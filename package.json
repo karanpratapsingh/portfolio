@@ -4,7 +4,8 @@
     "start": "npx expo start",
     "android": "npx expo start --android",
     "ios": "npx expo start --ios",
-    "web": "npx expo start --web"
+    "web": "npx expo start --web",
+    "build:web": "npx expo build:web"
   },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.10",
