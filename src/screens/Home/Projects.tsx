@@ -1,15 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
+import { BlurView } from 'expo-blur';
 import React from 'react';
 import { ImageBackground, ListRenderItemInfo, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import { FlatGrid } from 'react-native-super-grid';
+import { SectionHeader } from '../../components';
+import Config, { IProject } from '../../config';
 import { useDimensions } from '../../hooks';
 import { ScreenType } from '../../navigation';
 import { useTheme } from '../../store';
 import { Colors, Theme, typography } from '../../theme';
-import { BlurView } from 'expo-blur';
-import Config, { IProject } from '../../config';
-import { SectionHeader } from '../../components';
 
 function Projects(): React.ReactElement {
   const theme = useTheme(state => state.theme);

@@ -2,6 +2,7 @@ import React from 'react';
 import { Image, ListRenderItemInfo, StyleSheet } from 'react-native';
 import { FlatGrid } from 'react-native-super-grid';
 import { Stack, StackAssets } from '../../config';
+import { Colors } from '../../theme';
 
 interface StackGridProps {
   stack: Stack[];
@@ -10,7 +11,7 @@ interface StackGridProps {
 
 function StackGrid(props: StackGridProps) {
   const { stack, dimension } = props;
- 
+
   const renderItem = (info: ListRenderItemInfo<Stack>): JSX.Element => {
     const { item: stack } = info;
     const uri: string = StackAssets[stack];

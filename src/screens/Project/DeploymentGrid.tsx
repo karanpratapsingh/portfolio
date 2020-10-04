@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View, Linking, Platform } from 'rea
 import { Heading } from '../../components';
 import { Deployment } from '../../config';
 import { Colors, typography } from '../../theme';
-import { getDeploymentInfo, isMobile } from '../../utils';
+import { getDeploymentInfo, isMobile, openInNewTab } from '../../utils';
 
 interface DeploymentGridProps {
   deployment: Deployment;
@@ -34,12 +34,8 @@ function DeploymentIcon(props: DeploymentIconProps): React.ReactElement {
   const { label, icon } = getDeploymentInfo(type);
 
   const openProject = (): void => {
-    if (Platform.OS === 'web') {
-      window.open(url, '_blank');
-    } else {
-      if (url && Linking.canOpenURL(url)) {
-        Linking.openURL(url);
-      }
+    if (url) {
+      openInNewTab(url);
     }
   };
 

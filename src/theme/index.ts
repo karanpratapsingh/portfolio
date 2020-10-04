@@ -1,5 +1,6 @@
 import { ViewStyle } from 'react-native';
 import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions';
+import { ContactType } from '../config';
 import { isMobile } from '../utils';
 
 export enum ThemeVariant {
@@ -23,11 +24,18 @@ export const Colors = {
   primary: '#151a30',
   secondary: '#ffca28',
   placeholder: '#F2F2F2',
+  backgroundDark: '#0f1222',
   deployment: {
     web: '#444444',
     android: '#3DDC84',
     ios: '#3587e6'
   },
+  contact: {
+    [ContactType.email]: '#FFFF',
+    [ContactType.twitter]: '#00acee',
+    [ContactType.linkedIn]: '#0e76a8',
+    [ContactType.github]: '#FFFFFF',
+  }
 }
 
 export const ThemeMap: ThemeMap = {
@@ -45,7 +53,7 @@ export const ThemeMap: ThemeMap = {
     primary: Colors.primary,
     background: Colors.primary,
     secondary: Colors.secondary,
-    footer: '#0f1222',
+    footer: Colors.backgroundDark,
   },
 };
 

@@ -1,10 +1,10 @@
+import { AntDesign, Entypo, FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import React from 'react';
-import { Dimensions } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '../theme';
+import { Dimensions, Linking, Platform } from 'react-native';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
+import { ContactType } from '../config';
+import { Colors } from '../theme';
+
 export const isMobile: boolean = Dimensions.get('window').width <= 500;
 
 export function StringIsNumber(value: any): boolean {
@@ -35,5 +35,36 @@ export function getDeploymentInfo(type: string): DeploymentInfoResult {
 
     default:
       return { label: 'Web', icon: <MaterialCommunityIcons name='web' size={size} color={Colors.deployment.web} /> };
+  }
+}
+
+export function getContactIcon(type: ContactType | string): React.ReactElement {
+  const size = isMobile ? responsiveFontSize(4) : responsiveFontSize(2.5);
+
+  switch (type) {
+    case ContactType.email:
+      return <MaterialCommunityIcons name='email-outline' size={size} color={Colors.contact[type]} />;
+
+    case ContactType.twitter:
+      return <AntDesign name='twitter' size={size} color={Colors.contact[type]} />;
+
+    case ContactType.linkedIn:
+      return <Entypo name='linkedin' size={size} color={Colors.contact[type]} />;
+
+    case ContactType.github:
+      return <AntDesign name='github' size={size} color={Colors.contact[type]} />;
+
+    default:
+      return <AntDesign name='twitter' size={size} color={Colors.contact.email} />;
+  }
+}
+
+export function openInNewTab(url: string) {
+  if (Platform.OS === 'web') {
+    window.open(url, '_blank');
+  } else {
+    if (Linking.canOpenURL(url)) {
+      Linking.openURL(url);
+    }
   }
 }
