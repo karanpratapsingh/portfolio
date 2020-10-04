@@ -39,7 +39,7 @@ function Project(): React.ReactElement | null {
       <Heading label='Technologies' variant='medium' />
       <StackGrid stack={stack} dimension={40} />
       <DeploymentGrid deployment={deployment} />
-      {subProjects.length && <Heading label='More products' variant='medium' />}
+      {!!subProjects.length && <Heading label='More products' variant='medium' />}
       {subProjects.map(subProject => <SubProject subProject={subProject} />)}
     </ScrollView>
   );

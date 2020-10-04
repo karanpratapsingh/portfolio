@@ -16,7 +16,7 @@ function DeploymentGrid(props: DeploymentGridProps) {
 
   return (
     <View>
-      {deployments.length && showHeading && <Heading label='Deployments' variant='medium' />}
+      {!!deployments.length && showHeading && <Heading label='Deployments' variant='medium' />}
       <View style={styles.content}>
         {deployments.map(([type, url], index: number) => <DeploymentIcon key={index} type={type} url={url} />)}
       </View>
