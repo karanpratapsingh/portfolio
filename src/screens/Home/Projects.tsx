@@ -21,11 +21,10 @@ function Projects(): React.ReactElement {
   const ListHeaderComponent = () => <Text style={styles(theme).header}>Work</Text>
 
   const renderItem = (info: ListRenderItemInfo<IProject>): JSX.Element => {
-    const { item: project } = info;
-    const { title, banner } = project;
+    const { id, title, banner } = info.item;
 
     const onProject = () => {
-      navigation.navigate(ScreenType.Project, { project });
+      navigation.navigate(ScreenType.Project, { id });
     };
 
     return (
