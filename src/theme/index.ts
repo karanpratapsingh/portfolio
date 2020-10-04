@@ -1,4 +1,5 @@
-import { responsiveFontSize } from 'react-native-responsive-dimensions';
+import { ViewStyle } from 'react-native';
+import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions';
 
 export enum ThemeVariant {
   LIGHT,
@@ -46,3 +47,10 @@ export const typography = {
   body: responsiveFontSize(1.25),
   caption: responsiveFontSize(1.0),
 };
+
+export const defaultContainerStyles = (theme: Theme): ViewStyle => ({
+  flex: 1,
+  paddingVertical: responsiveWidth(2),
+  paddingHorizontal: responsiveWidth(2.5),
+  backgroundColor: theme.primary
+})
