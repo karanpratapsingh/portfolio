@@ -1,38 +1,53 @@
-import { RouteProp, useRoute } from '@react-navigation/native';
-import React from 'react';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { responsiveWidth } from 'react-native-responsive-dimensions';
-import { IProject } from '../../config';
+import Config, { IProject } from '../../config';
 import { useTheme } from '../../store';
-import { Colors, Theme, typography } from '../../theme';
+import { Colors, Theme, typography, defaultContainerStyles } from '../../theme';
+import StackGrid from './StackGrid';
+import { Header } from '../../components';
 
 type ProjectParams = {
-  project: IProject;
+  id: number;
 };
 
 type ProjectRouteParams = RouteProp<Record<string, ProjectParams | undefined>, string>;
 
-function Project(): React.ReactElement {
+function Project(): React.ReactElement | null {
   const theme = useTheme(state => state.theme);
+  const navigation = useNavigation();
   const { params } = useRoute<ProjectRouteParams>();
+  const project: IProject | undefined = Config.projects.find(({ id }) => id === params?.id)
+
+  useEffect(() => {
+    if (!project) {
+      navigation.goBack();
+    }
+  }, [project]);
+
+  if (!project) {
+    return null;
+  }
+
+  const { title, description } = project;
 
   return (
     <View style={styles(theme).container}>
-      <Text style={styles(theme).text}>{params?.project.title}</Text>
+      <Header label={title} />
+      <Text style={styles(theme).description}>{description}</Text>
+      <StackGrid stack={project.stack} dimension={40} />
     </View>
   );
 }
 
 const styles = (theme: Theme) => StyleSheet.create({
   container: {
-    flex: 1,
-    paddingVertical: responsiveWidth(2),
-    paddingHorizontal: responsiveWidth(2.5),
-    backgroundColor: theme.primary
+    ...defaultContainerStyles(theme)
   },
-  text: {
+  description: {
     color: Colors.white,
-    fontSize: typography.body
+    fontSize: typography.body,
+    fontWeight: '300'
   }
 });
 
