@@ -13,6 +13,7 @@ export interface Theme {
   primary: string;
   background: string;
   secondary: string;
+  footer: string;
 }
 
 type ThemeMap = { [key in ThemeVariant]: Theme };
@@ -22,7 +23,6 @@ export const Colors = {
   primary: '#151a30',
   secondary: '#ffca28',
   placeholder: '#F2F2F2',
-  footer: '#F8F8F8',
   deployment: {
     web: '#444444',
     android: '#3DDC84',
@@ -37,6 +37,7 @@ export const ThemeMap: ThemeMap = {
     primary: Colors.primary,
     background: '#FDFDFD',
     secondary: Colors.secondary,
+    footer: '#F8F8F8'
   },
   [ThemeVariant.DARK]: {
     type: ThemeVariant.DARK,
@@ -44,6 +45,7 @@ export const ThemeMap: ThemeMap = {
     primary: Colors.primary,
     background: Colors.primary,
     secondary: Colors.secondary,
+    footer: '#0f1222',
   },
 };
 

@@ -20,8 +20,8 @@ const styles = (theme: Theme) => StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: responsiveHeight(5),
-    height: responsiveHeight(10),
-    backgroundColor: Colors.footer
+    height: responsiveHeight(15),
+    backgroundColor: theme.footer
   },
   footer: {
     fontSize: typography.caption,
