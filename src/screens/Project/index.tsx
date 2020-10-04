@@ -1,11 +1,12 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Config, { IProject } from '../../config';
-import { useTheme } from '../../store';
-import { Colors, Theme, typography, defaultContainerStyles } from '../../theme';
-import StackGrid from './StackGrid';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Heading } from '../../components';
+import Config, { IProject, ISubProject } from '../../config';
+import { useTheme } from '../../store';
+import { Colors, defaultContainerStyles, Theme, typography } from '../../theme';
+import DeploymentGrid from './DeploymentGrid';
+import StackGrid from './StackGrid';
 
 type ProjectParams = {
   id: number;
@@ -29,14 +30,35 @@ function Project(): React.ReactElement | null {
     return null;
   }
 
-  const { title, description } = project;
+  const { title, description, stack, deployment, subProjects } = project;
 
   return (
-    <View style={styles(theme).container}>
+    <ScrollView style={styles(theme).container}>
       <Heading label={title} />
       <Text style={styles(theme).description}>{description}</Text>
-      <Text style={styles(theme).subtitle}>Technologies</Text>
-      <StackGrid stack={project.stack} dimension={40} />
+      <Heading label='Technologies' variant='medium' />
+      <StackGrid stack={stack} dimension={40} />
+      <DeploymentGrid deployment={deployment} />
+      {subProjects.length && <Heading label='More products' variant='medium' />}
+      {subProjects.map(subProject => <SubProject subProject={subProject} />)}
+    </ScrollView>
+  );
+}
+
+interface SubProjectProps {
+  subProject: ISubProject
+}
+
+function SubProject(props: SubProjectProps) {
+  const theme = useTheme(state => state.theme);
+  const { subProject } = props;
+  const { title, description, deployment } = subProject;
+
+  return (
+    <View style={styles(theme).subProject}>
+      <Heading label={title} variant='small' />
+      <Text style={[styles(theme).description, { marginBottom: 10 }]}>{description}</Text>
+      <DeploymentGrid deployment={deployment} showHeading={false} />
     </View>
   );
 }
@@ -48,13 +70,11 @@ const styles = (theme: Theme) => StyleSheet.create({
   description: {
     color: Colors.white,
     fontSize: typography.body,
-    fontWeight: '300'
+    fontWeight: '300',
+    marginBottom: 20,
   },
-  subtitle: {
-    marginTop: 20,
-    color: Colors.white,
-    fontSize: typography.body,
-    fontWeight: 'bold'
+  subProject: {
+    marginBottom: 15
   }
 });
 

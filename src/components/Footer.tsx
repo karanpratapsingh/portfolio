@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { responsiveHeight } from 'react-native-responsive-dimensions';
 import { useTheme } from '../store';
-import { typography, Theme } from '../theme';
+import { typography, Theme, Colors } from '../theme';
 
 function Footer() {
   const theme = useTheme(state => state.theme);
@@ -21,7 +21,7 @@ const styles = (theme: Theme) => StyleSheet.create({
     justifyContent: 'center',
     marginTop: responsiveHeight(5),
     height: responsiveHeight(10),
-    backgroundColor: '#F8F8F8'
+    backgroundColor: Colors.footer
   },
   footer: {
     fontSize: typography.caption,

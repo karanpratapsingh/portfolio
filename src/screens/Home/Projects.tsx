@@ -9,6 +9,7 @@ import { useTheme } from '../../store';
 import { Colors, Theme, typography } from '../../theme';
 import { BlurView } from 'expo-blur';
 import Config, { IProject } from '../../config';
+import { SectionHeader } from '../../components';
 
 function Projects(): React.ReactElement {
   const theme = useTheme(state => state.theme);
@@ -18,10 +19,10 @@ function Projects(): React.ReactElement {
 
   const itemDimension = width <= 1000 ? width * 0.9 : width * 0.3;
 
-  const ListHeaderComponent = () => <Text style={styles(theme).header}>Work</Text>
+  const ListHeaderComponent = () => <SectionHeader title='Work' subtitle={'Projects I\'ve worked on'} />
 
   const renderItem = (info: ListRenderItemInfo<IProject>): JSX.Element => {
-    const { id, title, banner } = info.item;
+    const { id, title, banner, description } = info.item;
 
     const onProject = () => {
       navigation.navigate(ScreenType.Project, { id });
@@ -30,8 +31,9 @@ function Projects(): React.ReactElement {
     return (
       <TouchableOpacity onPress={onProject} activeOpacity={0.95} style={styles(theme).card}>
         <ImageBackground source={{ uri: banner }} style={styles(theme).banner} borderRadius={10}>
-          <BlurView style={styles(theme).cardContent}>
+          <BlurView tint='dark' intensity={40} style={styles(theme).cardContent}>
             <Text style={styles(theme).title}>{title}</Text>
+            <Text style={styles(theme).description} ellipsizeMode='tail' numberOfLines={1}>{description}</Text>
           </BlurView>
         </ImageBackground>
       </TouchableOpacity>
@@ -74,13 +76,19 @@ const styles = (theme: Theme) => StyleSheet.create({
     justifyContent: 'flex-end',
   },
   cardContent: {
-    paddingVertical: 25,
+    paddingVertical: 15,
     paddingHorizontal: 10,
   },
   title: {
-    fontSize: typography.subtitle,
+    fontSize: typography.body,
     color: Colors.white,
-    fontWeight: '700',
+    fontWeight: 'bold',
+  },
+  description: {
+    marginTop: 5,
+    fontSize: typography.caption,
+    color: Colors.white,
+    fontWeight: '400',
   }
 })
 

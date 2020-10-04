@@ -1,15 +1,24 @@
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
-import { typography, Colors } from '../theme';
+import { Colors, typography } from '../theme';
 
 interface HeadingProps {
   label: string;
+  variant?: 'large' | 'medium' | 'small'
 }
 
 function Heading(props: HeadingProps) {
-  const { label } = props;
+  const { label, variant = 'large' } = props;
 
-  return <Text style={styles.text}>{label}</Text>;
+  let fontSize = typography.title;
+
+  if (variant === 'medium') {
+    fontSize = typography.subtitle;
+  } else if (variant === 'small') {
+    fontSize = typography.body;
+  }
+
+  return <Text style={[styles.text, { fontSize }]}>{label}</Text>;
 }
 
 const styles = StyleSheet.create({
@@ -17,7 +26,7 @@ const styles = StyleSheet.create({
     fontSize: typography.title,
     color: Colors.white,
     fontWeight: 'bold',
-    marginBottom: 10
+    marginVertical: 10
   }
 });
 

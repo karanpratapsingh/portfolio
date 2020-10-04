@@ -26,15 +26,17 @@ export const StackAssets: TStackAsset = {
   [Stack.arango]: 'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/stack%2Farango-logo.png?alt=media&token=e64711b5-c00e-445d-b8b9-8b6654edb83e'
 }
 
+export type Deployment = {
+  web?: string;
+  android?: string;
+  ios?: string;
+};
+
 export interface ISubProject {
   title: string;
   description: string;
   repository: string | null;
-  deployments: {
-    web?: string;
-    android?: string;
-    ios?: string;
-  },
+  deployment: Deployment,
 }
 
 export interface IProject {
@@ -46,7 +48,7 @@ export interface IProject {
   description: string;
   repository: string | null;
   stack: Stack[];
-  deployments: {
+  deployment: {
     web?: string;
     android?: string;
     ios?: string;
@@ -64,7 +66,7 @@ const projects: IProject[] = [
     description: 'Upcoming social media platform for web 3.0',
     repository: null,
     stack: [Stack.js, Stack.react, Stack.graphql, Stack.aws, Stack.arango],
-    deployments: {
+    deployment: {
       web: 'https://peapods.com',
     },
     subProjects: [],
@@ -78,7 +80,7 @@ const projects: IProject[] = [
     description: 'An open source social app that does not use your data against you',
     repository: 'https://github.com/karanpratapsingh/Proximity',
     stack: [Stack.ts, Stack.react, Stack.graphql, Stack.firebase],
-    deployments: {
+    deployment: {
       web: 'https://proximity-mobile.web.app/',
       android: 'https://play.google.com/store/apps/details?id=com.proximity.app',
       ios: 'https://apps.apple.com/us/app/proximity-app/id1489041006',
@@ -94,7 +96,7 @@ const projects: IProject[] = [
     description: 'An open source social app that does not use your data against you. The app effortlessly connects you to shoppers who need your advice and expertise when they’re shopping online. Assist and sell to customers the same way you would in-store, but now through chat and video straight from the app',
     repository: null,
     stack: [Stack.js, Stack.react, Stack.graphql, Stack.firebase],
-    deployments: {
+    deployment: {
       android: 'https://play.google.com/store/apps/details?id=app.boom.mobile',
     },
     subProjects: [],
@@ -108,7 +110,7 @@ const projects: IProject[] = [
     banner: 'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fstewards%2Fbanner.png?alt=media&token=51bb3366-f4e8-4db1-9bfc-c8ebc8c63953',
     description: 'Mobile ordering solution with robot delivery. Stewards also provides variety of tools like staff application to manage orders, self checkout solution and admin dashboard',
     stack: [Stack.js, Stack.react, Stack.firebase],
-    deployments: {
+    deployment: {
       web: 'https://stewards.app/lift99',
       android: 'https://play.google.com/store/apps/details?id=app.stewards.customer',
       ios: 'https://apps.apple.com/in/app/stewards-order-to-your-desk/id1479412118',
@@ -118,7 +120,7 @@ const projects: IProject[] = [
         title: 'Staff Management',
         repository: null,
         description: 'Staff app for stewards restaurant staff, easily update menu, product availability and take live orders from customers',
-        deployments: {
+        deployment: {
           android: 'https://play.google.com/store/apps/details?id=app.stewards.staff&hl=en',
         },
       },
@@ -126,7 +128,7 @@ const projects: IProject[] = [
         title: 'Admin Dashboard',
         repository: null,
         description: 'Staff administration app for stewards restaurant partners. This helps restaurant administrators to easily manage orders, receipts, tables, restaurant info etc.',
-        deployments: {
+        deployment: {
           web: 'https://manage.stewards.app/',
         },
       },
@@ -134,7 +136,7 @@ const projects: IProject[] = [
         title: 'Self Checkout',
         repository: null,
         description: 'Stewards self checkout solution for customers who don\'t like waiting. Available on demand for iPad and tablets',
-        deployments: {},
+        deployment: {},
       }
     ]
   },
@@ -147,7 +149,7 @@ const projects: IProject[] = [
     description: 'Get personalized videos from your favorite celebrities at just one click. Request personalised video messages for your friends, family, loved ones or even yourself.Be it a doubt or even a special wish from your favorite celebrity.',
     repository: null,
     stack: [Stack.js, Stack.react, Stack.python, Stack.aws],
-    deployments: {
+    deployment: {
       web: 'https://celebrify.in/',
       android: 'https://play.google.com/store/apps/details?id=com.celebrify.app',
       ios: 'https://apps.apple.com/us/app/celebrify-app/id1469588198',
@@ -162,7 +164,7 @@ const projects: IProject[] = [
     isOpenSource: false,
     repository: 'https://github.com/karanpratapsingh/KCards',
     stack: [Stack.js, Stack.react],
-    deployments: {
+    deployment: {
       web: 'https://kcards-server.herokuapp.com/',
       android: 'https://play.google.com/store/apps/details?id=com.kcards',
       ios: 'https://itunes.apple.com/us/app/kcards/id1461733524',

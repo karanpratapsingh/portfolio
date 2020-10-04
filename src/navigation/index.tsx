@@ -1,4 +1,5 @@
 import React from 'react';
+import { Entypo } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { TransitionPresets, createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
 import * as Screens from '../screens';
@@ -53,7 +54,8 @@ const config: StackNavigationOptions = {
   headerTintColor: Colors.secondary,
   headerTitleStyle: {
     color: Colors.secondary,
-  }
+  },
+  headerBackImage: () => <Entypo name='chevron-thin-left' size={24} color={Colors.secondary} />
 };
 
 function AppNavigator() {

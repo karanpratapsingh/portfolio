@@ -1,5 +1,6 @@
 import { ViewStyle } from 'react-native';
 import { responsiveFontSize, responsiveWidth } from 'react-native-responsive-dimensions';
+import { isMobile } from '../utils';
 
 export enum ThemeVariant {
   LIGHT,
@@ -20,7 +21,13 @@ export const Colors = {
   white: '#FFFFFF',
   primary: '#151a30',
   secondary: '#ffca28',
-  placeholder: '#F2F2F2'
+  placeholder: '#F2F2F2',
+  footer: '#F8F8F8',
+  deployment: {
+    web: '#444444',
+    android: '#3DDC84',
+    ios: '#3587e6'
+  },
 }
 
 export const ThemeMap: ThemeMap = {
@@ -40,17 +47,16 @@ export const ThemeMap: ThemeMap = {
   },
 };
 
-// TODO: bit small for mobile
 export const typography = {
-  title: responsiveFontSize(2.5),
-  subtitle: responsiveFontSize(1.75),
-  body: responsiveFontSize(1.25),
-  caption: responsiveFontSize(1.0),
+  title: isMobile ? responsiveFontSize(4) : responsiveFontSize(2.5),
+  subtitle: isMobile ? responsiveFontSize(2.25) : responsiveFontSize(1.75),
+  body: isMobile ? responsiveFontSize(2) : responsiveFontSize(1.25),
+  caption: isMobile ? responsiveFontSize(1.5) : responsiveFontSize(1.0),
 };
 
 export const defaultContainerStyles = (theme: Theme): ViewStyle => ({
   flex: 1,
-  paddingVertical: responsiveWidth(2),
-  paddingHorizontal: responsiveWidth(2.5),
+  paddingVertical: isMobile ? responsiveWidth(4) : responsiveWidth(2),
+  paddingHorizontal: isMobile ? responsiveWidth(5) : responsiveWidth(2.5),
   backgroundColor: theme.primary
 })
