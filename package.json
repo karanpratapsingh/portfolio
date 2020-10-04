@@ -9,6 +9,7 @@
     "build:web": "yarn expo build:web"
   },
   "dependencies": {
+    "@expo/vector-icons": "^10.0.0",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/native": "^5.7.5",
     "@react-navigation/stack": "^5.9.2",
