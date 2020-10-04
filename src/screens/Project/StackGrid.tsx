@@ -41,7 +41,6 @@ function StackGrid(props: StackGridProps) {
 
 const styles = StyleSheet.create({
   gridView: {
-    maxHeight: 65,
     marginBottom: 20
   },
   stackImage: {

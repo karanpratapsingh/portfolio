@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Linking, Platform } from 'react-native';
 import { Heading } from '../../components';
 import { Deployment } from '../../config';
 import { Colors, typography } from '../../theme';
@@ -18,7 +18,7 @@ function DeploymentGrid(props: DeploymentGridProps) {
     <View>
       {deployments.length && showHeading && <Heading label='Deployments' variant='medium' />}
       <View style={styles.content}>
-        {deployments.map(([type, uri], index: number) => <DeploymentIcon key={index} type={type} uri={uri} />)}
+        {deployments.map(([type, url], index: number) => <DeploymentIcon key={index} type={type} url={url} />)}
       </View>
     </View>
   );
@@ -26,15 +26,21 @@ function DeploymentGrid(props: DeploymentGridProps) {
 
 interface DeploymentIconProps {
   type: string;
-  uri: string | undefined;
+  url: string | undefined;
 }
 
 function DeploymentIcon(props: DeploymentIconProps): React.ReactElement {
-  const { type, uri } = props;
+  const { type, url } = props;
   const { label, icon } = getDeploymentInfo(type);
 
   const openProject = (): void => {
-    console.log(uri);
+    if (Platform.OS === 'web') {
+      window.open(url, '_blank');
+    } else {
+      if (url && Linking.canOpenURL(url)) {
+        Linking.openURL(url);
+      }
+    }
   };
 
   return (
@@ -56,7 +62,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     flexDirection: 'row',
     marginRight: isMobile ? 10 : 15,
-    paddingVertical: isMobile ? 2 : 4,
+    paddingVertical: 4,
     paddingHorizontal: isMobile ? 5 : 8,
     backgroundColor: Colors.white
   },

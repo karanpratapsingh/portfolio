@@ -28,7 +28,7 @@ export function getDeploymentInfo(type: string): DeploymentInfoResult {
       return { label: 'Web', icon: <MaterialCommunityIcons name='web' size={size} color={Colors.deployment[type]} /> };
 
     case 'android':
-      return { label: 'Android', icon: <FontAwesome name='android' size={size - 0.25} color={Colors.deployment[type]} /> };
+      return { label: 'Android', icon: <FontAwesome name='android' size={size - 0.5} color={Colors.deployment[type]} /> };
 
     case 'ios':
       return { label: 'iOS', icon: <Ionicons name='ios-appstore' size={size} color={Colors.deployment[type]} /> };
