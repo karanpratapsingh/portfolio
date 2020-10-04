@@ -41,7 +41,7 @@ function StackGrid(props: StackGridProps) {
 
 const styles = StyleSheet.create({
   gridView: {
-    marginVertical: 20
+    marginBottom: 20
   },
   stackImage: {
     marginTop: 20,

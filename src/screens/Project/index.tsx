@@ -5,7 +5,7 @@ import Config, { IProject } from '../../config';
 import { useTheme } from '../../store';
 import { Colors, Theme, typography, defaultContainerStyles } from '../../theme';
 import StackGrid from './StackGrid';
-import { Header } from '../../components';
+import { Heading } from '../../components';
 
 type ProjectParams = {
   id: number;
@@ -33,8 +33,9 @@ function Project(): React.ReactElement | null {
 
   return (
     <View style={styles(theme).container}>
-      <Header label={title} />
+      <Heading label={title} />
       <Text style={styles(theme).description}>{description}</Text>
+      <Text style={styles(theme).subtitle}>Technologies</Text>
       <StackGrid stack={project.stack} dimension={40} />
     </View>
   );
@@ -48,6 +49,12 @@ const styles = (theme: Theme) => StyleSheet.create({
     color: Colors.white,
     fontSize: typography.body,
     fontWeight: '300'
+  },
+  subtitle: {
+    marginTop: 20,
+    color: Colors.white,
+    fontSize: typography.body,
+    fontWeight: 'bold'
   }
 });
 

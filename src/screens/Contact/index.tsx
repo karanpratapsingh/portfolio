@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Header } from '../../components';
+import { Heading } from '../../components';
 import { useTheme } from '../../store';
 import { Theme, defaultContainerStyles } from '../../theme';
 
@@ -8,7 +8,7 @@ function Contact(): React.ReactElement {
   const theme = useTheme(state => state.theme);
   return (
     <View style={styles(theme).container}>
-      <Header label='Contact' />
+      <Heading label='Contact' />
     </View>
   );
 }

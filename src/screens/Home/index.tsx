@@ -1,5 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
+import { Footer } from '../../components';
 import { useTheme } from '../../store';
 import { Theme } from '../../theme';
 import Intro from './Intro';
@@ -12,6 +13,7 @@ function Home(): React.ReactElement {
     <ScrollView contentContainerStyle={styles(theme).container}>
       <Intro />
       <Projects />
+      <Footer />
     </ScrollView>
   );
 }

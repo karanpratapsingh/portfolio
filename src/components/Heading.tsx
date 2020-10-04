@@ -2,11 +2,11 @@ import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { typography, Colors } from '../theme';
 
-interface HeaderProps {
+interface HeadingProps {
   label: string;
 }
 
-function Header(props: HeaderProps) {
+function Heading(props: HeadingProps) {
   const { label } = props;
 
   return <Text style={styles.text}>{label}</Text>;
@@ -21,4 +21,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Header;
+export default Heading;
