@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Heading } from '../../components';
 import Config, { Stack } from '../../config';
 import { useTheme } from '../../store';
-import { Colors, Theme, typography, defaultContainerStyles } from '../../theme';
+import { Colors, defaultContainerStyles, Theme, typography } from '../../theme';
 import { enumToArray } from '../../utils';
 import StackGrid from '../Project/StackGrid';
 

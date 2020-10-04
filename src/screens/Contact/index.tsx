@@ -14,7 +14,7 @@ function Contact(): React.ReactElement {
     <View style={styles(theme).container}>
       <Heading label='Contact' />
       <Text style={styles(theme).contactText}>
-        Do you have a project in mind? want to hire me? or simply wanna chat? feel free to reach out
+        Do you have a project in mind? Want to hire me? Or simply wanna chat? Feel free to reach out
       </Text>
       {contactInfo.map(([type, url], index: number) => <ContactCard key={index} type={type} url={url} />)}
     </View>
@@ -36,7 +36,7 @@ function ContactCard(props: ContactCardProps) {
     if (type === ContactType.email) {
       contactUrl = `mailto:${contactUrl}`;
     } else {
-      contactUrl = `https//:${contactUrl}`;
+      contactUrl = `https://${contactUrl}`;
     }
     openInNewTab(contactUrl);
   };

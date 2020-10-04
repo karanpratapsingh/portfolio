@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import Switch from 'expo-dark-mode-switch';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import * as Animatable from 'react-native-animatable';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import Config from '../../config';
 import { useDimensions } from '../../hooks';
@@ -30,18 +31,24 @@ function Intro(): React.ReactElement {
 
   const { name, intro } = Config;
 
+  const wavingHand = (
+    <Animatable.View animation='swing' duration={2000}>
+      <Text style={styles(theme).header}>👋</Text>
+    </Animatable.View>
+  );
+
   return (
     <View style={{ height }}>
       <Switch style={styles(theme).themeSwitch} value={isDarkMode} onChange={onThemeChange} />
-      <View style={styles(theme).content}>
-        <Text style={styles(theme).header}>Hi, I am {name} 👋</Text>
+      <Animatable.View animation='fadeIn' style={styles(theme).content}>
+        <Text style={styles(theme).header}>Hi, I am {name} {wavingHand}</Text>
         <Text style={styles(theme).subtitle}>{intro}</Text>
         <Text style={styles(theme).subtitle}>Read more
         <Text onPress={onAbout} style={styles(theme).underline}>about me</Text>
           or
         <Text onPress={onContact} style={styles(theme).underline}>contact me</Text>
         </Text>
-      </View>
+      </Animatable.View>
     </View>
   );
 }

@@ -81,7 +81,7 @@ const projects: IProject[] = [
     repository: 'https://github.com/karanpratapsingh/Proximity',
     stack: [Stack.ts, Stack.react, Stack.graphql, Stack.firebase],
     deployment: {
-      web: 'https://proximity-mobile.web.app/',
+      web: 'https://proximity-mobile.web.app',
       android: 'https://play.google.com/store/apps/details?id=com.proximity.app',
       ios: 'https://apps.apple.com/us/app/proximity-app/id1489041006',
     },
@@ -97,6 +97,7 @@ const projects: IProject[] = [
     repository: null,
     stack: [Stack.js, Stack.react, Stack.graphql, Stack.firebase],
     deployment: {
+      web: 'https://boom.london',
       android: 'https://play.google.com/store/apps/details?id=app.boom.mobile',
     },
     subProjects: [],
@@ -111,7 +112,7 @@ const projects: IProject[] = [
     description: 'Mobile ordering solution with robot delivery. Stewards also provides variety of tools like staff application to manage orders, self checkout solution and admin dashboard',
     stack: [Stack.js, Stack.react, Stack.firebase],
     deployment: {
-      web: 'https://stewards.app/lift99',
+      web: 'https://stewards.app',
       android: 'https://play.google.com/store/apps/details?id=app.stewards.customer',
       ios: 'https://apps.apple.com/in/app/stewards-order-to-your-desk/id1479412118',
     },
@@ -129,7 +130,7 @@ const projects: IProject[] = [
         repository: null,
         description: 'Staff administration app for stewards restaurant partners. This helps restaurant administrators to easily manage orders, receipts, tables, restaurant info etc.',
         deployment: {
-          web: 'https://manage.stewards.app/',
+          web: 'https://manage.stewards.app',
         },
       },
       {
@@ -150,7 +151,7 @@ const projects: IProject[] = [
     repository: null,
     stack: [Stack.js, Stack.react, Stack.python, Stack.aws],
     deployment: {
-      web: 'https://celebrify.in/',
+      web: 'https://celebrify.in',
       android: 'https://play.google.com/store/apps/details?id=com.celebrify.app',
       ios: 'https://apps.apple.com/us/app/celebrify-app/id1469588198',
     },
@@ -165,11 +166,11 @@ const projects: IProject[] = [
     repository: 'https://github.com/karanpratapsingh/KCards',
     stack: [Stack.js, Stack.react],
     deployment: {
-      web: 'https://kcards-server.herokuapp.com/',
+      web: 'https://kcards-server.herokuapp.com',
       android: 'https://play.google.com/store/apps/details?id=com.kcards',
       ios: 'https://itunes.apple.com/us/app/kcards/id1461733524',
     },
-    website: 'https://kcards-server.herokuapp.com/',
+    website: 'https://kcards-server.herokuapp.com',
     subProjects: []
   },
 ];

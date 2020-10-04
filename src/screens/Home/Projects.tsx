@@ -22,7 +22,8 @@ function Projects(): React.ReactElement {
   const ListHeaderComponent = () => <SectionHeader title='Work' subtitle={'Projects I\'ve worked on'} />
 
   const renderItem = (info: ListRenderItemInfo<IProject>): JSX.Element => {
-    const { id, title, banner, description } = info.item;
+    const { item, index } = info;
+    const { id, title, banner, description } = item;
 
     const onProject = () => {
       navigation.navigate(ScreenType.Project, { id });
