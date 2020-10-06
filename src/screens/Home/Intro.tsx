@@ -32,7 +32,7 @@ function Intro(): React.ReactElement {
   const { name, intro } = Config;
 
   const wavingHand = (
-    <Animatable.View animation='swing' duration={2000}>
+    <Animatable.View animation='swing' duration={2000} delay={1000}>
       <Text style={styles(theme).header}>👋</Text>
     </Animatable.View>
   );
