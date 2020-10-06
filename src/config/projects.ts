@@ -93,7 +93,7 @@ const projects: IProject[] = [
     banner: 'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fvelvet%2Fbanner.png?alt=media&token=54a1f4e0-edfd-4e9e-bd2e-de4f6aff5049',
     website: 'https://boom.london',
     isOpenSource: false,
-    description: 'An open source social app that does not use your data against you. The app effortlessly connects you to shoppers who need your advice and expertise when they’re shopping online. Assist and sell to customers the same way you would in-store, but now through chat and video straight from the app',
+    description: 'Connect with shoppers who need your advice and expertise when they’re shopping online. Assist and sell to customers the same way you would in-store, but now through chat and video straight from the app',
     repository: null,
     stack: [Stack.js, Stack.react, Stack.graphql, Stack.firebase],
     deployment: {
