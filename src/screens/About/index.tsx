@@ -22,7 +22,7 @@ function About(): React.ReactElement {
       <Text style={styles(theme).about}>
         {about}
       </Text>
-      <Text onPress={onResume} style={styles(theme).underline}>Download my resume</Text>
+      <Text onPress={onResume} style={styles(theme).underline}>Checkout my resume</Text>
       <Heading label='Technologies I work with' variant='medium' />
       <StackGrid stack={stack} dimension={40} />
     </View>
