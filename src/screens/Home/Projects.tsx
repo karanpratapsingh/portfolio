@@ -19,10 +19,10 @@ function Projects(): React.ReactElement {
 
   const itemDimension = width <= 1000 ? width * 0.9 : width * 0.3;
 
-  const ListHeaderComponent = () => <SectionHeader title='Work' subtitle={'Projects I\'ve worked on'} />
+  const ListHeaderComponent = () => <SectionHeader title='Portfolio' subtitle={'Projects I\'ve worked on recently'} />
 
   const renderItem = (info: ListRenderItemInfo<IProject>): JSX.Element => {
-    const { item, index } = info;
+    const { item } = info;
     const { id, title, banner, description } = item;
 
     const onProject = () => {
@@ -67,13 +67,13 @@ const styles = (theme: Theme) => StyleSheet.create({
     marginHorizontal: responsiveWidth(2)
   },
   card: {
-    height: 300,
+    height: responsiveHeight(36),
     borderRadius: 5,
     overflow: 'hidden',
     backgroundColor: Colors.placeholder
   },
   banner: {
-    height: 300,
+    height: responsiveHeight(36),
     justifyContent: 'flex-end',
   },
   cardContent: {

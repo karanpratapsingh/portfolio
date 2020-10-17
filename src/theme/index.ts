@@ -11,6 +11,7 @@ export enum ThemeVariant {
 export interface Theme {
   type: ThemeVariant;
   text: string;
+  textSecondary: string;
   primary: string;
   background: string;
   secondary: string;
@@ -42,6 +43,7 @@ export const ThemeMap: ThemeMap = {
   [ThemeVariant.LIGHT]: {
     type: ThemeVariant.LIGHT,
     text: '#000000',
+    textSecondary: '#616161',
     primary: Colors.primary,
     background: '#FDFDFD',
     secondary: Colors.secondary,
@@ -50,6 +52,7 @@ export const ThemeMap: ThemeMap = {
   [ThemeVariant.DARK]: {
     type: ThemeVariant.DARK,
     text: Colors.white,
+    textSecondary: '#eeeeee',
     primary: Colors.primary,
     background: Colors.primary,
     secondary: Colors.secondary,

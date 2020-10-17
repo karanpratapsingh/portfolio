@@ -20,7 +20,7 @@ const styles = (theme: Theme) => StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: responsiveHeight(5),
-    height: responsiveHeight(15),
+    height: responsiveHeight(12),
     backgroundColor: theme.footer
   },
   footer: {

@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../store';
-import { typography, Colors, Theme } from '../theme';
+import { Theme, typography } from '../theme';
 
 interface SectionHeaderProps {
   title: string;
@@ -22,7 +22,7 @@ function SectionHeader(props: SectionHeaderProps) {
 
 const styles = (theme: Theme) => StyleSheet.create({
   container: {
-    marginBottom: 40,
+    marginBottom: 25,
     marginHorizontal: 10,
   },
   title: {
@@ -30,9 +30,10 @@ const styles = (theme: Theme) => StyleSheet.create({
     color: theme.text,
     fontWeight: '500',
     marginBottom: 5
-  }, subtitle: {
+  },
+  subtitle: {
     fontSize: typography.body,
-    color: theme.text,
+    color: theme.textSecondary,
     fontWeight: '300',
   }
 });

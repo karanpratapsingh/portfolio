@@ -1,5 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Footer } from '../../components';
 import { useTheme } from '../../store';
 import { Theme } from '../../theme';
@@ -11,9 +12,11 @@ function Home(): React.ReactElement {
 
   return (
     <ScrollView contentContainerStyle={styles(theme).container}>
-      <Intro />
-      <Projects />
-      <Footer />
+      <SafeAreaView>
+        <Intro />
+        <Projects />
+        <Footer />
+      </SafeAreaView>
     </ScrollView>
   );
 }
