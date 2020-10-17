@@ -18,7 +18,7 @@ export const StackAssets: TStackAsset = {
   [Stack.js]: 'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/stack%2Fjs-logo.png?alt=media&token=557f5a69-0aeb-487c-8b61-44e70ba45289',
   [Stack.react]: 'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/stack%2Freact-logo.png?alt=media&token=ef8f2d23-b005-400b-8677-d7b1165023da',
   [Stack.graphql]: 'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/stack%2Fgraphql-logo.png?alt=media&token=2842844e-a4a9-4318-8043-b246624fa7a4',
-  [Stack.aws]: 'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/stack%2Faws-logo.png?alt=media&token=759af172-7473-4e44-a72a-61e2402dcab0',
+  [Stack.aws]: 'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/stack%2Faws-logo1.png?alt=media&token=9aa0ec54-be22-437c-add7-a0eb184793a9',
   [Stack.firebase]: 'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/stack%2Ffirebase-logo.png?alt=media&token=8e099681-593c-45b5-a115-51b1c8c0c3e4',
   [Stack.redux]: 'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/stack%2Fredux-logo.png?alt=media&token=c6c182b4-661b-4b3f-a4b4-1ed0ffce0418',
   [Stack.python]: 'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/stack%2Fpython-logo.png?alt=media&token=7dc0f28e-0f00-40bb-aa1f-50b281cc1ef7',

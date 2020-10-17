@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { TransitionPresets, createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
 import * as Screens from '../screens';
 import { Colors } from '../theme';
+import Config from '../config';
 
 export enum ScreenType {
   Home = 'Home',
@@ -25,7 +26,10 @@ type TScreenProps = { [key in ScreenType]: any }
 const ScreenProps: TScreenProps = {
   [ScreenType.Home]: {
     component: Screens.Home,
-    options: headerConfig.noHeader
+    options: {
+      ...headerConfig.noHeader,
+      title: Config.fullName
+    }
   },
   [ScreenType.Project]: {
     component: Screens.Project,
