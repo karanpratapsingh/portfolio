@@ -71,7 +71,7 @@ function Projects(): React.ReactElement {
 
   return (
     <View style={styles(theme).container}>
-      <SectionHeader title='Articles' subtitle={'I also write articles sometimes'} />
+      <SectionHeader title='Articles' subtitle="When I'm not writing code, I write articles" />
       {content}
     </View>
   );
