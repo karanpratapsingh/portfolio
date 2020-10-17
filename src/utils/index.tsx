@@ -7,6 +7,8 @@ import { Colors } from '../theme';
 
 export const isMobile: boolean = Dimensions.get('window').width <= 500;
 
+export const isTablet: boolean = Dimensions.get('window').width <= 900;
+
 export function StringIsNumber(value: any): boolean {
   return isNaN(Number(value)) === true;
 }

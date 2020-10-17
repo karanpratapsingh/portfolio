@@ -8,18 +8,16 @@ import { SectionHeader } from '../../components';
 import Config, { IProject } from '../../config';
 import { useDimensions } from '../../hooks';
 import { ScreenType } from '../../navigation';
-import { useTheme } from '../../store';
-import { Colors, Theme, typography } from '../../theme';
+import { Colors, typography } from '../../theme';
 
 function Projects(): React.ReactElement {
-  const theme = useTheme(state => state.theme);
   const navigation = useNavigation();
   const { width } = useDimensions();
   const { projects } = Config;
 
   const itemDimension = width <= 1000 ? width * 0.9 : width * 0.3;
 
-  const ListHeaderComponent = () => <SectionHeader title='Portfolio' subtitle={'Projects I\'ve worked on recently'} />
+  const ListHeaderComponent = () => <SectionHeader title='Portfolio' subtitle={'Projects I\'ve worked on recently'} />;
 
   const renderItem = (info: ListRenderItemInfo<IProject>): JSX.Element => {
     const { item } = info;
@@ -30,11 +28,11 @@ function Projects(): React.ReactElement {
     };
 
     return (
-      <TouchableOpacity onPress={onProject} activeOpacity={0.95} style={styles(theme).card}>
-        <ImageBackground source={{ uri: banner }} style={styles(theme).banner} borderRadius={10}>
-          <BlurView tint='dark' intensity={40} style={styles(theme).cardContent}>
-            <Text style={styles(theme).title}>{title}</Text>
-            <Text style={styles(theme).description} ellipsizeMode='tail' numberOfLines={1}>{description}</Text>
+      <TouchableOpacity onPress={onProject} activeOpacity={0.95} style={styles.card}>
+        <ImageBackground source={{ uri: banner }} style={styles.banner} borderRadius={10}>
+          <BlurView tint='dark' intensity={40} style={styles.cardContent}>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.description} ellipsizeMode='tail' numberOfLines={1}>{description}</Text>
           </BlurView>
         </ImageBackground>
       </TouchableOpacity>
@@ -47,24 +45,18 @@ function Projects(): React.ReactElement {
       spacing={10}
       ListHeaderComponent={ListHeaderComponent}
       itemDimension={itemDimension}
-      style={styles(theme).gridView}
+      style={styles.gridView}
       renderItem={renderItem}
     />
   );
 }
 
-const styles = (theme: Theme) => StyleSheet.create({
-  header: {
-    marginHorizontal: responsiveWidth(1),
-    marginBottom: responsiveHeight(5),
-    fontSize: typography.title,
-    fontWeight: 'bold',
-    color: theme.text
-  },
+const styles = StyleSheet.create({
   gridView: {
     flex: 1,
     marginTop: 10,
-    marginHorizontal: responsiveWidth(2)
+    marginHorizontal: responsiveWidth(2),
+    marginBottom: responsiveWidth(1),
   },
   card: {
     height: responsiveHeight(36),
