@@ -8,4 +8,6 @@ Deployed at: [karanpratapsingh.com](https://karanpratapsingh.com)
 
 - Everything is configurable via `IConfig` and `IProject` interfaces in `src/config/...`, so feel free fork and override them
 
+- One click deploy on [Netlify](https://www.netlify.com/)
+
 - Have fun 🎉
