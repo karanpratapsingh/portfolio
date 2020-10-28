@@ -3,12 +3,14 @@ import Switch from 'expo-dark-mode-switch';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import * as Animatable from 'react-native-animatable';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import Config from '../../config';
 import { useDimensions } from '../../hooks';
 import { ScreenType } from '../../navigation';
 import { useTheme } from '../../store';
-import { Theme, ThemeVariant, typography } from '../../theme';
+import { Colors, Theme, ThemeVariant, typography } from '../../theme';
+import { isMobile } from '../../utils';
 
 function Intro(): React.ReactElement {
   const [theme, setTheme] = useTheme(state => [state.theme, state.setTheme]);
@@ -29,7 +31,7 @@ function Intro(): React.ReactElement {
     navigation.navigate(ScreenType.Contact);
   };
 
-  const { name, intro } = Config;
+  const { name, intro, availableForHire } = Config;
 
   const wavingHand = (
     <Animatable.View animation='swing' duration={2000} delay={1000}>
@@ -48,6 +50,13 @@ function Intro(): React.ReactElement {
           or
         <Text onPress={onContact} style={styles(theme).underline}>contact me</Text>
         </Text>
+        {availableForHire && (
+          <TouchableOpacity onPress={onContact} activeOpacity={0.9}>
+            <Animatable.View animation='tada' duration={2500} delay={1000} style={styles(theme).availableForHire}>
+              <Text style={styles(theme).availableForHireText}>🎉 I'm available for hire!</Text>
+            </Animatable.View>
+          </TouchableOpacity>
+        )}
       </Animatable.View>
     </View>
   );
@@ -80,6 +89,22 @@ const styles = (theme: Theme) => StyleSheet.create({
     fontSize: typography.subtitle,
     fontWeight: '400',
     textDecorationLine: 'underline',
+    fontStyle: 'italic'
+  },
+  availableForHire: {
+    width: isMobile ? 200 : 250,
+    marginTop: 20,
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    backgroundColor: Colors.hire(theme.type),
+    padding: 10,
+    borderRadius: 5
+  },
+  availableForHireText: {
+    fontSize: typography.caption,
+    fontWeight: '500',
+    color: Colors.white,
     fontStyle: 'italic'
   }
 });

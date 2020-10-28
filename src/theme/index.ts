@@ -14,6 +14,8 @@ export const ChipColor: { [key: string]: string } = {
   devops: '#0db7ed',
   android: '#56a036',
   ios: '#0c76e2',
+  redis: '#D82C20',
+  aws: '#FF9900'
 };
 
 export enum ThemeVariant {
@@ -40,7 +42,8 @@ export const Colors = {
   secondary: '#ffca28',
   placeholder: '#F2F2F2',
   backgroundDark: '#0f1222',
-  loader: (type: ThemeVariant) => type === ThemeVariant.DARK ? Colors.white : Colors.primary,
+  loader: (type: ThemeVariant): string => type === ThemeVariant.DARK ? Colors.white : Colors.primary,
+  hire: (type: ThemeVariant): string => type === ThemeVariant.DARK ? '#595dde' : '#66bb6a',
   deployment: {
     web: '#444444',
     android: '#3DDC84',
