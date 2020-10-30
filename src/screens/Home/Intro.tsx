@@ -1,9 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import Switch from 'expo-dark-mode-switch';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { responsiveHeight, responsiveWidth } from 'react-native-responsive-dimensions';
 import Config from '../../config';
 import { useDimensions } from '../../hooks';
