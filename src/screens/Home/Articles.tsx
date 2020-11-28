@@ -9,7 +9,7 @@ import Config from '../../config';
 import { useDimensions } from '../../hooks';
 import { useTheme } from '../../store';
 import { Colors, Theme, typography } from '../../theme';
-import { isMobile, isTablet, openInNewTab } from '../../utils';
+import { isMobile, isTablet, listToMatrix, openInNewTab } from '../../utils';
 
 type ArticleResult = any;
 
@@ -23,30 +23,38 @@ function Projects(): React.ReactElement {
 
   const itemDimension = width <= 1000 ? width * 0.9 : width * 0.3;
 
-  const renderItem = (info: ListRenderItemInfo<ArticleResult>): JSX.Element => {
+  const renderItem = (info: ListRenderItemInfo<ArticleResult[]>): JSX.Element => {
     const { item } = info;
-    const { title, tag_list, description, published_at, url } = item;
-
-    const date = dateFormat(new Date(published_at), 'mmm dS, yyyy');
-
-    const onPressArticle = () => {
-      openInNewTab(url);
-    };
 
     return (
-      <TouchableOpacity onPress={onPressArticle} activeOpacity={0.95} style={styles(theme).card}>
-        <View style={styles(theme).titleContainer}>
-          <Text style={styles(theme).title} ellipsizeMode='tail' numberOfLines={2}>{title}</Text>
-        </View>
-        <View style={styles(theme).tagContainer}>
-          {tag_list.map((tag: string) => <Chip key={tag} label={tag} />)}
-        </View>
-        <View style={{ flex: 1 }}>
-          <Text style={styles(theme).description} ellipsizeMode='tail' numberOfLines={2}>{description}</Text>
-        </View>
-        <Text style={styles(theme).date}>{date}</Text>
-      </TouchableOpacity>
-    );
+      <View>
+        {item.map((item: ArticleResult) => {
+
+          const { title, tag_list, description, published_at, url } = item;
+
+          const date = dateFormat(new Date(published_at), 'mmm dS, yyyy');
+
+          const onPressArticle = () => {
+            openInNewTab(url);
+          };
+
+          return (
+            <TouchableOpacity onPress={onPressArticle} activeOpacity={0.95} style={styles(theme).card}>
+              <View style={styles(theme).titleContainer}>
+                <Text style={styles(theme).title} ellipsizeMode='tail' numberOfLines={2}>{title}</Text>
+              </View>
+              <View style={styles(theme).tagContainer}>
+                {tag_list.map((tag: string) => <Chip key={tag} label={tag} />)}
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles(theme).description} ellipsizeMode='tail' numberOfLines={2}>{description}</Text>
+              </View>
+              <Text style={styles(theme).date}>{date}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    )
   };
 
   let content: React.ReactNode = (
@@ -56,9 +64,11 @@ function Projects(): React.ReactElement {
   );
 
   if (!isLoading && !data?.error) {
+    const columnGrid = listToMatrix(data, 2);
+
     content = (
       <FlatGrid
-        data={data}
+        data={columnGrid}
         spacing={10}
         horizontal
         itemDimension={itemDimension}
@@ -71,7 +81,7 @@ function Projects(): React.ReactElement {
 
   return (
     <View style={styles(theme).container}>
-      <SectionHeader title='Articles' subtitle="When I'm not writing code, I write articles" />
+      <SectionHeader title='Articles' subtitle="When I'm not writing code, I write articles" style={styles(theme).header} />
       {content}
     </View>
   );
@@ -81,17 +91,22 @@ const styles = (theme: Theme) => StyleSheet.create({
   container: {
     marginHorizontal: responsiveWidth(2)
   },
+  header: {
+    marginBottom: 5
+  },
   content: {
     alignItems: 'center',
     justifyContent: 'center',
     height: isMobile ? responsiveHeight(24) : responsiveHeight(32)
   },
   gridView: {
-    height: isMobile ? responsiveHeight(24) : responsiveHeight(32)
+    height: isMobile ? responsiveHeight(52) : responsiveHeight(60)
   },
   card: {
+    display: 'flex',
     width: isMobile ? responsiveWidth(90) : isTablet ? responsiveWidth(60) : responsiveWidth(32),
     height: isMobile ? responsiveHeight(24) : responsiveHeight(28),
+    marginTop: 10,
     padding: 20,
     borderRadius: 5,
     overflow: 'hidden',

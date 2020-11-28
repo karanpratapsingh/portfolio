@@ -70,3 +70,8 @@ export function openInNewTab(url: string) {
     }
   }
 }
+
+export function listToMatrix(list: any[], column: number): any[][] {
+  return list.reduce((rows, key, index) => (index % column == 0 ? rows.push([key])
+    : rows[rows.length - 1].push(key)) && rows, []);
+}
