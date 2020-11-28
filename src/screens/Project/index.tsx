@@ -1,12 +1,13 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Image } from 'react-native';
 import { Heading } from '../../components';
 import Config, { IProject, ISubProject } from '../../config';
 import { useTheme } from '../../store';
 import { Colors, defaultContainerStyles, Theme, typography } from '../../theme';
 import DeploymentGrid from './DeploymentGrid';
 import StackGrid from './StackGrid';
+import ScreenshotGrid from './ScreenshotGrid';
 
 type ProjectParams = {
   id: number;
@@ -30,7 +31,9 @@ function Project(): React.ReactElement | null {
     return null;
   }
 
-  const { title, description, stack, deployment, subProjects } = project;
+  const { title, description, stack, deployment, subProjects, screenshots } = project;
+
+  const hasSubProjects: boolean = !!subProjects.length;
 
   return (
     <ScrollView style={styles(theme).container}>
@@ -38,8 +41,8 @@ function Project(): React.ReactElement | null {
       <Text style={styles(theme).description}>{description}</Text>
       <Heading label='Technologies' variant='medium' />
       <StackGrid stack={stack} dimension={40} />
-      <DeploymentGrid deployment={deployment} />
-      {!!subProjects.length && <Heading label='More products' variant='medium' />}
+      <ScreenshotGrid screenshots={screenshots} />
+      {hasSubProjects && <Heading label='More products' variant='medium' />}
       {subProjects.map(subProject => <SubProject subProject={subProject} />)}
     </ScrollView>
   );
