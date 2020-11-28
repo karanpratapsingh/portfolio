@@ -9,13 +9,14 @@ import Config, { IProject } from '../../config';
 import { useDimensions } from '../../hooks';
 import { ScreenType } from '../../navigation';
 import { Colors, typography } from '../../theme';
+import { isTablet } from '../../utils';
 
 function Projects(): React.ReactElement {
   const navigation = useNavigation();
   const { width } = useDimensions();
   const { projects } = Config;
 
-  const itemDimension = width <= 1000 ? width * 0.9 : width * 0.3;
+  const itemDimension = isTablet ? width * 0.9 : width * 0.3;
 
   const ListHeaderComponent = () => <SectionHeader title='Portfolio' subtitle={'Projects I\'ve worked on recently'} />;
 
@@ -59,13 +60,13 @@ const styles = StyleSheet.create({
     marginBottom: responsiveWidth(1),
   },
   card: {
-    height: responsiveHeight(36),
+    height: isTablet ? responsiveHeight(45) : responsiveHeight(36),
     borderRadius: 5,
     overflow: 'hidden',
     backgroundColor: Colors.placeholder
   },
   banner: {
-    height: responsiveHeight(36),
+    height: isTablet ? responsiveHeight(45) : responsiveHeight(36),
     justifyContent: 'flex-end',
   },
   cardContent: {

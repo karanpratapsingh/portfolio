@@ -1,14 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, ViewStyle } from 'react-native';
 import { Colors, typography } from '../theme';
 
 interface HeadingProps {
   label: string;
-  variant?: 'large' | 'medium' | 'small'
+  variant?: 'large' | 'medium' | 'small',
+  style?: ViewStyle;
 }
 
 function Heading(props: HeadingProps) {
-  const { label, variant = 'large' } = props;
+  const { label, variant = 'large', style } = props;
 
   let fontSize = typography.title;
 
@@ -18,7 +19,7 @@ function Heading(props: HeadingProps) {
     fontSize = typography.body;
   }
 
-  return <Text style={[styles.text, { fontSize }]}>{label}</Text>;
+  return <Text style={[styles.text, style, { fontSize }]}>{label}</Text>;
 }
 
 const styles = StyleSheet.create({

@@ -1,19 +1,20 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { useTheme } from '../store';
 import { Theme, typography } from '../theme';
 
 interface SectionHeaderProps {
   title: string;
   subtitle: string;
+  style?: ViewStyle;
 }
 
 function SectionHeader(props: SectionHeaderProps) {
-  const { title, subtitle } = props;
+  const { title, subtitle, style } = props;
   const theme = useTheme(state => state.theme);
 
   return (
-    <View style={styles(theme).container}>
+    <View style={[styles(theme).container, style]}>
       <Text style={styles(theme).title}>{title}</Text>
       <Text style={styles(theme).subtitle}>{subtitle}</Text>
     </View>
