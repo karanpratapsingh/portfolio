@@ -41,6 +41,7 @@ function Project(): React.ReactElement | null {
       <Text style={styles(theme).description}>{description}</Text>
       <Heading label='Technologies' variant='medium' />
       <StackGrid stack={stack} dimension={40} />
+      <DeploymentGrid deployment={deployment} />
       <ScreenshotGrid screenshots={screenshots} />
       {hasSubProjects && <Heading label='More products' variant='medium' />}
       {subProjects.map(subProject => <SubProject subProject={subProject} />)}
