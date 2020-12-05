@@ -23,7 +23,7 @@ function ScreenshotGrid(props: ScreenshotGridProps): React.ReactElement {
     const { item } = info;
     return (
       <View style={styles.card}>
-        <Image source={{ uri: item }} style={styles.banner} borderRadius={10} />
+        <Image source={{ uri: item }} style={styles.image} borderRadius={10} resizeMode='cover' />
       </View>
     );
   };
@@ -35,7 +35,7 @@ function ScreenshotGrid(props: ScreenshotGridProps): React.ReactElement {
   return (
     <FlatGrid
       data={screenshots}
-      spacing={10}
+      spacing={20}
       ListHeaderComponent={ListHeaderComponent}
       itemDimension={itemDimension}
       style={styles.gridView}
@@ -58,9 +58,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: Colors.placeholder
   },
-  banner: {
-    height: responsiveHeight(80),
-    resizeMode: 'cover'
+  image: {
+    height: responsiveHeight(80)
   }
 })
 
