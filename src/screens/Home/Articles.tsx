@@ -66,7 +66,7 @@ function Projects(): React.ReactElement {
   if (!isLoading && !data?.error) {
     // Note: I am filtering out certain less important articles
     const term: string = 'fullstack graphql starter kit';
-    const filter = data.filter((item: ArticleResult) => item.title?.toLowerCase()?.includes(term))
+    const filter = data.filter((item: ArticleResult) => !item.title?.toLowerCase()?.includes(term))
     const columnGrid = listToMatrix(filter, 2);
 
     content = (
