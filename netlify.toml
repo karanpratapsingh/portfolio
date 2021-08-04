@@ -1,3 +1,0 @@
-[build]  
-  publish = "web-build/"
-  command = "yarn build:web"
