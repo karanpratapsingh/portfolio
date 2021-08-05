@@ -3,8 +3,10 @@ import Image from 'next/image';
 
 import config from '../config';
 
-import { SubHeader, Banner } from '../components';
-import { Card, Row, Col, List, Avatar } from 'antd';
+import { SubHeader, Banner, Footer, List, ProjectCard, ArticleCard } from '../components';
+import { Card, Row, Col } from 'antd';
+
+import { SwiperSlide } from 'swiper/react';
 
 export default function Home() {
   const [articles, setArticles] = useState<any>([]);
@@ -21,6 +23,32 @@ export default function Home() {
       });
   }
 
+  function renderProjectsList(project: Project): React.ReactNode {
+    const { title, description, banner } = project;
+    return (
+      <SwiperSlide>
+        <ProjectCard
+          title={title}
+          description={description}
+          banner={banner}
+        />
+      </SwiperSlide>
+    );
+  }
+
+  function renderArticlesList(article: any): React.ReactNode {
+    const { title, description, tag_list: tags } = article;
+    return (
+      <SwiperSlide>
+        <ArticleCard
+          title={title}
+          description={description}
+          tags={tags}
+        />
+      </SwiperSlide>
+    );
+  }
+
   return (
     <div className='flex flex-col'>
       <Head>
@@ -33,7 +61,7 @@ export default function Home() {
         <Banner />
       </div>
 
-      <div className='p-10'>
+      <div className='px-10 py-5'>
         <SubHeader
           title='Portfolio'
           description={`Projects I've worked on recently`}
@@ -54,9 +82,9 @@ export default function Home() {
                       alt="card" />
                   }
                 >
-                  <div className='flex flex-col'>
+                  <div className='flex flex-col p-6'>
                     <span className='text-lg font-bold'>{project.title}</span>
-                    <span className='text-sm font-light truncate text-ellipsis'>{project.description}</span>
+                    <p className='text-sm font-light line-clamp-2'>{project.description}</p>
                   </div>
                 </Card>
               </Col>
@@ -65,37 +93,29 @@ export default function Home() {
         </Row>
       </div>
 
-      <div className='p-10'>
-        <SubHeader
-          title='Articles'
-          description={`Projects I've worked on recently`}
-        />
-        <Row gutter={[8, 8]}>
-          {articles.map((article: any) => {
-            return (
-              <Col key={article.id} className='' sm={8} xxl={4}>
-                <Card
-                  hoverable
-                  className='rounded'
-                >
-                  <div className='flex flex-col'>
-                    <span className='text-lg font-bold truncate text-ellipsis'>{article.title}</span>
-                    <span className='text-sm font-light truncate text-ellipsis'>{article.description}</span>
-                  </div>
-                </Card>
-              </Col>
-            );
-          })}
-        </Row>
-      </div>
+      <List
+        title='Portfolio'
+        description={`Projects I've worked on recently`}
+        data={projects}
+        renderList={renderProjectsList}
+      />
 
-    </div >
+      <List
+        title='Articles'
+        description={`When I'm not writing code, I write articles`}
+        data={articles}
+        renderList={renderArticlesList}
+      />
+
+      <Footer />
+    </div>
   );
 }
 
 import { PageHeader, Switch } from 'antd';
-import projects from '../config/projects';
+import projects, { Project } from '../config/projects';
 import { useEffect, useState } from 'react';
+import { BreakpointValues } from '../types';
 
 function Header(): React.ReactElement {
   return (
