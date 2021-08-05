@@ -5,7 +5,7 @@ enum ContactType {
   github = 'github',
 }
 
-type Contact = Record<ContactType, string>;
+export type Contact = Record<ContactType, string>;
 
 const contact: Contact = {
   email: 'contact@karanpratapsingh.com',
@@ -14,4 +14,4 @@ const contact: Contact = {
   github: 'github.com/karanpratapsingh',
 };
 
-export { contact as default, Contact, ContactType };
+export { contact as default, ContactType };
