@@ -1,17 +1,17 @@
-export enum ContactType {
+enum ContactType {
   email = 'email',
   twitter = 'twitter',
   linkedIn = 'linkedIn',
-  github = 'github'
+  github = 'github',
 }
 
-export type Contact = Record<ContactType, string>;
+type Contact = Record<ContactType, string>;
 
-const contact = {
+const contact: Contact = {
   email: 'contact@karanpratapsingh.com',
   twitter: 'twitter.com/karan_6864',
   linkedIn: 'linkedin.com/in/karanpratapsingh4999',
   github: 'github.com/karanpratapsingh',
 };
 
-export default contact;
+export { contact as default, Contact, ContactType };
