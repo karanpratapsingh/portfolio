@@ -11,10 +11,14 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
+    "@tailwindcss/line-clamp": "^0.2.1",
     "antd": "^4.16.10",
+    "framer-motion": "^4.1.17",
     "next": "11.0.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "sass": "^1.37.5",
+    "swiper": "^6.8.1"
   },
   "devDependencies": {
     "@types/react": "17.0.13",
