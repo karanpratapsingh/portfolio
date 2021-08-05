@@ -35,7 +35,7 @@ const projects: Project[] = [
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fpeapods%2Fbanner.png?alt=media&token=20726ab4-332d-4cd7-afb1-2d1764deaf6b',
     website: 'https://peapods.com',
     isOpenSource: false,
-    description: 'Upcoming social media platform for web 3.0',
+    description: 'Upcoming decentralized social media platform for web 3.0',
     repository: null,
     stack: [Stack.js, Stack.react, Stack.graphql, Stack.aws, Stack.arango],
     screenshots: [],
@@ -52,7 +52,7 @@ const projects: Project[] = [
     banner:
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fproximity%2Fbanner.jpeg?alt=media&token=4d1d49e3-20ac-491e-8947-57a4e8520cc6',
     description:
-      'An open source social app that does not use your data against you',
+      'An open source social media app that does not use your data against you',
     repository: 'https://github.com/karanpratapsingh/Proximity',
     stack: [Stack.ts, Stack.react, Stack.graphql, Stack.firebase],
     screenshots: [
