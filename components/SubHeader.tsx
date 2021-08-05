@@ -1,4 +1,4 @@
-interface SubHeaderProps {
+export interface SubHeaderProps {
   title: string;
   description: string;
 }
