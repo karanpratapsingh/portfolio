@@ -1,0 +1,35 @@
+@import './colors';
+
+.swiper-container {
+  padding: 20px 0px !important;
+  height: auto !important;
+}
+
+.swiper-pagination {
+  position: absolute;
+  z-index: 20;
+  top: -35px;
+  right: 4%;
+  height: 30px;
+  left: initial !important;
+  bottom: initial !important;
+  width: auto !important;
+  opacity: 1 !important;
+
+  &-bullet {
+    width: 20px !important;
+    height: 4px !important;
+    display: inline-block !important;
+    margin: 0px !important;
+    margin-left: 2px !important;
+    border-radius: 0px !important;
+    background-color: $bulletActive !important;
+    transition: all 0.2s ease-in-out;
+
+    &-active {
+      background-color: $bulletInactive;
+      height: 5px;
+    }
+  }
+}
+
