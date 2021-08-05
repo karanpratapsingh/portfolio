@@ -7,6 +7,20 @@ import { SubHeader, Banner } from '../components';
 import { Card, Row, Col, List, Avatar } from 'antd';
 
 export default function Home() {
+  const [articles, setArticles] = useState<any>([]);
+
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
+  async function fetchArticles(): Promise<void> {
+    fetch('https://dev.to/api/articles?username=karanpratapsingh')
+      .then(response => response.json())
+      .then(response => {
+        setArticles(response);
+      });
+  }
+
   return (
     <div className='flex flex-col'>
       <Head>
@@ -51,12 +65,37 @@ export default function Home() {
         </Row>
       </div>
 
-    </div>
+      <div className='p-10'>
+        <SubHeader
+          title='Articles'
+          description={`Projects I've worked on recently`}
+        />
+        <Row gutter={[8, 8]}>
+          {articles.map((article: any) => {
+            return (
+              <Col key={article.id} className='' sm={8} xxl={4}>
+                <Card
+                  hoverable
+                  className='rounded'
+                >
+                  <div className='flex flex-col'>
+                    <span className='text-lg font-bold truncate text-ellipsis'>{article.title}</span>
+                    <span className='text-sm font-light truncate text-ellipsis'>{article.description}</span>
+                  </div>
+                </Card>
+              </Col>
+            );
+          })}
+        </Row>
+      </div>
+
+    </div >
   );
 }
 
 import { PageHeader, Switch } from 'antd';
 import projects from '../config/projects';
+import { useEffect, useState } from 'react';
 
 function Header(): React.ReactElement {
   return (
