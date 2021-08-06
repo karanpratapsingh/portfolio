@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import { Card, Tag } from 'antd';
 import { TagColor } from '../config';
-import { isDesktop } from 'react-device-detect';
 import React from 'react';
 
 interface BaseProps {
@@ -18,8 +17,7 @@ export function ProjectCard(props: ProjectCardProps): React.ReactElement {
 
   return (
     <Card
-      hoverable={isDesktop}
-      className='flex-shrink-0 mr-2 rounded w-72 lg:w-80'
+      className='flex-shrink-0 mr-2 rounded w-72 lg:w-80 cursor-pointer'
       cover={
         <Image
           loading='eager'
@@ -51,7 +49,7 @@ export function ArticleCard(props: ArticleCardProps): React.ReactElement {
   }
 
   return (
-    <Card hoverable={isDesktop} className='flex-shrink-0 mr-2 rounded w-72 lg:w-80'>
+    <Card className='flex-shrink-0 mr-2 rounded w-72 lg:w-80 cursor-pointer'>
       <div className='flex flex-col p-6'>
         <span className='text-lg font-bold truncate text-ellipsis'>
           {title}
