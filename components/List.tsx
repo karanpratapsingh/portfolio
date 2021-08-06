@@ -15,11 +15,11 @@ export function List(props: ListProps): React.ReactElement {
 
   function renderPlaceholder(): React.ReactNode {
     return (
-      <div className='flex flex-shrink-0 rounded w-72 lg:w-80 h-36 overflow-hidden mr-2'>
+      <div className='flex flex-shrink-0 rounded w-72 lg:w-80 h-40 overflow-hidden mr-2'>
         <Skeleton.Avatar
           active
           shape='square'
-          style={{ height: 150, width: 400 }}
+          style={{ height: 160, width: 400 }}
         />
       </div>
     );
