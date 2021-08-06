@@ -1,13 +1,11 @@
 import { Layout } from 'antd';
 import React from 'react';
 import { IconBaseProps } from 'react-icons';
-import {
-  FaLinkedinIn as LinkedinIcon
-} from 'react-icons/fa';
+import { FaLinkedinIn as LinkedinIcon } from 'react-icons/fa';
 import {
   IoLogoGithub as GithubIcon,
   IoLogoTwitter as TwitterIcon,
-  IoMdMail as MailIcon
+  IoMdMail as MailIcon,
 } from 'react-icons/io';
 import { contact, ContactType } from '../config';
 import { Maybe } from '../types';
@@ -47,19 +45,19 @@ export function Footer(): React.ReactElement {
         <a target='_blank' href={url} rel='noopener noreferrer'>
           {icon}
         </a>
-      )
+      );
     }
 
-    return Object.entries(contact).map(resolveIcon)
+    return Object.entries(contact).map(resolveIcon);
   }
 
   return (
     <Layout.Footer className='flex flex-col text-center py-16 lg:py-10 font-light bg-primary'>
       <span className='text-xl font-bold'>Let&apos;s connect</span>
-      <span className='my-8 font-light'>Get in touch for opportunities or just to say hi!</span>
-      <div className='flex self-center'>
-        {renderSocialIcons()}
-      </div>
+      <span className='my-8 font-light'>
+        Get in touch for opportunities or just to say hi!
+      </span>
+      <div className='flex self-center'>{renderSocialIcons()}</div>
     </Layout.Footer>
   );
 }
