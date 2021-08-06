@@ -69,8 +69,6 @@ export default function Home(props: HomeStaticProps) {
         <Banner />
       </div>
 
-      {/* <LegacyList /> */}
-
       <List
         title='Portfolio'
         description={`Projects I've worked on recently`}
@@ -109,43 +107,4 @@ export async function getServerSideProps() {
   };
 
   return { props };
-}
-
-function LegacyList() {
-  return (
-    <div className='px-10 py-5'>
-      <SubHeader
-        title='Portfolio'
-        description={`Projects I've worked on recently`}
-      />
-      <Row gutter={[8, 8]}>
-        {projects.map(project => {
-          return (
-            <Col key={project.id} className='' sm={8} xxl={4}>
-              <Card
-                hoverable
-                className='rounded'
-                cover={
-                  <Image
-                    src={project.banner}
-                    height={240}
-                    width={400}
-                    objectFit='cover'
-                    alt='card'
-                  />
-                }
-              >
-                <div className='flex flex-col p-6'>
-                  <span className='text-lg font-bold'>{project.title}</span>
-                  <p className='text-sm font-light line-clamp-2'>
-                    {project.description}
-                  </p>
-                </div>
-              </Card>
-            </Col>
-          );
-        })}
-      </Row>
-    </div>
-  );
 }
