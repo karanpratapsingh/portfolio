@@ -10,7 +10,7 @@ interface ListProps extends SubHeaderProps {
   renderList: (item: ListData) => React.ReactNode;
 }
 
-function List(props: ListProps): React.ReactElement {
+export function List(props: ListProps): React.ReactElement {
   const { data, renderList, title, description } = props;
 
   function renderPlaceholder(): React.ReactNode {
@@ -39,5 +39,3 @@ function List(props: ListProps): React.ReactElement {
     </div>
   );
 }
-
-export { List };

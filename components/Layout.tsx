@@ -4,7 +4,7 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-function Layout(props: LayoutProps): React.ReactElement {
+export function Layout(props: LayoutProps): React.ReactElement {
   const { children } = props;
 
   return (
@@ -14,5 +14,3 @@ function Layout(props: LayoutProps): React.ReactElement {
     </div>
   );
 }
-
-export { Layout };

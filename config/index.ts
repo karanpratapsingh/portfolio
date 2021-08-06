@@ -1,5 +1,5 @@
-import contact, { Contact } from './contact';
-import projects, { Project } from './projects';
+import { contact, Contact } from './contact';
+import { projects, Project } from './projects';
 
 type PersonalConfig = {
   name: string;

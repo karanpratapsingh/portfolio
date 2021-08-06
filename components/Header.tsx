@@ -1,7 +1,7 @@
 import { PageHeader, Switch } from 'antd';
 import Image from 'next/image';
 
-function Header(): React.ReactElement {
+export function Header(): React.ReactElement {
   const dimensions = {
     height: 20,
     width: 20,
@@ -26,5 +26,3 @@ function Header(): React.ReactElement {
     />
   );
 }
-
-export { Header };

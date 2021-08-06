@@ -3,7 +3,7 @@ export interface SubHeaderProps {
   description: string;
 }
 
-function SubHeader(props: SubHeaderProps): React.ReactElement {
+export function SubHeader(props: SubHeaderProps): React.ReactElement {
   const { title, description } = props;
 
   return (
@@ -13,5 +13,3 @@ function SubHeader(props: SubHeaderProps): React.ReactElement {
     </div>
   );
 }
-
-export { SubHeader };

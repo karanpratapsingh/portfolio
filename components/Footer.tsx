@@ -1,6 +1,6 @@
 import { Layout } from 'antd';
 
-function Footer(): React.ReactElement {
+export function Footer(): React.ReactElement {
   const year: number = new Date().getFullYear();
   return (
     <Layout.Footer className='text-center py-10 font-light bg-secondary'>
@@ -8,5 +8,3 @@ function Footer(): React.ReactElement {
     </Layout.Footer>
   );
 }
-
-export { Footer };
