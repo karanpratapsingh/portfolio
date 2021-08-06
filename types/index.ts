@@ -1,3 +1,5 @@
+export type Maybe<T> = T | null;
+
 export type Article = {
   id: number,
   title: string,

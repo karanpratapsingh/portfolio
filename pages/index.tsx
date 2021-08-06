@@ -17,7 +17,6 @@ import config from '../config';
 import projects, { Project } from '../config/projects';
 import { Article, Video } from '../types';
 
-
 interface HomeStaticProps {
   videos: Video[];
   articles: Article[];
