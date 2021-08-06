@@ -2,7 +2,7 @@ import config from '../config';
 
 export function Banner(): React.ReactElement {
   return (
-    <div className='h-screen flex flex-col flex-1 justify-center px-6 lg:px-10  py-10'>
+    <div className='banner flex flex-col flex-1 justify-center px-6 lg:px-10 py-10'>
       <h1 className='text-2xl lg:text-6xl font-bold'>
         Hi, I am {config.personal.name}
       </h1>

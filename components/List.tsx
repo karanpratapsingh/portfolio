@@ -33,9 +33,9 @@ export function List(props: ListProps): React.ReactElement {
   }
 
   return (
-    <div className='px-6 lg:px-10 pb-5'>
+    <div className='pb-5'>
       <SubHeader title={title} description={description} />
-      <div className='flex overflow-auto py-2'>{list}</div>
+      <div className='flex overflow-auto pl-6 lg:pl-10 py-2'>{list}</div>
     </div>
   );
 }
