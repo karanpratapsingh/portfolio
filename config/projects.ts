@@ -27,7 +27,7 @@ export interface Project {
   subProjects: SubProject[];
 }
 
-const projects: Project[] = [
+export const projects: Project[] = [
   {
     id: 0,
     title: 'Peapods',
@@ -210,5 +210,3 @@ const projects: Project[] = [
     subProjects: [],
   },
 ];
-
-export default projects;

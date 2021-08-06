@@ -6,15 +6,14 @@ import {
   ArticleCard,
   Banner,
   Conditional,
-  Footer,
   Header,
   List,
   ProjectCard,
   SubHeader,
-  VideoCard
+  VideoCard,
+  Layout
 } from '../components';
-import config from '../config';
-import projects, { Project } from '../config/projects';
+import config, { projects, Project } from '../config';
 import { Article, Video } from '../types';
 
 interface HomeStaticProps {
@@ -68,7 +67,7 @@ export default function Home(props: HomeStaticProps) {
   const showVideos = Boolean(config.videos);
 
   return (
-    <div className='flex flex-col'>
+    <Layout>
       <div>
         <Header />
         <Banner />
@@ -100,8 +99,7 @@ export default function Home(props: HomeStaticProps) {
           renderList={renderVideoList}
         />
       </Conditional>
-      <Footer />
-    </div>
+    </ Layout>
   );
 }
 
