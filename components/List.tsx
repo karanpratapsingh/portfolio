@@ -27,10 +27,7 @@ function List(props: ListProps): React.ReactElement {
 
   return (
     <div className='px-10 pb-5'>
-      <SubHeader
-        title={title}
-        description={description}
-      />
+      <SubHeader title={title} description={description} />
       <Swiper {...swiperParams}>
         {React.Children.toArray(data.map(renderList))}
       </Swiper>
@@ -38,4 +35,4 @@ function List(props: ListProps): React.ReactElement {
   );
 }
 
-export { List }
+export { List };

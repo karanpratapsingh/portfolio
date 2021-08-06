@@ -3,7 +3,14 @@ import Image from 'next/image';
 
 import config from '../config';
 
-import { SubHeader, Banner, Footer, List, ProjectCard, ArticleCard } from '../components';
+import {
+  SubHeader,
+  Banner,
+  Footer,
+  List,
+  ProjectCard,
+  ArticleCard,
+} from '../components';
 import { Card, Row, Col } from 'antd';
 
 import { SwiperSlide } from 'swiper/react';
@@ -27,11 +34,7 @@ export default function Home() {
     const { title, description, banner } = project;
     return (
       <SwiperSlide>
-        <ProjectCard
-          title={title}
-          description={description}
-          banner={banner}
-        />
+        <ProjectCard title={title} description={description} banner={banner} />
       </SwiperSlide>
     );
   }
@@ -40,11 +43,7 @@ export default function Home() {
     const { title, description, tag_list: tags } = article;
     return (
       <SwiperSlide>
-        <ArticleCard
-          title={title}
-          description={description}
-          tags={tags}
-        />
+        <ArticleCard title={title} description={description} tags={tags} />
       </SwiperSlide>
     );
   }
@@ -79,12 +78,15 @@ export default function Home() {
                       height={240}
                       width={400}
                       objectFit='cover'
-                      alt="card" />
+                      alt='card'
+                    />
                   }
                 >
                   <div className='flex flex-col p-6'>
                     <span className='text-lg font-bold'>{project.title}</span>
-                    <p className='text-sm font-light line-clamp-2'>{project.description}</p>
+                    <p className='text-sm font-light line-clamp-2'>
+                      {project.description}
+                    </p>
                   </div>
                 </Card>
               </Col>

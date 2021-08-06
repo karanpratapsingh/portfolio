@@ -26,7 +26,8 @@ export function ProjectCard(props: ProjectCardProps): React.ReactElement {
           height={240}
           width={400}
           objectFit='cover'
-          alt="card" />
+          alt='card'
+        />
       }
     >
       <div className='flex flex-col p-4'>
@@ -34,7 +35,7 @@ export function ProjectCard(props: ProjectCardProps): React.ReactElement {
         <p className='text-sm font-light line-clamp-2'>{description}</p>
       </div>
     </Card>
-  )
+  );
 }
 
 interface ArticleCardProps extends BaseProps {
@@ -49,17 +50,16 @@ export function ArticleCard(props: ArticleCardProps): React.ReactElement {
   }
 
   return (
-    <Card
-      hoverable={isDesktop}
-      className='rounded w-72 lg:w-80'
-    >
+    <Card hoverable={isDesktop} className='rounded w-72 lg:w-80'>
       <div className='flex flex-col p-6'>
-        <span className='text-lg font-bold truncate text-ellipsis'>{title}</span>
+        <span className='text-lg font-bold truncate text-ellipsis'>
+          {title}
+        </span>
         <ul className='flex my-2'>
           {React.Children.toArray(tags.map(renderTags))}
         </ul>
         <span className='text-sm font-light line-clamp-2'>{description}</span>
       </div>
     </Card>
-  )
+  );
 }
