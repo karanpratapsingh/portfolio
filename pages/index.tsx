@@ -95,7 +95,7 @@ export default function Home(props: HomeStaticProps) {
       <Conditional condition={showVideos}>
         <List
           title='Videos'
-          description={`I make videos`}
+          description={`I also make videos`}
           data={videos}
           renderList={renderVideoList}
         />
