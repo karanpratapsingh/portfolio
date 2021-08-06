@@ -13,6 +13,7 @@
     "@ant-design/icons": "^4.6.2",
     "@tailwindcss/line-clamp": "^0.2.1",
     "antd": "^4.16.10",
+    "dateformat": "^4.5.1",
     "framer-motion": "^4.1.17",
     "next": "11.0.1",
     "react": "17.0.2",
@@ -20,6 +21,7 @@
     "sass": "^1.37.5"
   },
   "devDependencies": {
+    "@types/dateformat": "^3.0.1",
     "@types/react": "17.0.13",
     "autoprefixer": "^10.3.1",
     "eslint": "7.29.0",
