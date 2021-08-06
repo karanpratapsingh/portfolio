@@ -4,6 +4,7 @@ import { projects, Project } from './projects';
 type PersonalConfig = {
   name: string;
   fullName: string;
+  title: string;
   intro: string;
   about: string;
   resume: string;
@@ -28,15 +29,16 @@ type VideosConfig = {
 
 interface Config {
   personal: PersonalConfig;
+  projects: Project[];
   articles?: ArticlesConfig;
   videos?: VideosConfig;
-  projects: Project[];
 }
 
 const config: Config = {
   personal: {
     name: 'Karan',
     fullName: 'Karan Pratap Singh',
+    title: 'Software Engineer & Solutions Architect',
     intro:
       'A full stack developer who loves open source and values learning and growing with people, teams, and technologies.',
     about:
