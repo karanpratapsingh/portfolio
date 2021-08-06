@@ -3,11 +3,11 @@ import config from '../config';
 export function Banner(): React.ReactElement {
   return (
     <div className='banner flex flex-col flex-1 justify-center px-6 lg:px-10 py-10'>
-      <h1 className='text-2xl lg:text-6xl font-bold'>
+      <h1 className='text-2xl lg:text-5xl font-bold'>
         Hi, I am {config.personal.name}
       </h1>
-      <p className='mt-2 lg:text-2xl font-light'>{config.personal.intro}</p>
-      <p className='mt-2 lg:text-2xl font-light'>
+      <p className='my-4 lg:text-2xl font-light'>{config.personal.title}</p>
+      <p className='lg:text-xl font-light'>
         Read more
         <span className='cursor-pointer mx-2 font-bold underline italic'>
           about me

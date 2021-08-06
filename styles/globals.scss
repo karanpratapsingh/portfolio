@@ -24,3 +24,11 @@ div#__next > div {
 * {
   scroll-behavior: smooth;
 }
+
+.banner {
+  height: 80vh;
+
+  @screen lg {
+    height: 95vh;
+  }
+}
