@@ -19,14 +19,15 @@ export function ProjectCard(props: ProjectCardProps): React.ReactElement {
   return (
     <Card
       hoverable={isDesktop}
-      className='rounded w-72 lg:w-80'
+      className='flex-shrink-0 mr-2 rounded w-72 lg:w-80'
       cover={
         <Image
+          loading='eager'
           src={banner}
           height={240}
           width={400}
           objectFit='cover'
-          alt='card'
+          alt={title}
         />
       }
     >
@@ -50,7 +51,7 @@ export function ArticleCard(props: ArticleCardProps): React.ReactElement {
   }
 
   return (
-    <Card hoverable={isDesktop} className='rounded w-72 lg:w-80'>
+    <Card hoverable={isDesktop} className='flex-shrink-0 mr-2 rounded w-72 lg:w-80'>
       <div className='flex flex-col p-6'>
         <span className='text-lg font-bold truncate text-ellipsis'>
           {title}

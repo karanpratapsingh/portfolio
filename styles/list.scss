@@ -4,16 +4,6 @@
   padding: 0px;
 }
 
-.swiper-container {
-  padding: 10px 0px !important;
-  height: auto !important;
-}
-
-.swiper-slide {
-  width: auto !important;
-  margin-right: 10px;
-}
-
-.swiper-pagination {
+*::-webkit-scrollbar {
   display: none;
 }

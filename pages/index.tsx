@@ -11,9 +11,8 @@ import {
   ProjectCard,
   ArticleCard,
 } from '../components';
-import { Card, Row, Col } from 'antd';
 
-import { SwiperSlide } from 'swiper/react';
+import { Card, Row, Col } from 'antd';
 
 export default function Home() {
   const [articles, setArticles] = useState<any>([]);
@@ -32,20 +31,12 @@ export default function Home() {
 
   function renderProjectsList(project: Project): React.ReactNode {
     const { title, description, banner } = project;
-    return (
-      <SwiperSlide>
-        <ProjectCard title={title} description={description} banner={banner} />
-      </SwiperSlide>
-    );
+    return <ProjectCard title={title} description={description} banner={banner} />;
   }
 
   function renderArticlesList(article: any): React.ReactNode {
     const { title, description, tag_list: tags } = article;
-    return (
-      <SwiperSlide>
-        <ArticleCard title={title} description={description} tags={tags} />
-      </SwiperSlide>
-    );
+    return <ArticleCard title={title} description={description} tags={tags} />;
   }
 
   return (
@@ -117,7 +108,6 @@ export default function Home() {
 import { PageHeader, Switch } from 'antd';
 import projects, { Project } from '../config/projects';
 import { useEffect, useState } from 'react';
-import { BreakpointValues } from '../types';
 
 function Header(): React.ReactElement {
   return (
