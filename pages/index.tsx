@@ -1,22 +1,22 @@
+import { Card, Col, Row } from 'antd';
 import Image from 'next/image';
-
+import React from 'react';
+import * as API from '../api';
 import {
-  Header,
-  SubHeader,
+  ArticleCard,
   Banner,
+  Conditional,
   Footer,
+  Header,
   List,
   ProjectCard,
-  ArticleCard,
-  VideoCard,
-  Conditional
+  SubHeader,
+  VideoCard
 } from '../components';
-import projects, { Project } from '../config/projects';
-import React from 'react';
-import { Card, Row, Col } from 'antd';
-import { Video, Article } from '../types';
-import * as API from '../api';
 import config from '../config';
+import projects, { Project } from '../config/projects';
+import { Article, Video } from '../types';
+
 
 interface HomeStaticProps {
   videos: Video[];
