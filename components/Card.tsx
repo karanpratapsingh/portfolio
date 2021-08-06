@@ -55,7 +55,10 @@ export function ArticleCard(props: ArticleCardProps): React.ReactElement {
   }
 
   return (
-    <Card className='flex-shrink-0 mr-2 rounded w-72 lg:w-80 cursor-pointer' onClick={onClick}>
+    <Card
+      className='flex-shrink-0 mr-2 rounded w-72 lg:w-80 cursor-pointer'
+      onClick={onClick}
+    >
       <div className='flex flex-col py-4 px-6'>
         <span className='text-lg font-bold truncate text-ellipsis'>
           {title}
@@ -71,20 +74,19 @@ export function ArticleCard(props: ArticleCardProps): React.ReactElement {
 }
 
 interface VideoCardProps {
-  id: string
+  id: string;
 }
 
 export function VideoCard(props: VideoCardProps): React.ReactElement {
   const { id } = props;
 
   return (
-    <Card
-      className='flex-shrink-0 mr-2 rounded w-72 lg:w-80 cursor-pointer'>
+    <Card className='flex-shrink-0 mr-2 rounded w-72 lg:w-80 cursor-pointer'>
       <iframe
         src={`https://www.youtube.com/embed/${id}`}
-        title="YouTube video player"
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        title='YouTube video player'
+        frameBorder='0'
+        allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
         allowFullScreen
       />
     </Card>

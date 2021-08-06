@@ -16,7 +16,11 @@ function List(props: ListProps): React.ReactElement {
   function renderPlaceholder(): React.ReactNode {
     return (
       <div className='flex flex-shrink-0 rounded w-72 lg:w-80 h-36 overflow-hidden mr-2'>
-        <Skeleton.Avatar active shape='square' style={{ height: 150, width: 400 }} />
+        <Skeleton.Avatar
+          active
+          shape='square'
+          style={{ height: 150, width: 400 }}
+        />
       </div>
     );
   }
@@ -31,9 +35,7 @@ function List(props: ListProps): React.ReactElement {
   return (
     <div className='px-6 lg:px-10 pb-5'>
       <SubHeader title={title} description={description} />
-      <div className='flex overflow-auto py-2'>
-        {list}
-      </div>
+      <div className='flex overflow-auto py-2'>{list}</div>
     </div>
   );
 }

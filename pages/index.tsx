@@ -11,7 +11,7 @@ import {
   ProjectCard,
   SubHeader,
   VideoCard,
-  Layout
+  Layout,
 } from '../components';
 import config, { projects, Project } from '../config';
 import { Article, Video } from '../types';
@@ -99,7 +99,7 @@ export default function Home(props: HomeStaticProps) {
           renderList={renderVideoList}
         />
       </Conditional>
-    </ Layout>
+    </Layout>
   );
 }
 
@@ -109,7 +109,7 @@ export async function getServerSideProps() {
 
   const props: HomeStaticProps = {
     articles,
-    videos
+    videos,
   };
 
   return { props };
@@ -151,6 +151,5 @@ function LegacyList() {
         })}
       </Row>
     </div>
-  )
+  );
 }
-

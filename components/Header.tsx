@@ -7,8 +7,12 @@ function Header(): React.ReactElement {
     width: 20,
   };
 
-  const checked = <Image src='/assets/svg/switch/sun.svg' {...dimensions} alt='sun-icon' />
-  const unchecked = <Image src='/assets/svg/switch/moon.svg' {...dimensions} alt='moon-icon' />
+  const checked = (
+    <Image src='/assets/svg/switch/sun.svg' {...dimensions} alt='sun-icon' />
+  );
+  const unchecked = (
+    <Image src='/assets/svg/switch/moon.svg' {...dimensions} alt='moon-icon' />
+  );
 
   return (
     <PageHeader
@@ -23,4 +27,4 @@ function Header(): React.ReactElement {
   );
 }
 
-export { Header }
+export { Header };
