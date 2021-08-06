@@ -10,7 +10,7 @@ export function Header(): React.ReactElement {
       extra={
         <div className='flex items-center'>
           <SunIcon className='text-2xl' />
-          <Switch className='mx-2' />
+          <Switch className='mx-3' />
           <MoonIcon className='text-xl' />
         </div>
       }

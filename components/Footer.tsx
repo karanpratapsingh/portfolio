@@ -48,13 +48,13 @@ export function Footer(): React.ReactElement {
       );
     }
 
-    return Object.entries(contact).map(resolveIcon);
+    return React.Children.toArray(Object.entries(contact).map(resolveIcon));
   }
 
   return (
-    <Layout.Footer className='flex flex-col text-center py-16 lg:py-10 font-light bg-primary'>
+    <Layout.Footer className='flex flex-col text-center py-10 lg:py-16 font-light bg-primary'>
       <span className='text-xl font-bold'>Let&apos;s connect</span>
-      <span className='my-8 font-light'>
+      <span className='my-4 lg:my-8 font-light'>
         Get in touch for opportunities or just to say hi!
       </span>
       <div className='flex self-center'>{renderSocialIcons()}</div>
