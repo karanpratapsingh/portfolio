@@ -42,19 +42,15 @@ export default function Home(props: HomeStaticProps) {
   }
 
   function renderArticlesList(article: Article): React.ReactNode {
-    const { title, description, tags, publishedAt, url } = article;
-
-    function onArticleClick(): void {
-      console.log(url);
-    }
+    const { title, description, url, tags, publishedAt } = article;
 
     return (
       <ArticleCard
         title={title}
         description={description}
+        url={url}
         tags={tags}
-        publishedAt={new Date(publishedAt)}
-        onClick={onArticleClick}
+        publishedAt={publishedAt}
       />
     );
   }

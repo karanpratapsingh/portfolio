@@ -7,7 +7,7 @@ import dataFormat from 'dateformat';
 interface BaseProps {
   title: string;
   description: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 interface ProjectCardProps extends BaseProps {
@@ -32,44 +32,44 @@ export function ProjectCard(props: ProjectCardProps): React.ReactElement {
         />
       }
     >
-      <div className='flex flex-col p-4'>
+      <div className='flex flex-col pt-2 pb-4 px-6'>
         <span className='text-lg font-bold'>{title}</span>
-        <p className='text-sm font-light line-clamp-2'>{description}</p>
+        <p className='mt-1 text-sm font-light line-clamp-2'>{description}</p>
       </div>
     </Card>
   );
 }
 
 interface ArticleCardProps extends BaseProps {
+  url: string;
   tags: string[];
-  publishedAt: Date;
+  publishedAt: string;
 }
 
 export function ArticleCard(props: ArticleCardProps): React.ReactElement {
-  const { title, description, tags, publishedAt, onClick } = props;
+  const { title, description, url, tags, publishedAt } = props;
 
-  const date = dataFormat(publishedAt, 'mmm dS, yyyy');
+  const date = dataFormat(new Date(publishedAt), 'mmm dS, yyyy');
 
   function renderTags(tag: string): React.ReactNode {
     return <Tag color={TagColor[tag]}>{tag}</Tag>;
   }
 
   return (
-    <Card
-      className='flex-shrink-0 mr-2 rounded w-72 lg:w-80 cursor-pointer'
-      onClick={onClick}
-    >
-      <div className='flex flex-col py-4 px-6'>
-        <span className='text-lg font-bold truncate text-ellipsis'>
-          {title}
-        </span>
-        <ul className='flex my-2'>
-          {React.Children.toArray(tags.map(renderTags))}
-        </ul>
-        <span className='text-sm font-light line-clamp-2'>{description}</span>
-        <p className='text-xs font-light mt-2 text-right'>{date}</p>
-      </div>
-    </Card>
+    <a target='_blank' href={url} rel='noopener noreferrer'>
+      <Card className='flex-shrink-0 mr-2 rounded w-72 lg:w-80 cursor-pointer'>
+        <div className='flex flex-col py-4 px-6'>
+          <span className='text-lg font-bold truncate text-ellipsis'>
+            {title}
+          </span>
+          <ul className='flex my-2'>
+            {React.Children.toArray(tags.map(renderTags))}
+          </ul>
+          <span className='text-sm font-light line-clamp-2'>{description}</span>
+          <p className='text-xs font-light mt-2 text-right'>{date}</p>
+        </div>
+      </Card>
+    </a>
   );
 }
 
