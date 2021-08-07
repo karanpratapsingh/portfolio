@@ -1,67 +1,30 @@
+import { personal, Personal } from './personal';
 import { contact, Contact } from './contact';
 import { projects, Project } from './projects';
-
-type PersonalConfig = {
-  name: string;
-  fullName: string;
-  title: string;
-  intro: string;
-  about: string;
-  resume: string;
-  contact: Contact;
-  available: boolean;
-};
-
-type ArticleProvider = 'dev.to';
-
-type ArticlesConfig = {
-  provider: ArticleProvider;
-  username: string;
-  apiUrl: string;
-};
-
-type VideosProvider = 'youtube.com';
-
-type VideosConfig = {
-  provider: VideosProvider;
-  apiUrl: string;
-};
+import { articles, Articles } from './articles';
+import { videos, Videos } from './videos';
 
 interface Config {
-  personal: PersonalConfig;
+  personal: Personal;
+  contact: Contact;
   projects: Project[];
-  articles?: ArticlesConfig;
-  videos?: VideosConfig;
+  articles?: Articles;
+  videos?: Videos;
 }
 
 const config: Config = {
-  personal: {
-    name: 'Karan',
-    fullName: 'Karan Pratap Singh',
-    title: 'Software Engineer & Solutions Architect',
-    intro:
-      'A full stack developer who loves open source and values learning and growing with people, teams, and technologies.',
-    about:
-      'A software engineer who loves to collaborate and build well-structured, scalable applications. I’ve written code in high-paced and challenging environment with an emphasis on using best practices to develop high-quality software that meets project requirements, budget, and schedule. Also, an avid open source contributor who values learning and growing with people, teams, and technologies.',
-    resume:
-      'https://drive.google.com/file/d/1f8R2yyvc6G-zGNJaW8l5TBC5Cfgipo3u/view?usp=sharing',
-    available: false,
-    contact,
-  },
+  personal,
+  contact,
   projects,
-  articles: {
-    provider: 'dev.to',
-    username: 'karanpratapsingh',
-    apiUrl: 'https://dev.to/api',
-  },
-  videos: {
-    provider: 'youtube.com',
-    apiUrl: 'https://www.googleapis.com/youtube/v3',
-  },
+  articles,
+  videos,
 };
 
 export default config;
 
-export * from './projects';
+export * from './personal';
 export * from './contact';
+export * from './projects';
+export * from './articles';
+export * from './videos';
 export * from './stack';
