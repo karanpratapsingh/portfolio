@@ -21,7 +21,10 @@ export function Header(): React.ReactElement {
           <SunIcon className='text-3xl lg:text-4xl' onClick={setDark} />
         </Conditional>
         <Conditional condition={resolvedTheme === 'dark'}>
-          <MoonIcon className='text-3xl lg:text-4xl text-white' onClick={setLight} />
+          <MoonIcon
+            className='text-3xl lg:text-4xl text-white'
+            onClick={setLight}
+          />
         </Conditional>
       </div>
     </div>

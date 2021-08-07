@@ -3,7 +3,7 @@ import { IconBaseProps } from 'react-icons';
 import { FaLinkedinIn as LinkedinIcon } from 'react-icons/fa';
 import {
   IoLogoGithub as GithubIcon,
-  IoLogoTwitter as TwitterIcon
+  IoLogoTwitter as TwitterIcon,
 } from 'react-icons/io';
 import { SiGmail as MailIcon } from 'react-icons/si';
 import { Colors, contact, ContactType } from '../../config';
