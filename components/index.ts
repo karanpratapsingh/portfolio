@@ -6,3 +6,4 @@ export * from './Card';
 export * from './Header';
 export * from './Conditional';
 export * from './Layout';
+export * from './BottomSheet';
