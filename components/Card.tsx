@@ -81,8 +81,9 @@ function Video(props: VideoProps): React.ReactElement {
   const { id } = props;
 
   return (
-    <AntDesignCard className='flex-shrink-0 mr-2 rounded w-72 lg:w-80 cursor-pointer'>
+    <AntDesignCard className='flex-shrink-0 mr-2 cursor-pointer'>
       <iframe
+        className='rounded w-72 lg:w-80'
         src={`https://www.youtube.com/embed/${id}`}
         title='YouTube video player'
         frameBorder='0'
