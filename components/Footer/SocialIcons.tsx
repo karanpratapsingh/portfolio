@@ -48,7 +48,7 @@ function resolveIcon(entry: [string, string]): React.ReactNode {
   }
 
   return (
-    <a target='_blank' href={url} rel='noopener noreferrer'>
+    <a href={url} target='_blank' rel='noopener noreferrer'>
       {icon}
     </a>
   );

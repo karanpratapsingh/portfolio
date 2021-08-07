@@ -47,7 +47,7 @@ function About(props: AboutBottomSheetProps): React.ReactElement {
             <p className='-ml-2 mt-4'>
               <ColorText
                 text='Get my Resume'
-                href={personal.resume}
+                url={personal.resume}
                 backgroundColor={resumeColor}
               />
             </p>
