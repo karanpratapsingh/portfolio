@@ -16,9 +16,9 @@ export function Banner(props: BannerProps): React.ReactElement {
 
   return (
     <div className='banner flex flex-col flex-1 justify-center px-6 lg:px-10 py-10 dark:text-white'>
-      <span className='text-3xl lg:text-5xl font-bold'>
+      <h1 className='text-3xl lg:text-5xl font-bold dark:text-white'>
         Hi, I am {personal.name}
-      </span>
+      </h1>
       <p className='my-2 text-lg lg:my-4 lg:text-2xl font-light'>
         {personal.title}
       </p>

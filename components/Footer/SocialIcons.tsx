@@ -12,7 +12,7 @@ import { Maybe } from '../../types';
 export function SocialIcons(): React.ReactElement {
   return (
     <div className='flex mt-2'>
-      {React.Children.toArray(Object.entries(contact).map(resolveIcon))}
+      {React.Children.toArray(Object.entries(contact.links).map(resolveIcon))}
     </div>
   );
 }
