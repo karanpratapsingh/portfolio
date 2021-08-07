@@ -1,6 +1,5 @@
 import { useTheme } from 'next-themes';
-import { useRouter } from 'next/dist/client/router';
-import React, { Fragment } from 'react';
+import React, { Fragment, useMemo } from 'react';
 import { BottomSheet as DefaultBottomSheet } from 'react-spring-bottom-sheet';
 import config, { Project, WorkStack } from '../../config';
 import { getRandomColorPair, getThemeClassName } from '../../util';
@@ -34,7 +33,7 @@ interface AboutBottomSheetProps extends BaseBottomSheetProps {}
 function About(props: AboutBottomSheetProps): React.ReactElement {
   const { open, onDismiss } = props;
 
-  const [resumeColor] = getRandomColorPair();
+  const [resumeColor] = useMemo(getRandomColorPair, []);
 
   return (
     <BaseBottomSheet open={open} onDismiss={onDismiss}>
@@ -46,7 +45,7 @@ function About(props: AboutBottomSheetProps): React.ReactElement {
             <span>{personal.about}</span>
             <p className='-ml-2 mt-4'>
               <ColorText
-                text='Get my Resume'
+                text='Resume'
                 url={personal.resume}
                 backgroundColor={resumeColor}
               />
