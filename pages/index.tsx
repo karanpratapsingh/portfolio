@@ -10,7 +10,7 @@ import {
   List,
 } from '../components';
 import config, { Project, projects } from '../config';
-import { useBoolean } from '../hooks/useBoolean';
+import { useBoolean } from '../hooks';
 import { Article, Video } from '../types';
 
 interface HomeStaticProps {
