@@ -1,6 +1,9 @@
 import 'tailwindcss/tailwind.css';
+
 import '../styles/globals.scss';
 import '../styles/list.scss';
+import '../styles/bottomsheet.scss';
+
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import config from '../config';
