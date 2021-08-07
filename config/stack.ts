@@ -2,7 +2,6 @@ export const TagColor: Record<string, string> = {
   react: '#61DAF6',
   nextjs: '#000000',
   go: '#00ADD8',
-  testing: '#049c64',
   reactnative: '#2D2D2D',
   redux: '#764ABC',
   node: '#68A063',
@@ -11,12 +10,13 @@ export const TagColor: Record<string, string> = {
   docker: '#0db7ed',
   kubernetes: '#326ce5',
   babel: '#f5db53',
-  devops: '#0db7ed',
   android: '#56a036',
   ios: '#0c76e2',
   redis: '#D82C20',
   webpack: '#8dd6f9',
   aws: '#FF9900',
+  testing: '#049c64',
+  devops: '#059f00',
 };
 
 export enum Stack {
