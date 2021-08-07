@@ -1,39 +1,70 @@
-export const TagColor: Record<string, string> = {
+export const StackColor: Record<string, string> = {
+  // Languages
+  go: '#00ADD8',
+  python: '#4B8BBE',
+  typescript: '#234A84',
+  javascript: '#F7DF1E',
+
+  // Frontend
   react: '#61DAF6',
   nextjs: '#000000',
-  go: '#00ADD8',
+
+  // Backend
   graphql: '#e535ab',
-  reactnative: '#2D2D2D',
-  redux: '#764ABC',
   node: '#68A063',
-  javascript: '#F7DF1E',
-  typescript: '#234A84',
-  python: '#4B8BBE',
-  docker: '#0db7ed',
-  kubernetes: '#326ce5',
+  django: '#092e20',
+
+  // Tools, Libs
   babel: '#f5db53',
+  redux: '#764ABC',
+
+  // Mobile
+  reactnative: '#2D2D2D',
   android: '#56a036',
   ios: '#0c76e2',
+
+  // Databases
+  postgres: '#336791',
+  mongo: '#4DB33D',
   redis: '#D82C20',
   webpack: '#8dd6f9',
+
+  // Cloud
   aws: '#FF9900',
   gcp: '#4285F4',
+  docker: '#0db7ed',
+  kubernetes: '#326ce5',
+
+  // Misc.
   testing: '#049c64',
   devops: '#059f00',
 };
 
 export enum Stack {
-  typescript = 'TypeScript',
-  javascript = 'JavaScript',
-  go = 'Go',
-  react = 'React',
-  reactnative = 'React Native',
-  graphql = 'GraphQL',
-  aws = 'AWS',
-  kubernetes = 'Kubernetes',
-  gcp = 'Google Cloud',
-  python = 'Python',
-  node = 'Node',
+  // Languages
+  go,
+  typescript,
+  javascript,
+  python,
+
+  // Frontend
+  react,
+  reactnative,
+
+  // Backend
+  graphql,
+  node,
+  django,
+
+  // Cloud
+  aws,
+  gcp,
+  kubernetes,
+
+  // Databases
+  redis,
+  postgres,
+  mongo,
 }
 
 export const WorkStack = [
@@ -55,46 +86,63 @@ type StackInfoMap = {
 export const StackInfo: Record<Stack, StackInfoMap> = {
   [Stack.typescript]: {
     value: 'TypeScript',
-    color: TagColor.typescript,
+    color: StackColor.typescript,
   },
   [Stack.javascript]: {
     value: 'JavaScript',
-    color: TagColor.javascript,
+    color: StackColor.javascript,
   },
   [Stack.go]: {
     value: 'Go',
-    color: TagColor.go,
+    color: StackColor.go,
   },
   [Stack.react]: {
     value: 'React',
-    color: TagColor.react,
+    color: StackColor.react,
   },
   [Stack.reactnative]: {
     value: 'React Native',
-    color: TagColor.reactnative,
+    color: StackColor.reactnative,
   },
   [Stack.graphql]: {
     value: 'GraphQL',
-    color: TagColor.graphql,
+    color: StackColor.graphql,
   },
   [Stack.aws]: {
     value: 'AWS',
-    color: TagColor.aws,
+    color: StackColor.aws,
   },
   [Stack.kubernetes]: {
     value: 'Kubernetes',
-    color: TagColor.kubernetes,
+    color: StackColor.kubernetes,
   },
   [Stack.gcp]: {
     value: 'Google Cloud',
-    color: TagColor.gcp,
+    color: StackColor.gcp,
   },
   [Stack.python]: {
     value: 'Python',
-    color: TagColor.python,
+    color: StackColor.python,
   },
   [Stack.node]: {
-    value: 'Nodejs',
-    color: TagColor.nodejs,
+    value: 'Node',
+    color: StackColor.node,
+  },
+  [Stack.django]: {
+    value: 'Django',
+    color: StackColor.django,
+  },
+  [Stack.postgres]: {
+    value: 'Postgres',
+    color: StackColor.postgres,
+  },
+  [Stack.redis]: {
+    value: 'Redis',
+    color: StackColor.redis,
+  },
+  [Stack.mongo]: {},
+  [Stack.mongo]: {
+    value: 'MongoDB',
+    color: StackColor.mongo,
   },
 };

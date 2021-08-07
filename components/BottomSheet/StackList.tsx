@@ -17,11 +17,11 @@ export function StackList(props: StackListProps): React.ReactElement {
         <Tag color={color}>{value}</Tag>
       </div>
     );
-  }, [])
+  }, []);
 
   return (
     <div className='flex flex-wrap mb-4'>
       {React.Children.toArray(stack.map(renderStack))}
     </div>
-  )
-};
+  );
+}

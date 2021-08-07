@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 import config from '../config';
 
 interface BannerProps {
-  onAbout: () => void
-  onContact: () => void
+  onAbout: () => void;
+  onContact: () => void;
 }
 
 export function Banner(props: BannerProps): React.ReactElement {
@@ -15,14 +15,24 @@ export function Banner(props: BannerProps): React.ReactElement {
       <h1 className='text-3xl lg:text-5xl font-bold'>
         Hi, I am {config.personal.name}
       </h1>
-      <p className='my-2 text-lg lg:my-4 lg:text-2xl font-light'>{config.personal.title}</p>
+      <p className='my-2 text-lg lg:my-4 lg:text-2xl font-light'>
+        {config.personal.title}
+      </p>
       <p className='lg:text-xl font-light'>
         Read more
-        <span className='cursor-pointer mx-2 font-medium p-1' onClick={onAbout} style={{ backgroundColor: colors[0] }}>
+        <span
+          className='cursor-pointer mx-2 font-medium p-1'
+          onClick={onAbout}
+          style={{ backgroundColor: colors[0] }}
+        >
           about me
         </span>
         or
-        <span className='cursor-pointer mx-2 font-medium p-1' onClick={onContact} style={{ backgroundColor: colors[1] }}>
+        <span
+          className='cursor-pointer mx-2 font-medium p-1'
+          onClick={onContact}
+          style={{ backgroundColor: colors[1] }}
+        >
           contact me
         </span>
       </p>

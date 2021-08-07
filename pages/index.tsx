@@ -7,7 +7,7 @@ import {
   Conditional,
   Header,
   Layout,
-  List
+  List,
 } from '../components';
 import config, { Project, projects } from '../config';
 import { useBoolean } from '../hooks/useBoolean';
@@ -32,7 +32,7 @@ export default function Home(props: HomeStaticProps) {
 
     function onProjectClick(): void {
       setActiveProject(project);
-      openProject()
+      openProject();
     }
 
     return (
@@ -95,15 +95,9 @@ export default function Home(props: HomeStaticProps) {
         />
       </Conditional>
 
-      <BottomSheet.About
-        open={about}
-        onDismiss={closeAbout}
-      />
+      <BottomSheet.About open={about} onDismiss={closeAbout} />
 
-      <BottomSheet.Contact
-        open={contact}
-        onDismiss={closeContact}
-      />
+      <BottomSheet.Contact open={contact} onDismiss={closeContact} />
 
       <BottomSheet.ProjectDetails
         open={project}

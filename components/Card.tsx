@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { Card as AntDesignCard, Tag } from 'antd';
-import { TagColor } from '../config';
+import { StackColor } from '../config';
 import React from 'react';
 import dataFormat from 'dateformat';
 
@@ -52,7 +52,7 @@ function Article(props: ArticleProps): React.ReactElement {
   const date = dataFormat(new Date(publishedAt), 'mmm dS, yyyy');
 
   function renderTags(tag: string): React.ReactNode {
-    return <Tag color={TagColor[tag]}>{tag}</Tag>;
+    return <Tag color={StackColor[tag]}>{tag}</Tag>;
   }
 
   return (
@@ -97,5 +97,5 @@ function Video(props: VideoProps): React.ReactElement {
 export const Card = {
   Project,
   Article,
-  Video
-}
+  Video,
+};
