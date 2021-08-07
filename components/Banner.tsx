@@ -8,7 +8,7 @@ interface BannerProps {
 
 export function Banner(props: BannerProps): React.ReactElement {
   const { onAbout, onContact } = props;
-  const colors: string[] = useMemo(randomizeColor, []);
+  const colors: string[] = useMemo(getRandomColorPair, []);
 
   return (
     <div className='banner flex flex-col flex-1 justify-center px-6 lg:px-10 py-10'>
@@ -30,7 +30,7 @@ export function Banner(props: BannerProps): React.ReactElement {
   );
 }
 
-function randomizeColor(): string[] {
+function getRandomColorPair(): string[] {
   const colors: string[][] = [
     ['#F5E1FF', '#FFF8BC'],
     ['#caf0f8', '#C9f2c7'],

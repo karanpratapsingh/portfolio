@@ -1,23 +1,17 @@
-import { Card, Col, Row } from 'antd';
-import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 import * as API from '../api';
 import {
-  ArticleCard,
   Banner,
+  BottomSheet,
+  Card,
   Conditional,
   Header,
-  List,
-  ProjectCard,
-  VideoCard,
   Layout,
-  BottomSheet,
+  List
 } from '../components';
-import config, { projects, Project } from '../config';
-import { Article, Video } from '../types';
+import config, { Project, projects } from '../config';
 import { useBoolean } from '../hooks/useBoolean';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { Article, Video } from '../types';
 
 interface HomeStaticProps {
   videos: Video[];
@@ -42,7 +36,7 @@ export default function Home(props: HomeStaticProps) {
     }
 
     return (
-      <ProjectCard
+      <Card.Project
         title={title}
         description={description}
         banner={banner}
@@ -55,7 +49,7 @@ export default function Home(props: HomeStaticProps) {
     const { title, description, url, tags, publishedAt } = article;
 
     return (
-      <ArticleCard
+      <Card.Article
         title={title}
         description={description}
         url={url}
@@ -66,7 +60,7 @@ export default function Home(props: HomeStaticProps) {
   }
 
   function renderVideoList(video: Video): React.ReactNode {
-    return <VideoCard id={video.id} />;
+    return <Card.Video id={video.id} />;
   }
 
   return (

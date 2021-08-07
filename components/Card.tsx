@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Card, Tag } from 'antd';
+import { Card as AntDesignCard, Tag } from 'antd';
 import { TagColor } from '../config';
 import React from 'react';
 import dataFormat from 'dateformat';
@@ -10,15 +10,15 @@ interface BaseProps {
   onClick?: () => void;
 }
 
-interface ProjectCardProps extends BaseProps {
+interface ProjectProps extends BaseProps {
   banner: string;
 }
 
-export function ProjectCard(props: ProjectCardProps): React.ReactElement {
+function Project(props: ProjectProps): React.ReactElement {
   const { title, banner, description, onClick } = props;
 
   return (
-    <Card
+    <AntDesignCard
       className='flex-shrink-0 mr-2 rounded w-72 lg:w-80 cursor-pointer'
       onClick={onClick}
       cover={
@@ -36,17 +36,17 @@ export function ProjectCard(props: ProjectCardProps): React.ReactElement {
         <span className='text-lg font-bold'>{title}</span>
         <p className='mt-1 text-sm font-light line-clamp-2'>{description}</p>
       </div>
-    </Card>
+    </AntDesignCard>
   );
 }
 
-interface ArticleCardProps extends BaseProps {
+interface ArticleProps extends BaseProps {
   url: string;
   tags: string[];
   publishedAt: string;
 }
 
-export function ArticleCard(props: ArticleCardProps): React.ReactElement {
+function Article(props: ArticleProps): React.ReactElement {
   const { title, description, url, tags, publishedAt } = props;
 
   const date = dataFormat(new Date(publishedAt), 'mmm dS, yyyy');
@@ -57,7 +57,7 @@ export function ArticleCard(props: ArticleCardProps): React.ReactElement {
 
   return (
     <a target='_blank' href={url} rel='noopener noreferrer'>
-      <Card className='flex-shrink-0 mr-2 rounded w-72 lg:w-80 cursor-pointer'>
+      <AntDesignCard className='flex-shrink-0 mr-2 rounded w-72 lg:w-80 cursor-pointer'>
         <div className='flex flex-col py-4 px-6'>
           <span className='text-lg font-bold truncate text-ellipsis'>
             {title}
@@ -68,20 +68,20 @@ export function ArticleCard(props: ArticleCardProps): React.ReactElement {
           <span className='text-sm font-light line-clamp-2'>{description}</span>
           <p className='text-xs font-light mt-2 text-right'>{date}</p>
         </div>
-      </Card>
+      </AntDesignCard>
     </a>
   );
 }
 
-interface VideoCardProps {
+interface VideoProps {
   id: string;
 }
 
-export function VideoCard(props: VideoCardProps): React.ReactElement {
+function Video(props: VideoProps): React.ReactElement {
   const { id } = props;
 
   return (
-    <Card className='flex-shrink-0 mr-2 rounded w-72 lg:w-80 cursor-pointer'>
+    <AntDesignCard className='flex-shrink-0 mr-2 rounded w-72 lg:w-80 cursor-pointer'>
       <iframe
         src={`https://www.youtube.com/embed/${id}`}
         title='YouTube video player'
@@ -89,6 +89,12 @@ export function VideoCard(props: VideoCardProps): React.ReactElement {
         allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
         allowFullScreen
       />
-    </Card>
+    </AntDesignCard>
   );
+}
+
+export const Card = {
+  Project,
+  Article,
+  Video
 }
