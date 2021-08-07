@@ -27,6 +27,11 @@ div#__next > div {
   transition: background-color 200ms ease;
 }
 
+a, a:hover, a:focus, a:active {
+  text-decoration: none;
+  color: inherit;
+}
+
 .layout {
   max-width: 100%;
 
