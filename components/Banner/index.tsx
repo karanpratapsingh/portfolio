@@ -3,6 +3,8 @@ import config from '../../config';
 import { getRandomColorPair } from '../../util';
 import { ColorText } from './ColorText';
 
+const { personal } = config;
+
 interface BannerProps {
   onAbout: () => void;
   onContact: () => void;
@@ -15,10 +17,10 @@ export function Banner(props: BannerProps): React.ReactElement {
   return (
     <div className='banner flex flex-col flex-1 justify-center px-6 lg:px-10 py-10 dark:text-white'>
       <span className='text-3xl lg:text-5xl font-bold'>
-        Hi, I am {config.personal.name}
+        Hi, I am {personal.name}
       </span>
       <p className='my-2 text-lg lg:my-4 lg:text-2xl font-light'>
-        {config.personal.title}
+        {personal.title}
       </p>
       <p className='lg:text-xl font-light'>
         Read more

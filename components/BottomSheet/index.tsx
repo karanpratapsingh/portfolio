@@ -1,11 +1,15 @@
 import { useTheme } from 'next-themes';
-import React from 'react';
+import { useRouter } from 'next/dist/client/router';
+import React, { Fragment } from 'react';
 import { BottomSheet as DefaultBottomSheet } from 'react-spring-bottom-sheet';
 import config, { Project, WorkStack } from '../../config';
-import { getThemeClassName } from '../../util';
+import { getRandomColorPair, getThemeClassName } from '../../util';
+import { ColorText } from '../Banner/ColorText';
 import { SocialIcons } from '../Footer';
 import { SubHeader } from '../SubHeader';
 import { StackList } from './StackList';
+
+const { personal } = config;
 
 interface BaseBottomSheetProps {
   open: boolean;
@@ -30,12 +34,25 @@ interface AboutBottomSheetProps extends BaseBottomSheetProps {}
 function About(props: AboutBottomSheetProps): React.ReactElement {
   const { open, onDismiss } = props;
 
+  const [resumeColor] = getRandomColorPair();
+
   return (
     <BaseBottomSheet open={open} onDismiss={onDismiss}>
       <SubHeader
         className='lg:mt-4'
         title='About'
-        description={config.personal.about}
+        description={
+          <Fragment>
+            <span>{personal.about}</span>
+            <p className='-ml-2 mt-4'>
+              <ColorText
+                text='Get my Resume'
+                href={personal.resume}
+                backgroundColor={resumeColor}
+              />
+            </p>
+          </Fragment>
+        }
       />
       <SubHeader title='Stack' description={<StackList stack={WorkStack} />} />
     </BaseBottomSheet>
@@ -73,7 +90,7 @@ function ProjectDetails(props: ProjectBottomSheetProps): React.ReactElement {
         className='lg:mt-4'
         title={project.title}
         description={project.description}
-      ></SubHeader>
+      />
       <SubHeader
         title='Stack'
         description={<StackList stack={project.stack} />}
