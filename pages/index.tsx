@@ -9,12 +9,13 @@ import {
   Header,
   List,
   ProjectCard,
-  SubHeader,
   VideoCard,
   Layout,
+  BottomSheet,
 } from '../components';
 import config, { projects, Project } from '../config';
 import { Article, Video } from '../types';
+import { useBoolean } from '../hooks/useBoolean';
 
 interface HomeStaticProps {
   videos: Video[];
@@ -59,14 +60,14 @@ export default function Home(props: HomeStaticProps) {
     return <VideoCard id={video.id} />;
   }
 
-  const showArticles = Boolean(config.articles);
-  const showVideos = Boolean(config.videos);
+  const [about, openAbout, closeAbout] = useBoolean(false);
+  const [contact, openContact, closeContact] = useBoolean(false);
 
   return (
     <Layout>
       <div>
         <Header />
-        <Banner />
+        <Banner onAbout={openAbout} onContact={openContact} />
       </div>
 
       <List
@@ -76,7 +77,7 @@ export default function Home(props: HomeStaticProps) {
         renderList={renderProjectsList}
       />
 
-      <Conditional condition={showArticles}>
+      <Conditional condition={Boolean(config.articles)}>
         <List
           title='Articles'
           description={`When I'm not writing code, I write articles`}
@@ -85,7 +86,7 @@ export default function Home(props: HomeStaticProps) {
         />
       </Conditional>
 
-      <Conditional condition={showVideos}>
+      <Conditional condition={Boolean(config.videos)}>
         <List
           title='Videos'
           description={`I also make videos`}
@@ -93,6 +94,16 @@ export default function Home(props: HomeStaticProps) {
           renderList={renderVideoList}
         />
       </Conditional>
+
+      <BottomSheet.About
+        open={about}
+        onDismiss={closeAbout}
+      />
+
+      <BottomSheet.Contact
+        open={contact}
+        onDismiss={closeContact}
+      />
     </Layout>
   );
 }

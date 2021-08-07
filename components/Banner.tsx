@@ -2,13 +2,13 @@ import { useMemo } from 'react';
 import config from '../config';
 
 interface BannerProps {
-  onClick: () => void
+  onAbout: () => void
+  onContact: () => void
 }
 
 export function Banner(props: BannerProps): React.ReactElement {
-  const { onClick } = props;
-
-  const colors = useMemo(() => randomizeColor(), []);
+  const { onAbout, onContact } = props;
+  const colors: string[] = useMemo(randomizeColor, []);
 
   return (
     <div className='banner flex flex-col flex-1 justify-center px-6 lg:px-10 py-10'>
@@ -18,11 +18,11 @@ export function Banner(props: BannerProps): React.ReactElement {
       <p className='my-2 text-lg lg:my-4 lg:text-2xl font-light'>{config.personal.title}</p>
       <p className='lg:text-xl font-light'>
         Read more
-        <span onClick={onClick} className='cursor-pointer mx-2 font-medium p-1' style={{ backgroundColor: colors[0] }}>
+        <span className='cursor-pointer mx-2 font-medium p-1' onClick={onAbout} style={{ backgroundColor: colors[0] }}>
           about me
         </span>
         or
-        <span className='cursor-pointer mx-2 font-medium p-1' style={{ backgroundColor: colors[1] }}>
+        <span className='cursor-pointer mx-2 font-medium p-1' onClick={onContact} style={{ backgroundColor: colors[1] }}>
           contact me
         </span>
       </p>
