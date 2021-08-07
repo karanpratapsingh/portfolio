@@ -2,6 +2,7 @@ import { useTheme } from 'next-themes';
 import React from 'react';
 import { BottomSheet as DefaultBottomSheet } from 'react-spring-bottom-sheet';
 import config, { Project, WorkStack } from '../../config';
+import { getThemeClassName } from '../../util';
 import { SocialIcons } from '../Footer';
 import { SubHeader } from '../SubHeader';
 import { StackList } from './StackList';
@@ -15,7 +16,7 @@ interface BaseBottomSheetProps {
 function BaseBottomSheet(props: BaseBottomSheetProps): React.ReactElement {
   const { open, onDismiss, children } = props;
   const { resolvedTheme } = useTheme();
-  const className = getClassName(resolvedTheme);
+  const className = getThemeClassName('bottomsheet', resolvedTheme);
 
   return (
     <DefaultBottomSheet className={className} open={open} onDismiss={onDismiss}>
@@ -79,10 +80,6 @@ function ProjectDetails(props: ProjectBottomSheetProps): React.ReactElement {
       />
     </BaseBottomSheet>
   );
-}
-
-function getClassName(theme?: string): string {
-  return `${theme}-bottomsheet`;
 }
 
 export const BottomSheet = {

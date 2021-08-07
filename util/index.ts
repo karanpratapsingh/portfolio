@@ -9,3 +9,7 @@ export function getRandomColorPair(): string[] {
   const random: number = Math.round(Math.random() * (colors.length - 1));
   return colors[random];
 }
+
+export function getThemeClassName(className: string, theme?: string): string {
+  return `${theme}-${className}`;
+}
