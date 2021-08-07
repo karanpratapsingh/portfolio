@@ -5,14 +5,14 @@ import { FaLinkedinIn as LinkedinIcon } from 'react-icons/fa';
 import {
   IoLogoGithub as GithubIcon,
   IoLogoTwitter as TwitterIcon,
-  IoMdMail as MailIcon,
 } from 'react-icons/io';
-import { contact, ContactType } from '../config';
+import { SiGmail as MailIcon } from 'react-icons/si';
+import { Colors, contact, ContactType } from '../config';
 import { Maybe } from '../types';
 
 export function Footer(): React.ReactElement {
   return (
-    <Layout.Footer className='flex flex-col text-center py-10 lg:py-16 font-light bg-primary dark:bg-purple-500 dark:text-white'>
+    <Layout.Footer className='flex flex-col items-center py-10 lg:py-16 font-light bg-primary dark:text-white'>
       <span className='text-xl font-bold'>Let&apos;s connect</span>
       <span className='mt-4 lg:mt-8 lg:mb-6 font-light'>
         Get in touch for opportunities or just to say hi!
@@ -24,7 +24,7 @@ export function Footer(): React.ReactElement {
 
 export function SocialIcons(): React.ReactElement {
   return (
-    <div className='flex self-center mt-2'>
+    <div className='flex mt-2'>
       {React.Children.toArray(Object.entries(contact).map(resolveIcon))}
     </div>
   );
@@ -35,6 +35,7 @@ function resolveIcon(entry: [string, string]): React.ReactNode {
 
   const props: IconBaseProps = {
     className: 'cursor-pointer text-2xl mr-4 dark:text-white',
+    color: Colors[type],
   };
 
   let icon: Maybe<React.ReactNode> = null;

@@ -1,4 +1,4 @@
-export const StackColor: Record<string, string> = {
+export const Colors: Record<string, string> = {
   // Languages
   go: '#00ADD8',
   python: '#4B8BBE',
@@ -10,34 +10,40 @@ export const StackColor: Record<string, string> = {
   nextjs: '#000000',
 
   // Backend
-  graphql: '#e535ab',
+  graphql: '#E535AB',
   node: '#68A063',
-  django: '#092e20',
+  django: '#092E20',
 
   // Tools, Libs
-  babel: '#f5db53',
+  babel: '#F5DB53',
   redux: '#764ABC',
 
   // Mobile
   reactnative: '#2D2D2D',
-  android: '#56a036',
-  ios: '#0c76e2',
+  android: '#56A036',
+  ios: '#0C76E2',
 
   // Databases
   postgres: '#336791',
   mongo: '#4DB33D',
   redis: '#D82C20',
-  webpack: '#8dd6f9',
+  webpack: '#8DD6F9',
 
   // Cloud
   aws: '#FF9900',
   gcp: '#4285F4',
-  docker: '#0db7ed',
-  kubernetes: '#326ce5',
+  docker: '#0DB7Ed',
+  kubernetes: '#326CE5',
+
+  // Social
+  github: '#333',
+  linkedin: '#0077B5',
+  twitter: '#1DA1F2',
+  email: '#D44638',
 
   // Misc.
-  testing: '#049c64',
-  devops: '#059f00',
+  testing: '#049C64',
+  devops: '#059F00',
 };
 
 export enum Stack {
@@ -86,63 +92,63 @@ type StackInfoMap = {
 export const StackInfo: Record<Stack, StackInfoMap> = {
   [Stack.typescript]: {
     value: 'TypeScript',
-    color: StackColor.typescript,
+    color: Colors.typescript,
   },
   [Stack.javascript]: {
     value: 'JavaScript',
-    color: StackColor.javascript,
+    color: Colors.javascript,
   },
   [Stack.go]: {
     value: 'Go',
-    color: StackColor.go,
+    color: Colors.go,
   },
   [Stack.react]: {
     value: 'React',
-    color: StackColor.react,
+    color: Colors.react,
   },
   [Stack.reactnative]: {
     value: 'React Native',
-    color: StackColor.reactnative,
+    color: Colors.reactnative,
   },
   [Stack.graphql]: {
     value: 'GraphQL',
-    color: StackColor.graphql,
+    color: Colors.graphql,
   },
   [Stack.aws]: {
     value: 'AWS',
-    color: StackColor.aws,
+    color: Colors.aws,
   },
   [Stack.kubernetes]: {
     value: 'Kubernetes',
-    color: StackColor.kubernetes,
+    color: Colors.kubernetes,
   },
   [Stack.gcp]: {
     value: 'Google Cloud',
-    color: StackColor.gcp,
+    color: Colors.gcp,
   },
   [Stack.python]: {
     value: 'Python',
-    color: StackColor.python,
+    color: Colors.python,
   },
   [Stack.node]: {
     value: 'Node',
-    color: StackColor.node,
+    color: Colors.node,
   },
   [Stack.django]: {
     value: 'Django',
-    color: StackColor.django,
+    color: Colors.django,
   },
   [Stack.postgres]: {
     value: 'Postgres',
-    color: StackColor.postgres,
+    color: Colors.postgres,
   },
   [Stack.redis]: {
     value: 'Redis',
-    color: StackColor.redis,
+    color: Colors.redis,
   },
   [Stack.mongo]: {},
   [Stack.mongo]: {
     value: 'MongoDB',
-    color: StackColor.mongo,
+    color: Colors.mongo,
   },
 };
