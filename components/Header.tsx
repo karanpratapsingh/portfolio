@@ -1,37 +1,28 @@
-import { PageHeader } from 'antd';
 import { useTheme } from 'next-themes';
-import { useMemo } from 'react';
-import {
-  IoMoonOutline as MoonIcon,
-  IoSunnyOutline as SunIcon
-} from 'react-icons/io5';
+import { IoIosSunny as SunIcon, IoMdMoon as MoonIcon } from 'react-icons/io';
+import { Conditional } from './Conditional';
 
 export function Header(): React.ReactElement {
   const { theme, setTheme } = useTheme();
 
-  const isDark: boolean = useMemo(() => theme === 'dark', [theme]);
-
   function setDark(): void {
-    setTheme('dark')
+    setTheme('dark');
   }
 
   function setLight(): void {
-    setTheme('light')
-  }
-
-  let icon: React.ReactNode = <SunIcon className='text-3xl' onClick={setDark} />;
-
-  if (isDark) {
-    icon = <MoonIcon className='text-3xl dark:text-white' onClick={setLight} />;
+    setTheme('light');
   }
 
   return (
-    <PageHeader
-      extra={
-        <div className='flex items-center cursor-pointer hover:opacity-80'>
-          {icon}
-        </div>
-      }
-    />
+    <div className='flex justify-end'>
+      <div className='mt-5 mr-5 lg:mt-10 lg:mr-0 cursor-pointer hover:opacity-80'>
+        <Conditional condition={theme === 'light'}>
+          <SunIcon className='text-4xl' onClick={setDark} />
+        </Conditional>
+        <Conditional condition={theme === 'dark'}>
+          <MoonIcon className='text-3xl text-white' onClick={setLight} />
+        </Conditional>
+      </div>
+    </div>
   );
 }
