@@ -24,6 +24,7 @@ div#__next > div {
 
 * {
   scroll-behavior: smooth;
+  transition: background-color 200ms ease;
 }
 
 .layout {
