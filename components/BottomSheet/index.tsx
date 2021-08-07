@@ -1,10 +1,9 @@
-import { BottomSheet as DefaultBottomSheet } from 'react-spring-bottom-sheet';
-import config, { Project, Stack, StackInfo, TagColor, WorkStack } from '../config';
-import { SubHeader } from './SubHeader';
-import { Tag } from 'antd';
 import React from 'react';
-import { SocialIcons } from './Footer';
-import { useCallback } from 'react';
+import { BottomSheet as DefaultBottomSheet } from 'react-spring-bottom-sheet';
+import config, { Project, WorkStack } from '../../config';
+import { SocialIcons } from '../Footer';
+import { SubHeader } from '../SubHeader';
+import { StackList } from './StackList';
 
 interface BottomSheetProps {
   open: boolean;
@@ -76,30 +75,6 @@ function ProjectDetails(props: ProjectBottomSheetProps): React.ReactElement {
     </DefaultBottomSheet>
   )
 }
-
-interface StackListProps {
-  stack: Stack[];
-}
-
-function StackList(props: StackListProps): React.ReactElement {
-  const { stack } = props;
-
-  const renderStack = useCallback((stack: Stack): React.ReactNode => {
-    const { color, value } = StackInfo[stack];
-
-    return (
-      <div className='pb-1'>
-        <Tag color={color}>{value}</Tag>
-      </div>
-    );
-  }, [])
-
-  return (
-    <div className='flex flex-wrap mb-4'>
-      {React.Children.toArray(stack.map(renderStack))}
-    </div>
-  )
-};
 
 export const BottomSheet = {
   About,
