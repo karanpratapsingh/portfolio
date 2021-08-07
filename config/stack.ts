@@ -36,13 +36,65 @@ export enum Stack {
   node = 'Node',
 }
 
-export enum WorkStack {
-  typescript = 'TypeScript',
-  go = 'Go',
-  kubernetes = 'Kubernetes',
-  react = 'React',
-  reactnative = 'React Native',
-  graphql = 'GraphQL',
-  aws = 'AWS',
-  gcp = 'Google Cloud',
-}
+export const WorkStack = [
+  Stack.typescript,
+  Stack.go,
+  Stack.kubernetes,
+  Stack.react,
+  Stack.reactnative,
+  Stack.graphql,
+  Stack.aws,
+  Stack.gcp,
+];
+
+type StackInfoMap = {
+  value: string;
+  color: string;
+};
+
+export const StackInfo: Record<Stack, StackInfoMap> = {
+  [Stack.typescript]: {
+    value: 'TypeScript',
+    color: TagColor.typescript,
+  },
+  [Stack.javascript]: {
+    value: 'JavaScript',
+    color: TagColor.javascript,
+  },
+  [Stack.go]: {
+    value: 'Go',
+    color: TagColor.go,
+  },
+  [Stack.react]: {
+    value: 'React',
+    color: TagColor.react,
+  },
+  [Stack.reactnative]: {
+    value: 'React Native',
+    color: TagColor.reactnative,
+  },
+  [Stack.graphql]: {
+    value: 'GraphQL',
+    color: TagColor.graphql,
+  },
+  [Stack.aws]: {
+    value: 'AWS',
+    color: TagColor.aws,
+  },
+  [Stack.kubernetes]: {
+    value: 'Kubernetes',
+    color: TagColor.kubernetes,
+  },
+  [Stack.gcp]: {
+    value: 'Google Cloud',
+    color: TagColor.gcp,
+  },
+  [Stack.python]: {
+    value: 'Python',
+    color: TagColor.python,
+  },
+  [Stack.node]: {
+    value: 'Nodejs',
+    color: TagColor.nodejs,
+  },
+};

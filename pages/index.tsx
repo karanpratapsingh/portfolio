@@ -16,6 +16,8 @@ import {
 import config, { projects, Project } from '../config';
 import { Article, Video } from '../types';
 import { useBoolean } from '../hooks/useBoolean';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 interface HomeStaticProps {
   videos: Video[];
@@ -25,11 +27,18 @@ interface HomeStaticProps {
 export default function Home(props: HomeStaticProps) {
   const { articles, videos } = props;
 
+  const [activeProject, setActiveProject] = useState<Project>(projects[0]);
+
+  const [about, openAbout, closeAbout] = useBoolean(false);
+  const [contact, openContact, closeContact] = useBoolean(false);
+  const [project, openProject, closeProject] = useBoolean(false);
+
   function renderProjectsList(project: Project): React.ReactNode {
     const { title, description, banner } = project;
 
     function onProjectClick(): void {
-      console.log('CLICKED', title);
+      setActiveProject(project);
+      openProject()
     }
 
     return (
@@ -59,9 +68,6 @@ export default function Home(props: HomeStaticProps) {
   function renderVideoList(video: Video): React.ReactNode {
     return <VideoCard id={video.id} />;
   }
-
-  const [about, openAbout, closeAbout] = useBoolean(false);
-  const [contact, openContact, closeContact] = useBoolean(false);
 
   return (
     <Layout>
@@ -103,6 +109,12 @@ export default function Home(props: HomeStaticProps) {
       <BottomSheet.Contact
         open={contact}
         onDismiss={closeContact}
+      />
+
+      <BottomSheet.ProjectDetails
+        open={project}
+        onDismiss={closeProject}
+        project={activeProject}
       />
     </Layout>
   );

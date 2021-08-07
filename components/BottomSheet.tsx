@@ -1,9 +1,10 @@
 import { BottomSheet as DefaultBottomSheet } from 'react-spring-bottom-sheet';
-import config, { TagColor, WorkStack } from '../config';
+import config, { Project, Stack, StackInfo, TagColor, WorkStack } from '../config';
 import { SubHeader } from './SubHeader';
 import { Tag } from 'antd';
 import React from 'react';
 import { SocialIcons } from './Footer';
+import { useCallback } from 'react';
 
 interface BottomSheetProps {
   open: boolean;
@@ -12,23 +13,6 @@ interface BottomSheetProps {
 
 function About(props: BottomSheetProps): React.ReactElement {
   const { open, onDismiss } = props;
-
-  function renderStack(entry: [string, string]): React.ReactNode {
-    const [key, value] = entry;
-    const color = TagColor[key];
-
-    return (
-      <div className='pb-1'>
-        <Tag color={color}>{value}</Tag>
-      </div>
-    );
-  }
-
-  const stack = (
-    <div className='flex flex-wrap mb-4'>
-      {React.Children.toArray(Object.entries(WorkStack).map(renderStack))}
-    </div>
-  );
 
   return (
     <DefaultBottomSheet
@@ -42,7 +26,7 @@ function About(props: BottomSheetProps): React.ReactElement {
       />
       <SubHeader
         title='Stack'
-        description={stack}
+        description={<StackList stack={WorkStack} />}
       />
     </DefaultBottomSheet>
   )
@@ -67,7 +51,58 @@ function Contact(props: BottomSheetProps): React.ReactElement {
   )
 }
 
-export const BottomSheet: Record<string, React.FC<BottomSheetProps>> = {
+interface ProjectBottomSheetProps extends BottomSheetProps {
+  project: Project;
+}
+
+function ProjectDetails(props: ProjectBottomSheetProps): React.ReactElement {
+  const { open, onDismiss, project } = props;
+
+  return (
+    <DefaultBottomSheet
+      open={open}
+      onDismiss={onDismiss}
+    >
+      <SubHeader
+        className='lg:mt-4'
+        title={project.title}
+        description={project.description}
+      >
+      </SubHeader>
+      <SubHeader
+        title='Stack'
+        description={<StackList stack={project.stack} />}
+      />
+    </DefaultBottomSheet>
+  )
+}
+
+interface StackListProps {
+  stack: Stack[];
+}
+
+function StackList(props: StackListProps): React.ReactElement {
+  const { stack } = props;
+
+  const renderStack = useCallback((stack: Stack): React.ReactNode => {
+    const { color, value } = StackInfo[stack];
+
+    return (
+      <div className='pb-1'>
+        <Tag color={color}>{value}</Tag>
+      </div>
+    );
+  }, [])
+
+  return (
+    <div className='flex flex-wrap mb-4'>
+      {React.Children.toArray(stack.map(renderStack))}
+    </div>
+  )
+};
+
+export const BottomSheet = {
   About,
-  Contact
+  Contact,
+  ProjectDetails
 }
