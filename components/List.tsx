@@ -15,7 +15,7 @@ export function List(props: ListProps): React.ReactElement {
 
   function renderPlaceholder(): React.ReactNode {
     return (
-      <div className='flex flex-shrink-0 rounded w-72 lg:w-80 h-40 overflow-hidden mr-2'>
+      <div className='list flex flex-shrink-0 rounded w-72 lg:w-80 h-40 overflow-hidden mr-2'>
         <Skeleton.Avatar
           active
           shape='square'
@@ -35,7 +35,7 @@ export function List(props: ListProps): React.ReactElement {
   return (
     <div className='pb-5'>
       <SubHeader title={title} description={description} />
-      <div className='flex overflow-auto pl-6 lg:pl-10 py-2'>{list}</div>
+      <div className='list flex overflow-auto pl-6 lg:pl-10 py-2'>{list}</div>
     </div>
   );
 }
