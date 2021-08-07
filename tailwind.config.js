@@ -10,7 +10,7 @@ module.exports = {
       borderColor: {
         light: '#F0F0F0',
         dark: '#303030',
-      }
+      },
     },
   },
   variants: {
