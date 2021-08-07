@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import '~antd/dist/antd.css';
+@import '~react-spring-bottom-sheet/dist/style.css';
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
 
 html,
@@ -23,6 +24,22 @@ div#__next > div {
 
 * {
   scroll-behavior: smooth;
+}
+
+.layout {
+  max-width: 100%;
+
+  @screen md {
+    max-width: 90%;
+  }
+
+  @screen lg {
+    max-width: 85%;
+  }
+
+  @screen 2xl {
+    max-width: 80%;
+  }
 }
 
 .banner {

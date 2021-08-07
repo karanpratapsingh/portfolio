@@ -9,7 +9,9 @@ export function Layout(props: LayoutProps): React.ReactElement {
 
   return (
     <div className='flex flex-col'>
-      {children}
+      <div className='layout flex flex-col self-center overflow-hidden'>
+        {children}
+      </div>
       <Footer />
     </div>
   );
