@@ -37,7 +37,7 @@ export const projects: Project[] = [
     isOpenSource: false,
     description: 'Upcoming decentralized social media platform for web 3.0',
     repository: null,
-    stack: [Stack.js, Stack.react, Stack.graphql, Stack.aws, Stack.arango],
+    stack: [Stack.javascript, Stack.react, Stack.graphql, Stack.aws],
     screenshots: [],
     deployment: {
       web: 'https://peapods.com',
@@ -54,7 +54,7 @@ export const projects: Project[] = [
     description:
       'An open source social media app that does not use your data against you',
     repository: 'https://github.com/karanpratapsingh/Proximity',
-    stack: [Stack.ts, Stack.react, Stack.graphql, Stack.firebase],
+    stack: [Stack.typescript, Stack.reactnative, Stack.graphql, Stack.aws],
     screenshots: [
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fproximity%2Fscreenshots%2Fscreenshot-1.png?alt=media&token=a9b5a094-8a16-4c84-af16-65bf2378d7d9',
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fproximity%2Fscreenshots%2Fscreenshot-2.png?alt=media&token=fca4c07e-c922-445e-a259-a06c038e0974',
@@ -83,7 +83,7 @@ export const projects: Project[] = [
     description:
       'Connect with shoppers who need your advice and expertise when they’re shopping online. Assist and sell to customers the same way you would in-store, but now through chat and video straight from the app',
     repository: null,
-    stack: [Stack.js, Stack.react, Stack.graphql, Stack.firebase],
+    stack: [Stack.javascript, Stack.react, Stack.graphql, Stack.gcp],
     screenshots: [
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fvelvet%2Fscreenshots%2Fscreenshot-1.png?alt=media&token=b9b044ce-a3af-402f-a1db-1ae61621bb18',
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fvelvet%2Fscreenshots%2Fscreenshot-2.png?alt=media&token=f551d87b-4f74-4d06-b81e-50ea8bf7feba',
@@ -110,7 +110,7 @@ export const projects: Project[] = [
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fstewards%2Fbanner.png?alt=media&token=51bb3366-f4e8-4db1-9bfc-c8ebc8c63953',
     description:
       'Mobile ordering solution with robot delivery. Stewards also provides variety of tools like staff application to manage orders, self checkout solution and admin dashboard',
-    stack: [Stack.js, Stack.react, Stack.firebase],
+    stack: [Stack.javascript, Stack.react, Stack.gcp],
     screenshots: [
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fstewards%2Fscreenshots%2Fscreenshot-1.png?alt=media&token=ba9d7163-8df6-43ae-b804-01cd221cc593',
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fstewards%2Fscreenshots%2Fscreenshot-2.png?alt=media&token=c8194dc7-08cf-4b8c-a3ad-f6c643291a95',
@@ -166,7 +166,7 @@ export const projects: Project[] = [
     description:
       'Get personalized videos from your favorite celebrities at just one click. Request personalised video messages for your friends, family, loved ones or even yourself.Be it a doubt or even a special wish from your favorite celebrity.',
     repository: null,
-    stack: [Stack.js, Stack.react, Stack.python, Stack.aws],
+    stack: [Stack.javascript, Stack.react, Stack.python, Stack.aws],
     screenshots: [
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fcelebrify%2Fscreenshots%2Fscreenshot-1.png?alt=media&token=93fffd15-08ca-4ffc-8fce-47bc269237ee',
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fcelebrify%2Fscreenshots%2Fscreenshot-2.png?alt=media&token=fd597baf-3aaa-4ad8-abe9-1d42c628285f',
@@ -192,7 +192,7 @@ export const projects: Project[] = [
       'KCards is your one-stop replacement for paper cards. KCards help you to easily share your cards with other users and get real-time analytics on the shared cards',
     isOpenSource: false,
     repository: 'https://github.com/karanpratapsingh/KCards',
-    stack: [Stack.js, Stack.react],
+    stack: [Stack.javascript, Stack.react],
     screenshots: [
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fkcards%2Fscreenshots%2Fscreenshot-1.png?alt=media&token=5de462e1-7368-49fd-843f-abd4cccb3317',
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fkcards%2Fscreenshots%2Fscreenshot-2.png?alt=media&token=30061b0b-5bed-47d5-bf43-16c44cf076e0',
