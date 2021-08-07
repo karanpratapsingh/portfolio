@@ -18,10 +18,10 @@ export function Header(): React.ReactElement {
     <div className='flex items-center justify-end'>
       <div className='mt-5 mr-5 lg:mt-10 lg:mr-0 cursor-pointer hover:opacity-80 dark:text-white'>
         <Conditional condition={resolvedTheme === 'light'}>
-          <SunIcon className='text-4xl' onClick={setDark} />
+          <SunIcon className='text-3xl lg:text-4xl' onClick={setDark} />
         </Conditional>
         <Conditional condition={resolvedTheme === 'dark'}>
-          <MoonIcon className='text-3xl text-white' onClick={setLight} />
+          <MoonIcon className='text-3xl lg:text-4xl text-white' onClick={setLight} />
         </Conditional>
       </div>
     </div>
