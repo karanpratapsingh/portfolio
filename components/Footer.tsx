@@ -12,7 +12,7 @@ import { Maybe } from '../types';
 
 export function Footer(): React.ReactElement {
   return (
-    <Layout.Footer className='flex flex-col items-center py-10 lg:py-16 font-light bg-primary dark:text-white'>
+    <Layout.Footer className='flex flex-col items-center py-10 lg:py-16 font-light bg-primary'>
       <span className='text-xl font-bold'>Let&apos;s connect</span>
       <span className='mt-4 lg:mt-8 lg:mb-6 font-light'>
         Get in touch for opportunities or just to say hi!

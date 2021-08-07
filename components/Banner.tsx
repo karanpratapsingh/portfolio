@@ -8,7 +8,7 @@ interface BannerProps {
 
 export function Banner(props: BannerProps): React.ReactElement {
   const { onAbout, onContact } = props;
-  const colors: string[] = useMemo(getRandomColorPair, []);
+  const [aboutColor, contactColor]: string[] = useMemo(getRandomColorPair, []);
 
   return (
     <div className='banner flex flex-col flex-1 justify-center px-6 lg:px-10 py-10 dark:text-white'>
@@ -20,24 +20,32 @@ export function Banner(props: BannerProps): React.ReactElement {
       </p>
       <p className='lg:text-xl font-light'>
         Read more
-        <span
-          className='cursor-pointer mx-2 font-medium p-1'
-          onClick={onAbout}
-          style={{ backgroundColor: colors[0] }}
-        >
-          about me
-        </span>
+        <ColorText text='about me' backgroundColor={aboutColor} onClick={onAbout} />
         or
-        <span
-          className='cursor-pointer mx-2 font-medium p-1'
-          onClick={onContact}
-          style={{ backgroundColor: colors[1] }}
-        >
-          contact me
-        </span>
+        <ColorText text='contact me' backgroundColor={contactColor} onClick={onContact} />
       </p>
     </div>
   );
+}
+
+interface ColorTextProps {
+  text: string;
+  backgroundColor: string;
+  onClick?: () => void;
+}
+
+function ColorText(props: ColorTextProps): React.ReactElement {
+  const { text, backgroundColor, onClick } = props;
+
+  return (
+    <span
+      className='cursor-pointer mx-2 font-medium p-1 dark:text-black'
+      onClick={onClick}
+      style={{ backgroundColor }}
+    >
+      {text}
+    </span>
+  )
 }
 
 function getRandomColorPair(): string[] {
