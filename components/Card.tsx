@@ -1,8 +1,8 @@
-import Image from 'next/image';
 import { Card as AntDesignCard, Tag } from 'antd';
-import { StackColor } from '../config';
-import React from 'react';
 import dataFormat from 'dateformat';
+import Image from 'next/image';
+import React from 'react';
+import { Colors } from '../config';
 
 interface BaseProps {
   title: string;
@@ -56,12 +56,14 @@ function Article(props: ArticleProps): React.ReactElement {
   const date = dataFormat(new Date(publishedAt), 'mmm dS, yyyy');
 
   function renderTags(tag: string): React.ReactNode {
-    return <Tag color={StackColor[tag]}>{tag}</Tag>;
+    return <Tag color={Colors[tag]}>{tag}</Tag>;
   }
 
   return (
     <a target='_blank' href={url} rel='noopener noreferrer'>
-      <AntDesignCard className={`${dimensions} ${border} cursor-pointer ${color}`}>
+      <AntDesignCard
+        className={`${dimensions} ${border} cursor-pointer ${color}`}
+      >
         <div className='flex flex-col py-4 px-6'>
           <span className='text-lg font-bold truncate text-ellipsis'>
             {title}

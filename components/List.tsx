@@ -1,7 +1,7 @@
-import { SubHeaderProps } from './SubHeader';
-import { SubHeader } from '../components';
-import React from 'react';
 import { Skeleton } from 'antd';
+import React from 'react';
+import { SubHeader } from '../components';
+import { SubHeaderProps } from './SubHeader';
 
 type ListData = any;
 
