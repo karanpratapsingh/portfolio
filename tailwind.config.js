@@ -4,8 +4,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#fcf5ff',
+        primary: '#FCF5FF',
+        dark: '#202020',
       },
+      borderColor: {
+        light: '#F0F0F0',
+        dark: '#303030',
+      }
     },
   },
   variants: {
