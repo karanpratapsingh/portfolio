@@ -14,12 +14,16 @@ interface ProjectProps extends BaseProps {
   banner: string;
 }
 
+const dimensions = 'flex-shrink-0 w-72 lg:w-80 mr-2 rounded cursor-pointer';
+const border = 'border border-light dark:border-dark';
+const color = 'dark:bg-dark dark:text-white';
+
 function Project(props: ProjectProps): React.ReactElement {
   const { title, banner, description, onClick } = props;
 
   return (
     <AntDesignCard
-      className='flex-shrink-0 mr-2 rounded w-72 lg:w-80 cursor-pointer'
+      className={`${dimensions} ${border} ${color}`}
       onClick={onClick}
       cover={
         <Image
@@ -57,7 +61,7 @@ function Article(props: ArticleProps): React.ReactElement {
 
   return (
     <a target='_blank' href={url} rel='noopener noreferrer'>
-      <AntDesignCard className='flex-shrink-0 mr-2 rounded w-72 lg:w-80 cursor-pointer'>
+      <AntDesignCard className={`${dimensions} ${border} cursor-pointer ${color}`}>
         <div className='flex flex-col py-4 px-6'>
           <span className='text-lg font-bold truncate text-ellipsis'>
             {title}
@@ -81,9 +85,9 @@ function Video(props: VideoProps): React.ReactElement {
   const { id } = props;
 
   return (
-    <AntDesignCard className='flex-shrink-0 mr-2 cursor-pointer'>
+    <AntDesignCard className={`${border} ${color}`}>
       <iframe
-        className='rounded w-72 lg:w-80'
+        className={dimensions}
         src={`https://www.youtube.com/embed/${id}`}
         title='YouTube video player'
         frameBorder='0'

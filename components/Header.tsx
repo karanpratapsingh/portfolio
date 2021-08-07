@@ -22,7 +22,7 @@ export function Header(): React.ReactElement {
   let icon: React.ReactNode = <SunIcon className='text-3xl' onClick={setDark} />;
 
   if (isDark) {
-    icon = <MoonIcon className='text-3xl' onClick={setLight} />;
+    icon = <MoonIcon className='text-3xl dark:text-white' onClick={setLight} />;
   }
 
   return (
