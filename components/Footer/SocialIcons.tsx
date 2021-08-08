@@ -3,15 +3,21 @@ import { IconBaseProps } from 'react-icons';
 import { FaLinkedinIn as LinkedinIcon } from 'react-icons/fa';
 import {
   IoLogoGithub as GithubIcon,
-  IoLogoTwitter as TwitterIcon
+  IoLogoTwitter as TwitterIcon,
 } from 'react-icons/io';
 import { SiGmail as MailIcon } from 'react-icons/si';
 import { Colors, contact, ContactType } from '../../config';
 import { EntryTuple, Maybe } from '../../types';
 
-export function SocialIcons(): React.ReactElement {
+interface SocialIconsProps {
+  className?: string;
+}
+
+export function SocialIcons(props: SocialIconsProps): React.ReactElement {
+  const { className } = props;
+
   return (
-    <div className='flex mt-2'>
+    <div className={`flex mt-2 ${className}`}>
       {React.Children.toArray(Object.entries(contact.links).map(resolveIcon))}
     </div>
   );

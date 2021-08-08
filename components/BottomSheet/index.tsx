@@ -70,7 +70,7 @@ function ContactBottomSheet(
         title={`Let's Connect`}
         description='Do you have a project in mind? Want to hire me? Or simply wanna chat? Feel free to reach out'
       >
-        <SocialIcons />
+        <SocialIcons className='mt-4 mb-2' />
       </SubHeader>
     </BaseBottomSheet>
   );
