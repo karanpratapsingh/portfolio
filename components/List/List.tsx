@@ -1,5 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import { Skeleton } from 'antd';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { SubHeader } from '..';
 import { Project } from '../../config';
 import { Article, Video } from '../../types';
@@ -130,8 +131,40 @@ function VideoList(props: VideoListProps): React.ReactElement {
   );
 }
 
+interface ScreenShotListProps {
+  screenshots: string[];
+}
+
+function ScreenShotList(props: ScreenShotListProps): React.ReactElement {
+  const { screenshots } = props;
+
+  const renderScreenShotList = useCallback((screenshot: string) => {
+    return (
+      <div className='flex-shrink-0 mr-2'>
+        <img
+          src={screenshot}
+          className='h-80 lg:h-96'
+          alt='project screenshot'
+        />
+      </div>
+    );
+  }, []);
+
+  return (
+    <SubHeader
+      title='Screenshots'
+      description={
+        <div className='flex overflow-auto'>
+          {React.Children.toArray(screenshots.map(renderScreenShotList))}
+        </div>
+      }
+    />
+  );
+}
+
 export const List = {
   Project: ProjectList,
   Article: ArticleList,
   Video: VideoList,
+  ScreenShot: ScreenShotList,
 };
