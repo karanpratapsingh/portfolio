@@ -154,7 +154,7 @@ function ScreenShotList(props: ScreenShotListProps): React.ReactElement {
     <SubHeader
       title='Screenshots'
       description={
-        <div className='flex overflow-auto'>
+        <div className='list flex overflow-auto mt-2 mb-1'>
           {React.Children.toArray(screenshots.map(renderScreenShotList))}
         </div>
       }

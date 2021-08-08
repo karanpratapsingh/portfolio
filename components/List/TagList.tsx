@@ -95,9 +95,9 @@ function SubProjectList(props: SubProjectListProps): React.ReactElement {
       const { title, description, deployment } = subProject;
       return (
         <div className='flex flex-col my-1'>
-          <span className='font-lg font-bold mt-1'>{title}</span>
-          <p className='my-1'>{description}</p>
+          <span className='text-lg font-bold my-1'>{title}</span>
           <TagList.Deployment skipHeader deployment={deployment} />
+          <p className='mt-1 font-light'>{description}</p>
         </div>
       );
     },
