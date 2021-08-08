@@ -13,7 +13,7 @@ interface BaseProps {
 interface ProjectProps extends BaseProps {
   banner: string;
 }
-
+// TODO: use clsx
 const dimensions = 'flex-shrink-0 w-72 lg:w-80 mr-2 rounded cursor-pointer';
 const border = 'border border-light dark:border-dark';
 const color = 'dark:bg-dark dark:text-white';
@@ -87,9 +87,9 @@ function Video(props: VideoProps): React.ReactElement {
   const { id } = props;
 
   return (
-    <AntDesignCard className={`${border} ${color}`}>
+    <AntDesignCard className={`${dimensions} h-40 ${border} ${color}`}>
       <iframe
-        className={dimensions}
+        className={`${dimensions} h-40`}
         src={`https://www.youtube.com/embed/${id}`}
         title='YouTube video player'
         frameBorder='0'
