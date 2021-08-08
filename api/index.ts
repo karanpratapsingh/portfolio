@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-import env from 'env-var';
 import config from '../config';
 import { Article, Maybe, Video } from '../types';
+import { getEnv } from '../util';
 
 export async function getArticles(): Promise<Article[]> {
   const showArticles = Boolean(config.articles);
@@ -60,11 +60,8 @@ export async function getVideos(): Promise<Video[]> {
     return videos;
   }
 
-  const key: string = env.get('NEXT_APP_YOUTUBE_API_KEY').required().asString();
-  const channelId: string = env
-    .get('NEXT_APP_YOUTUBE_CHANNEL_ID')
-    .required()
-    .asString();
+  const key = getEnv('YOUTUBE_API_KEY', true);
+  const channelId = getEnv('YOUTUBE_CHANNEL_ID', true);
 
   try {
     const url: string = `${config.videos?.apiUrl}/search`;
