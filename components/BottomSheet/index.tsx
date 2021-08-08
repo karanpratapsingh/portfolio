@@ -1,7 +1,7 @@
+import { Button } from 'antd';
 import { useTheme } from 'next-themes';
 import React, { Fragment, useMemo } from 'react';
 import { BottomSheet as DefaultBottomSheet } from 'react-spring-bottom-sheet';
-import { snapPoints } from 'react-spring-bottom-sheet/dist/types';
 import config, { Project, WorkStack } from '../../config';
 import { getRandomColorPair, getThemeClassName } from '../../util';
 import { ColorText } from '../Banner/ColorText';
@@ -16,20 +16,27 @@ interface BaseBottomSheetProps {
   open: boolean;
   onDismiss: () => void;
   children?: React.ReactNode;
-  snapPoints?: snapPoints;
 }
 
 function BaseBottomSheet(props: BaseBottomSheetProps): React.ReactElement {
-  const { open, onDismiss, children, snapPoints } = props;
+  const { open, onDismiss, children } = props;
   const { resolvedTheme } = useTheme();
   const className = getThemeClassName('bottomsheet', resolvedTheme);
+
+  const footer = (
+    <div className='flex items-center justify-end'>
+      <Button onClick={onDismiss} danger>
+        close
+      </Button>
+    </div>
+  );
 
   return (
     <DefaultBottomSheet
       className={className}
       open={open}
       onDismiss={onDismiss}
-      snapPoints={snapPoints}
+      footer={footer}
     >
       {children}
     </DefaultBottomSheet>
@@ -76,7 +83,7 @@ function ContactBottomSheet(
       <SubHeader
         className='lg:mt-4'
         title={`Let's Connect`}
-        description='Do you have a project in mind? Want to hire me? Or simply wanna chat? Feel free to reach out'
+        description='Do you have a project in mind? Want to hire me? or simply wanna chat? Feel free to reach out'
       >
         <SocialIcons className='mt-4 mb-2' />
       </SubHeader>
@@ -95,12 +102,8 @@ function ProjectBottomSheet(
   const { title, description, stack, deployment, screenshots, subProjects } =
     project;
 
-  const topPadding: number = screenshots.length ? 20 : 0;
-
-  const snapPoints: snapPoints = ({ minHeight }) => minHeight - topPadding;
-
   return (
-    <BaseBottomSheet open={open} onDismiss={onDismiss} snapPoints={snapPoints}>
+    <BaseBottomSheet open={open} onDismiss={onDismiss}>
       <SubHeader className='lg:mt-4' title={title} description={description} />
       <TagList.Stack stack={stack} />
       <TagList.Deployment deployment={deployment} />
