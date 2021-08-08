@@ -6,7 +6,7 @@ import {
   Conditional,
   Header,
   Layout,
-  List
+  List,
 } from '../components';
 import config, { Project, projects } from '../config';
 import { useBoolean } from '../hooks';
@@ -45,7 +45,7 @@ export default function Home(props: HomeStaticProps) {
         onProject={onProject}
       />
 
-      <Conditional condition={Boolean(config.articles)}>
+      <Conditional condition={config.articles}>
         <List.Article
           title='Articles'
           description={`When I'm not writing code, I write articles`}
@@ -53,7 +53,7 @@ export default function Home(props: HomeStaticProps) {
         />
       </Conditional>
 
-      <Conditional condition={Boolean(config.videos)}>
+      <Conditional condition={config.videos}>
         <List.Video
           title='Videos'
           description={`I also make videos`}
