@@ -1,4 +1,7 @@
-export type Env = 'NEXT_PUBLIC_GOOGLE_ANALYTICS_ID' | 'YOUTUBE_API_KEY' | 'YOUTUBE_CHANNEL_ID';
+export type Env =
+  | 'NEXT_PUBLIC_GOOGLE_ANALYTICS_ID'
+  | 'YOUTUBE_API_KEY'
+  | 'YOUTUBE_CHANNEL_ID';
 
 export type Maybe<T> = T | null;
 

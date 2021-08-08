@@ -1,5 +1,9 @@
+export enum ArticleProvider {
+  DEVTO = 'dev.to',
+}
+
 export type DevtoConfig = {
-  provider: 'dev.to';
+  provider: ArticleProvider.DEVTO;
   username: string;
   apiUrl: string;
 };
@@ -7,7 +11,7 @@ export type DevtoConfig = {
 export type Articles = DevtoConfig;
 
 export const articles: DevtoConfig = {
-  provider: 'dev.to',
+  provider: ArticleProvider.DEVTO,
   username: 'karanpratapsingh',
   apiUrl: 'https://dev.to/api',
 };

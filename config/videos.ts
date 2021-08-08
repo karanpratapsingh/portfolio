@@ -1,11 +1,15 @@
+export enum VideoProvider {
+  YOUTUBE = 'youtube.com',
+}
+
 export type YouTubeConfig = {
-  provider: 'youtube.com';
+  provider: VideoProvider.YOUTUBE;
   apiUrl: string;
 };
 
 export type Videos = YouTubeConfig;
 
-export const videos: YouTubeConfig = {
-  provider: 'youtube.com',
+export const videos: Videos = {
+  provider: VideoProvider.YOUTUBE,
   apiUrl: 'https://www.googleapis.com/youtube/v3',
 };
