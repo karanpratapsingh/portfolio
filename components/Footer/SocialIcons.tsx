@@ -3,11 +3,11 @@ import { IconBaseProps } from 'react-icons';
 import { FaLinkedinIn as LinkedinIcon } from 'react-icons/fa';
 import {
   IoLogoGithub as GithubIcon,
-  IoLogoTwitter as TwitterIcon,
+  IoLogoTwitter as TwitterIcon
 } from 'react-icons/io';
 import { SiGmail as MailIcon } from 'react-icons/si';
 import { Colors, contact, ContactType } from '../../config';
-import { Maybe } from '../../types';
+import { EntryTuple, Maybe } from '../../types';
 
 export function SocialIcons(): React.ReactElement {
   return (
@@ -17,7 +17,7 @@ export function SocialIcons(): React.ReactElement {
   );
 }
 
-function resolveIcon(entry: [string, string]): React.ReactNode {
+function resolveIcon(entry: EntryTuple): React.ReactNode {
   const [type, url] = entry;
 
   const props: IconBaseProps = {
