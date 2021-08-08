@@ -3,11 +3,10 @@ import * as API from '../api';
 import {
   Banner,
   BottomSheet,
-  Card,
   Conditional,
   Header,
   Layout,
-  List,
+  List
 } from '../components';
 import config, { Project, projects } from '../config';
 import { useBoolean } from '../hooks';
@@ -27,40 +26,9 @@ export default function Home(props: HomeStaticProps) {
   const [contact, openContact, closeContact] = useBoolean(false);
   const [project, openProject, closeProject] = useBoolean(false);
 
-  function renderProjectsList(project: Project): React.ReactNode {
-    const { title, description, banner } = project;
-
-    function onProjectClick(): void {
-      setActiveProject(project);
-      openProject();
-    }
-
-    return (
-      <Card.Project
-        title={title}
-        description={description}
-        banner={banner}
-        onClick={onProjectClick}
-      />
-    );
-  }
-
-  function renderArticlesList(article: Article): React.ReactNode {
-    const { title, description, url, tags, publishedAt } = article;
-
-    return (
-      <Card.Article
-        title={title}
-        description={description}
-        url={url}
-        tags={tags}
-        publishedAt={publishedAt}
-      />
-    );
-  }
-
-  function renderVideoList(video: Video): React.ReactNode {
-    return <Card.Video id={video.id} />;
+  function onProject(project: Project): void {
+    setActiveProject(project);
+    openProject();
   }
 
   return (
@@ -70,36 +38,32 @@ export default function Home(props: HomeStaticProps) {
         <Banner onAbout={openAbout} onContact={openContact} />
       </div>
 
-      <List
+      <List.Project
         title='Portfolio'
         description={`Projects I've worked on recently`}
-        data={projects}
-        renderList={renderProjectsList}
+        projects={projects}
+        onProject={onProject}
       />
 
       <Conditional condition={Boolean(config.articles)}>
-        <List
+        <List.Article
           title='Articles'
           description={`When I'm not writing code, I write articles`}
-          data={articles}
-          renderList={renderArticlesList}
+          articles={articles}
         />
       </Conditional>
 
       <Conditional condition={Boolean(config.videos)}>
-        <List
+        <List.Video
           title='Videos'
           description={`I also make videos`}
-          data={videos}
-          renderList={renderVideoList}
+          videos={videos}
         />
       </Conditional>
 
       <BottomSheet.About open={about} onDismiss={closeAbout} />
-
       <BottomSheet.Contact open={contact} onDismiss={closeContact} />
-
-      <BottomSheet.ProjectDetails
+      <BottomSheet.Project
         open={project}
         onDismiss={closeProject}
         project={activeProject}
