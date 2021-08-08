@@ -2,7 +2,7 @@ import { LinkOutlined } from '@ant-design/icons';
 import { Tag } from 'antd';
 import React, { useCallback } from 'react';
 import { SubHeader } from '../../components';
-import { Colors, Deployment, Stack, StackInfo } from '../../config';
+import { Colors, Deployment, Stack, StackInfo, SubProject } from '../../config';
 import { EntryTuple } from '../../types';
 
 type BaseTagListData = any;
@@ -10,22 +10,24 @@ type BaseTagListData = any;
 interface BaseTagListProps {
   title: string;
   data: BaseTagListData[];
+  skipHeader?: boolean;
   renderList: (item: BaseTagListData) => React.ReactNode;
 }
 
 function BaseTagList(props: BaseTagListProps): React.ReactElement {
-  const { data, renderList, title } = props;
+  const { data, renderList, title, skipHeader = false } = props;
 
-  return (
-    <SubHeader
-      title={title}
-      description={
-        <div className='flex flex-wrap'>
-          {React.Children.toArray(data.map(renderList))}
-        </div>
-      }
-    />
+  let list = (
+    <div className='flex flex-wrap'>
+      {React.Children.toArray(data.map(renderList))}
+    </div>
   );
+
+  if (skipHeader) {
+    return list;
+  }
+
+  return <SubHeader title={title} description={list} />;
 }
 
 interface StackListProps {
@@ -49,11 +51,12 @@ export function StackList(props: StackListProps): React.ReactElement {
 }
 
 interface DeploymentListProps {
+  skipHeader?: boolean;
   deployment: Deployment;
 }
 
 function DeploymentList(props: DeploymentListProps): React.ReactElement {
-  const { deployment } = props;
+  const { deployment, skipHeader = false } = props;
 
   const renderDeployment = useCallback((entry: EntryTuple): React.ReactNode => {
     const [platform, url] = entry;
@@ -73,13 +76,43 @@ function DeploymentList(props: DeploymentListProps): React.ReactElement {
   return (
     <BaseTagList
       title='Deployments'
+      skipHeader={skipHeader}
       data={Object.entries(deployment)}
       renderList={renderDeployment}
     />
   );
 }
 
+interface SubProjectListProps {
+  subProjects: SubProject[];
+}
+
+function SubProjectList(props: SubProjectListProps): React.ReactElement {
+  const { subProjects } = props;
+
+  const renderSubProjectList = useCallback(
+    (subProject: SubProject): React.ReactNode => {
+      const { title, description, deployment } = subProject;
+      return (
+        <div className='flex flex-col my-1'>
+          <span className='font-lg font-bold mt-1'>{title}</span>
+          <p className='my-1'>{description}</p>
+          <TagList.Deployment skipHeader deployment={deployment} />
+        </div>
+      );
+    },
+    [],
+  );
+
+  return (
+    <SubHeader title='More Products' description='Some additional products'>
+      {React.Children.toArray(subProjects.map(renderSubProjectList))}
+    </SubHeader>
+  );
+}
+
 export const TagList = {
   Stack: StackList,
   Deployment: DeploymentList,
+  SubProject: SubProjectList,
 };
