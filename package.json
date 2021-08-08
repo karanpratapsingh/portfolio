@@ -10,8 +10,10 @@
     "lint:fix": "yarn prettier --write ."
   },
   "dependencies": {
+    "@analytics/google-analytics": "^0.5.3",
     "@ant-design/icons": "^4.6.2",
     "@tailwindcss/line-clamp": "^0.2.1",
+    "analytics": "^0.7.13",
     "antd": "^4.16.10",
     "axios": "^0.21.1",
     "dateformat": "^4.5.1",
