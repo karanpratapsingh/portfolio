@@ -1,17 +1,20 @@
 import 'tailwindcss/tailwind.css';
 
 import '../styles/globals.scss';
-import '../styles/list.scss';
 import '../styles/bottomsheet.scss';
+import '../styles/list.scss';
 
-import type { AppProps } from 'next/app';
 import { NextSeo } from 'next-seo';
-import config from '../config';
 import { ThemeProvider } from 'next-themes';
+import type { AppProps } from 'next/app';
+import config from '../config';
+import { useAnalytics } from '../hooks';
 
 const { personal, contact } = config;
 
 function MyApp({ Component, pageProps }: AppProps) {
+  useAnalytics();
+
   return (
     <ThemeProvider defaultTheme='system' attribute='class'>
       <NextSeo

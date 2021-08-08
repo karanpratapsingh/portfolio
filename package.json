@@ -10,10 +10,8 @@
     "lint:fix": "yarn prettier --write ."
   },
   "dependencies": {
-    "@analytics/google-analytics": "^0.5.3",
     "@ant-design/icons": "^4.6.2",
     "@tailwindcss/line-clamp": "^0.2.1",
-    "analytics": "^0.7.13",
     "antd": "^4.16.10",
     "axios": "^0.21.1",
     "dateformat": "^4.5.1",
@@ -24,6 +22,7 @@
     "next-themes": "^0.0.15",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-ga": "^3.3.0",
     "react-icons": "^4.2.0",
     "react-spring-bottom-sheet": "^3.4.0",
     "sass": "^1.37.5"

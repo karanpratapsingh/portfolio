@@ -1,13 +1,15 @@
-import { getEnv } from '../util';
+export enum AnalyticsProvider {
+  GOOGLE = 'google',
+}
 
 export type GoogleAnalyticsConfig = {
-  provider: 'google';
+  provider: AnalyticsProvider.GOOGLE;
   trackingId?: string;
 };
 
 export type Analytics = GoogleAnalyticsConfig;
 
 export const analytics: Analytics = {
-  provider: 'google',
-  trackingId: getEnv('NEXT_PUBLIC_GOOGLE_ANALYTICS_ID'),
+  provider: AnalyticsProvider.GOOGLE,
+  trackingId: process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID,
 };
