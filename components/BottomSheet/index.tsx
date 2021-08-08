@@ -1,11 +1,13 @@
 import { useTheme } from 'next-themes';
 import React, { Fragment, useMemo } from 'react';
 import { BottomSheet as DefaultBottomSheet } from 'react-spring-bottom-sheet';
+import { snapPoints } from 'react-spring-bottom-sheet/dist/types';
 import config, { Project, WorkStack } from '../../config';
 import { getRandomColorPair, getThemeClassName } from '../../util';
 import { ColorText } from '../Banner/ColorText';
+import { Conditional } from '../Conditional';
 import { SocialIcons } from '../Footer';
-import { TagList } from '../List';
+import { List, TagList } from '../List';
 import { SubHeader } from '../SubHeader';
 
 const { personal } = config;
@@ -14,15 +16,21 @@ interface BaseBottomSheetProps {
   open: boolean;
   onDismiss: () => void;
   children?: React.ReactNode;
+  snapPoints?: snapPoints;
 }
 
 function BaseBottomSheet(props: BaseBottomSheetProps): React.ReactElement {
-  const { open, onDismiss, children } = props;
+  const { open, onDismiss, children, snapPoints } = props;
   const { resolvedTheme } = useTheme();
   const className = getThemeClassName('bottomsheet', resolvedTheme);
 
   return (
-    <DefaultBottomSheet className={className} open={open} onDismiss={onDismiss}>
+    <DefaultBottomSheet
+      className={className}
+      open={open}
+      onDismiss={onDismiss}
+      snapPoints={snapPoints}
+    >
       {children}
     </DefaultBottomSheet>
   );
@@ -84,13 +92,24 @@ function ProjectBottomSheet(
   props: ProjectBottomSheetProps,
 ): React.ReactElement {
   const { open, onDismiss, project } = props;
-  const { title, description, stack, deployment } = project;
+  const { title, description, stack, deployment, screenshots, subProjects } =
+    project;
+
+  const topPadding: number = screenshots.length ? 20 : 0;
+
+  const snapPoints: snapPoints = ({ minHeight }) => minHeight - topPadding;
 
   return (
-    <BaseBottomSheet open={open} onDismiss={onDismiss}>
+    <BaseBottomSheet open={open} onDismiss={onDismiss} snapPoints={snapPoints}>
       <SubHeader className='lg:mt-4' title={title} description={description} />
       <TagList.Stack stack={stack} />
       <TagList.Deployment deployment={deployment} />
+      <Conditional condition={screenshots.length}>
+        <List.ScreenShot screenshots={screenshots} />
+      </Conditional>
+      <Conditional condition={subProjects.length}>
+        <TagList.SubProject subProjects={subProjects} />
+      </Conditional>
     </BaseBottomSheet>
   );
 }
