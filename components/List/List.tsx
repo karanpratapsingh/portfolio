@@ -141,7 +141,11 @@ function ScreenShotList(props: ScreenShotListProps): React.ReactElement {
   const renderScreenShotList = useCallback((screenshot: string) => {
     return (
       <div className='flex-shrink-0 mr-2'>
-        <img src={screenshot} className='rounded h-80 lg:h-96' alt='screenshot' />
+        <img
+          src={screenshot}
+          className='rounded h-80 lg:h-96'
+          alt='screenshot'
+        />
       </div>
     );
   }, []);

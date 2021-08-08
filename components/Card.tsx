@@ -1,4 +1,5 @@
 import { Card as AntDesignCard, Tag } from 'antd';
+import clsx from 'clsx';
 import dataFormat from 'dateformat';
 import Image from 'next/image';
 import React from 'react';
@@ -13,7 +14,7 @@ interface BaseProps {
 interface ProjectProps extends BaseProps {
   banner: string;
 }
-// TODO: use clsx
+
 const dimensions = 'flex-shrink-0 w-72 lg:w-80 mr-2 rounded cursor-pointer';
 const border = 'border border-light dark:border-dark';
 const color = 'dark:bg-dark dark:text-white';
@@ -23,7 +24,7 @@ function Project(props: ProjectProps): React.ReactElement {
 
   return (
     <AntDesignCard
-      className={`${dimensions} ${border} ${color}`}
+      className={clsx(dimensions, border, color)}
       onClick={onClick}
       cover={
         <Image
@@ -62,7 +63,7 @@ function Article(props: ArticleProps): React.ReactElement {
   return (
     <a target='_blank' href={url} rel='noopener noreferrer'>
       <AntDesignCard
-        className={`${dimensions} ${border} cursor-pointer ${color}`}
+        className={clsx(dimensions, border, color, 'cursor-pointer')}
       >
         <div className='flex flex-col py-4 px-6'>
           <span className='text-lg font-bold truncate text-ellipsis'>
@@ -87,9 +88,9 @@ function Video(props: VideoProps): React.ReactElement {
   const { id } = props;
 
   return (
-    <AntDesignCard className={`${dimensions} h-40 ${border} ${color}`}>
+    <AntDesignCard className={clsx(dimensions, border, color, 'h-40')}>
       <iframe
-        className={`${dimensions} h-40`}
+        className={clsx(dimensions, 'h-40')}
         src={`https://www.youtube.com/embed/${id}`}
         title='YouTube video player'
         frameBorder='0'

@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 import { IconBaseProps } from 'react-icons';
 import { FaLinkedinIn as LinkedinIcon } from 'react-icons/fa';
@@ -17,7 +18,7 @@ export function SocialIcons(props: SocialIconsProps): React.ReactElement {
   const { className } = props;
 
   return (
-    <div className={`flex mt-2 ${className}`}>
+    <div className={clsx('flex mt-2', className)}>
       {React.Children.toArray(Object.entries(contact.links).map(resolveIcon))}
     </div>
   );
