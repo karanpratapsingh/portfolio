@@ -6,6 +6,11 @@
 @import '~react-spring-bottom-sheet/dist/style.css';
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
 
+* {
+  scroll-behavior: smooth;
+  transition: background-color 200ms ease;
+}
+
 html,
 body {
   padding: 0;
@@ -22,9 +27,11 @@ div#__next > div {
   overflow-y: scroll;
 }
 
-* {
-  scroll-behavior: smooth;
-  transition: background-color 200ms ease;
+html,
+div#__next {
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 a,

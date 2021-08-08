@@ -8,7 +8,7 @@ export function Layout(props: LayoutProps): React.ReactElement {
   const { children } = props;
 
   return (
-    <div className='flex flex-col dark:bg-dark'>
+    <div className='list flex flex-col dark:bg-dark'>
       <div className='layout flex flex-col self-center overflow-hidden'>
         {children}
       </div>
