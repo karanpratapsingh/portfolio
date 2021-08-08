@@ -6,6 +6,8 @@ module.exports = {
       colors: {
         primary: '#FCF5FF',
         dark: '#161616',
+        'placeholder-light': '#F0F0F0',
+        'placeholder-dark': '#303030',
       },
       borderColor: {
         light: '#F0F0F0',
