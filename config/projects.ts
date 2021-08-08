@@ -18,7 +18,6 @@ export interface Project {
   id: number;
   title: string;
   website: string;
-  isOpenSource: boolean;
   banner: string;
   description: string;
   repository: Maybe<string>;
@@ -35,7 +34,6 @@ export const projects: Project[] = [
     banner:
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fpeapods%2Fbanner.png?alt=media&token=20726ab4-332d-4cd7-afb1-2d1764deaf6b',
     website: 'https://peapods.com',
-    isOpenSource: false,
     description: 'Upcoming decentralized social media platform for web 3.0',
     repository: null,
     stack: [
@@ -55,7 +53,6 @@ export const projects: Project[] = [
     id: 1,
     title: 'Proximity',
     website: 'https://proximity-mobile.web.app',
-    isOpenSource: true,
     banner:
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fproximity%2Fbanner.jpeg?alt=media&token=4d1d49e3-20ac-491e-8947-57a4e8520cc6',
     description:
@@ -92,7 +89,6 @@ export const projects: Project[] = [
     banner:
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fvelvet%2Fbanner.png?alt=media&token=1c8fef8b-397e-434e-8ae8-48b6a5bc2ed2',
     website: 'https://boom.london',
-    isOpenSource: false,
     description:
       'Connect with shoppers who need your advice and expertise when they’re shopping online. Assist and sell to customers the same way you would in-store, but now through chat and video straight from the app',
     repository: null,
@@ -123,7 +119,6 @@ export const projects: Project[] = [
     id: 3,
     title: 'Stewards',
     website: 'https://stewards.app',
-    isOpenSource: false,
     repository: null,
     banner:
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fstewards%2Fbanner.png?alt=media&token=51bb3366-f4e8-4db1-9bfc-c8ebc8c63953',
@@ -184,7 +179,6 @@ export const projects: Project[] = [
   {
     id: 4,
     title: 'Celebrify',
-    isOpenSource: false,
     website: 'https://celebrify.in',
     banner:
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fcelebrify%2Fbanner.jpeg?alt=media&token=94cd7e6c-6360-4f65-b08a-b95f5ce7d12c',
@@ -215,9 +209,8 @@ export const projects: Project[] = [
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fkcards%2Fbanner.jpeg?alt=media&token=39dc0d23-0edf-49f2-b662-f2f6ed99cfec',
     description:
       'KCards is your one-stop replacement for paper cards. KCards help you to easily share your cards with other users and get real-time analytics on the shared cards',
-    isOpenSource: false,
     repository: 'https://github.com/karanpratapsingh/KCards',
-    stack: [Stack.node, Stack.react, Stack.reactnative, Stack.mongo],
+    stack: [Stack.react, Stack.reactnative, Stack.node, Stack.mongo],
     screenshots: [
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fkcards%2Fscreenshots%2Fscreenshot-1.png?alt=media&token=5de462e1-7368-49fd-843f-abd4cccb3317',
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fkcards%2Fscreenshots%2Fscreenshot-2.png?alt=media&token=30061b0b-5bed-47d5-bf43-16c44cf076e0',
