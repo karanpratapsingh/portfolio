@@ -1,6 +1,6 @@
-import { Button } from 'antd';
 import { useTheme } from 'next-themes';
 import React, { Fragment, useMemo } from 'react';
+import { IoCloseCircle as CloseIcon } from 'react-icons/io5';
 import { BottomSheet as DefaultBottomSheet } from 'react-spring-bottom-sheet';
 import config, { Project, WorkStack } from '../../config';
 import { getRandomColorPair, getThemeClassName } from '../../util';
@@ -16,21 +16,25 @@ interface BaseBottomSheetProps {
   open: boolean;
   onDismiss: () => void;
   children?: React.ReactNode;
-  footer?: React.ReactNode;
 }
 
 function BaseBottomSheet(props: BaseBottomSheetProps): React.ReactElement {
-  const { open, onDismiss, children, footer } = props;
+  const { open, onDismiss, children } = props;
   const { resolvedTheme } = useTheme();
   const className = getThemeClassName('bottomsheet', resolvedTheme);
 
-  return (
-    <DefaultBottomSheet
-      className={className}
-      open={open}
-      onDismiss={onDismiss}
-      footer={footer}
+  const header = (
+    <div
+      className='flex items-center justify-end cursor-pointer px-5'
+      onClick={onDismiss}
     >
+      <CloseIcon className='text-2xl text-placeholder-dark dark:text-placeholder-light opacity-40' />
+    </div>
+  );
+
+  return (
+    <DefaultBottomSheet className={className} open={open} onDismiss={onDismiss}>
+      {header}
       {children}
     </DefaultBottomSheet>
   );
@@ -95,21 +99,8 @@ function ProjectBottomSheet(
   const { title, description, stack, deployment, screenshots, subProjects } =
     project;
 
-  const footer = (
-    <div className='flex items-center justify-end'>
-      <Button
-        className='text-base font-medium bg-transparent hover:bg-transparent focus:bg-transparent'
-        type='text'
-        danger
-        onClick={onDismiss}
-      >
-        close
-      </Button>
-    </div>
-  );
-
   return (
-    <BaseBottomSheet open={open} onDismiss={onDismiss} footer={footer}>
+    <BaseBottomSheet open={open} onDismiss={onDismiss}>
       <SubHeader className='lg:mt-4' title={title} description={description} />
       <TagList.Stack stack={stack} />
       <TagList.Deployment deployment={deployment} />
