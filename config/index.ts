@@ -3,6 +3,7 @@ import { contact, Contact } from './contact';
 import { projects, Project } from './projects';
 import { articles, Articles } from './articles';
 import { videos, Videos } from './videos';
+import { analytics, Analytics } from './analytics';
 
 interface Config {
   personal: Personal;
@@ -10,6 +11,7 @@ interface Config {
   projects: Project[];
   articles?: Articles;
   videos?: Videos;
+  analytics?: Analytics;
 }
 
 const config: Config = {
@@ -18,6 +20,7 @@ const config: Config = {
   projects,
   articles,
   videos,
+  analytics,
 };
 
 export default config;
@@ -27,4 +30,5 @@ export * from './contact';
 export * from './projects';
 export * from './articles';
 export * from './videos';
+export * from './analytics';
 export * from './stack';
