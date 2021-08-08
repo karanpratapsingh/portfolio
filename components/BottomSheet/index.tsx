@@ -16,20 +16,13 @@ interface BaseBottomSheetProps {
   open: boolean;
   onDismiss: () => void;
   children?: React.ReactNode;
+  footer?: React.ReactNode;
 }
 
 function BaseBottomSheet(props: BaseBottomSheetProps): React.ReactElement {
-  const { open, onDismiss, children } = props;
+  const { open, onDismiss, children, footer } = props;
   const { resolvedTheme } = useTheme();
   const className = getThemeClassName('bottomsheet', resolvedTheme);
-
-  const footer = (
-    <div className='flex items-center justify-end'>
-      <Button onClick={onDismiss} danger>
-        close
-      </Button>
-    </div>
-  );
 
   return (
     <DefaultBottomSheet
@@ -102,8 +95,20 @@ function ProjectBottomSheet(
   const { title, description, stack, deployment, screenshots, subProjects } =
     project;
 
+  const footer = (
+    <div className='flex items-center justify-end'>
+      <Button
+        className='font-medium bg-transparent hover:bg-transparent focus:bg-transparent'
+        danger
+        onClick={onDismiss}
+      >
+        close
+      </Button>
+    </div>
+  );
+
   return (
-    <BaseBottomSheet open={open} onDismiss={onDismiss}>
+    <BaseBottomSheet open={open} onDismiss={onDismiss} footer={footer}>
       <SubHeader className='lg:mt-4' title={title} description={description} />
       <TagList.Stack stack={stack} />
       <TagList.Deployment deployment={deployment} />
