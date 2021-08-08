@@ -10,6 +10,7 @@
     "lint:fix": "yarn prettier --write ."
   },
   "dependencies": {
+    "@ant-design/icons": "^4.6.2",
     "@tailwindcss/line-clamp": "^0.2.1",
     "antd": "^4.16.10",
     "axios": "^0.21.1",
