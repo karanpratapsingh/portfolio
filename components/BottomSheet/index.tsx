@@ -98,7 +98,8 @@ function ProjectBottomSheet(
   const footer = (
     <div className='flex items-center justify-end'>
       <Button
-        className='font-medium bg-transparent hover:bg-transparent focus:bg-transparent'
+        className='text-base font-medium bg-transparent hover:bg-transparent focus:bg-transparent'
+        type='text'
         danger
         onClick={onDismiss}
       >

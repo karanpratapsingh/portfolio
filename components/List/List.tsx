@@ -17,7 +17,7 @@ interface BaseListProps extends SubHeaderProps {
 function BaseList(props: BaseListProps): React.ReactElement {
   const { data, renderList, title, description } = props;
 
-  function renderPlaceholder(): React.ReactNode {
+  const renderPlaceholder = useCallback((): React.ReactNode => {
     return (
       <div className='list flex flex-shrink-0 rounded w-72 lg:w-80 h-40 overflow-hidden mr-2'>
         <Skeleton.Avatar
@@ -27,7 +27,7 @@ function BaseList(props: BaseListProps): React.ReactElement {
         />
       </div>
     );
-  }
+  }, []);
 
   let list: React.ReactNode = React.Children.toArray(data.map(renderList));
 
@@ -52,22 +52,25 @@ interface ProjectListProps extends SubHeaderProps {
 function ProjectList(props: ProjectListProps): React.ReactElement {
   const { title, description, projects, onProject } = props;
 
-  function renderProjectsList(project: Project): React.ReactNode {
-    const { title, description, banner } = project;
+  const renderProjectsList = useCallback(
+    (project: Project): React.ReactNode => {
+      const { title, description, banner } = project;
 
-    function onProjectClick(): void {
-      onProject(project);
-    }
+      function onProjectClick(): void {
+        onProject(project);
+      }
 
-    return (
-      <Card.Project
-        title={title}
-        description={description}
-        banner={banner}
-        onClick={onProjectClick}
-      />
-    );
-  }
+      return (
+        <Card.Project
+          title={title}
+          description={description}
+          banner={banner}
+          onClick={onProjectClick}
+        />
+      );
+    },
+    [onProject],
+  );
 
   return (
     <BaseList
@@ -86,19 +89,22 @@ interface ArticleListProps extends SubHeaderProps {
 function ArticleList(props: ArticleListProps): React.ReactElement {
   const { title, description, articles } = props;
 
-  function renderArticlesList(article: Article): React.ReactNode {
-    const { title, description, url, tags, publishedAt } = article;
+  const renderArticlesList = useCallback(
+    (article: Article): React.ReactNode => {
+      const { title, description, url, tags, publishedAt } = article;
 
-    return (
-      <Card.Article
-        title={title}
-        description={description}
-        url={url}
-        tags={tags}
-        publishedAt={publishedAt}
-      />
-    );
-  }
+      return (
+        <Card.Article
+          title={title}
+          description={description}
+          url={url}
+          tags={tags}
+          publishedAt={publishedAt}
+        />
+      );
+    },
+    [],
+  );
 
   return (
     <BaseList
