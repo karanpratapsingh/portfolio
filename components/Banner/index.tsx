@@ -12,7 +12,7 @@ interface BannerProps {
 
 export function Banner(props: BannerProps): React.ReactElement {
   const { onAbout, onContact } = props;
-  const [aboutColor, contactColor]: string[] = useMemo(getRandomColorPair, []);
+  const [aboutColor, contactColor]= useMemo(getRandomColorPair, []);
 
   return (
     <div className='banner flex flex-col flex-1 justify-center px-6 lg:px-10 py-10 dark:text-white'>

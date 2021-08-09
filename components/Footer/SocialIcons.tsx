@@ -8,7 +8,7 @@ import {
 } from 'react-icons/io';
 import { SiGmail as MailIcon } from 'react-icons/si';
 import { Colors, contact, ContactType } from '../../config';
-import { EntryTuple, Maybe } from '../../types';
+import { Tuple, Maybe } from '../../types';
 
 interface SocialIconsProps {
   className?: string;
@@ -24,7 +24,7 @@ export function SocialIcons(props: SocialIconsProps): React.ReactElement {
   );
 }
 
-function resolveIcon(entry: EntryTuple): React.ReactNode {
+function resolveIcon(entry: Tuple<string>): React.ReactNode {
   const [type, url] = entry;
 
   const props: IconBaseProps = {

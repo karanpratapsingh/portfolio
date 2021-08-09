@@ -18,4 +18,4 @@ export type Video = {
   id: string;
 };
 
-export type EntryTuple = [string, string];
+export type Tuple<T> = [T, T];

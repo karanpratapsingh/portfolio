@@ -3,7 +3,7 @@ import { Tag } from 'antd';
 import React, { useCallback } from 'react';
 import { SubHeader } from '../../components';
 import { Colors, Deployment, Stack, StackInfo, SubProject } from '../../config';
-import { EntryTuple } from '../../types';
+import { Tuple } from '../../types';
 
 type BaseTagListData = any;
 
@@ -58,7 +58,7 @@ interface DeploymentListProps {
 function DeploymentList(props: DeploymentListProps): React.ReactElement {
   const { deployment, skipHeader = false } = props;
 
-  const renderDeployment = useCallback((entry: EntryTuple): React.ReactNode => {
+  const renderDeployment = useCallback((entry: Tuple<string>): React.ReactNode => {
     const [platform, url] = entry;
     const color = Colors[platform];
 
