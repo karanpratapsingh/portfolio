@@ -58,20 +58,28 @@ interface DeploymentListProps {
 function DeploymentList(props: DeploymentListProps): React.ReactElement {
   const { deployment, skipHeader = false } = props;
 
-  const renderDeployment = useCallback((entry: Tuple<string>): React.ReactNode => {
-    const [platform, url] = entry;
-    const color = Colors[platform];
+  const renderDeployment = useCallback(
+    (entry: Tuple<string>): React.ReactNode => {
+      const [platform, url] = entry;
+      const color = Colors[platform];
 
-    const icon: React.ReactNode = <LinkOutlined />;
+      const icon: React.ReactNode = <LinkOutlined />;
 
-    return (
-      <a className='pb-1' href={url} target='_blank' rel='noopener noreferrer'>
-        <Tag icon={icon} color={color}>
-          {platform}
-        </Tag>
-      </a>
-    );
-  }, []);
+      return (
+        <a
+          className='pb-1'
+          href={url}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          <Tag icon={icon} color={color}>
+            {platform}
+          </Tag>
+        </a>
+      );
+    },
+    [],
+  );
 
   return (
     <BaseTagList

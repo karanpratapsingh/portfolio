@@ -96,8 +96,15 @@ function ProjectBottomSheet(
   props: ProjectBottomSheetProps,
 ): React.ReactElement {
   const { open, onDismiss, project } = props;
-  const { title, description, stack, deployment, screenshots, subProjects } =
-    project;
+  const {
+    title,
+    description,
+    stack,
+    deployment,
+    dimensions,
+    screenshots,
+    subProjects,
+  } = project;
 
   return (
     <BaseBottomSheet open={open} onDismiss={onDismiss}>
@@ -105,7 +112,7 @@ function ProjectBottomSheet(
       <TagList.Stack stack={stack} />
       <TagList.Deployment deployment={deployment} />
       <Conditional condition={screenshots.length}>
-        <List.ScreenShot screenshots={screenshots} />
+        <List.ScreenShot screenshots={screenshots} dimensions={dimensions} />
       </Conditional>
       <Conditional condition={subProjects.length}>
         <TagList.SubProject subProjects={subProjects} />

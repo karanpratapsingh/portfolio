@@ -1,4 +1,4 @@
-import { Maybe } from '../types';
+import { Maybe, Tuple } from '../types';
 import { Stack } from './stack';
 
 export type Deployment = {
@@ -14,6 +14,8 @@ export interface SubProject {
   deployment: Deployment;
 }
 
+export const defaultDimensions: Tuple<number> = [450, 220];
+
 export interface Project {
   id: number;
   title: string;
@@ -22,6 +24,7 @@ export interface Project {
   description: string;
   repository: Maybe<string>;
   stack: Stack[];
+  dimensions?: Tuple<number>; // Tuple of [height, width]
   screenshots: string[];
   deployment: Deployment;
   subProjects: SubProject[];
@@ -186,6 +189,7 @@ export const projects: Project[] = [
       'Get personalized videos from your favorite celebrities at just one click. Request personalized video messages for your friends, family, loved ones or even yourself.Be it a doubt or even a special wish from your favorite celebrity.',
     repository: null,
     stack: [Stack.react, Stack.reactnative, Stack.django, Stack.aws],
+    dimensions: [450, 270],
     screenshots: [
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fcelebrify%2Fscreenshots%2Fscreenshot-1.png?alt=media&token=93fffd15-08ca-4ffc-8fce-47bc269237ee',
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fcelebrify%2Fscreenshots%2Fscreenshot-2.png?alt=media&token=fd597baf-3aaa-4ad8-abe9-1d42c628285f',
@@ -211,6 +215,7 @@ export const projects: Project[] = [
       'KCards is your one-stop replacement for paper cards. KCards help you to easily share your cards with other users and get real-time analytics on the shared cards',
     repository: 'https://github.com/karanpratapsingh/KCards',
     stack: [Stack.react, Stack.reactnative, Stack.node, Stack.mongo],
+    dimensions: [450, 270],
     screenshots: [
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fkcards%2Fscreenshots%2Fscreenshot-1.png?alt=media&token=5de462e1-7368-49fd-843f-abd4cccb3317',
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fkcards%2Fscreenshots%2Fscreenshot-2.png?alt=media&token=30061b0b-5bed-47d5-bf43-16c44cf076e0',

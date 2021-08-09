@@ -1,9 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
 import { Skeleton } from 'antd';
+import Image from 'next/image';
 import React, { useCallback } from 'react';
 import { SubHeader } from '..';
-import { Project } from '../../config';
-import { Article, Video } from '../../types';
+import { defaultDimensions, Project } from '../../config';
+import { Article, Tuple, Video } from '../../types';
 import { Card } from '../Card';
 import { SubHeaderProps } from '../SubHeader';
 
@@ -138,23 +138,32 @@ function VideoList(props: VideoListProps): React.ReactElement {
 }
 
 interface ScreenShotListProps {
+  dimensions?: Tuple<number>;
   screenshots: string[];
 }
 
 function ScreenShotList(props: ScreenShotListProps): React.ReactElement {
   const { screenshots } = props;
 
-  const renderScreenShotList = useCallback((screenshot: string) => {
-    return (
-      <div className='flex-shrink-0 mr-2'>
-        <img
-          src={screenshot}
-          className='rounded h-80 lg:h-96'
-          alt='screenshot'
-        />
-      </div>
-    );
-  }, []);
+  const [height, width] = props?.dimensions ?? defaultDimensions;
+
+  const renderScreenShotList = useCallback(
+    (screenshot: string) => {
+      return (
+        <div className='flex-shrink-0 mr-2 rounded overflow-hidden'>
+          <Image
+            loading='eager'
+            src={screenshot}
+            height={height}
+            width={width}
+            objectFit='cover'
+            alt='screenshot'
+          />
+        </div>
+      );
+    },
+    [height, width],
+  );
 
   return (
     <SubHeader
