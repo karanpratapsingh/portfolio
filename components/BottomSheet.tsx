@@ -2,13 +2,13 @@ import { useTheme } from 'next-themes';
 import React, { Fragment, useMemo } from 'react';
 import { IoCloseCircle as CloseIcon } from 'react-icons/io5';
 import { BottomSheet as DefaultBottomSheet } from 'react-spring-bottom-sheet';
-import config, { Project, WorkStack } from '../../config';
-import { getRandomColorPair, getThemeClassName } from '../../util';
-import { ColorText } from '../Banner/ColorText';
-import { Conditional } from '../Conditional';
-import { SocialIcons } from '../Footer';
-import { List, TagList } from '../List';
-import { SubHeader } from '../SubHeader';
+import config, { Project, WorkStack } from '../config';
+import { getRandomColorPair, getThemeClassName } from '../util';
+import { ColorText } from './Banner/ColorText';
+import { Conditional } from './Conditional';
+import { SocialIcons } from './Footer';
+import { List, TagList } from './List';
+import { SubHeader } from './SubHeader';
 
 const { personal } = config;
 
