@@ -55,7 +55,7 @@ export default function Home(props: HomeStaticProps): React.ReactElement {
       <Conditional condition={config.videos}>
         <List.Video
           title='Videos'
-          description={`I also make videos`}
+          description='I also make videos'
           videos={videos}
         />
       </Conditional>

@@ -34,6 +34,7 @@ export const Colors: Record<string, string> = {
   gcp: '#4285F4',
   docker: '#0DB7Ed',
   kubernetes: '#326CE5',
+  terraform: '#7B42BC',
 
   // Social
   linkedin: '#0077B5',
