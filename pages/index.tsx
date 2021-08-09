@@ -17,10 +17,11 @@ interface HomeStaticProps {
   articles: Article[];
 }
 
-export default function Home(props: HomeStaticProps) {
+export default function Home(props: HomeStaticProps): React.ReactElement {
   const { articles, videos } = props;
 
-  const [activeProject, setActiveProject] = useState<Project>(projects[0]);
+  const [initialProject] = projects;
+  const [activeProject, setActiveProject] = useState<Project>(initialProject);
 
   const [about, openAbout, closeAbout] = useBoolean(false);
   const [contact, openContact, closeContact] = useBoolean(false);
@@ -33,10 +34,8 @@ export default function Home(props: HomeStaticProps) {
 
   return (
     <Layout>
-      <div>
-        <Header />
-        <Banner onAbout={openAbout} onContact={openContact} />
-      </div>
+      <Header />
+      <Banner onAbout={openAbout} onContact={openContact} />
 
       <List.Project
         title='Portfolio'
