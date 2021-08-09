@@ -1,3 +1,6 @@
-# https://www.robotstxt.org/robotstxt.html
+# Allow all user agents.
 User-agent: *
-Disallow:
+Allow: /
+
+User-agent: Googlebot
+Disallow: /nogooglebot/
