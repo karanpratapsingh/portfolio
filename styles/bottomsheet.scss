@@ -12,9 +12,5 @@
     div[data-rsbs-header]::before {
       background-color: $placeholderDark;
     }
-    div[data-rsbs-footer] {
-      border: none;
-      border-top: 1px solid $placeholderDark;
-    }
   }
 }

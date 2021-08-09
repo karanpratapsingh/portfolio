@@ -5,8 +5,7 @@ export function getRandomColorPair(): string[] {
   const colors: string[][] = [
     ['#F5E1FF', '#FFF8BC'],
     ['#CAF0F8', '#C9F2C7'],
-    // TODO: change first color index 2
-    ['#D8E2DC', '#FAEDCD'],
+    ['#FAE0E4', '#FAEDCD'],
     ['#EEEbff', '#F7D9C4'],
   ];
 

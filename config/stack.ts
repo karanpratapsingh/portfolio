@@ -36,7 +36,6 @@ export const Colors: Record<string, string> = {
   kubernetes: '#326CE5',
 
   // Social
-  github: '#333',
   linkedin: '#0077B5',
   twitter: '#1DA1F2',
   email: '#D44638',

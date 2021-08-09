@@ -5,14 +5,15 @@ module.exports = {
     extend: {
       colors: {
         primary: '#FCF5FF',
+        'primary-dark': '#2b2d42',
         light: '#FFFFFF',
         dark: '#161616',
         'placeholder-light': '#F0F0F0',
-        'placeholder-dark': '#303030',
+        'placeholder-dark': '#252525',
       },
       borderColor: {
         light: '#F0F0F0',
-        dark: '#303030',
+        dark: '#252525',
       },
     },
   },
