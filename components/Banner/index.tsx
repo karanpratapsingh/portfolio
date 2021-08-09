@@ -1,3 +1,4 @@
+import { motion, Variants } from 'framer-motion';
 import { useMemo } from 'react';
 import config from '../../config';
 import { getRandomColorPair } from '../../util';
@@ -12,10 +13,25 @@ interface BannerProps {
 
 export function Banner(props: BannerProps): React.ReactElement {
   const { onAbout, onContact } = props;
-  const [aboutColor, contactColor]= useMemo(getRandomColorPair, []);
+  const [aboutColor, contactColor] = useMemo(getRandomColorPair, []);
+
+  const variants: Variants = {
+    initial: {
+      opacity: 0,
+    },
+    fade: {
+      opacity: 1,
+    },
+  };
 
   return (
-    <div className='banner flex flex-col flex-1 justify-center px-6 lg:px-10 py-10 dark:text-white'>
+    <motion.div
+      variants={variants}
+      initial='initial'
+      animate='fade'
+      transition={{ duration: 0.25 }}
+      className='banner flex flex-col flex-1 justify-center px-6 lg:px-10 py-10 dark:text-white'
+    >
       <h1 className='text-3xl lg:text-5xl font-bold dark:text-white'>
         Hi, I am {personal.name}
       </h1>
@@ -36,6 +52,6 @@ export function Banner(props: BannerProps): React.ReactElement {
           onClick={onContact}
         />
       </p>
-    </div>
+    </motion.div>
   );
 }
