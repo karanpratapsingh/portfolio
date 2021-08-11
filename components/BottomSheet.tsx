@@ -1,9 +1,9 @@
 import { useTheme } from 'next-themes';
-import React, { Fragment, useMemo } from 'react';
+import React, { Fragment } from 'react';
 import { IoCloseCircle as CloseIcon } from 'react-icons/io5';
 import { BottomSheet as DefaultBottomSheet } from 'react-spring-bottom-sheet';
-import config, { Project, WorkStack } from '../config';
-import { getRandomColorPair, getThemeClassName } from '../utils';
+import config, { Colors, Project, WorkStack } from '../config';
+import { getThemeClassName } from '../utils';
 import { ColorText } from './Banner/ColorText';
 import { Conditional } from './Conditional';
 import { SocialIcons } from './Footer';
@@ -45,17 +45,15 @@ interface AboutBottomSheetProps extends BaseBottomSheetProps {}
 function AboutBottomSheet(props: AboutBottomSheetProps): React.ReactElement {
   const { open, onDismiss } = props;
 
-  const [resumeColor] = useMemo(getRandomColorPair, []);
-
   const about = (
     <Fragment>
       <span>{personal.about}</span>
       <p className='mt-4'>
         <ColorText
           className='px-2'
-          text='Get my resume'
+          text='Resume'
           url={personal.resume}
-          backgroundColor={resumeColor}
+          backgroundColor={Colors.resume}
         />
       </p>
     </Fragment>
