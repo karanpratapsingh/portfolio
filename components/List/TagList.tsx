@@ -69,6 +69,7 @@ function DeploymentList(props: DeploymentListProps): React.ReactElement {
         <a
           className='pb-1'
           href={url}
+          aria-label={platform}
           target='_blank'
           rel='noopener noreferrer'
         >

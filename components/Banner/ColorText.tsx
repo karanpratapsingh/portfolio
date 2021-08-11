@@ -14,6 +14,7 @@ export function ColorText(props: ColorTextProps): React.ReactElement {
   return (
     <a
       href={url}
+      aria-label={text}
       target='_blank'
       rel='noopener noreferrer'
       className={clsx(

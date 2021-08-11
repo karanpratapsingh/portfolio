@@ -55,7 +55,7 @@ function resolveIcon(entry: Tuple<string>): React.ReactNode {
   }
 
   return (
-    <a href={url} target='_blank' rel='noopener noreferrer'>
+    <a href={url} aria-label={type} target='_blank' rel='noopener noreferrer'>
       {icon}
     </a>
   );

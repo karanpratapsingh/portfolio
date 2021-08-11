@@ -61,7 +61,7 @@ function Article(props: ArticleProps): React.ReactElement {
   }
 
   return (
-    <a target='_blank' href={url} rel='noopener noreferrer'>
+    <a target='_blank' aria-label={title} href={url} rel='noopener noreferrer'>
       <AntDesignCard
         className={clsx(dimensions, border, color, 'cursor-pointer')}
       >
@@ -69,9 +69,9 @@ function Article(props: ArticleProps): React.ReactElement {
           <span className='text-lg font-bold truncate text-ellipsis'>
             {title}
           </span>
-          <ul className='flex my-2'>
+          <div className='flex my-2'>
             {React.Children.toArray(tags.map(renderTags))}
-          </ul>
+          </div>
           <span className='text-sm font-light line-clamp-2'>{description}</span>
           <p className='text-xs font-light mt-2 text-right'>{date}</p>
         </div>
