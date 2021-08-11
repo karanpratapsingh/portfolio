@@ -52,7 +52,8 @@ function AboutBottomSheet(props: AboutBottomSheetProps): React.ReactElement {
       <span>{personal.about}</span>
       <p className='mt-4'>
         <ColorText
-          text='Resume'
+          className='px-2'
+          text='Get my resume'
           url={personal.resume}
           backgroundColor={resumeColor}
         />

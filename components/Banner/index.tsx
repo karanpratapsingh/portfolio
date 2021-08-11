@@ -56,7 +56,7 @@ export function Banner(props: BannerProps): React.ReactElement {
         />
       </p>
       <Conditional condition={personal.available}>
-        <p className='lg:text-xl font-light mt-4'>
+        <p className='lg:text-xl font-light mt-4 lg:mt-6'>
           <ColorText
             className='bg-black text-white dark:bg-white dark:text-black'
             text={`I'm available for hire!`}
