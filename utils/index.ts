@@ -3,10 +3,10 @@ import { Env } from '../types';
 
 export function getRandomColorPair(): string[] {
   const colors: string[][] = [
-    ['#F5E1FF', '#FFF8BC'],
-    ['#CAF0F8', '#C9F2C7'],
-    ['#FAE0E4', '#FAEDCD'],
-    ['#EEEbff', '#F7D9C4'],
+    ['#EEEBFF', '#FFFAD4'],
+    ['#FAE0E4', '#E0FAF6'],
+    ['#CAF0F8', '#F8D2CA'],
+    ['#F5E1FF', '#CAF0F8'],
   ];
 
   const random: number = Math.round(Math.random() * (colors.length - 1));
