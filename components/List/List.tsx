@@ -150,7 +150,7 @@ function ScreenShotList(props: ScreenShotListProps): React.ReactElement {
   const renderScreenShotList = useCallback(
     (screenshot: string) => {
       return (
-        <div className='flex-shrink-0 mr-2 rounded overflow-hidden'>
+        <div className='flex-shrink-0 mr-2 rounded overflow-hidden bg-placeholder-light dark:bg-placeholder-dark'>
           <Image
             loading='eager'
             src={screenshot}
