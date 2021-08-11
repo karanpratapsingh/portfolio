@@ -5,7 +5,7 @@ export enum ContactType {
   email = 'email',
 }
 
-export type Contact = {
+export interface Contact {
   twitter: string;
   site: string;
   links: Record<ContactType, string>;
