@@ -66,6 +66,7 @@ export enum Stack {
   // Cloud
   aws,
   gcp,
+  docker,
   kubernetes,
 
   // Databases
@@ -77,10 +78,11 @@ export enum Stack {
 export const WorkStack = [
   Stack.typescript,
   Stack.go,
-  Stack.kubernetes,
   Stack.react,
   Stack.reactnative,
   Stack.graphql,
+  Stack.kubernetes,
+  Stack.docker,
   Stack.aws,
   Stack.gcp,
 ];
@@ -118,6 +120,10 @@ export const StackInfo: Record<Stack, StackInfoMap> = {
   [Stack.aws]: {
     value: 'AWS',
     color: Colors.aws,
+  },
+  [Stack.docker]: {
+    value: 'Docker',
+    color: Colors.docker,
   },
   [Stack.kubernetes]: {
     value: 'Kubernetes',
