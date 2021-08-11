@@ -44,7 +44,7 @@ export const Colors: Record<string, string> = {
   // Misc.
   testing: '#049C64',
   devops: '#059F00',
-  resume: '#F5E1FF',
+  resume: '#EEEBFF',
 };
 
 export enum Stack {
