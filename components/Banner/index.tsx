@@ -2,6 +2,7 @@ import { motion, Variants } from 'framer-motion';
 import { useMemo } from 'react';
 import config from '../../config';
 import { getRandomColorPair } from '../../util';
+import { Conditional } from '../Conditional';
 import { ColorText } from './ColorText';
 
 const { personal } = config;
@@ -41,17 +42,28 @@ export function Banner(props: BannerProps): React.ReactElement {
       <p className='lg:text-xl font-light'>
         Read more
         <ColorText
+          className='mx-2'
           text='about me'
           backgroundColor={aboutColor}
           onClick={onAbout}
         />
         or
         <ColorText
+          className='ml-2'
           text='contact me'
           backgroundColor={contactColor}
           onClick={onContact}
         />
       </p>
+      <Conditional condition={personal.available}>
+        <p className='lg:text-xl font-light mt-4'>
+          <ColorText
+            className='bg-black text-white dark:bg-white dark:text-black'
+            text={`I'm available for hire!`}
+            onClick={onContact}
+          />
+        </p>
+      </Conditional>
     </motion.div>
   );
 }

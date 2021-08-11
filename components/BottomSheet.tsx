@@ -50,7 +50,7 @@ function AboutBottomSheet(props: AboutBottomSheetProps): React.ReactElement {
   const about = (
     <Fragment>
       <span>{personal.about}</span>
-      <p className='-ml-2 mt-4'>
+      <p className='mt-4'>
         <ColorText
           text='Resume'
           url={personal.resume}
