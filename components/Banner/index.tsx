@@ -7,8 +7,8 @@ import { ColorText } from './ColorText';
 const { personal } = config;
 
 interface BannerProps {
-  onAbout: () => void;
-  onContact: () => void;
+  onAbout: VoidFunction;
+  onContact: VoidFunction;
 }
 
 export function Banner(props: BannerProps): React.ReactElement {

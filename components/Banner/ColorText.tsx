@@ -2,7 +2,7 @@ interface ColorTextProps {
   text: string;
   backgroundColor: string;
   url?: string;
-  onClick?: () => void;
+  onClick?: VoidFunction;
 }
 
 export function ColorText(props: ColorTextProps): React.ReactElement {

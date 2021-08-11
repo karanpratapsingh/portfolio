@@ -8,7 +8,7 @@ import { Colors } from '../config';
 interface BaseProps {
   title: string;
   description: string;
-  onClick?: () => void;
+  onClick?: VoidFunction;
 }
 
 interface ProjectProps extends BaseProps {

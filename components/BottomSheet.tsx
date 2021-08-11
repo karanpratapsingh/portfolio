@@ -14,7 +14,7 @@ const { personal } = config;
 
 interface BaseBottomSheetProps {
   open: boolean;
-  onDismiss: () => void;
+  onDismiss: VoidFunction;
   children?: React.ReactNode;
 }
 
