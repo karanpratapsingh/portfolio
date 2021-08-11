@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import config from '../config';
 import { Article, Maybe, Video } from '../types';
-import { getEnv } from '../util';
+import { getEnv } from '../utils';
 
 export async function getArticles(): Promise<Article[]> {
   const showArticles = Boolean(config.articles);

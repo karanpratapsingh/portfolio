@@ -3,7 +3,7 @@ import React, { Fragment, useMemo } from 'react';
 import { IoCloseCircle as CloseIcon } from 'react-icons/io5';
 import { BottomSheet as DefaultBottomSheet } from 'react-spring-bottom-sheet';
 import config, { Project, WorkStack } from '../config';
-import { getRandomColorPair, getThemeClassName } from '../util';
+import { getRandomColorPair, getThemeClassName } from '../utils';
 import { ColorText } from './Banner/ColorText';
 import { Conditional } from './Conditional';
 import { SocialIcons } from './Footer';

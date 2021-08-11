@@ -1,7 +1,7 @@
 import { motion, Variants } from 'framer-motion';
 import { useMemo } from 'react';
 import config from '../../config';
-import { getRandomColorPair } from '../../util';
+import { getRandomColorPair } from '../../utils';
 import { Conditional } from '../Conditional';
 import { ColorText } from './ColorText';
 
