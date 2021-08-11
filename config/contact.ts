@@ -9,7 +9,7 @@ export interface Contact {
   twitter: string;
   site: string;
   links: Record<ContactType, string>;
-};
+}
 
 export const contact: Contact = {
   twitter: '@karan__6864',

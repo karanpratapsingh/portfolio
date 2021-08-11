@@ -1,5 +1,5 @@
 <div align="center">
-  <img alt="Logo" src="https://user-images.githubusercontent.com/29705703/128719328-ed17026c-09f8-4f7c-a435-02881dc49b96.png" width="100" />
+  <img alt="Logo" src="https://user-images.githubusercontent.com/29705703/128719328-ed17026c-09f8-4f7c-a435-02881dc49b96.png" width="100px" />
 </div>
 <h1 align="center">
   karanpratapsingh.com
@@ -13,7 +13,7 @@
   </a>
 </p>
 
-<video src="https://user-images.githubusercontent.com/29705703/128994645-9ccaa278-df74-452d-94f5-43a4188cdfb0.mp4" autoplay />
+<video src="https://user-images.githubusercontent.com/29705703/128995155-28a07d37-8d34-4050-a415-4b74ef62bd4d.mp4" autoplay />
 
 ### Make it your own!
 

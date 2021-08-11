@@ -5,7 +5,7 @@ export interface Personal {
   about: string;
   resume: string;
   available: boolean;
-};
+}
 
 export const personal: Personal = {
   name: 'Karan',
