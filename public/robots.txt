@@ -1,0 +1,6 @@
+# Allow all user agents.
+User-agent: *
+Allow: /
+
+User-agent: Googlebot
+Disallow: /nogooglebot/

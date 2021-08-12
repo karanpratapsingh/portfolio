@@ -1,3 +1,3 @@
 [build]  
-  publish = "web-build/"
-  command = "yarn build:web"
+  publish = ".next/"
+  command = "yarn build"

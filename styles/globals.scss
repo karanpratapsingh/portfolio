@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import '~antd/dist/antd.css';
+@import '~react-spring-bottom-sheet/dist/style.css';
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+
+* {
+  scroll-behavior: smooth;
+  transition: background-color 250ms ease;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+
+html,
+body,
+body > div:first-child,
+div#__next,
+div#__next > div {
+  min-height: 100vh;
+  overflow-y: scroll;
+}
+
+html,
+div#__next {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+a,
+a:hover,
+a:focus,
+a:active {
+  text-decoration: none;
+  color: inherit;
+}
+
+.layout {
+  max-width: 100%;
+
+  @screen md {
+    max-width: 90%;
+  }
+
+  @screen lg {
+    max-width: 85%;
+  }
+
+  @screen 2xl {
+    max-width: 80%;
+  }
+}
+
+.banner {
+  min-height: 80vh;
+
+  @screen lg {
+    min-height: 95vh;
+  }
+}

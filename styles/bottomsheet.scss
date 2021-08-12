@@ -1,0 +1,16 @@
+@import './colors.scss';
+
+.light-bottomsheet {
+  div[data-rsbs-overlay] {
+    background-color: $backgroundLight;
+  }
+}
+
+.dark-bottomsheet {
+  div[data-rsbs-overlay] {
+    background-color: $backgroundDark;
+    div[data-rsbs-header]::before {
+      background-color: $placeholderDark;
+    }
+  }
+}

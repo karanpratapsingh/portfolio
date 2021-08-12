@@ -1,13 +1,22 @@
-## PORTFOLIO for 2020
+<div align="center">
+  <img alt="Logo" src="https://user-images.githubusercontent.com/29705703/128719328-ed17026c-09f8-4f7c-a435-02881dc49b96.png" width="100px" />
+</div>
+<h1 align="center">
+  karanpratapsingh.com
+</h1>
+<p align="center">
+  My portfolio built with <a href="https://nextjs.org/" target="_blank">Nextjs</a> and hosted with <a href="https://www.netlify.com/" target="_blank">Netlify</a>
+</p>
+<p align="center">
+  <a href="https://app.netlify.com/sites/karanpratapsingh/deploys" target="_blank">
+    <img src="https://api.netlify.com/api/v1/badges/1b28818d-e6c7-4019-ac80-873ef6ef9eb7/deploy-status" alt="Netlify Status" />
+  </a>
+</p>
 
-Deployed at: [karanpratapsingh.com](https://karanpratapsingh.com)
+<video src="https://user-images.githubusercontent.com/29705703/128995155-28a07d37-8d34-4050-a415-4b74ef62bd4d.mp4" autoplay />
 
-### Make it your own:
+### Make it your own!
 
-- It's a standard [react-native-web](https://github.com/necolas/react-native-web) project using [expo-cli](https://docs.expo.io/get-started/installation/)
+This was written to be configurable since the start, so you can simply override all the interfaces present in `config` folder which contains all the config for `projects`, `articles`, `videos`.
 
-- Everything is configurable via `IConfig` and `IProject` interfaces in `src/config/...`, so feel free fork and override them
-
-- One click deploy on [Netlify](https://www.netlify.com/)
-
-- Have fun 🎉
+Custom providers can also be easily implemented. For example if you'd like to render articles from `medium.com` rather than `dev.to`.
