@@ -47,7 +47,7 @@ export function StackList(props: StackListProps): React.ReactElement {
     );
   }, []);
 
-  return <BaseTagList title='Stack' data={stack} renderList={renderStack} />;
+  return <BaseTagList title='Skills' data={stack} renderList={renderStack} />;
 }
 
 interface DeploymentListProps {
