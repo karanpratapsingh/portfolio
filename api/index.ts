@@ -1,7 +1,8 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import config from '../config';
-import { Article, Maybe, Video } from '../types';
-import { getEnv } from '../utils';
+import staticResponse from '../config/static.json';
+import { Article, Video } from '../types';
+import { async, getEnv, parseYouTubeResponse } from '../utils';
 
 export async function getArticles(): Promise<Article[]> {
   const showArticles = Boolean(config.articles);
@@ -63,56 +64,33 @@ export async function getVideos(): Promise<Video[]> {
   const key = getEnv('YOUTUBE_API_KEY', true);
   const channelId = getEnv('YOUTUBE_CHANNEL_ID', true);
 
-  try {
-    const url: string = `${config.videos?.apiUrl}/search`;
-    const request: AxiosRequestConfig = {
-      params: {
-        key,
-        channelId,
-        order: 'date',
-        maxResults: 20,
-      },
-    };
+  const url: string = `${config.videos?.apiUrl}/search`;
+  const request: AxiosRequestConfig = {
+    params: {
+      key,
+      channelId,
+      order: 'date',
+      maxResults: 20,
+    },
+  };
 
-    const [response, error] = await async<AxiosResponse, AxiosError>(
-      axios.get(url, request),
-    );
+  const [response, error] = await async<AxiosResponse, AxiosError>(
+    axios.get(url, request),
+  );
 
-    if (error) {
-      const message = error?.response?.data?.error?.message;
-      console.log(message);
-      return videos;
-    }
-
-    response?.data?.items?.forEach((item: any) => {
-      const { kind, videoId: id } = item.id;
-
-      switch (kind) {
-        case 'youtube#video':
-          videos.push({ id });
-          break;
-        default:
-          break;
-      }
-    });
-  } catch (error) {
-    console.log(error);
+  if (error) {
+    const message = error?.response?.data?.error?.message;
+    console.error(message);
+    // Serve static video response if YT API quota exceeds
+    staticResponse.videos.forEach(({ id }: any) => videos.push({ id }));
+    return videos;
   }
+
+  response?.data?.items?.forEach((item: any) =>
+    parseYouTubeResponse(item, (id: string) => {
+      videos.push({ id });
+    }),
+  );
 
   return videos;
-}
-
-type AsyncFn = any;
-type AsyncResult = any;
-type AsyncError = any;
-
-async function async<R = AsyncResult, E = AsyncError>(
-  method: AsyncFn,
-): Promise<[Maybe<R>, Maybe<E>]> {
-  try {
-    const result = await method;
-    return [result, null];
-  } catch (error) {
-    return [null, error];
-  }
 }

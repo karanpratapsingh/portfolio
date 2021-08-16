@@ -1,5 +1,5 @@
 import env from 'env-var';
-import { Env } from '../types';
+import { Env, Maybe } from '../types';
 
 export function getRandomColorPair(): string[] {
   const colors: string[][] = [
@@ -25,4 +25,32 @@ export function getEnv(variable: Env, required?: boolean): string | undefined {
   }
 
   return foundEnv.asString();
+}
+
+type CallbackFn = (id: string) => void;
+
+export function parseYouTubeResponse(item: any, callback: CallbackFn): void {
+  const { kind, videoId: id } = item.id;
+  switch (kind) {
+    case 'youtube#video':
+      callback(id);
+      break;
+    default:
+      break;
+  }
+}
+
+type AsyncFn = any;
+type AsyncResult = any;
+type AsyncError = any;
+
+export async function async<R = AsyncResult, E = AsyncError>(
+  method: AsyncFn,
+): Promise<[Maybe<R>, Maybe<E>]> {
+  try {
+    const result = await method;
+    return [result, null];
+  } catch (error) {
+    return [null, error];
+  }
 }
