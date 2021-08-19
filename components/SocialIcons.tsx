@@ -1,5 +1,7 @@
 import clsx from 'clsx';
-import React from 'react';
+import { Colors } from 'config/colors';
+import { contact, ContactType } from 'config/contact';
+import React, { memo } from 'react';
 import { IconBaseProps } from 'react-icons';
 import { FaLinkedinIn as LinkedinIcon } from 'react-icons/fa';
 import {
@@ -7,14 +9,13 @@ import {
   IoLogoTwitter as TwitterIcon,
 } from 'react-icons/io';
 import { SiGmail as MailIcon } from 'react-icons/si';
-import { Colors, contact, ContactType } from '../../config';
-import { Tuple, Maybe } from '../../types';
+import { Maybe, Tuple } from 'types';
 
 interface SocialIconsProps {
   className?: string;
 }
 
-export function SocialIcons(props: SocialIconsProps): React.ReactElement {
+function SocialIcons(props: SocialIconsProps): React.ReactElement {
   const { className } = props;
 
   return (
@@ -60,3 +61,5 @@ function resolveIcon(entry: Tuple<string>): React.ReactNode {
     </a>
   );
 }
+
+export default memo(SocialIcons);

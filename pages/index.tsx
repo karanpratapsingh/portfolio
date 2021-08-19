@@ -1,23 +1,30 @@
+import * as API from 'api';
+import config from 'config';
+import { Project, projects } from 'config/projects';
+import useBoolean from 'hooks/useBoolean';
+import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
-import * as API from '../api';
-import {
-  Banner,
-  BottomSheet,
-  Conditional,
-  Header,
-  Layout,
-  List,
-} from '../components';
-import config, { Project, projects } from '../config';
-import { useBoolean } from '../hooks';
-import { Article, Video } from '../types';
+import { Article, Video } from 'types';
 
 interface HomeStaticProps {
   videos: Video[];
   articles: Article[];
 }
 
-export default function Home(props: HomeStaticProps): React.ReactElement {
+const Banner = dynamic(import('components/Banner'));
+const Conditional = dynamic(import('components/Conditional'));
+const Header = dynamic(import('components/Header'));
+const Layout = dynamic(import('components/Layout'));
+
+const ProjectList = dynamic(import('components/List/Project'));
+const ArticleList = dynamic(import('components/List/Article'));
+const VideoList = dynamic(import('components/List/Video'));
+
+const AboutBottomSheet = dynamic(import('components/BottomSheet/About'));
+const ContactBottomSheet = dynamic(import('components/BottomSheet/Contact'));
+const ProjectBottomSheet = dynamic(import('components/BottomSheet/Project'));
+
+function Home(props: HomeStaticProps): React.ReactElement {
   const { articles, videos } = props;
 
   const [initialProject] = projects;
@@ -37,7 +44,7 @@ export default function Home(props: HomeStaticProps): React.ReactElement {
       <Header />
       <Banner onAbout={openAbout} onContact={openContact} />
 
-      <List.Project
+      <ProjectList
         title='Portfolio'
         description={`Projects I've worked on recently`}
         projects={projects}
@@ -45,7 +52,7 @@ export default function Home(props: HomeStaticProps): React.ReactElement {
       />
 
       <Conditional condition={config.articles}>
-        <List.Article
+        <ArticleList
           title='Articles'
           description={`When I'm not writing code, I write articles`}
           articles={articles}
@@ -53,16 +60,16 @@ export default function Home(props: HomeStaticProps): React.ReactElement {
       </Conditional>
 
       <Conditional condition={config.videos}>
-        <List.Video
+        <VideoList
           title='Videos'
           description='I also make videos'
           videos={videos}
         />
       </Conditional>
 
-      <BottomSheet.About open={about} onDismiss={closeAbout} />
-      <BottomSheet.Contact open={contact} onDismiss={closeContact} />
-      <BottomSheet.Project
+      <AboutBottomSheet open={about} onDismiss={closeAbout} />
+      <ContactBottomSheet open={contact} onDismiss={closeContact} />
+      <ProjectBottomSheet
         open={project}
         onDismiss={closeProject}
         project={activeProject}
@@ -70,6 +77,8 @@ export default function Home(props: HomeStaticProps): React.ReactElement {
     </Layout>
   );
 }
+
+export default Home;
 
 export async function getServerSideProps() {
   const articles = await API.getArticles();

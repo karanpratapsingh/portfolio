@@ -1,10 +1,10 @@
-import { Footer } from './Footer';
+import Footer from './Footer';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-export function Layout(props: LayoutProps): React.ReactElement {
+function Layout(props: LayoutProps): React.ReactElement {
   const { children } = props;
 
   return (
@@ -16,3 +16,5 @@ export function Layout(props: LayoutProps): React.ReactElement {
     </div>
   );
 }
+
+export default Layout;

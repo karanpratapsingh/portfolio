@@ -1,8 +1,8 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-import config from '../config';
-import staticResponse from '../config/static.json';
-import { Article, Video } from '../types';
-import { async, getEnv, parseYouTubeResponse } from '../utils';
+import config from 'config';
+import staticResponse from 'config/static.json';
+import { Article, Video } from 'types';
+import { async, getEnv, parseYouTubeResponse } from 'utils';
 
 export async function getArticles(): Promise<Article[]> {
   const showArticles = Boolean(config.articles);

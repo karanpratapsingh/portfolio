@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
-import config from '../../config';
-import { getRandomColorPair } from '../../utils';
-import { Conditional } from '../Conditional';
-import { ColorText } from './ColorText';
+import config from 'config';
+import { memo, useMemo } from 'react';
+import { getRandomColorPair } from 'utils';
+import ColorText from './ColorText';
+import Conditional from './Conditional';
 
 const { personal } = config;
 
@@ -11,7 +11,7 @@ interface BannerProps {
   onContact: VoidFunction;
 }
 
-export function Banner(props: BannerProps): React.ReactElement {
+function Banner(props: BannerProps): React.ReactElement {
   const { onAbout, onContact } = props;
   const [aboutColor, contactColor] = useMemo(getRandomColorPair, []);
 
@@ -51,3 +51,5 @@ export function Banner(props: BannerProps): React.ReactElement {
     </div>
   );
 }
+
+export default memo(Banner);

@@ -24,11 +24,3 @@ const config: Config = {
 };
 
 export default config;
-
-export * from './personal';
-export * from './contact';
-export * from './projects';
-export * from './articles';
-export * from './videos';
-export * from './analytics';
-export * from './stack';

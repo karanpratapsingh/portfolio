@@ -3,8 +3,10 @@ interface ConditionalProps {
   children: React.ReactNode;
 }
 
-export function Conditional(props: ConditionalProps): React.ReactElement {
+function Conditional(props: ConditionalProps): React.ReactElement {
   const { condition, children } = props;
 
   return <>{Boolean(condition) && children}</>;
 }
+
+export default Conditional;

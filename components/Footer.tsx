@@ -1,8 +1,8 @@
 import { Layout } from 'antd';
-import React from 'react';
-import { SocialIcons } from './SocialIcons';
+import React, { memo } from 'react';
+import SocialIcons from './SocialIcons';
 
-export function Footer(): React.ReactElement {
+function Footer(): React.ReactElement {
   const year: number = new Date().getFullYear();
 
   return (
@@ -19,4 +19,4 @@ export function Footer(): React.ReactElement {
   );
 }
 
-export * from './SocialIcons';
+export default memo(Footer);
