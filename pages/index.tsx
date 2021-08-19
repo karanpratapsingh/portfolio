@@ -11,18 +11,18 @@ interface HomeStaticProps {
   articles: Article[];
 }
 
-const Banner = dynamic(import('../components/Banner'));
-const Conditional = dynamic(import('../components/Conditional'));
-const Header = dynamic(import('../components/Header'));
-const Layout = dynamic(import('../components/Layout'));
+const Banner = dynamic(import('components/Banner'));
+const Conditional = dynamic(import('components/Conditional'));
+const Header = dynamic(import('components/Header'));
+const Layout = dynamic(import('components/Layout'));
 
-const ProjectList = dynamic(import('../components/List/Project'));
-const ArticleList = dynamic(import('../components/List/Article'));
-const VideoList = dynamic(import('../components/List/Video'));
+const ProjectList = dynamic(import('components/List/Project'));
+const ArticleList = dynamic(import('components/List/Article'));
+const VideoList = dynamic(import('components/List/Video'));
 
-const AboutBottomSheet = dynamic(import('../components/BottomSheet/About'));
-const ContactBottomSheet = dynamic(import('../components/BottomSheet/Contact'));
-const ProjectBottomSheet = dynamic(import('../components/BottomSheet/Project'));
+const AboutBottomSheet = dynamic(import('components/BottomSheet/About'));
+const ContactBottomSheet = dynamic(import('components/BottomSheet/Contact'));
+const ProjectBottomSheet = dynamic(import('components/BottomSheet/Project'));
 
 function Home(props: HomeStaticProps): React.ReactElement {
   const { articles, videos } = props;
