@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { memo } from 'react';
 
 export interface SubHeaderProps {
   title: React.ReactNode;
@@ -24,4 +25,4 @@ function SubHeader(props: SubHeaderProps): React.ReactElement {
   );
 }
 
-export default SubHeader;
+export default memo(SubHeader);

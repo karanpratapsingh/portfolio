@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import { SubProject } from '../../config';
 import SubHeader from '../SubHeader';
 import DeploymentList from './Deployment';
@@ -32,4 +32,4 @@ function SubProjectList(props: SubProjectListProps): React.ReactElement {
   );
 }
 
-export default SubProjectList;
+export default memo(SubProjectList);

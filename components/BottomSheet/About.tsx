@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, memo } from 'react';
 import config, { Colors, WorkStack } from '../../config';
-import ColorText from '../Banner/ColorText';
+import ColorText from '../ColorText';
 import StackList from '../TagList/Stack';
 import SubHeader from '../SubHeader';
 import BaseBottomSheet, { BaseBottomSheetProps } from './Base';
@@ -34,4 +34,4 @@ function AboutBottomSheet(props: AboutBottomSheetProps): React.ReactElement {
   );
 }
 
-export default AboutBottomSheet;
+export default memo(AboutBottomSheet);

@@ -1,6 +1,6 @@
 import { LinkOutlined } from '@ant-design/icons';
 import { Tag } from 'antd';
-import React, { useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import { Colors, Deployment } from '../../config';
 import { Tuple } from '../../types';
 import BaseTagList from './Base';
@@ -47,4 +47,4 @@ function DeploymentList(props: DeploymentListProps): React.ReactElement {
   );
 }
 
-export default DeploymentList;
+export default memo(DeploymentList);

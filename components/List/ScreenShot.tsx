@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import ScrollContainer from 'react-indiana-drag-scroll';
 import { defaultDimensions } from '../../config';
 import { Tuple } from '../../types';
@@ -56,4 +56,4 @@ function ScreenShotList(props: ScreenShotListProps): React.ReactElement {
   );
 }
 
-export default ScreenShotList;
+export default memo(ScreenShotList);

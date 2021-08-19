@@ -1,5 +1,5 @@
 import { Tag } from 'antd';
-import React, { useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import { Stack, StackInfo } from '../../config';
 import BaseTagList from './Base';
 
@@ -23,4 +23,4 @@ function StackList(props: StackListProps): React.ReactElement {
   return <BaseTagList title='Skills' data={stack} renderList={renderStack} />;
 }
 
-export default StackList;
+export default memo(StackList);

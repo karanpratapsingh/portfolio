@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
-import config from '../../config';
-import { getRandomColorPair } from '../../utils';
-import Conditional from '../Conditional';
+import { memo, useMemo } from 'react';
+import config from '../config';
+import { getRandomColorPair } from '../utils';
 import ColorText from './ColorText';
+import Conditional from './Conditional';
 
 const { personal } = config;
 
@@ -52,4 +52,4 @@ function Banner(props: BannerProps): React.ReactElement {
   );
 }
 
-export default Banner;
+export default memo(Banner);

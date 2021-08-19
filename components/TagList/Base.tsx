@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import SubHeader from '../SubHeader';
 
 type BaseTagListData = any;
@@ -26,4 +26,4 @@ function BaseTagList(props: BaseTagListProps): React.ReactElement {
   return <SubHeader title={title} description={list} />;
 }
 
-export default BaseTagList;
+export default memo(BaseTagList);

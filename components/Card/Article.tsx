@@ -1,7 +1,7 @@
 import { Card as AntDesignCard, Tag } from 'antd';
 import clsx from 'clsx';
 import dataFormat from 'dateformat';
-import React from 'react';
+import React, { memo } from 'react';
 import { Colors } from '../../config';
 import { BaseProps, border, color, dimensions } from './Base';
 
@@ -40,4 +40,4 @@ function Article(props: ArticleProps): React.ReactElement {
   );
 }
 
-export default Article;
+export default memo(Article);

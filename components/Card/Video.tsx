@@ -1,6 +1,6 @@
 import { Card as AntDesignCard } from 'antd';
 import clsx from 'clsx';
-import React from 'react';
+import React, { memo } from 'react';
 import { border, color, dimensions } from './Base';
 
 interface VideoProps {
@@ -24,4 +24,4 @@ function Video(props: VideoProps): React.ReactElement {
   );
 }
 
-export default Video;
+export default memo(Video);

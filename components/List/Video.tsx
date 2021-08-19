@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Video } from '../../types';
 import VideoCard from '../Card/Video';
 import { SubHeaderProps } from '../SubHeader';
@@ -25,4 +25,4 @@ function VideoList(props: VideoListProps): React.ReactElement {
   );
 }
 
-export default VideoList;
+export default memo(VideoList);

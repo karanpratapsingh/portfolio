@@ -1,5 +1,5 @@
 import { useTheme } from 'next-themes';
-import React from 'react';
+import React, { memo } from 'react';
 import { IoCloseCircle as CloseIcon } from 'react-icons/io5';
 import { BottomSheet as DefaultBottomSheet } from 'react-spring-bottom-sheet';
 import { getThemeClassName } from '../../utils';
@@ -34,4 +34,4 @@ function BaseBottomSheet(props: BaseBottomSheetProps): React.ReactElement {
   );
 }
 
-export default BaseBottomSheet;
+export default memo(BaseBottomSheet);

@@ -1,5 +1,5 @@
-import React from 'react';
-import SocialIcons from '../Footer/SocialIcons';
+import React, { memo } from 'react';
+import SocialIcons from '../SocialIcons';
 import SubHeader from '../SubHeader';
 import BaseBottomSheet, { BaseBottomSheetProps } from './Base';
 
@@ -22,4 +22,4 @@ function ContactBottomSheet(
   );
 }
 
-export default ContactBottomSheet;
+export default memo(ContactBottomSheet);

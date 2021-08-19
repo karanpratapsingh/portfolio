@@ -1,7 +1,7 @@
 import { Card as AntDesignCard } from 'antd';
 import clsx from 'clsx';
 import Image from 'next/image';
-import React from 'react';
+import React, { memo } from 'react';
 import { BaseProps, border, color, dimensions } from './Base';
 
 interface ProjectProps extends BaseProps {
@@ -34,4 +34,4 @@ function Project(props: ProjectProps): React.ReactElement {
   );
 }
 
-export default Project;
+export default memo(Project);

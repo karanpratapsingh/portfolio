@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import { Article } from '../../types';
 import ArticleCard from '../Card/Article';
 import { SubHeaderProps } from '../SubHeader';
@@ -38,4 +38,4 @@ function ArticleList(props: ArticleListProps): React.ReactElement {
   );
 }
 
-export default ArticleList;
+export default memo(ArticleList);

@@ -1,5 +1,5 @@
 import { Skeleton } from 'antd';
-import React, { useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import ScrollContainer from 'react-indiana-drag-scroll';
 import SubHeader from '../SubHeader';
 import { SubHeaderProps } from '../SubHeader';
@@ -46,4 +46,4 @@ function BaseList(props: BaseListProps): React.ReactElement {
   );
 }
 
-export default BaseList;
+export default memo(BaseList);

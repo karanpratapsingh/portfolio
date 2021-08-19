@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { memo } from 'react';
 
 interface ColorTextProps {
   text: string;
@@ -29,4 +30,4 @@ function ColorText(props: ColorTextProps): React.ReactElement {
   );
 }
 
-export default ColorText;
+export default memo(ColorText);

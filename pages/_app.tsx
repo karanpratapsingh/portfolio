@@ -5,7 +5,7 @@ import '../styles/list.scss';
 import { ThemeProvider } from 'next-themes';
 import type { AppProps } from 'next/app';
 import { useAnalytics } from '../hooks';
-import { Seo } from '../components';
+import Seo from '../components/Seo';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useAnalytics();

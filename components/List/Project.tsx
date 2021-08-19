@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import { Project } from '../../config';
 import ProjectCard from '../Card/Project';
 import { SubHeaderProps } from '../SubHeader';
@@ -42,4 +42,4 @@ function ProjectList(props: ProjectListProps): React.ReactElement {
   );
 }
 
-export default ProjectList;
+export default memo(ProjectList);

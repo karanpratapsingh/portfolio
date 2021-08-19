@@ -1,4 +1,5 @@
 import { useTheme } from 'next-themes';
+import { memo } from 'react';
 import { IoMdMoon as MoonIcon } from 'react-icons/io';
 import { IoSunnyOutline as SunIcon } from 'react-icons/io5';
 import Conditional from './Conditional';
@@ -31,4 +32,4 @@ function Header(): React.ReactElement {
   );
 }
 
-export default Header;
+export default memo(Header);

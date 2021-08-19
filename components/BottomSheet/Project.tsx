@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Project } from '../../config';
 import Conditional from '../Conditional';
 import ScreenShotList from '../List/ScreenShot';
@@ -41,4 +41,4 @@ function ProjectBottomSheet(
   );
 }
 
-export default ProjectBottomSheet;
+export default memo(ProjectBottomSheet);
