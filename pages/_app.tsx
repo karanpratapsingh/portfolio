@@ -1,6 +1,6 @@
-import '../styles/globals.scss';
-import '../styles/bottomsheet.scss';
-import '../styles/list.scss';
+import 'styles/globals.scss';
+import 'styles/bottomsheet.scss';
+import 'styles/list.scss';
 
 import { ThemeProvider } from 'next-themes';
 import type { AppProps } from 'next/app';
