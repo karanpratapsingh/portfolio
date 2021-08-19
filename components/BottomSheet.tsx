@@ -34,8 +34,10 @@ function BaseBottomSheet(props: BaseBottomSheetProps): React.ReactElement {
 
   return (
     <DefaultBottomSheet className={className} open={open} onDismiss={onDismiss}>
-      {header}
-      {children}
+      <div className='pb-2'>
+        {header}
+        {children}
+      </div>
     </DefaultBottomSheet>
   );
 }
@@ -61,7 +63,7 @@ function AboutBottomSheet(props: AboutBottomSheetProps): React.ReactElement {
 
   return (
     <BaseBottomSheet open={open} onDismiss={onDismiss}>
-      <SubHeader className='lg:mt-4' title='About' description={about} />
+      <SubHeader title='About' description={about} />
       <TagList.Stack stack={WorkStack} />
     </BaseBottomSheet>
   );
@@ -77,7 +79,6 @@ function ContactBottomSheet(
   return (
     <BaseBottomSheet open={open} onDismiss={onDismiss}>
       <SubHeader
-        className='lg:mt-4'
         title={`Let's Connect`}
         description='Do you have a project in mind? Want to hire me? or simply wanna chat? Feel free to reach out'
       >
@@ -107,7 +108,7 @@ function ProjectBottomSheet(
 
   return (
     <BaseBottomSheet open={open} onDismiss={onDismiss}>
-      <SubHeader className='lg:mt-4' title={title} description={description} />
+      <SubHeader title={title} description={description} />
       <TagList.Stack stack={stack} />
       <TagList.Deployment deployment={deployment} />
       <Conditional condition={screenshots.length}>
