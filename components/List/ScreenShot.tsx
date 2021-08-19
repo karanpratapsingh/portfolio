@@ -1,4 +1,4 @@
-import { defaultDimensions } from 'config';
+import { defaultDimensions } from 'config/projects';
 import Image from 'next/image';
 import React, { memo, useCallback } from 'react';
 import ScrollContainer from 'react-indiana-drag-scroll';

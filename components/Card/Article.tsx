@@ -1,6 +1,6 @@
 import { Card as AntDesignCard, Tag } from 'antd';
 import clsx from 'clsx';
-import { Colors } from 'config';
+import { Colors } from 'config/colors';
 import dataFormat from 'dateformat';
 import React, { memo } from 'react';
 import { BaseProps, border, color, dimensions } from './Base';

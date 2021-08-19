@@ -1,5 +1,5 @@
 import { Tag } from 'antd';
-import { Stack, StackInfo } from 'config';
+import { Stack, StackInfo } from 'config/stack';
 import React, { memo, useCallback } from 'react';
 import BaseTagList from './Base';
 

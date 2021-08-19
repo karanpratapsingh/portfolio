@@ -1,4 +1,4 @@
-import { Project } from 'config';
+import type { Project } from 'config/projects';
 import React, { memo } from 'react';
 import Conditional from '../Conditional';
 import ScreenShotList from '../List/ScreenShot';

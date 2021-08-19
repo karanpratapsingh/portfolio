@@ -1,4 +1,4 @@
-import { Project } from 'config';
+import type { Project } from 'config/projects';
 import React, { memo, useCallback } from 'react';
 import ProjectCard from '../Card/Project';
 import { SubHeaderProps } from '../SubHeader';

@@ -1,6 +1,6 @@
+import { analytics } from 'config/analytics';
 import { useEffect } from 'react';
 import ReactGA from 'react-ga';
-import { analytics } from 'config';
 
 function useAnalytics(): void {
   useEffect(() => {

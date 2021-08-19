@@ -1,4 +1,6 @@
-import config, { Colors, WorkStack } from 'config';
+import config from 'config';
+import { Colors } from 'config/colors';
+import { WorkStack } from 'config/stack';
 import React, { Fragment, memo } from 'react';
 import ColorText from '../ColorText';
 import SubHeader from '../SubHeader';

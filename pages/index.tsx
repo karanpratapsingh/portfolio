@@ -1,5 +1,6 @@
 import * as API from 'api';
-import config, { Project, projects } from 'config';
+import config from 'config';
+import { Project, projects } from 'config/projects';
 import useBoolean from 'hooks/useBoolean';
 import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
