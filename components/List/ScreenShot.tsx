@@ -1,8 +1,8 @@
+import { defaultDimensions } from 'config';
 import Image from 'next/image';
 import React, { memo, useCallback } from 'react';
 import ScrollContainer from 'react-indiana-drag-scroll';
-import { defaultDimensions } from '../../config';
-import { Tuple } from '../../types';
+import { Tuple } from 'types';
 import SubHeader from '../SubHeader';
 
 interface ScreenShotListProps {

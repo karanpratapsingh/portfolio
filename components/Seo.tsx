@@ -1,5 +1,5 @@
+import config from 'config';
 import { NextSeo } from 'next-seo';
-import config from '../config';
 
 const { personal, contact } = config;
 

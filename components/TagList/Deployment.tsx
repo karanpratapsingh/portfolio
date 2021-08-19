@@ -1,8 +1,8 @@
 import { LinkOutlined } from '@ant-design/icons';
 import { Tag } from 'antd';
+import { Colors, Deployment } from 'config';
 import React, { memo, useCallback } from 'react';
-import { Colors, Deployment } from '../../config';
-import { Tuple } from '../../types';
+import { Tuple } from 'types';
 import BaseTagList from './Base';
 
 interface DeploymentListProps {

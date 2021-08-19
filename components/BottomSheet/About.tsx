@@ -1,8 +1,8 @@
+import config, { Colors, WorkStack } from 'config';
 import React, { Fragment, memo } from 'react';
-import config, { Colors, WorkStack } from '../../config';
 import ColorText from '../ColorText';
-import StackList from '../TagList/Stack';
 import SubHeader from '../SubHeader';
+import StackList from '../TagList/Stack';
 import BaseBottomSheet, { BaseBottomSheetProps } from './Base';
 
 const { personal } = config;

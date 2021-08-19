@@ -1,8 +1,7 @@
 import { Skeleton } from 'antd';
 import React, { memo, useCallback } from 'react';
 import ScrollContainer from 'react-indiana-drag-scroll';
-import SubHeader from '../SubHeader';
-import { SubHeaderProps } from '../SubHeader';
+import SubHeader, { SubHeaderProps } from '../SubHeader';
 
 type BaseListData = any;
 

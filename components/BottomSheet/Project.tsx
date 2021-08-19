@@ -1,5 +1,5 @@
+import { Project } from 'config';
 import React, { memo } from 'react';
-import { Project } from '../../config';
 import Conditional from '../Conditional';
 import ScreenShotList from '../List/ScreenShot';
 import SubHeader from '../SubHeader';

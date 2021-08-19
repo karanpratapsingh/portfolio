@@ -1,5 +1,5 @@
+import { Project } from 'config';
 import React, { memo, useCallback } from 'react';
-import { Project } from '../../config';
 import ProjectCard from '../Card/Project';
 import { SubHeaderProps } from '../SubHeader';
 import BaseList from './Base';

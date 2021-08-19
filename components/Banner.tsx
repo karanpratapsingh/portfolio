@@ -1,6 +1,6 @@
+import config from 'config';
 import { memo, useMemo } from 'react';
-import config from '../config';
-import { getRandomColorPair } from '../utils';
+import { getRandomColorPair } from 'utils';
 import ColorText from './ColorText';
 import Conditional from './Conditional';
 

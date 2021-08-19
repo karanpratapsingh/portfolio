@@ -1,6 +1,6 @@
 import { Tag } from 'antd';
+import { Stack, StackInfo } from 'config';
 import React, { memo, useCallback } from 'react';
-import { Stack, StackInfo } from '../../config';
 import BaseTagList from './Base';
 
 interface StackListProps {

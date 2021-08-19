@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from 'react';
-import { Article } from '../../types';
+import { Article } from 'types';
 import ArticleCard from '../Card/Article';
 import { SubHeaderProps } from '../SubHeader';
 import BaseList from './Base';

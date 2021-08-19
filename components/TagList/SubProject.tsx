@@ -1,5 +1,5 @@
+import { SubProject } from 'config';
 import React, { memo, useCallback } from 'react';
-import { SubProject } from '../../config';
 import SubHeader from '../SubHeader';
 import DeploymentList from './Deployment';
 

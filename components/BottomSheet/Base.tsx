@@ -2,7 +2,7 @@ import { useTheme } from 'next-themes';
 import React, { memo } from 'react';
 import { IoCloseCircle as CloseIcon } from 'react-icons/io5';
 import { BottomSheet as DefaultBottomSheet } from 'react-spring-bottom-sheet';
-import { getThemeClassName } from '../../utils';
+import { getThemeClassName } from 'utils';
 
 export interface BaseBottomSheetProps {
   open: boolean;

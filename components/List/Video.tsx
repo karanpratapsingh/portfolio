@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Video } from '../../types';
+import { Video } from 'types';
 import VideoCard from '../Card/Video';
 import { SubHeaderProps } from '../SubHeader';
 import BaseList from './Base';

@@ -1,8 +1,8 @@
 import { Card as AntDesignCard, Tag } from 'antd';
 import clsx from 'clsx';
+import { Colors } from 'config';
 import dataFormat from 'dateformat';
 import React, { memo } from 'react';
-import { Colors } from '../../config';
 import { BaseProps, border, color, dimensions } from './Base';
 
 interface ArticleProps extends BaseProps {
