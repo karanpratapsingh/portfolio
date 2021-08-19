@@ -2,6 +2,9 @@
   padding: 0px;
 }
 
-.list::-webkit-scrollbar {
-  display: none;
+.list {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
