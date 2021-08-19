@@ -1,12 +1,12 @@
 import { Skeleton } from 'antd';
 import Image from 'next/image';
 import React, { useCallback } from 'react';
+import ScrollContainer from 'react-indiana-drag-scroll';
 import { SubHeader } from '..';
 import { defaultDimensions, Project } from '../../config';
 import { Article, Tuple, Video } from '../../types';
 import { Card } from '../Card';
 import { SubHeaderProps } from '../SubHeader';
-import ScrollContainer from 'react-indiana-drag-scroll';
 
 type BaseListData = any;
 
@@ -40,7 +40,10 @@ function BaseList(props: BaseListProps): React.ReactElement {
   return (
     <div className='pb-5'>
       <SubHeader title={title} description={description} />
-      <ScrollContainer className='list flex overflow-auto pl-6 lg:pl-10 py-2'>
+      <ScrollContainer
+        className='list flex overflow-auto pl-6 lg:pl-10 py-2'
+        hideScrollbars={false}
+      >
         {list}
       </ScrollContainer>
     </div>
@@ -152,8 +155,16 @@ function ScreenShotList(props: ScreenShotListProps): React.ReactElement {
 
   const renderScreenShotList = useCallback(
     (screenshot: string) => {
+      const style: React.CSSProperties = {
+        height,
+        width,
+      };
+
       return (
-        <div className='flex-shrink-0 mr-2 rounded overflow-hidden bg-placeholder-light dark:bg-placeholder-dark'>
+        <div
+          className='flex-shrink-0 mr-2 rounded overflow-hidden bg-placeholder-light dark:bg-primary'
+          style={style}
+        >
           <Image
             loading='eager'
             src={screenshot}
@@ -172,9 +183,12 @@ function ScreenShotList(props: ScreenShotListProps): React.ReactElement {
     <SubHeader
       title='Screenshots'
       description={
-        <div className='list flex overflow-auto mt-2 mb-1'>
+        <ScrollContainer
+          className='list flex overflow-auto mt-2 mb-1'
+          hideScrollbars={false}
+        >
           {React.Children.toArray(screenshots.map(renderScreenShotList))}
-        </div>
+        </ScrollContainer>
       }
     />
   );
