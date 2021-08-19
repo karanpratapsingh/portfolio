@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import ReactGA from 'react-ga';
 import { analytics } from '../config';
 
-export function useAnalytics(): void {
+function useAnalytics(): void {
   useEffect(() => {
     mountGoogleAnalytics();
   }, []);
@@ -21,3 +21,5 @@ function mountGoogleAnalytics(): void {
     console.warn('Google analytics tracking id not set');
   }
 }
+
+export default useAnalytics;

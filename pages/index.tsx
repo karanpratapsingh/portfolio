@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
 import * as API from '../api';
 import config, { Project, projects } from '../config';
-import { useBoolean } from '../hooks';
+import useBoolean from '../hooks/useBoolean';
 import { Article, Video } from '../types';
 
 interface HomeStaticProps {

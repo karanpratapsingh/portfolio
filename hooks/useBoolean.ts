@@ -10,7 +10,7 @@ export type ReturnType = [
   SetFn,
 ];
 
-export function useBoolean(initialValue: boolean): ReturnType {
+function useBoolean(initialValue: boolean): ReturnType {
   const [value, setValue] = useState<boolean>(initialValue);
 
   const setTrue = useCallback(() => setValue(true), []);
@@ -19,3 +19,5 @@ export function useBoolean(initialValue: boolean): ReturnType {
 
   return [value, setTrue, setFalse, toggle, setValue];
 }
+
+export default useBoolean;
