@@ -162,7 +162,7 @@ function ScreenShotList(props: ScreenShotListProps): React.ReactElement {
 
       return (
         <div
-          className='flex-shrink-0 mr-2 rounded overflow-hidden bg-placeholder-light dark:bg-primary'
+          className='flex-shrink-0 mr-2 rounded overflow-hidden bg-placeholder-light dark:bg-placeholder-dark'
           style={style}
         >
           <Image
@@ -171,7 +171,7 @@ function ScreenShotList(props: ScreenShotListProps): React.ReactElement {
             height={height}
             width={width}
             objectFit='cover'
-            alt='screenshot'
+            alt=''
           />
         </div>
       );
