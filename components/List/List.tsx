@@ -6,6 +6,7 @@ import { defaultDimensions, Project } from '../../config';
 import { Article, Tuple, Video } from '../../types';
 import { Card } from '../Card';
 import { SubHeaderProps } from '../SubHeader';
+import ScrollContainer from 'react-indiana-drag-scroll';
 
 type BaseListData = any;
 
@@ -39,7 +40,9 @@ function BaseList(props: BaseListProps): React.ReactElement {
   return (
     <div className='pb-5'>
       <SubHeader title={title} description={description} />
-      <div className='list flex overflow-auto pl-6 lg:pl-10 py-2'>{list}</div>
+      <ScrollContainer className='list flex overflow-auto pl-6 lg:pl-10 py-2'>
+        {list}
+      </ScrollContainer>
     </div>
   );
 }

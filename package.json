@@ -24,6 +24,7 @@
     "react-dom": "17.0.2",
     "react-ga": "3.3.0",
     "react-icons": "4.2.0",
+    "react-indiana-drag-scroll": "2.0.1",
     "react-spring-bottom-sheet": "3.4.0",
     "sass": "1.37.5"
   },
