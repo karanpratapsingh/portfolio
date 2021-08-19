@@ -1,6 +1,6 @@
 import { Layout } from 'antd';
 import React from 'react';
-import { SocialIcons } from './SocialIcons';
+import SocialIcons from './SocialIcons';
 
 export function Footer(): React.ReactElement {
   const year: number = new Date().getFullYear();

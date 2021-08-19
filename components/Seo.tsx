@@ -3,7 +3,7 @@ import config from '../config';
 
 const { personal, contact } = config;
 
-export function Seo(): React.ReactElement {
+function Seo(): React.ReactElement {
   const description: string = `${personal.name}'s portfolio`;
 
   const additionalLinkTags = [
@@ -28,3 +28,5 @@ export function Seo(): React.ReactElement {
     />
   );
 }
+
+export default Seo;

@@ -7,7 +7,7 @@ export interface SubHeaderProps {
   children?: React.ReactNode;
 }
 
-export function SubHeader(props: SubHeaderProps): React.ReactElement {
+function SubHeader(props: SubHeaderProps): React.ReactElement {
   const { title, description, className, children } = props;
 
   return (
@@ -23,3 +23,5 @@ export function SubHeader(props: SubHeaderProps): React.ReactElement {
     </div>
   );
 }
+
+export default SubHeader;

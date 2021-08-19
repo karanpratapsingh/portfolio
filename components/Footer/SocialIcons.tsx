@@ -14,7 +14,7 @@ interface SocialIconsProps {
   className?: string;
 }
 
-export function SocialIcons(props: SocialIconsProps): React.ReactElement {
+function SocialIcons(props: SocialIconsProps): React.ReactElement {
   const { className } = props;
 
   return (
@@ -60,3 +60,5 @@ function resolveIcon(entry: Tuple<string>): React.ReactNode {
     </a>
   );
 }
+
+export default SocialIcons;

@@ -1,9 +1,9 @@
 import { useTheme } from 'next-themes';
 import { IoMdMoon as MoonIcon } from 'react-icons/io';
 import { IoSunnyOutline as SunIcon } from 'react-icons/io5';
-import { Conditional } from './Conditional';
+import Conditional from './Conditional';
 
-export function Header(): React.ReactElement {
+function Header(): React.ReactElement {
   const { setTheme, resolvedTheme } = useTheme();
 
   function setDark(): void {
@@ -30,3 +30,5 @@ export function Header(): React.ReactElement {
     </div>
   );
 }
+
+export default Header;
