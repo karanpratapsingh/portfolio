@@ -59,7 +59,7 @@ export const projects: Project[] = [
     banner:
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fproximity%2Fbanner.jpeg?alt=media&token=4d1d49e3-20ac-491e-8947-57a4e8520cc6',
     description:
-      'An open source social media app that does not use your data against you',
+      'An open source social media app that does not use your data against you.',
     repository: 'https://github.com/karanpratapsingh/Proximity',
     stack: [
       Stack.typescript,
@@ -93,7 +93,7 @@ export const projects: Project[] = [
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fvelvet%2Fbanner.png?alt=media&token=1c8fef8b-397e-434e-8ae8-48b6a5bc2ed2',
     website: 'https://boom.london',
     description:
-      'Connect with shoppers who need your advice and expertise when they’re shopping online. Assist and sell to customers the same way you would in-store, but now through chat and video straight from the app',
+      'Connect with shoppers who need your advice and expertise when they’re shopping online. Assist and sell to customers the same way you would in-store, but now through chat and video straight from the app.',
     repository: null,
     stack: [
       Stack.javascript,
@@ -126,7 +126,7 @@ export const projects: Project[] = [
     banner:
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fstewards%2Fbanner.png?alt=media&token=51bb3366-f4e8-4db1-9bfc-c8ebc8c63953',
     description:
-      'Mobile ordering solution with robot delivery. Stewards also provides variety of tools like staff application to manage orders, self checkout solution and admin dashboard',
+      'Mobile ordering solution with robot delivery. Stewards also provides variety of tools like staff application to manage orders, self checkout solution and admin dashboard.',
     stack: [
       Stack.javascript,
       Stack.react,
@@ -155,7 +155,7 @@ export const projects: Project[] = [
         title: 'Staff Management',
         repository: null,
         description:
-          'Staff app for stewards restaurant staff, easily update menu, product availability and take live orders from customers',
+          'Staff app for stewards restaurant staff, easily update menu, product availability and take live orders from customers.',
         deployment: {
           android:
             'https://play.google.com/store/apps/details?id=app.stewards.staff&hl=en',
@@ -174,7 +174,7 @@ export const projects: Project[] = [
         title: 'Self Checkout',
         repository: null,
         description:
-          "Stewards self checkout solution for customers who don't like waiting. Available on demand for iPad and tablets",
+          "Stewards self checkout solution for customers who don't like waiting. Available on demand for iPad and tablets.",
         deployment: {},
       },
     ],
@@ -186,7 +186,7 @@ export const projects: Project[] = [
     banner:
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fcelebrify%2Fbanner.jpeg?alt=media&token=94cd7e6c-6360-4f65-b08a-b95f5ce7d12c',
     description:
-      'Get personalized videos from your favorite celebrities at just one click. Request personalized video messages for your friends, family, loved ones or even yourself.Be it a doubt or even a special wish from your favorite celebrity.',
+      'Get personalized videos from your favorite celebrities at just one click. Request personalized video messages for your friends, family, loved ones or even yourself. Be it a doubt or even a special wish from your favorite celebrity.',
     repository: null,
     stack: [Stack.react, Stack.reactnative, Stack.django, Stack.aws],
     dimensions: [450, 270],
@@ -212,7 +212,7 @@ export const projects: Project[] = [
     banner:
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fkcards%2Fbanner.jpeg?alt=media&token=39dc0d23-0edf-49f2-b662-f2f6ed99cfec',
     description:
-      'KCards is your one-stop replacement for paper cards. KCards help you to easily share your cards with other users and get real-time analytics on the shared cards',
+      'KCards is your one-stop replacement for paper cards. KCards help you to easily share your cards with other users and get real-time analytics on the shared cards.',
     repository: 'https://github.com/karanpratapsingh/KCards',
     stack: [Stack.react, Stack.reactnative, Stack.node, Stack.mongo],
     dimensions: [450, 270],
