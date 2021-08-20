@@ -2,7 +2,7 @@ import { Card as AntDesignCard } from 'antd';
 import clsx from 'clsx';
 import Image from 'next/image';
 import React, { memo } from 'react';
-import { BaseProps, border, color, dimensions } from './Base';
+import { background, BaseProps, border, color, dimensions } from './Base';
 
 interface ProjectProps extends BaseProps {
   banner: string;
@@ -17,6 +17,7 @@ function Project(props: ProjectProps): React.ReactElement {
       onClick={onClick}
       cover={
         <Image
+          className={background}
           loading='eager'
           src={banner}
           height={240}
