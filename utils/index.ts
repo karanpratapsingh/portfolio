@@ -40,16 +40,17 @@ export function parseYouTubeResponse(item: any, callback: CallbackFn): void {
   }
 }
 
-type AsyncFn = any;
 type AsyncResult = any;
 type AsyncError = any;
+type AsyncReturn<R, E> = [Maybe<R>, Maybe<E>];
+type AsyncFn = Promise<AsyncResult>;
 
 export async function async<R = AsyncResult, E = AsyncError>(
   method: AsyncFn,
-): Promise<[Maybe<R>, Maybe<E>]> {
+): Promise<AsyncReturn<R, E>> {
   try {
-    const result = await method;
-    return [result, null];
+    const data: R = await method;
+    return [data, null];
   } catch (error) {
     return [null, error];
   }
