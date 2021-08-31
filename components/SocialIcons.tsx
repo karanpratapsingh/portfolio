@@ -8,7 +8,7 @@ import {
   IoLogoGithub as GithubIcon,
   IoLogoTwitter as TwitterIcon,
 } from 'react-icons/io';
-import { SiGmail as MailIcon } from 'react-icons/si';
+import { SiGmail as MailIcon, SiYoutube as YoutubeIcon } from 'react-icons/si';
 import { Maybe, Tuple } from 'types';
 
 interface SocialIconsProps {
@@ -46,6 +46,10 @@ function resolveIcon(entry: Tuple<string>): React.ReactNode {
 
     case ContactType.github:
       icon = <GithubIcon {...props} />;
+      break;
+
+    case ContactType.youtube:
+      icon = <YoutubeIcon {...props} />;
       break;
 
     case ContactType.email:
