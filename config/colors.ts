@@ -45,5 +45,6 @@ export const Colors: Record<string, string> = {
   // Misc.
   testing: '#049C64',
   devops: '#059F00',
+  serverless: '#000000',
   resume: '#EEEBFF',
 };
