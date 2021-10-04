@@ -18,6 +18,6 @@ export const personal: Personal = {
     avid open source contributor who values learning and growing with people, teams, and technologies.
   `,
   resume:
-    'https://drive.google.com/file/d/1V5umW8CKY-1aegh_NO_ZBCC9heYfI-o3/view?usp=sharing',
+    'https://drive.google.com/file/d/13ZAZlisvJ_F1Bo8q1e7KJDlkAAt6uNXZ/view?usp=sharing',
   available: false,
 };
