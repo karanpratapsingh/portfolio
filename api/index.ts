@@ -29,7 +29,14 @@ export async function getArticles(): Promise<Article[]> {
     return articles;
   }
 
-  response?.data.forEach((data: any) => {
+  const filtered = response?.data?.filter(
+    (data: any) =>
+      !config.articles?.blacklist.some((str: string) =>
+        data?.title?.includes(str),
+      ),
+  );
+
+  filtered?.forEach((data: any) => {
     const {
       id,
       title,
