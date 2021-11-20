@@ -17,6 +17,6 @@ export const personal: Personal = {
     project requirements, budget, and schedule.
  `,
   resume:
-    'https://drive.google.com/file/d/13ZAZlisvJ_F1Bo8q1e7KJDlkAAt6uNXZ/view?usp=sharing',
+    'https://docs.google.com/document/d/1eZwkRliradI4IBSrFUzhhhfURpff045Q/edit?usp=sharing&ouid=103878119262981722477&rtpof=true&sd=true',
   available: false,
 };
