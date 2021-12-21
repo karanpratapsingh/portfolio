@@ -10,9 +10,9 @@ export interface Personal {
 export const personal: Personal = {
   name: 'Karan',
   fullName: 'Karan Pratap Singh',
-  title: 'Software Engineer & Solutions Architect',
+  title: 'Senior Software Engineer',
   about: `
-    Diligent software engineer who values learning and growing with people, teams, and technologies. Experienced at writing 
+    A software engineer who values learning and growing with people, teams, and technologies. Experienced at writing 
     code in a high-paced environment with an emphasis on using best practices to develop high-quality software that satisfies 
     project requirements, budget, and schedule.
  `,
