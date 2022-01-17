@@ -19,7 +19,7 @@ export const contact: Contact = {
     github: 'https://github.com/karanpratapsingh',
     linkedin: 'https://linkedin.com/in/karan99',
     twitter: 'https://twitter.com/karan_6864',
-    youtube: 'https://www.youtube.com/channel/UCgAb7MfWecaeUu-Nsl1J6jg',
+    youtube: 'https://www.youtube.com/c/KaranPratapSingh',
     email: 'mailto:contact@karanpratapsingh.com',
   },
 };
