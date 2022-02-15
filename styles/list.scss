@@ -8,3 +8,9 @@
     display: none;
   }
 }
+
+.social-icons:last-child {
+  .icon {
+    @apply mr-0;
+  }
+}
