@@ -10,12 +10,14 @@ export enum ContactType {
 export interface Contact {
   twitter: string;
   site: string;
+  calendly?: string;
   links: Record<ContactType, string>;
 }
 
 export const contact: Contact = {
   twitter: '@karan__6864',
   site: 'karanpratapsingh.com',
+  calendly: 'https://calendly.com/karanpratapsingh',
   links: {
     github: 'https://github.com/karanpratapsingh',
     linkedin: 'https://linkedin.com/in/karan99',
