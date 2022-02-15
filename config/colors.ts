@@ -45,8 +45,13 @@ export const Colors: Record<string, string> = {
   buymeacoffee: '#FFDD00',
 
   // Misc.
+  discuss: '#404040',
+  beginners: '#4f9a94',
   testing: '#049C64',
+  backend: '#404040',
   devops: '#059F00',
   serverless: '#000000',
   resume: '#EEEBFF',
+  opensource: '#26BE00',
+  tutorial: '#4dd0e1',
 };
