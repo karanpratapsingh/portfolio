@@ -1,5 +1,9 @@
 @import './colors.scss';
 
+.bottomsheet {
+  min-height: 16rem;
+}
+
 .light-bottomsheet {
   div[data-rsbs-overlay] {
     background-color: $backgroundLight;

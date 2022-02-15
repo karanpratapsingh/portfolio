@@ -18,7 +18,7 @@ function SubHeader(props: SubHeaderProps): React.ReactElement {
         className,
       )}
     >
-      <span className='text-2xl lg:text-2xl font-bold mb-1'>{title}</span>
+      <span className='text-2xl lg:text-2xl font-bold mb-2'>{title}</span>
       <span className='text-base font-light'>{description}</span>
       {children}
     </div>
