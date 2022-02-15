@@ -8,7 +8,7 @@ function Footer(): React.ReactElement {
   return (
     <Layout.Footer className='flex flex-col items-center mt-4 py-10 lg:py-12 font-light bg-primary dark:bg-primary-dark dark:text-white'>
       <span className='text-xl font-bold'>Let&apos;s connect</span>
-      <span className='mt-4 mb-2 lg:text-base lg:mt-6 lg:mb-4 font-light'>
+      <span className='mt-2 mb-2 lg:text-base lg:mb-4 font-light'>
         Get in touch for opportunities or to say hi!
       </span>
       <SocialIcons />
