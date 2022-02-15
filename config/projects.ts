@@ -19,6 +19,7 @@ export const defaultDimensions: Tuple<number> = [450, 220];
 export interface Project {
   id: number;
   title: string;
+  slug: string;
   website: string;
   banner: string;
   description: string;
@@ -34,6 +35,7 @@ export const projects: Project[] = [
   {
     id: 0,
     title: 'Peapods',
+    slug: 'peapods',
     banner:
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fpeapods%2Fbanner.png?alt=media&token=20726ab4-332d-4cd7-afb1-2d1764deaf6b',
     website: 'https://peapods.com',
@@ -55,6 +57,7 @@ export const projects: Project[] = [
   {
     id: 1,
     title: 'Proximity',
+    slug: 'proximity',
     website: 'https://proximity-mobile.web.app',
     banner:
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fproximity%2Fbanner.jpeg?alt=media&token=4d1d49e3-20ac-491e-8947-57a4e8520cc6',
@@ -89,6 +92,7 @@ export const projects: Project[] = [
   {
     id: 2,
     title: 'Velvet Live',
+    slug: 'velvet-live',
     banner:
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fvelvet%2Fbanner.png?alt=media&token=1c8fef8b-397e-434e-8ae8-48b6a5bc2ed2',
     website: 'https://boom.london',
@@ -121,6 +125,7 @@ export const projects: Project[] = [
   {
     id: 3,
     title: 'Stewards',
+    slug: 'stewards',
     website: 'https://stewards.app',
     repository: null,
     banner:
@@ -182,6 +187,7 @@ export const projects: Project[] = [
   {
     id: 4,
     title: 'Celebrify',
+    slug: 'celebrify',
     website: 'https://celebrify.in',
     banner:
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fcelebrify%2Fbanner.jpeg?alt=media&token=94cd7e6c-6360-4f65-b08a-b95f5ce7d12c',
@@ -209,6 +215,7 @@ export const projects: Project[] = [
   {
     id: 5,
     title: 'KCards',
+    slug: 'kcards',
     banner:
       'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fkcards%2Fbanner.jpeg?alt=media&token=39dc0d23-0edf-49f2-b662-f2f6ed99cfec',
     description:
