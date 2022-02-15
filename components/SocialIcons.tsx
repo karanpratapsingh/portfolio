@@ -6,14 +6,12 @@ import { IconBaseProps } from 'react-icons';
 import { FaLinkedinIn as LinkedinIcon } from 'react-icons/fa';
 import {
   IoLogoGithub as GithubIcon,
-  IoLogoTwitter as TwitterIcon,
+  IoLogoTwitter as TwitterIcon
 } from 'react-icons/io';
 import {
-  SiGmail as MailIcon,
-  SiYoutube as YoutubeIcon,
-  SiBuymeacoffee as BuymeacoffeeIcon,
+  SiBuymeacoffee as BuymeacoffeeIcon, SiGmail as MailIcon,
+  SiYoutube as YoutubeIcon
 } from 'react-icons/si';
-import { FaPaypal as PaypalIcon } from 'react-icons/fa';
 import { Maybe, Tuple } from 'types';
 
 interface SocialIconsProps {
@@ -59,10 +57,6 @@ function resolveIcon(entry: Tuple<string>): React.ReactNode {
 
     case ContactType.email:
       icon = <MailIcon {...props} />;
-      break;
-
-    case ContactType.paypal:
-      icon = <PaypalIcon {...props} />;
       break;
 
     case ContactType.buymeacoffee:
