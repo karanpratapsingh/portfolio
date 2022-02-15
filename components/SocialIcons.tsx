@@ -34,7 +34,7 @@ function resolveIcon(entry: Tuple<string>): React.ReactNode {
   const [type, url] = entry;
 
   const props: IconBaseProps = {
-    className: 'cursor-pointer text-2xl mr-4',
+    className: 'icon cursor-pointer text-3xl mr-6',
     color: Colors[type],
   };
 
