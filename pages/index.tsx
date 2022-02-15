@@ -2,9 +2,10 @@ import * as API from 'api';
 import config from 'config';
 import { Project, projects } from 'config/projects';
 import useBoolean from 'hooks/useBoolean';
+import { useRouter } from 'next/dist/client/router';
 import dynamic from 'next/dynamic';
-import React, { useState } from 'react';
-import { Article, Video } from 'types';
+import React, { useEffect, useState } from 'react';
+import { Article, Query, Video } from 'types';
 
 interface HomeStaticProps {
   videos: Video[];
@@ -33,6 +34,22 @@ function Home(props: HomeStaticProps): React.ReactElement {
   const [about, openAbout, closeAbout] = useBoolean(false);
   const [contact, openContact, closeContact] = useBoolean(false);
   const [project, openProject, closeProject] = useBoolean(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const query: Query = router.query;
+
+    if (query?.project) {
+      const foundProject = projects.find(({ slug }) => slug === query?.project);
+
+      if (foundProject) {
+        setActiveProject(foundProject);
+        openProject();
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function onProject(project: Project): void {
     setActiveProject(project);

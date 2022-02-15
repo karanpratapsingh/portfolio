@@ -1,5 +1,7 @@
 import config from 'config';
-import { memo, useMemo } from 'react';
+import { useRouter } from 'next/dist/client/router';
+import { memo, useEffect, useMemo } from 'react';
+import { Query } from 'types';
 import { getRandomColorPair } from 'utils';
 import ColorText from './ColorText';
 import Conditional from './Conditional';
@@ -14,6 +16,25 @@ interface BannerProps {
 function Banner(props: BannerProps): React.ReactElement {
   const { onAbout, onContact } = props;
   const [aboutColor, contactColor] = useMemo(getRandomColorPair, []);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const query: Query = router.query;
+
+    if (query?.action) {
+      switch (query.action) {
+        case 'about':
+          onAbout();
+          break;
+        case 'contact':
+          onContact();
+          break;
+        default:
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className='banner flex flex-col flex-1 justify-center px-6 lg:px-10 py-10 dark:text-white'>
