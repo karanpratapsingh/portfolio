@@ -41,6 +41,7 @@ export const Colors: Record<string, string> = {
   twitter: '#1DA1F2',
   youtube: '#FF0000',
   email: '#D44638',
+  buymeacoffee: '#FFDD00',
 
   // Misc.
   testing: '#049C64',
