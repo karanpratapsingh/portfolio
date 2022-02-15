@@ -26,7 +26,7 @@ function BaseBottomSheet(props: BaseBottomSheetProps): React.ReactElement {
 
   return (
     <DefaultBottomSheet className={className} open={open} onDismiss={onDismiss}>
-      <div className='pb-2'>
+      <div className='bottomsheet pb-2'>
         {header}
         {children}
       </div>

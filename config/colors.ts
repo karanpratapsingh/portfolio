@@ -46,7 +46,6 @@ export const Colors: Record<string, string> = {
 
   // Misc.
   discuss: '#404040',
-  beginners: '#4f9a94',
   testing: '#049C64',
   backend: '#404040',
   devops: '#059F00',
