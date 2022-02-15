@@ -6,11 +6,12 @@ import { IconBaseProps } from 'react-icons';
 import { FaLinkedinIn as LinkedinIcon } from 'react-icons/fa';
 import {
   IoLogoGithub as GithubIcon,
-  IoLogoTwitter as TwitterIcon
+  IoLogoTwitter as TwitterIcon,
 } from 'react-icons/io';
 import {
-  SiBuymeacoffee as BuymeacoffeeIcon, SiGmail as MailIcon,
-  SiYoutube as YoutubeIcon
+  SiBuymeacoffee as BuymeacoffeeIcon,
+  SiGmail as MailIcon,
+  SiYoutube as YoutubeIcon,
 } from 'react-icons/si';
 import { Maybe, Tuple } from 'types';
 
@@ -32,7 +33,7 @@ function resolveIcon(entry: Tuple<string>): React.ReactNode {
   const [type, url] = entry;
 
   const props: IconBaseProps = {
-    className: 'icon cursor-pointer text-3xl mr-6',
+    className: 'icon cursor-pointer text-2xl mr-6',
     color: Colors[type],
   };
 
@@ -67,7 +68,13 @@ function resolveIcon(entry: Tuple<string>): React.ReactNode {
   }
 
   return (
-    <a className='social-icons' href={url} aria-label={type} target='_blank' rel='noopener noreferrer'>
+    <a
+      className='social-icons'
+      href={url}
+      aria-label={type}
+      target='_blank'
+      rel='noopener noreferrer'
+    >
       {icon}
     </a>
   );
