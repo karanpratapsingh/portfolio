@@ -13,6 +13,7 @@ import {
   SiYoutube as YoutubeIcon,
   SiBuymeacoffee as BuymeacoffeeIcon,
 } from 'react-icons/si';
+import { FaPaypal as PaypalIcon } from 'react-icons/fa';
 import { Maybe, Tuple } from 'types';
 
 interface SocialIconsProps {
@@ -58,6 +59,10 @@ function resolveIcon(entry: Tuple<string>): React.ReactNode {
 
     case ContactType.email:
       icon = <MailIcon {...props} />;
+      break;
+
+    case ContactType.paypal:
+      icon = <PaypalIcon {...props} />;
       break;
 
     case ContactType.buymeacoffee:
