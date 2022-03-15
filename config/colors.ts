@@ -44,6 +44,9 @@ export const Colors: Record<string, string> = {
   buymeacoffee: '#FFDD00',
 
   // Misc.
+  git: '#F1502F',
+  microservices: '#1890ff',
+  distributedsystems: '#404040',
   discuss: '#404040',
   testing: '#049C64',
   backend: '#404040',
