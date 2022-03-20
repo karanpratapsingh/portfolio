@@ -16,7 +16,7 @@ function Project(props: ProjectProps): React.ReactElement {
       className={clsx(dimensions, border, color)}
       onClick={onClick}
       cover={
-        <div className={clsx(border, 'border-b-0')}>
+        <div className={clsx(border, 'border-b-0 rounded-t')}>
           <Image
             className={background}
             loading='eager'

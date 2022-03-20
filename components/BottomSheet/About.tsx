@@ -31,7 +31,7 @@ function AboutBottomSheet(props: AboutBottomSheetProps): React.ReactElement {
   return (
     <BaseBottomSheet open={open} onDismiss={onDismiss}>
       <SubHeader title='About' description={about} />
-      <StackList stack={WorkStack} />
+      <StackList title='Skills' stack={WorkStack} />
     </BaseBottomSheet>
   );
 }

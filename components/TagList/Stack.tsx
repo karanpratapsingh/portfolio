@@ -4,11 +4,12 @@ import React, { memo, useCallback } from 'react';
 import BaseTagList from './Base';
 
 interface StackListProps {
+  title?: string;
   stack: Stack[];
 }
 
 function StackList(props: StackListProps): React.ReactElement {
-  const { stack } = props;
+  const { title = 'Stack', stack } = props;
 
   const renderStack = useCallback((stack: Stack): React.ReactNode => {
     const { color, value } = StackInfo[stack];
@@ -20,7 +21,7 @@ function StackList(props: StackListProps): React.ReactElement {
     );
   }, []);
 
-  return <BaseTagList title='Skills' data={stack} renderList={renderStack} />;
+  return <BaseTagList title={title} data={stack} renderList={renderStack} />;
 }
 
 export default memo(StackList);
