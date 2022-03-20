@@ -16,15 +16,17 @@ function Project(props: ProjectProps): React.ReactElement {
       className={clsx(dimensions, border, color)}
       onClick={onClick}
       cover={
-        <Image
-          className={background}
-          loading='eager'
-          src={banner}
-          height={240}
-          width={400}
-          objectFit='cover'
-          alt={title}
-        />
+        <div className={clsx(border, 'border-b-0')}>
+          <Image
+            className={background}
+            loading='eager'
+            src={banner}
+            height={240}
+            width={400}
+            objectFit='cover'
+            alt={title}
+          />
+        </div>
       }
     >
       <div className='flex flex-col pt-2 pb-4 px-6'>
