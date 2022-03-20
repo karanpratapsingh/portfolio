@@ -36,6 +36,9 @@ export const Colors: Record<string, string> = {
   kubernetes: '#326CE5',
   terraform: '#7B42BC',
 
+  // Messaging
+  nats: '#199bfc',
+
   // Social
   linkedin: '#0077B5',
   twitter: '#1DA1F2',

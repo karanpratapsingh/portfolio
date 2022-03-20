@@ -22,6 +22,9 @@ export enum Stack {
   docker,
   kubernetes,
 
+  // Messaging
+  nats,
+
   // Databases
   redis,
   postgres,
@@ -98,6 +101,10 @@ export const StackInfo: Record<Stack, StackInfoMap> = {
     value: 'Django',
     color: Colors.django,
   },
+  [Stack.nats]: {
+    value: 'NATS',
+    color: Colors.nats,
+  },
   [Stack.postgres]: {
     value: 'Postgres',
     color: Colors.postgres,
@@ -106,7 +113,6 @@ export const StackInfo: Record<Stack, StackInfoMap> = {
     value: 'Redis',
     color: Colors.redis,
   },
-  [Stack.mongo]: {},
   [Stack.mongo]: {
     value: 'MongoDB',
     color: Colors.mongo,
