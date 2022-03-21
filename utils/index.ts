@@ -52,6 +52,6 @@ export async function async<R = AsyncResult, E = AsyncError>(
     const data: R = await method;
     return [data, null];
   } catch (error) {
-    return [null, error];
+    return [null, error as Maybe<E>];
   }
 }
