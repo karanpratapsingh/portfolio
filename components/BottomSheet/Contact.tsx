@@ -41,7 +41,7 @@ function ContactBottomSheet(
   return (
     <BaseBottomSheet open={open} onDismiss={onDismiss}>
       <SubHeader title={`Let's Connect`} description={description}>
-        <SocialIcons className='mt-4 mb-2' />
+        <SocialIcons className='mt-6 mb-2' />
       </SubHeader>
     </BaseBottomSheet>
   );
