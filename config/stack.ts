@@ -32,15 +32,17 @@ export enum Stack {
 }
 
 export const WorkStack = [
-  Stack.typescript,
   Stack.go,
+  Stack.typescript,
   Stack.react,
   Stack.reactnative,
   Stack.graphql,
   Stack.kubernetes,
   Stack.docker,
+  Stack.nats,
   Stack.aws,
   Stack.gcp,
+  Stack.postgres,
 ];
 
 type StackInfoMap = {
