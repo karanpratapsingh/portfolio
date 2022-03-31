@@ -42,6 +42,7 @@ export const WorkStack = [
   Stack.nats,
   Stack.aws,
   Stack.gcp,
+  Stack.redis,
   Stack.postgres,
 ];
 
