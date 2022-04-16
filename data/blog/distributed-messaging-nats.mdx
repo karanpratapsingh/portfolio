@@ -1,0 +1,189 @@
+---
+title: 'Distributed messaging with NATS'
+date: '2022-01-20'
+tags: ['nats', 'microservices', 'backend', 'opensource']
+draft: false
+summary: 'Distributed messaging with NATS'
+images: ['/static/blogs/distributed-messaging-nats.png']
+authors: ['default']
+---
+
+Recently, I was building an application where I wanted to take event-driven approach for async communication between the microservices. Usually, I would use [Apache Kafka](https://kafka.apache.org/), [RabbitMQ](https://www.rabbitmq.com/tutorials/tutorial-one-go.html), [Redis Streams](https://redis.io/topics/streams-intro) or a managed solution like [AWS SNS](https://aws.amazon.com/sns/), [Google Cloud Pub/Sub](https://cloud.google.com/pubsub/) but this time I wanted to keep my implementation easy and cost minimal yet not affect my scalability or increase technical debt for the future. After a few hops on [StackShare](stackshare.io), I found [NATS](https://nats.io) as a popular alternative and after trying it out, I really liked it. That evening I migrated everything from Apache Kafka to NATS. So, in this article, we'll learn what NATS is and how to get started with it.
+
+### What is NATS?
+
+![nats](https://nats.io/img/logos/nats-horizontal-color.png)
+
+NATS is an [open-source](https://github.com/nats-io/nats-server) messaging system. It provides a simple, secure, and performant communications system for digital systems, services, and devices. The core design principles of NATS are performance, scalability, and ease of use. Its server can run on-premise, in the cloud, at the edge, and even on a Raspberry Pi. NATS can secure and simplify the design and operation of modern distributed systems. It is written in [Go](https://go.dev/) and used by companies like Tesla, Paypal, Walmart, and many others. NATS is also part of the Cloud Native Computing Foundation ([CNCF](https://www.cncf.io/)).
+
+_Note: For more info checkout [NATS.io](https://nats.io) or watch this fantastic [Keynote](https://www.youtube.com/watch?v=lHQXEqyH57U) by its creator [Derek Collison](https://github.com/derekcollison)._
+
+### Features
+
+Here are some of the features that I found interesting for my use case:
+
+- Ease of use
+- Highly performant
+- Zero downtime scaling
+- Self healing and resilient
+- Isolated and secure by default
+- Supports edge, cloud or hybrid deployments.
+
+### Getting started
+
+Before we start with any code, let's see what we will implement. We will try to make a simple pub/sub example like shown in the diagram below, and we will use different languages and pretend they are different services.
+![demo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/aidayfv61l5bhhrcjvwy.png)
+
+#### Setup NATS server
+
+Before anything, we'll need to set up a NATS server. We can do it multiple ways as shown below. Personally, I like to use docker but feel free to set it up however you want. We can also use `demo.nats.io` which is a demo server provider by NATS authors (please don't use it for production!).
+
+**Docker**
+
+Here's our `docker-compose.yml` file:
+
+```yml
+version: '3.8'
+
+services:
+  nats:
+    container_name: nats
+    image: nats:2.7.0-alpine
+    ports:
+      - 4222:4222
+```
+
+```
+$ docker compose up
+```
+
+Or we can simply use `docker run` as well.
+
+```
+$ docker run -p 4222:4222 nats:2.7.0-alpine
+```
+
+**Locally**
+
+As I'm using macOS, I installed it with [`brew`](https://brew.sh/).
+
+```
+$ brew install nats-server
+$ nats-server
+```
+
+_Note: Checkout [official docs](https://docs.nats.io/running-a-nats-service/introduction/installation) for more installation options._
+
+**Output**
+
+```
+[18193] 2022/01/20 16:00:05.581377 [INF] Starting nats-server
+[18193] 2022/01/20 16:00:05.581992 [INF]   Version:  2.7.0
+[18193] 2022/01/20 16:00:05.581996 [INF]   Git:      [not set]
+[18193] 2022/01/20 16:00:05.582005 [INF]   Name:     ND2VU7MH7J6RU6RS6JUKKPPCTMRPY35LRBRFT3NLENDZI3TL33PVRR3P
+[18193] 2022/01/20 16:00:05.582008 [INF]   ID:       ND2VU7MH7J6RU6RS6JUKKPPCTMRPY35LRBRFT3NLENDZI3TL33PVRR3P
+[18193] 2022/01/20 16:00:05.582791 [INF] Listening for client connections on 0.0.0.0:4222
+[18193] 2022/01/20 16:00:05.583066 [INF] Server is ready
+```
+
+#### Client
+
+Now that our NATS server is running, we'll be using [Go](https://github.com/nats-io/nats.go) and [Node.js](https://github.com/nats-io/nats.js) clients to connect to it for a simple demonstration. Not familiar with Go or Node? Don't worry NATS has clients available in [over 40 languages](https://nats.io/download)!
+
+First, let's init our Go module.
+
+```
+$ go mod init example
+$ go get github.com/nats-io/nats.go/@latest
+$ touch main.go
+```
+
+Our Go code will act as the subscriber.
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/nats-io/nats.go"
+)
+
+var subject = "my_subject"
+
+func main() {
+	wait := make(chan bool)
+
+	nc, err := nats.Connect(nats.DefaultURL)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	nc.Subscribe(subject, func(m *nats.Msg) {
+		fmt.Printf("Received: %s\n", string(m.Data))
+		nc.Publish(m.Reply, []byte("Hello"))
+	})
+
+	fmt.Println("Subscribed to", subject)
+
+	<-wait
+}
+```
+
+Now, let's init our Node project.
+
+```
+$ npm init -y
+$ npm install nats
+$ touch index.js
+```
+
+Here is our JavaScript code that will act as the publisher.
+
+```js
+const { connect, StringCodec } = require('nats');
+
+const subject = 'my_subject';
+const servers = 'localhost:4222';
+
+async function demo() {
+  const codec = StringCodec();
+  const nc = await connect({ servers });
+
+  nc.publish(subject, codec.encode('Hello there!'));
+
+  console.log('Sent...');
+
+  await nc.drain();
+}
+
+demo();
+```
+
+We will subscribe to the `my_subject` subject by running our Go code first.
+
+```
+$ go run main.go
+Subscribed to my_subject
+```
+
+Now, We will run our JavaScript code, which publishes `Hello there!` message on `my_subject` subject.
+
+```
+$ node index.js
+Sent...
+```
+
+And there it is! We can see the message being received by our subscriber. NATS makes this so simple, yet so powerful!
+
+```
+Subscribed to my_subject
+Received: Hello there!
+```
+
+### Conclusion
+
+We haven't even scratched the surface in this article, NATS also has a built-in distributed persistence system called [JetStream](https://docs.nats.io/nats-concepts/jetstream) which takes it to a whole another level!
+
+Lastly, I think NATS is a fantastic technology, it scales well from a hobby project to production ready distributed applications. And best of all it's quite easy to get started. I hope this article was helpful in getting you interested!

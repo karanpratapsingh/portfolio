@@ -1,0 +1,209 @@
+---
+title: 'Easy Kubernetes development with Skaffold'
+date: '2021-09-07'
+tags: ['kubernetes', 'docker', 'go', 'node']
+draft: false
+summary: 'Easy Kubernetes development with Skaffold'
+images: ['/static/blogs/kubernetes-development-skaffold.png']
+authors: ['default']
+---
+
+In this article, we'll see how we can use skaffold to develop our kubernetes native applications locally.
+
+I will be using [minikube](https://minikube.sigs.k8s.io/docs/) for local kubernetes cluster
+
+<iframe
+  className='sm:h-96'
+  height='100%'
+  width='100%'
+  src='https://www.youtube.com/embed/2gxp5GW3_tQ'
+  allowFullScreen
+  frameborder='0'
+  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+></iframe>
+
+### What is Skaffold?
+
+Skaffold is a command line tool that helps with development for Kubernetes-native applications by deploying to your local or remote Kubernetes cluster as you develop.
+
+It can handle the workflow for building, pushing, and deploying your application. Skaffold also operates completely on the client-side, with no required components on your cluster, making it super lightweight and high-performance.
+
+It has a great developer experience, and I've been using it for a while. Learn more about Skaffold [here](https://cloud.google.com/blog/products/application-development/kubernetes-development-simplified-skaffold-is-now-ga)
+
+![Skaffold development loop from cloud.google.com](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/25ukj457lbkhokr7byqy.png)
+
+### Install Skaffold
+
+You can install scaffold from [here](https://skaffold.dev/docs/install/)
+
+### Project setup
+
+I've initialized a pretty simple express app.
+
+```
+├── src
+│   └── index.js
+├── package.json
+└── yarn.lock
+```
+
+Start the minikube cluster
+
+```
+$ minikube start
+```
+
+![minikube start output](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/c3wdp39jn1b8h9s6w17n.png)
+
+### Dockerfile
+
+Let's dockerize our app so that we can run it in our kubernetes cluster
+
+_Note: To learn more about best practices for dockerizing your applications, checkout my [dockerize series](https://karanpratapsingh.com/blog/introduction-dockerize-series)!_
+
+```dockerfile
+FROM node:14-alpine
+# Declare a workdir
+WORKDIR /app
+# Cache and install dependencies
+COPY package.json yarn.lock ./
+RUN yarn install
+# Copy app files
+COPY . ./
+# Expose port
+EXPOSE 4000
+CMD [ "yarn", "start" ]
+```
+
+Also, let's quickly add a `.dockerignore` to exclude our `node_modules`
+
+```
+**/node_modules
+```
+
+### Creating K8s deployment
+
+Let's create a `k8s` folder and create a `deployment.yaml`
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  labels:
+    app: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+        - name: app
+          image: node-app
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: '1'
+          ports:
+            - containerPort: 4000
+```
+
+### Exposing k8s deployment with a service
+
+Now, let's add a `k8s/service.yaml` of type `NodePort` to expose our deployment
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-svc
+spec:
+  type: NodePort
+  selector:
+    app: app
+  ports:
+    - port: 4000
+      targetPort: 4000
+```
+
+### Scaffold config
+
+And finally, we need to add a `skaffold.yaml` config for our app.
+
+_Full config options can be found [here](https://skaffold.dev/docs/references/yaml/?version=v2beta18)_
+
+```yaml
+apiVersion: skaffold/v2beta18
+kind: Config
+
+profiles:
+  - name: dev
+    activation:
+      - command: dev
+    build:
+      artifacts:
+        - image: node-app
+          context: .
+          sync:
+            manual:
+              - src: 'src/**/*.js'
+                dest: .
+```
+
+If you're storing your kubernetes yaml files in a custom path you can use this to `skaffold.yaml`
+
+```yaml
+profile: ...
+deploy:
+  kubectl:
+    manifests:
+      - custom/path/file.yaml
+```
+
+Start! Start! Start!
+
+```
+skaffold dev --port-forward
+```
+
+![skaffold-dev-output](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6qw37gvzxiph5ziwk05w.png)
+
+_Note: We can also declare [`portForward`](https://skaffold.dev/docs/pipeline-stages/port-forwarding/) config in your `skaffold.yaml`_
+
+```yaml
+portForward:
+  - resourceType: service
+    resourceName: app-svc
+    port: 4000
+    localPort: 4000
+```
+
+### Using Buildpacks
+
+Buildpacks enable building a container image from source code without the need for a `Dockerfile`.
+
+Skaffold supports building with Cloud Native Buildpacks. This would help us simplify our `skaffold.yaml`
+
+```yaml
+apiVersion: skaffold/v2beta18
+kind: Config
+
+profiles:
+  - name: dev
+    activation:
+      - command: dev
+    build:
+      artifacts:
+        - image: node-app
+          buildpacks:
+            builder: 'gcr.io/buildpacks/builder:v1'
+```
+
+This article only scratches the surface of what skaffold is capable of! You can find tons examples in the official [github repository](https://github.com/GoogleContainerTools/skaffold)
+
+I hope this was helpful, you can find all the code in this [repository](https://github.com/karanpratapsingh/tutorials/tree/master/kubernetes/skaffold). As always, feel free to reach out anytime if you face any issues.

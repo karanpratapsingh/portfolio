@@ -1,0 +1,200 @@
+---
+title: 'Art of building small containers'
+date: '2021-07-30'
+tags: ['docker', 'go', 'kubernetes', 'devops']
+draft: false
+summary: 'Art of building small containers'
+images: ['/static/blogs/art-of-building-small-container.png']
+authors: ['default']
+---
+
+In this article, we will learn how to build small docker containers by understanding builder pattern and [multistage](https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds) builds in detail and go over what benefits they provide.
+
+**Spoilers** we will reduce our golang container size from over `850mb` to just under `12mb`!
+
+<iframe
+  className='sm:h-96'
+  height='100%'
+  width='100%'
+  src='https://www.youtube.com/embed/KONK0re3_3Y'
+  allowFullScreen
+  frameborder='0'
+  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+></iframe>
+
+_I've also made a video, if you'd like to follow along. Slides from the video can be found [here](https://drive.google.com/file/d/1x6uitfx1-CTb9pFb-ZjQgpbxh4wfvb-x/view?usp=sharing)_
+
+## Problem
+
+Docker images are often much bigger than they have to be which ends up impacting our deployments, security and dev experience.
+
+Optimizing a build can be complex as it’s hard to keep your image clean and eventually, it gets messy, and hard to follow.
+
+We also end up shipping unnecessary assets like tooling, dev dependencies, runtime or compiler in our releases.
+
+Let's assume we have a simple hello world in Go and we'd like to dockerize it and deploy on Kubernetes
+
+Here's our very simple hello world project
+
+```
+├── Dockerfile
+└── main.go
+```
+
+```go
+package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	http.HandleFunc("/", helloHandler)
+	http.ListenAndServe(":8080", nil)
+}
+
+func helloHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello, World!")
+}
+```
+
+and our `Dockerfile`
+
+```dockerfile
+FROM golang:1.16.5
+WORKDIR /app
+COPY main.go .
+RUN go build main.go
+CMD ./main
+```
+
+```
+$ docker build -t default .
+$ docker images
+
+default     latest    afac261974d0   32 seconds ago     868MB
+```
+
+Woah, why is our hello world image over **~850mb!**
+
+![meme](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/bekeralfdlzj92k3sr80.gif)
+
+## Solutions
+
+Let's look at some possible solutions for reducing our image size
+
+### Smaller base images
+
+One simple solution is to just use a smaller base image when we are building our containers.
+
+**Example**
+
+```
+GO
+
+1.16.5              862MB
+1.16.5-alpine       302MB  <---
+
+Node
+
+16                  907MB
+16-slim             176MB
+16-alpine           112MB  <---
+```
+
+To do this we can update the `FROM` statement in our `Dockerfile`
+
+```dockerfile
+FROM golang:1.16-alpine
+```
+
+### Builder pattern with multistage builds
+
+![builder pattern](https://user-images.githubusercontent.com/29705703/126502626-fb241cd0-e5a6-4f25-ae3b-eace049d80c8.png)
+
+Builder pattern simply describes a way to build your docker containers by splitting the build process into two or multiple stages to reduce any unnecessary assets from the production image.
+
+The first image is a builder image, which basically builds our code by taking advantage of having all the necessary build utilities available.
+
+The second image is our runtime or release image in which we will just copy over the built binary and deploy it, hence the size reduction!
+
+[Multistage builds](https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds) just allow us to define all our stages in a single Dockerfile as opposed to splitting into multiple Dockerfiles like we had to do before multistage feature was available
+
+Here's how it reflects in our `Dockerfile`
+
+```dockerfile
+FROM golang:1.16.5 as builder
+WORKDIR /app
+COPY main.go .
+RUN go build main.go
+
+FROM alpine as production
+COPY --from=builder /app/main .
+EXPOSE 8080
+CMD ./main
+```
+
+```
+$ docker build -t multistage .
+$ docker images
+
+multistage     latest    iucs2934758r   18 seconds ago     12.5MB
+```
+
+_Note: we can also use `scratch` or my new favourite [`distroless`](https://github.com/GoogleContainerTools/distroless) containers from Google_
+
+**TLDR**
+
+- Derive from a base image with the whole runtime or SDK
+- Copy our source code
+- Install dependencies
+- Produce build artifact
+- Copy the built artifact to a much smaller release image
+
+## Benefits
+
+Here are the benefits we get from building small containers
+
+### Performance
+
+Some of the benefits of building and deploying small docker containers are:
+
+- Faster push and pull from the container registry
+- Small and optimized builds
+
+### Cost effective
+
+We can now push our new docker image with a fraction of the cost and space required for the original.
+
+Here's an interesting example from one from my client running around 18 microservices on Kubernetes
+
+**Default**
+
+```
+18 microservices x ~800mb x 5 deploys cycles month x 12 months
+
+~864GB/year
+```
+
+**Optimized**
+
+```
+18 microservices x ~25mb x 5 deploys cycles month x 12 months
+
+~27GB/year
+```
+
+### Security
+
+Security is an essential part of any application especially if you're working in a highly regulated industry such as healthcare, finance, etc.
+
+Smaller images reduces a lot of attack surface for vulnerabilities, here's a quick scan from AWS ECR
+
+![scan results](https://user-images.githubusercontent.com/29705703/126503208-2ded46f0-4df0-45cb-a4f3-06bb001d98a4.png)
+
+### Next steps
+
+Now we can deploy our tiny docker containers on Kubernetes/OpenShift fast and efficiently.
+
+Feel free to reach out to me on [Twitter](https://twitter.com/karan_6864) if you have any questions.

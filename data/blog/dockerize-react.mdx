@@ -1,0 +1,235 @@
+---
+title: 'Dockerize your React app'
+date: '2021-07-08'
+tags: ['react', 'javascript', 'devops']
+draft: false
+summary: 'Dockerize your React app'
+images: ['/static/blogs/dockerize-react.png']
+authors: ['default']
+---
+
+Hey, welcome back. This article is part of the Dockerize series, make sure to checkout the [Introduction](https://karanpratapsingh.com/blog/introduction-dockerize-series) where I go over some concepts we are going to use.
+
+Today we'll dockerize our React application by taking advantage of builder pattern with multi stage builds for optimization!
+
+<iframe
+  className='sm:h-96'
+  height='100%'
+  width='100%'
+  src='https://www.youtube.com/embed/1QK27MUr2Dk'
+  allowFullScreen
+  frameborder='0'
+  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+></iframe>
+
+_I've also made a video, if you'd like to follow along_
+
+### Project setup
+
+I've initialized a pretty standard react project using the default [create react app](https://github.com/facebook/create-react-app) (CRA) template.
+
+All the code from this article will be available in [this repo](https://github.com/karanpratapsingh/tutorials)
+
+```
+├── node_modules
+├── public
+│   ├── favicon.ico
+│   ├── index.html
+│   ├── manifest.json
+│   └── robots.txt
+├── src
+│   ├── App.css
+│   ├── App.js
+│   ├── index.css
+│   ├── index.js
+│   └── logo.svg
+├── package.json
+└── yarn.lock
+```
+
+### For development
+
+Let's start by adding a `Dockerfile`
+
+```dockerfile
+FROM node:14-alpine AS development
+ENV NODE_ENV development
+# Add a work directory
+WORKDIR /app
+# Cache and Install dependencies
+COPY package.json .
+COPY yarn.lock .
+RUN yarn install
+# Copy app files
+COPY . .
+# Expose port
+EXPOSE 3000
+# Start the app
+CMD [ "yarn", "start" ]
+```
+
+Add a `.dockerignore`, this will help us ignore `node_modules`, `.env` etc
+
+```
+**/node_modules
+**/npm-debug.log
+build
+```
+
+Let's create a `docker-compose.dev.yml`. Here we'll also mount our code in a [volume](https://www.cloudsavvyit.com/7500/what-are-docker-volumes-and-how-do-you-use-them/) so that we can sync our changes with the container while developing.
+
+```yml
+version: '3.8'
+
+services:
+  app:
+    container_name: app-dev
+    image: app-dev
+    build:
+      context: .
+      target: development
+    volumes:
+      - ./src:/app/src
+    ports:
+      - 3000:3000
+```
+
+Let's start our react app for development!
+
+```
+docker-compose -f docker-compose.dev.yml up
+```
+
+We can also add it to our `package.json`
+
+```json
+"dev": "docker-compose -f docker-compose.dev.yml up"
+```
+
+_we can use the `-d` flag to run in daemon mode_
+
+Let's check our container!
+
+```
+docker ps
+```
+
+```
+REPOSITORY          TAG                   IMAGE ID       CREATED              SIZE
+app-dev            latest                5064f3e40c97   About a minute ago    436MB
+```
+
+Over `400mb`!! Don't worry, this is just for development. We'll optimize our production build with builder pattern!
+
+### For production
+
+We'll use [nginx](https://www.nginx.com/) to serve our static assets and will help resolve routes when we're using [React Router](https://reactrouter.com/) or any kind of routing.
+
+_Note: Personally, I do not recommend using static server packages like [serve](https://www.npmjs.com/package/serve) in production, nginx gives us much more performance and control_
+
+Let's create a `nginx.conf`
+
+```nginx
+server {
+  listen 80;
+
+  location / {
+    root /usr/share/nginx/html/;
+    include /etc/nginx/mime.types;
+    try_files $uri $uri/ /index.html;
+  }
+}
+```
+
+Let's update our `Dockerfile` for `production`
+
+```dockerfile
+FROM node:14-alpine AS builder
+ENV NODE_ENV production
+# Add a work directory
+WORKDIR /app
+# Cache and Install dependencies
+COPY package.json .
+COPY yarn.lock .
+RUN yarn install --production
+# Copy app files
+COPY . .
+# Build the app
+RUN yarn build
+
+# Bundle static assets with nginx
+FROM nginx:1.21.0-alpine as production
+ENV NODE_ENV production
+# Copy built assets from builder
+COPY --from=builder /app/build /usr/share/nginx/html
+# Add your nginx.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Expose port
+EXPOSE 80
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+Let's add a `docker-compose.prod.yml` file
+
+```yml
+version: '3.8'
+
+services:
+  app:
+    container_name: app-prod
+    image: app-prod
+    build:
+      context: .
+      target: production
+```
+
+Build production image
+
+```
+docker-compose -f docker-compose.prod.yml build
+```
+
+Let's check out our built production image
+
+```
+docker images
+```
+
+Using builder pattern we reduced out image size to just `~23mb`!!
+
+```
+REPOSITORY          TAG                   IMAGE ID       CREATED              SIZE
+app-prod           latest                c5db8d308bb9   About a minute ago   23.1MB
+```
+
+let's start our production container on port `80` with the name `react-app`
+
+```
+docker run -p 80:80 --name react-app app-prod
+```
+
+## Optimizing static assets (Bonus)
+
+You can also add the following inside the `location` block to introduce caching for our static assets and javascript bundle.
+
+You can refer this [guide](https://gist.github.com/philipstanislaus/654adafad91efb6de230845b5bdeae61) to dive deep into optimizing
+
+```nginx
+# Cache static assets
+location ~* \.(?:jpg|jpeg|gif|png|ico|svg)$ {
+  expires 7d;
+  add_header Cache-Control "public";
+}
+
+# Cache css and js bundle
+location ~* \.(?:css|js)$ {
+  add_header Cache-Control "no-cache, public, must-revalidate, proxy-revalidate";
+}
+```
+
+## Next steps
+
+With that, we should be able to take advantage of docker in our workflow and deploy our production images faster to any platform of our choice.
+
+Feel free to reach out to me on [Twitter](https://twitter.com/karan_6864) if you face any issues.

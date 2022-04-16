@@ -1,0 +1,90 @@
+---
+title: 'Unit testing in Go'
+date: '2021-07-03'
+tags: ['go']
+draft: false
+summary: "In this article let's discuss how we can write simple unit tests in go."
+images: ['/static/blogs/unit-testing-go.png']
+authors: ['default']
+---
+
+In this article let's discuss how we can write simple unit tests in go.
+
+All the code from this article is available on [github](https://github.com/karanpratapsingh/tutorials)
+
+<iframe
+  className='sm:h-96'
+  height='100%'
+  width='100%'
+  src='https://www.youtube.com/embed/IorsKSduDaM'
+  allowFullScreen
+  frameborder='0'
+  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+></iframe>
+
+_I've also made a video, if you like to follow along!_
+
+## Writing our first unit test
+
+Initialize a `sample` module
+
+```
+go mod init sample
+```
+
+Let's start with adding a `length.go` file with a `Length` function. This function simply returns the length of the input string.
+
+![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/wc882y57vevz839yn3hn.png)
+
+In go, tests file are usually named with `_test` (just like we do `.test.js` for jest). Let's create `length_test.go`.
+
+This is a very basic test function in which we'll be testing out our `Length` function
+
+![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/oalj3v2ep0jyi0xq9weu.png)
+
+Let's add some test logic
+
+![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ozhjspdwvfxa52md14cg.png)
+
+Let's run it!
+
+```
+go test
+```
+
+Yay! our test passed!
+
+```go
+PASS
+ok      sample  0.429s
+```
+
+Now let's change our `expected` variable to `5`, and re-run our test and we should see the test fail
+
+```go
+--- FAIL: Test (0.00s)
+    length_test.go:10: Expected 5 Got 4
+FAIL
+exit status 1
+FAIL    sample  0.334s
+```
+
+### Multiple test cases
+
+Let's add out test cases with `input` and `expected` outputs
+
+_This approach is similar to [`test.each`](https://jestjs.io/docs/api#testeachtablename-fn-timeout) from jest_
+
+![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3hff11zpld0ks3xp4nvd.png)
+
+Update `Test_Length` function to use `testCases`
+![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ufo80bjc03toc3cpzefd.png)
+
+Run the test cases!
+
+```go
+PASS
+ok      sample  0.347s
+```
+
+Great! Thank you all for reading this article, if you have any questions don't hesitate to reach to me on [twitter](https://twitter.com/karan_6864)

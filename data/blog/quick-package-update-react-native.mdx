@@ -1,0 +1,237 @@
+---
+title: 'Quick guide for updating package name in React Native'
+date: '2020-04-11'
+tags: ['javascript', 'reactnative']
+draft: false
+summary: 'Guide to update package name in React Native'
+authors: ['default']
+---
+
+Hey, React Native community, in this short article let's see how to change the package name and bundle Ids in our React Native application.
+
+List of files to edit to change/rename your react-native android project.
+The following constants are used in the files to denote what kind of value should be placed.
+
+- `APPLICATION_NAME` - this will be used by react-native to identify your application.
+- `APPLICATION_DISPLAY_NAME` - Display name on the Home Screen.
+- `ANDROID_PACKAGE_NAME` - A valid android package name.
+- `IOS_BUNDLE_ID` - A valid iOS bundle identifier.
+
+<i>
+  Please note that this is only to show what files to modify, the contents of
+  the files are omitted in order to emphasize the parts to change.
+</i>
+
+### Android
+
+### Files to modify
+
+```
+---------------------------------------------------
+FILE                  |  PATH
+---------------------------------------------------
+app.json              |  ./
+index.js              |  ./
+package.json          |  ./
+settings.gradle       |  ./android/
+BUCK                  |  ./android/app/
+build.gradle          |  ./android/app/
+AndroidManifest.xml   |  ./android/app/src/main/
+MainActivity.java     |  ./android/app/src/main/java/**
+MainApplication.java  |  ./android/app/src/main/java/**
+strings.xml           |  ./android/app/src/main/res/values
+```
+
+#### AndroidManifest.xml
+
+```xml
+<!-- ./android/app/src/main/AndroidManifest.xml -->
+<!-- change the value of 'package' -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ANDROID_PACKAGE_NAME">
+</manifest>
+```
+
+#### BUCK
+
+```
+# ./android/app/BUCK
+
+# find 'android_build_config' and 'android_resource'
+# ANDROID_PACKAGE_NAME = com.mycompany.whaterver.app
+
+android_build_config(
+    name = "build_config",
+    package = "ANDROID_PACKAGE_NAME",
+)
+
+android_resource(
+    name = "res",
+    package = "ANDROID_PACKAGE_NAME",
+    res = "src/main/res",
+)
+```
+
+#### MainActivity.java
+
+```java
+// ./android/app/src/main/java/
+
+/* NOTE: create a directory according to your package name
+ * example: An android package name like, 'com.mycompany.sub.app'
+ * will turn into 'com/mycompany/sub/app'
+ * Now, manually create/put MainActivity.java under './android/app/src/main/java/com/mycompany/sub/app/'
+*/
+
+package ANDROID_PACKAGE_NAME;
+
+import com.facebook.react.ReactActivity;
+
+public class MainActivity extends ReactActivity {
+
+    /**
+     * Returns the name of the main component registered from JavaScript.
+     * This is used to schedule rendering of the component.
+     */
+    @Override
+    protected String getMainComponentName() {
+        return "APPLICATION_NAME";
+    }
+}
+```
+
+#### MainApplication.java
+
+```java
+// ./android/app/src/main/java/
+
+// Similar to MainActivity.java
+/* NOTE: create a directory according to your package name
+ * example: An android package name like, 'com.mycompany.sub.app'
+ * will turn into 'com/mycompany/sub/app'
+ * Now, manually create/put MainActivity.java under './android/app/src/main/java/com/mycompany/sub/app/'
+*/
+
+package ANDROID_PACKAGE_NAME;
+
+import android.app.Application;
+
+import com.facebook.react.ReactApplication;
+```
+
+#### app.json
+
+```json
+{
+  "name": "APPLICATION_NAME",
+  "displayName": "APPLICATION_DISPLAY_NAME"
+}
+```
+
+#### build.gradle
+
+```groovy
+# ./android/app/build.gradle
+
+# find 'applicationId' under 'android.defaultConfig'
+# android.defaultConfig.applicationId
+
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "ANDROID_PACKAGE_NAME"
+        minSdkVersion 16
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+    }
+```
+
+#### index.js
+
+```js
+import { AppRegistry } from 'react-native';
+import App from './App';
+
+AppRegistry.registerComponent('APPLICATION_NAME', () => App);
+```
+
+#### package.json
+
+```json
+{
+  "name": "APPLICATION_NAME",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "react": "16.3.1",
+    "react-native": "0.55.3"
+  }
+}
+```
+
+#### settings.gradle
+
+```groovy
+// ./android/settings.gradle
+
+rootProject.name = 'APPLICATION_NAME'
+include ':app'
+```
+
+#### strings.xml
+
+```xml
+<!-- ./android/app/src/main/res/values/strings.xml -->
+<resources>
+    <!-- NOTE:
+      This will be the name visible in the Android Home screen
+    -->
+    <string name="app_name">APPLICATION_NAME/APPLICATION_DISPLAY_NAME</string>
+</resources>
+```
+
+### iOS
+
+#### Files to modify
+
+```
+---------------------------------------------------
+FILE                  |  PATH
+---------------------------------------------------
+info.plist            |  ./ios/APPLICATION_NAME/**
+```
+
+##### info.plist
+
+```xml
+<dict>
+  ...
+  <key>CFBundleDisplayName</key>
+  <string>APPLICATION_NAME</string>
+  <key>CFBundleIdentifier</key>
+  <string>IOS_BUNDLE_ID</string>
+  ...
+</dict>
+```
+
+I hope you were able to update the package name of your app, as always don't forget to run a clean build after these changes.
+
+<i>
+  If you liked this article, or faced any issues, feel free to reach out via
+  [Twitter](https://twitter.com/karan_6864) or
+  [Email](mailto:karan.pratapsingh686@gmail.com) 🚀
+</i>
+
+Happy Coding :tada:

@@ -1,0 +1,105 @@
+---
+title: 'Pull Request automation with Mergify'
+date: '2022-03-08'
+tags: ['git', 'productivity']
+draft: false
+summary: 'Pull Request automation with Mergify'
+images: ['/static/blogs/pull-request-automation-with-mergify.jpeg']
+authors: ['default']
+---
+
+In this article, we'll be taking a look at [Mergify](https://mergify.com/?utm_source=article&utm_medium=dev.to&utm_campaign=Karan) which is a pull request automation service, triggering actions when a pull request matches defined criteria.
+
+![banner](https://raw.githubusercontent.com/Mergifyio/.github/main/profile/banner.png)
+
+### Why do we need it?
+
+As we all know, a developer's job doesn't end at opening a pull request. There so many variables such as:
+
+- **CI Tests:** Please don't fail
+- **Reviewers:** Who do I ask to review my PR?
+- **Rebasing:** Conflicts!!!
+- **Merging:** I hope it deploys successfully
+
+And whether you're working at a startup or an enterprise, this becomes really tedious as we scale our teams. So why not just automate the entire thing? This is exactly what Mergify does.
+
+### Features
+
+Mergify was able to handle all my use cases and has great features such as:
+
+- **Automatic Merges**
+
+We can customise automatic merge behaviour and once that criteria such as CI tests passes, our PR will be merged automatically! This brings a lot of consistency to our PR workflow.
+
+- **Reviewers Assignment**
+
+Github supports [CODEOWNERS](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners) but sometimes we need additional functionality which might not just be code dependent such as validating branches, documentation, updates and much more.
+
+- **Merge Queue**
+
+This has to be my favourite feature, I can't remember how many times I went _"Okay, I need to merge this after that and this after that...wait what was it again?"_.
+
+But as the new merge happens, it is possible that the pull request that was once working breaks the main branch. The stalled pull request might introduce regression or breakages into the production system.
+
+Using a merge queue solves that problem by updating any pull request that is not up-to-date with its base branch before it is merged. The update forces the continuous integration system to retest the pull request with the new code from its base branch, catching any potential regression.
+
+This basically eliminates manual merges and help us plan our release better by prioritising important pull requests.
+
+_Learn more about merge queues in detail [here](https://blog.mergify.com/what-is-a-merge-queue/?utm_source=article&utm_medium=dev.to&utm_campaign=Karan)_
+
+- **Automatic Updates and Backports**
+
+This feature helps us keep our pull request up to date with their base branch. An example would be when we ship bug fixes to our release branches, this is quite common if you follow the [gitflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) pattern but it comes back in form of conflicts when it's time to rebase your branch with the main branch. So, backports and automatic updates are quite effective and helps us to push bug fixes in all our maintained branches.
+
+### Hands on!
+
+Let's try do integrate a simple use case into our demo repository. We will create a pull request assignment automation.
+
+**Installation**
+
+First, we need to login into Mergify and allow access to our Github repository. This should install Mergify in our Github account.
+
+![installation](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/mj8b8r60vteo2mtvhrwi.png)
+
+We're in! So this is the dashboard, and here we will be able to create configurations, merge queues, check usage, billing and much more.
+
+![dashboard](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/w4urv6jikp4b7l0r07lp.png)
+
+**Config**
+
+Now, let's create our configuration file `.mergify.yml`.
+
+_Note: Make sure to checkout full reference [here](https://docs.mergify.com/configuration/?utm_source=article&utm_medium=dev.to&utm_campaign=Karan)._
+
+```yaml
+pull_request_rules:
+  - name: assign PRs with Txt files modified to karan
+    conditions:
+      - files~=\.txt$
+    actions:
+      assign:
+        add_users:
+          - karanpratapsingh
+```
+
+If you're not sure if your config is correct, you can always validate it on the dashboard!
+
+![editor](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/lh9cljdsb1vha6s4j8ky.png)
+
+**Action!**
+
+Let's see it in action. I'm going to add a `*.txt` file such as `work.txt` and then create a pull request. Shortly we'll see Mergify do it's thing!
+
+![result](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/fkkcfm8tz4zf4np2grt9.png)
+
+As you can see our pull request has been assigned a user by the Mergify bot!
+
+### But wait, There's more!
+
+This doesn't even scratch the surface, there is so much more you can do with Mergify!
+
+![actions](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/jiux4arvq4xvmqqy8gsl.png)
+
+### Conclusion
+
+I hope this was helpful! I think Mergify is a great tool that can help you simplify your workflow and improve your SDLC. Feel free to reach out if you face any issues!

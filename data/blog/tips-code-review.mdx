@@ -1,0 +1,64 @@
+---
+title: 'Tips for Better Code Review'
+date: '2021-10-19'
+tags: ['git', 'productivity']
+draft: false
+summary: 'Tips for Better Code Review'
+images: ['/static/blogs/tips-code-review.png']
+authors: ['default']
+---
+
+Code reviews can be really helpful to find issues before they head out to QA and also keep our code clean and efficient but sometimes they can be frustrating for the reviewer and the reviewee.
+
+So, here are some tips for better code reviews!
+
+### Keeping PR's small
+
+PR should be small and easily reviewable, this decreases barrier for reviews and improves quality of review
+
+This should help show direction and minimizes re-work. If you're looking to gather early feedback, github has [Draft PR](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests#draft-pull-requests) feature
+
+### Focus on code not styling
+
+This point may seem silly but it's quite true where styling isn't enforced by the language itself (for instance Go).
+
+If this is a frequent issue in the code reviews. Try to settle styling guidelines eon either by building your own or using an existing one and automating it with CI.
+
+### How can _we_ improve _our_ code
+
+It's not about you, it's about the code. So don't take the reviews personally. Both sides i.e reviewee and the reviewer should assume best intentions.
+
+Remember to use _we_ and not _you_
+
+### Actionable feedback
+
+As a reviewer your comment should offer actionable feedback.
+We've all had that one comment on our PR at some point in our life that made us think _"Okay, what the hell do I do with this?"_
+
+Hence, the feedback should be actionable and a request not command.
+
+**Don't**
+
+_"This doesn't seem right_
+
+**Do**
+
+_"We're not sure about this approach, can you try XYZ? Here's an example or docs ..."_
+
+### Who do I pick?
+
+Picking right person for a review can be helpful. So before picking the reviewer be sure to ask your self _Who has the most context about this?_.
+
+Assigning code owners can also be really helpful [(more on code owners)](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners)
+
+### Positive feedback
+
+Code reviews don't have to be only about mistakes. They can also be about positive feedback.
+
+For example:
+
+_"This looks useful! I didn't know we can do that"_
+
+_"Refactoring this was a great idea, thank you!"_
+
+Lastly, remember to always be humble. Every code review can be a chance to learn something new. Have Fun!

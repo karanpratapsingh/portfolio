@@ -1,0 +1,145 @@
+---
+title: 'Advanced Monitoring with NATS surveyor'
+date: '2022-04-15'
+tags: ['nats', 'distributedsystems', 'monitoring']
+draft: false
+summary: 'Advanced Monitoring with NATS surveyor'
+images: ['/static/blogs/advanced-monitoring-with-nats-surveyor.png']
+authors: ['default']
+---
+
+In this article, we’ll set up [nats-surveyor](https://github.com/nats-io/nats-surveyor) for advanced monitoring of our [NATS servers](https://github.com/nats-io/nats-server) through [Prometheus](https://prometheus.io/) and [Grafana](https://grafana.com/).
+
+### What is NATS Surveyor?
+
+![setup](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/zd2x79at8dmnnjkcox4g.png)
+
+NATS surveyor polls the NATS server for [Statz](https://docs.nats.io/running-a-nats-service/nats_admin/monitoring#monitoring-endpoints) messages to generate data for Prometheus. This allows a single exporter to connect to any NATS server and get an entire picture of a NATS deployment without requiring extra monitoring components or sidecars.
+
+It’s really powerful as we can now just connect the data generated for [Prometheus](https://prometheus.io/) and setup dashboards on observability platforms like [Grafana](https://grafana.com/).
+
+### Setup
+
+Let’s setup our local super cluster and start our surveyor service.
+
+**Local cluster**
+
+To setup our local super cluster, we can use [this repo](https://github.com/ColinSullivan1/nats-local-supercluster.git). Here’s the topology.
+
+```bash
+$ git clone https://github.com/ColinSullivan1/nats-local-supercluster.git
+$ cd nats-local-supercluster
+$ ./start_supercluster.sh
+```
+
+![supercluster](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/jcp2i9gw3osfglyn7at3.png)
+
+**Surveyor**
+
+Now that our local super cluster is up and running, we can setup [nats-surveyor](https://github.com/nats-io/nats-surveyor).
+
+For now, we’ll do it with [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/).
+
+_Note: We can also install `nats-surveyor` directly from the [Github releases](https://github.com/nats-io/nats-surveyor/releases) as well_
+
+```bash
+$ git clone https://github.com/nats-io/nats-surveyor.git
+$ cd nats-surveyor/docker-compose
+$ ./survey.sh "nats://$(ipconfig getifaddr en0):4000" 9 ../../nats-local-supercluster/auth/nkeys/creds/myoperator/SYS/SYS.creds
+[+] Running 3/0
+ ⠿ Container nats-surveyor  Created                                                      0.0s
+ ⠿ Container prometheus     Created                                                      0.0s
+ ⠿ Container grafana        Created                                                      0.0s
+Attaching to grafana, nats-surveyor, prometheus
+...
+```
+
+_Notice how we use_ `ipconfig getifaddr en0` to get the current IP of the system and _`SYS.creds` with NATS surveyor._
+
+**Generating demo data**
+
+For generating traffic we can use the `nats bench` command
+
+_Note: Learn more about NATS CLI in the previous [article](https://karanpratapsingh.com/blog/introduction-nats-cli)._
+
+```bash
+$ nats bench -s 127.0.0.1:4000 --msgs 100000000 --pub 1 --sub 1 --creds ../../nats-local-supercluster/auth/nkeys/creds/myoperator/myaccount/myuser.creds subject
+16:38:53 Starting pub/sub benchmark [subject=subject, msgs=100,000,000, msgsize=128 B, pubs=1, subs=1]
+16:38:53 Starting subscriber, expecting 100,000,000 messages
+16:38:53 Starting publisher, publishing 100,000,000 messages
+Finished     40s [==========================================] 100%
+Finished     40s [==========================================] 100%
+
+NATS Pub/Sub stats: 4,924,665 msgs/sec ~ 601.16 MB/sec
+ Pub stats: 2,462,354 msgs/sec ~ 300.58 MB/sec
+ Sub stats: 2,462,346 msgs/sec ~ 300.58 MB/sec
+```
+
+_Yes, we just transferred 100 Million messages in just 40s alongside running a super cluster on the same machine! NATS has amazing performance._
+
+We can also use `nats bench` with `--pubsleep` flag to simulate real-time traffic in the background while we look at the dashboards.
+
+```bash
+$ nats bench -s 127.0.0.1:4000 --msgs 100000000 --pubsleep 1ms --pub 1 --sub 1 --creds ../../nats-local-supercluster/auth/nkeys/creds/myoperator/myaccount/myuser.creds subject
+14:24:20 Starting pub/sub benchmark [subject=subject, msgs=100,000,000, msgsize=128 B, pubs=1, subs=1, js=false, pubsleep=1ms, subsleep=0s]
+14:24:20 Starting subscriber, expecting 100,000,000 messages
+14:24:20 Starting publisher, publishing 100,000,000 messages
+Receiving    18s [--------------------------------------------------------------]   0%
+Publishing   18s [--------------------------------------------------------------]   0%
+```
+
+### Monitoring
+
+Now we should be able to go to [Grafana](https://grafana.com/) running on `[localhost:3000/dashboards](http://localhost:3000/dashboards)` and see all the available monitoring dashboards.
+
+_Note: You might be presented with a login screen, the default user is `admin` and the password is `admin`_
+
+Here we can see we have different dashboards such as Clients, Clusters, NATS Overview, Network Usage, Super Cluster, etc. So let’s explore these dashboards one by one!
+
+![dashboard](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/i2w6b06py84498apzkdj.png)
+
+**Clients**
+
+In the client dashboard, we can monitor things like slow consumers, subscriptions, connections per second, and much more.
+
+![clients](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/kg9txknr6z9xx54ai9gc.png)
+
+**Clusters**
+
+In the cluster dashboard, we can see how many clusters we are running with bandwidth and messages per second.
+
+![clusters](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/kibtmsthb54qofkn14h8.png)
+
+**Overview**
+
+The overview dashboard provides basic information about how many servers and clusters we are running with route or gateway connections.
+
+_Check out that insane 300k messages/sec, and that’s on a development machine!_
+
+![overview](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/efpln8xw2i1r8uh7vqdn.png)
+
+**Network Usage**
+
+The network dashboard is all about how much data is being sent or received in our clusters.
+
+![network usage](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/f2z6r4cnhmqec3v7hkyd.png)
+
+**Node Resource Usage**
+
+This dashboard provides information about individual nodes and provides metrics like CPU and memory usage of our nodes.
+
+![node resource usage](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ei4kh7ud3lk8g6one3kp.png)
+
+**Super Cluster**
+
+This dashboard works at the super cluster level and provides metrics like super cluster bandwidth, connections, message rate, and much more.
+
+This makes it really easy to monitor multiple super clusters.
+
+![superclusters](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/i3gy392beuczimtwlw2d.png)
+
+### Conclusion
+
+In this article, we set up NATS Surveyor, which is an incredible tool that makes it easy to setup monitoring for our NATS services as easily as a single command. It’s a must have if you’re running distributed systems with NATS at scale. Make sure to checkout the [docs](https://docs.nats.io/) for more info.
+
+I hope this article was helpful, feel free to [reachout](https://karanpratapsingh.com?action=contact) to me if you face any issues. Have a great day!

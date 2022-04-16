@@ -1,0 +1,220 @@
+---
+title: 'GraphQL subscriptions at scale with NATS'
+date: '2022-03-09'
+tags: ['nats', 'go', 'graphql', 'microservices']
+draft: false
+summary: 'GraphQL subscriptions at scale with NATS'
+images: ['/static/blogs/graphql-subscription-at-scale-with-nats.png']
+authors: ['default']
+---
+
+In this article, we'll look at how to setup [GraphQL](https://graphql.org/) subscriptions at scale with [NATS](https://nats.io/).
+
+_Note: If you're not familiar with NATS, please checkout my [earlier article](https://karanpratapsingh.com/blog/distributed-messaging-nats)._
+
+### Why GraphQL subscriptions?
+
+In my opinion, subscriptions are quite underrated and often overlooked. They provide just the right amount of abscraction over websockets, which is both developer friendly and powerful. Plus all the tooling around GraphQL is simply fantastic, from ease of integration to code generators, it's the perfect choice to reduce complexity on the frontend.
+
+### What and How?
+
+Here, we'll create a simple GraphQL server and subscribe to a subject from our resolver. We'll use [GraphQL playground](https://github.com/graphql/graphql-playground) to mock client side behavior. Once we're connected we'll use NATS CLI to send a payload to our subject and see the changes on the client.
+
+_Note: NATS client is available in over 40 different [languages](https://nats.io/download/#clients)._
+
+![architecture](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/u005osvssv3g4vda3a4p.png)
+
+### Pre-requisites
+
+We will require following tools to run our example, so make sure you have these installed first.
+
+- [NATS Server](https://nats.io/download/)
+- [NATS CLI](https://github.com/nats-io/natscli)
+
+### Setup
+
+Let's start by setting up a basic GraphQL project using [gqlgen](https://github.com/99designs/gqlgen) which lets us autogenerate our schema, resolvers and much more.
+
+_Note: All the code from this article will be available in this [repo](https://github.com/karanpratapsingh/tutorials/tree/master/go/nats-gql)_
+
+Init a new go module.
+
+```
+$ mkdir example
+$ cd example
+$ go mod init example
+```
+
+Create a new gqlgen project.
+
+```
+$ printf '// +build tools\npackage tools\nimport _ "github.com/99designs/gqlgen"' | gofmt > tools.go
+$ go mod tidy
+$ go run github.com/99designs/gqlgen init
+$ printf 'package model' | gofmt > graph/model/doc.go
+```
+
+This should create the following directory structure
+
+```
+├── go.mod
+├── go.sum
+├── gqlgen.yml
+├── graph
+│   ├── generated
+│   │   └── generated.go
+│   ├── model
+│   │   ├── doc.go
+│   │   └── models_gen.go
+│   ├── resolver.go
+│   ├── schema.graphqls
+│   └── schema.resolvers.go
+├── server.go
+└── tools.go
+```
+
+Before we run this, let's simplify the `graph/schema.graphqls` as below to keep things as minimal as possible so we can focus on NATS integration more clearly.
+
+```graphql
+type Subscription {
+  payload: String
+}
+
+type Query {
+  payload: String
+}
+```
+
+Let's re-generate our resolvers
+
+```
+$ go run github.com/99designs/gqlgen generate
+validation failed: packages.Load: nats-gql/graph/schema.resolvers.go:36:72: NewTodo not declared by package model
+nats-gql/graph/schema.resolvers.go:36:89: Todo not declared by package model
+nats-gql/graph/schema.resolvers.go:39:62: Todo not declared by package model
+nats-gql/graph/schema.resolvers.go:42:41: MutationResolver not declared by package generated
+
+exit status 1
+```
+
+This should give an error, which tells us to remove unused code from our resolvers. To fix this simply open `graph/schema.resolvers.go` and remove anything below the `// !!! WARNING !!!` sign.
+
+Now, let's also change the query resolver `Payload`.
+
+```go
+func (r *queryResolver) Payload(ctx context.Context) (*string, error) {
+	value := "hello world"
+	return &value, nil
+}
+```
+
+And finally let's run the server!
+
+```
+$ go run server.go
+2022/02/15 18:20:56 connect to http://localhost:8080/ for GraphQL playground
+```
+
+Wohoo! Now we can go to `localhost:8080` and run our sample query in GraphQL playground and it should give us a result.
+![query](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/py10so016qcb4tbks16a.png)
+
+Now that we have our basic GraphQL server working, let's look into our subscription resolver defined in `schema.resolvers.go`.
+
+But first, let's understand the `Payload` resolver function. As we know, Go has this amazing concept of channels and if we look at the return signature this function requires us to return a [_receive only channel_](https://www.sohamkamani.com/golang/channels/) of type `*string` along with `error` in case something goes wrong. This seems quite idiomatic Go to me!
+
+_Note: gqlgen will forward any data sent to this channel to the subcription._
+
+```go
+func (r *subscriptionResolver) Payload(ctx context.Context) (<-chan *string, error)
+```
+
+_Note: Notice that `*string` will be changed if we update our schema and regenerate our resolvers_
+
+This is perfect! Let's install [`nats.go`](github.com/nats-io/nats.go).
+
+```
+$ go get github.com/nats-io/nats.go
+```
+
+gqlgen is setup in such a way that it makes it very easy to do dependency injection. So, let's init our NATS client. But first let's update some types.
+
+In `graph/resolver.go` update the `Resolver` type as below.
+
+```go
+type Resolver struct{
+	Nats *nats.Conn
+}
+```
+
+Nice! now we'll be able to init and pass our client to `graph.Resolver` struct in `server.go`.
+
+```go
+nc, err := nats.Connect(nats.DefaultURL)
+
+if err != nil {
+	panic(err)
+}
+
+defer nc.Close()
+
+srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{nc}}))
+```
+
+Great! moving back to `graph/schema_resolvers.go` let's define a channel and subscribe to a subject like `payload-subject`. In the callback function, we'll simply convert our message data which is a byte array to string and send it to our channel.
+
+```go
+func (r *subscriptionResolver) Payload(ctx context.Context) (<-chan *string, error) {
+	ch := make(chan *string)
+
+	r.Nats.Subscribe("payload-subject", func(msg *nats.Msg) {
+		payload := string(msg.Data)
+		ch <- &payload
+	})
+
+	return ch, nil
+}
+```
+
+_Note: You can easily setup an [encoded connection](https://docs.nats.io/using-nats/developer/sending/structure) to auto-parse any json data. NATS makes it super convenient!_
+
+Before we run our app, let's open a new terminal window and start our NATS server.
+
+```
+$ nats-server
+[17275] 2022/02/15 18:57:30.517959 [INF] Starting nats-server
+[17275] 2022/02/15 18:57:30.518427 [INF]   Version:  2.7.0
+[17275] 2022/02/15 18:57:30.518431 [INF]   Git:      [not set]
+[17275] 2022/02/15 18:57:30.518439 [INF]   Name:     NDR3HVHJHVJKXIAIXYZWLUEYTEG6MRSOSCHLW2QXEKA2GSZ2JKBTI3DA
+[17275] 2022/02/15 18:57:30.518442 [INF]   ID:       NDR3HVHJHVJKXIAIXYZWLUEYTEG6MRSOSCHLW2QXEKA2GSZ2JKBTI3DA
+[17275] 2022/02/15 18:57:30.521185 [INF] Listening for client connections on 0.0.0.0:4222
+[17275] 2022/02/15 18:57:30.521621 [INF] Server is read
+```
+
+_Note: Want to run NATS in production? Checkout my ealier article where we look at different ways of running a [NATS server on Kubernetes](https://karanpratapsingh.com/blog/nats-with-kubernetes-3bmc)._
+
+Finally! Let's start our app and navigate to `localhost:8080`
+
+```
+$ go run server.go
+2022/02/15 19:03:22 connect to http://localhost:8080/ for GraphQL playground
+```
+
+Let's start a subscription for a query.
+
+```graphql
+subscription {
+  payload
+}
+```
+
+Now it should be actively listening for changes. Lastly, let's publish a message, usually this will be performed by a another service or client but right now we can just use the nats cli. i.e `nats pub <subject> <payload>`
+
+```
+$ nats pub payload-subject "hello world"
+```
+
+![nats-subscription](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3g001txcm9elgr7pomhu.gif)
+
+### Conclusion
+
+Perfect! Now we can run our real time GraphQL subscriptions at scale, all thanks to NATS which is capable of serving upto 18 million messages per second (yes, you read that right!). I hope this article was helpful, as always if you have any questions feel free to reachout to me on [LinkedIn](https://www.linkedin.com/in/karan99/) or [Twitter](https://twitter.com/karan_6864).

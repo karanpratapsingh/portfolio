@@ -1,0 +1,22 @@
+.fade-in {
+  animation: fade-in ease 500ms;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.banner {
+  min-height: 70vh;
+
+  @screen lg {
+    min-height: 95vh;
+  }
+}

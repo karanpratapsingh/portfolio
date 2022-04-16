@@ -1,0 +1,203 @@
+---
+title: 'Dockerize your Go app'
+date: '2021-07-24'
+tags: ['go', 'docker', 'devops']
+draft: false
+summary: 'Dockerize your Go app'
+images: ['/static/blogs/dockerize-go.png']
+authors: ['default']
+---
+
+Go is quickly becoming one of my favorite languages to work with. So, today we'll dockerize our Go app by taking advantage of builder pattern and multistage builds to reduce our docker image from `850mb` to just `15mb`!
+
+_This article is part of the Dockerize series, make sure to checkout the [Introduction](https://karanpratapsingh.com/blog/introduction-dockerize-series) where I go over some concepts which we are going to use. Code from this article is available [here](https://github.com/karanpratapsingh/tutorials/tree/master/go)_
+
+<iframe
+  className='sm:h-96'
+  height='100%'
+  width='100%'
+  src='https://www.youtube.com/embed/zUc2LihXjlw'
+  allowFullScreen
+  frameborder='0'
+  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+></iframe>
+
+_I've also made a video, if you'd like to follow along_
+
+### Project setup
+
+I've initialized a simple api using [Mux](https://github.com/gorilla/mux)
+
+```
+├── main.go
+├── go.mod
+└── go.sum
+```
+
+Here's our `main.go`
+
+```js
+package main
+
+import (
+	"encoding/json"
+	"log"
+	"net/http"
+
+	"github.com/gorilla/mux"
+)
+
+func main() {
+	router := mux.NewRouter()
+	router.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
+		response := map[string]string{
+			"message": "Hello Docker!",
+		}
+		json.NewEncoder(rw).Encode(response)
+	})
+
+	log.Println("Server is running!")
+	http.ListenAndServe(":4000", router)
+}
+```
+
+### For development
+
+We'll be using [Reflex](https://github.com/cespare/reflex) as part of our development workflow. If you're not familiar, Refelx provides live reload when developing.
+
+Let's continue our docker setup by adding a `Dockerfile`
+
+```dockerfile
+FROM golang:1.16.5 as development
+# Add a work directory
+WORKDIR /app
+# Cache and install dependencies
+COPY go.mod go.sum ./
+RUN go mod download
+# Copy app files
+COPY . .
+# Install Reflex for development
+RUN go install github.com/cespare/reflex@latest
+# Expose port
+EXPOSE 4000
+# Start app
+CMD reflex -g '*.go' go run api.go --start-service
+```
+
+Let's create a `docker-compose.yml`. Here we'll also mount our code in a [volume](https://www.cloudsavvyit.com/7500/what-are-docker-volumes-and-how-do-you-use-them/) so that we can sync our changes with the container while developing.
+
+```yml
+version: '3.8'
+
+services:
+  app:
+    container_name: app-dev
+    image: app-dev
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/app
+    ports:
+      - 4000:4000
+```
+
+Start! Start! Start!
+
+```
+docker-compose up
+```
+
+_we can also use the `-d` flag to run in daemon mode_
+
+Great, our dev server is up!
+
+```
+app-dev  | Starting service...
+app-dev  | 2021/07/04 12:50:06 Server is running!
+```
+
+Let's checkout our image using `docker images` command
+
+```
+REPOSITORY          TAG                   IMAGE ID       CREATED         SIZE
+app-dev             latest                3063740d56d8   7 minutes ago   872MB
+```
+
+Over `850mb` for a hello world! While this might be okay for development, but for production let's see how we can reduce our image size
+
+### For production
+
+Let's update our `Dockerfile` by adding a `builder` and `production` stage
+
+_Update: Notice how we define `CGO_ENABLED 0` with `ENV` in `Dockerfile` rather than doing directly before `go build` command. Also, we will be using `alpine` instead of `scratch` as it's really hard to debug containers in production with `scratch`_
+
+```dockerfile
+FROM golang:1.16.5 as builder
+# Define build env
+ENV GOOS linux
+ENV CGO_ENABLED 0
+# Add a work directory
+WORKDIR /app
+# Cache and install dependencies
+COPY go.mod go.sum ./
+RUN go mod download
+# Copy app files
+COPY . .
+# Build app
+RUN go build -o app
+
+FROM alpine:3.14 as production
+# Add certificates
+RUN apk add --no-cache ca-certificates
+# Copy built binary from builder
+COPY --from=builder app .
+# Expose port
+EXPOSE 4000
+# Exec built binary
+CMD ./app
+```
+
+Let's add a build our production image
+
+```
+docker build -t app-prod . --target production
+```
+
+Let's check out our built production image
+
+```
+docker images
+```
+
+Using builder pattern we reduced out image size to just `~15mb`!!
+
+```
+REPOSITORY                    TAG                   IMAGE ID       CREATED          SIZE
+app-prod                      latest                ed84a3896251   50 seconds ago   14.7MB
+```
+
+let's start our production container on port `80`
+
+```
+docker run -p 80:4000 --name app-prod app-prod
+```
+
+We can also add a [`Makefile`](https://opensource.com/article/18/8/what-how-makefile) to make our workflow easier
+
+```make
+dev:
+  docker-compose up
+
+build:
+  docker build -t app-prod . --target production
+
+start:
+  docker run -p 80:4000 --name app-prod app-prod
+```
+
+## Next steps
+
+With that, we should be able to take advantage of docker in our workflow and deploy our production images faster to any platform of our choice.
+
+Feel free to reach out to me on [Twitter](https://twitter.com/karan_6864) if you face any issues.

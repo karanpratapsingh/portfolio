@@ -1,0 +1,187 @@
+---
+title: 'Cleaning up imports using module resolver in React Native'
+date: '2020-03-21'
+tags: ['javascript', 'reactnative']
+draft: false
+summary: 'Guide for integrating module resolver for React Native projects'
+images: ['/static/blogs/imports-module-resolver-react-native.jpeg']
+authors: ['default']
+---
+
+Hello, React Native Community!
+
+During a recent interview, my interviewer said "I went through some of your code on Github, seems good and all but why aren't you using a module resolver? Do imports not get messy?"
+
+I remember thinking "Oh this makes sense, why am I not doing this?", because coincidentally enough recently I started using Babel module resolver in a project I was doing for a client but not my own portfolio projects.
+
+### Why do I need another babel plugin?
+
+So, the idea of a module resolver is to improve code readability and developer experience as it's easier to import your components. Also, it is very good for projects which are scaling fast.
+
+Let's consider an example:
+
+```js
+import Module from '../../../Module';
+```
+
+The above can be simplified into:
+
+```js
+import Module from 'components/Module';
+
+// similarly
+
+import Module from '@components/Module';
+```
+
+And if you have configured an index.ts, it's like a cherry on top
+
+```js
+import { Module } from '@components';
+```
+
+---
+
+#### Getting started
+
+```bash
+yarn add --dev babel-plugin-module-resolver
+
+# or if you use npm
+
+npm install --save-dev babel-plugin-module-resolver
+```
+
+After installing the plugin we need to update **babel.config.js** (you can also use **.babelrc**) and add 'module-resolver' to the list of babel plugins.
+
+```js
+module.exports = {
+  presets: ['module:metro-react-native-babel-preset'],
+  plugins: [
+    [
+      'module-resolver',
+      {
+        root: ['.'],
+        extensions: [
+          '.ios.ts',
+          '.android.ts',
+          '.ts',
+          '.ios.tsx',
+          '.android.tsx',
+          '.tsx',
+          '.jsx',
+          '.js',
+          '.json',
+        ],
+        alias: {
+          '@app/config': './app/config',
+          '@app/context': './app/context',
+          '@app/constants': './app/constants',
+          '@app/layout': './app/layout',
+          '@app/navigation': './app/navigation',
+          '@app/screens': './app/screens',
+          '@app/theme': './app/theme',
+          '@app/utils': './app/utils',
+        },
+      },
+    ],
+  ],
+};
+```
+
+- **root** specifies your project main directory. Usually, it is called 'app' or 'src'.
+- **extensions** allows you to limit the plugin to specific file types.
+- **alias** lets you specify all the folders you need shortcuts for your module imports.
+
+The above example is from one of my projects.
+As you can see, we can easily configure this for any type of folder structure.
+
+<i>
+  If you're starting a fresh project and looking for a clean boilerplate with a
+  good folder structure, then you can check out
+  [react-native-boilerplate](https://github.com/karanpratapsingh/react-native-boilerplate)
+</i>
+
+Now with the integration completed, let's now make sure our auto-completion and IntelliSense works as well.
+
+<i>
+  Note: Multiple major IDE's are supported, you can have a look at the plugin's
+  repository
+  [babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver)
+  for more information.
+</i>
+
+<br />
+If you are working with typescript then add the following fields to your **tsconfig.json**
+(Isn't typescript just awesome?)
+
+```JSON
+{
+  ...
+  "compilerOptions": {
+    ...
+    "baseUrl": ".",
+    "paths": {
+      "*": ["./app/*"],
+      "@app/utils": ["./utils/*"],
+      "@components": ["./components/*"]
+    }
+   ...
+  }
+}
+```
+
+Or, if you're rocking javascript just simply add a **jsconfig.json** to your project and add the above fields so you can still get auto-completion.
+
+<i>
+  Note: Please make sure to put the paths into square brackets []. Otherwise,
+  TypeScript won’t be able to locate the paths properly.
+</i>
+
+- **Running the project**
+
+After setting up the plugin, we now need to make sure it's working.
+Before you start changing your imports we need to do the following:
+
+- **Cleaning build folders for android and ios**
+
+```bash
+rm -rf ios/build android/app/build
+```
+
+- **Resetting cache for npm or yarn**
+
+```bash
+yarn start -c
+
+# or if you use npm
+
+npm start --reset-cache
+```
+
+Now you should be able to build your project and start changing the import.
+
+<i>
+  Note: If you are still facing the issue with cache, recheck your
+  **babel.config.js** and **tsconfig.json** and try the command below to clear
+  watchman.
+</i>
+
+```bash
+watchman watch-del-all && rm -rf $TMPDIR/react-* && rm -rf node_modules/ && npm cache verify && npm install && npm start --reset-cache
+```
+
+<i>
+  If you're looking for an example, then checkout this
+  [commit](https://github.com/karanpratapsingh/Proximity/pull/30/commits/bca786ed31e01a7a5e6ee24dba6f4dd8a3373503)
+  on one of my project.
+</i>
+
+Hope this article was insightful and helped you improve code readability and the experience for you and your team.
+
+<i>
+  Did you face any issues during the integration? Feel free to leave a comment
+  or reach out to me via [twitter](https://twitter.com/karan_6864).
+</i>
+
+Happy Coding! 🎉

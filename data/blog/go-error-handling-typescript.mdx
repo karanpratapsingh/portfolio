@@ -1,0 +1,91 @@
+---
+title: 'Go like error handling in TypeScript'
+date: '2021-08-20'
+tags: ['typescript', 'go', 'node']
+draft: false
+summary: 'Go like error handling in TypeScript'
+images: ['/static/blogs/go-error-handling-typescript.png']
+authors: ['default']
+---
+
+In this article we'll learn about how we can handle our errors like Go with TypeScript.
+
+_**Note:** In TypeScript this is probably not a "best practice", or even a good practice at all but let's have fun experimenting nonetheless!_
+
+Let's take the following as an example.
+
+```ts
+import * as fs from 'fs/promises';
+
+async function main(): Promise<void> {
+  try {
+    const result: Buffer = await fs.readFile('./package.json');
+    // Do something with result
+  } catch (error) {
+    // Handle error
+  }
+}
+
+main();
+```
+
+In Go, this should look as below.
+
+```go
+package main
+
+import "io/ioutil"
+
+func main() {
+	data, err := ioutil.ReadFile("./package.json")
+
+	if err != nil {
+		// Handle error
+	}
+
+	// Do something with data
+}
+```
+
+Let's write our `async` handler helper function! This function basically returns a Tuple of result and error as TypeScript doesn't have multiple returns.
+
+```ts
+type Maybe<T> = T | null;
+
+type AsyncResult = any;
+type AsyncError = any;
+type AsyncReturn<R, E> = [Maybe<R>, Maybe<E>];
+type AsyncFn = Promise<AsyncResult>;
+
+async function async<R = AsyncResult, E = AsyncError>(
+  fn: AsyncFn,
+): Promise<AsyncReturn<R, E>> {
+  try {
+    const data: R = await fn;
+    return [data, null];
+  } catch (error) {
+    return [null, error];
+  }
+}
+```
+
+We can use our `async` utility as below. We can pass our Result and Error generics types.
+
+```ts
+import * as fs from 'fs/promises';
+
+async function main(): Promise<void> {
+  const fn: Promise<Buffer> = fs.readFile('./package.json');
+  const [data, error] = await async<Buffer, NodeJS.ErrnoException>(fn);
+
+  if (error) {
+    // Handle error
+  }
+
+  // Do something with data
+}
+
+main();
+```
+
+Perfect! We now have isolated our `try/catch` with Go like error handling pattern.

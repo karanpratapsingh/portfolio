@@ -1,0 +1,72 @@
+---
+title: 'Top 5 Docker Best Practices'
+date: '2022-02-11'
+tags: ['aws', 'typescript', 'docker', 'devops']
+draft: false
+summary: 'Top 5 Docker Best Practices'
+authors: ['default']
+---
+
+In this article, we will go over some essential Docker best practices which will help us to optimize our images for better size, security and developer experience.
+
+### #1 Least Privileged User
+
+By default if the user isn't specified in the Dockerfile, it will use the `root` user, which can be a big security risk as 99% of the time your application doesn't need a root user and this might make it easier for an attacker to escalate privileges on the host.
+
+To avoid this simply create a dedicated user and a dedicated group in the `Dockerfile` and add the `USER` directive to use that user to run the application.
+
+![least-previleged](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/h9j3kn8609lfh0bsnosk.png)
+
+_Note: Some images already come with a generic user, which we can use. For example, [`node.js`](https://github.com/nodejs/docker-node/blob/main/17/alpine3.14/Dockerfile) images comes with a user called `node`._
+
+### #2 Multi-Stage Builds
+
+Docker images are often much bigger than they have to be which ends up impacting our deployments, security and dev experience. Optimizing a build can be complex as it’s hard to keep your image clean and eventually, it gets messy, and hard to follow. We also end up shipping unnecessary assets like tooling, dev dependencies, runtime or compiler in our releases.
+
+**TLDR**
+
+The main idea is to separate the build stage from the runtime stage.
+
+- Derive from a base image with the whole runtime or SDK
+- Copy our source code
+- Install dependencies
+- Produce build artifacts
+- Copy the built artifacts to a much smaller release image
+
+Below is an example for Go, the final production image is just round 10mb!
+![multistage-build](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/5x22fy4q8spekpubbypz.png)
+
+_Note: To learn more about multi-stage builds, check my earlier article on [Art of building small containers](https://karanpratapsingh.com/blog/art-of-building-small-container)_
+
+### #3 Scanning for Security Vulnerabilities
+
+Security is an essential part of any application especially if you're working in a highly regulated industry such as healthcare, finance, etc. Lucky for us, docker comes with a `docker scan` command, which can scan our images for security vulnerabilities. It is recommend to use this as part of your CI setup.
+
+```
+$ docker scan <your-image>
+```
+
+Here are scan results for `node:17-alpine` and `node:17`. As we can see `node:17` with full OS distribution has tons of vulnerabilities.
+
+![good-example](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/2snjtbu5yevsepilxzq4.png)
+![bad-example](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ljh6xhwjb0ghc0utvw1g.png)
+
+### #4 Use smaller size Official Images
+
+Let's be honest, no one likes pulling huge containers whether for development or during CI builds. While sometimes we have to use a container with full OS distribution for particular task but in my opinion, containers should be small and just act as an isolated wrapper around our applications when it comes to shipping code. Hence, it is recommended to use smaller images with leaner OS distributions, which only bundle the necessary system tools and libraries, also minimizing the attack surface and making sure that we have more secure images.
+
+For example, using [`alpine`](https://alpinelinux.org/) often a common practice when it comes to optimizing image sizes. Alpine Linux is a security-oriented, lightweight Linux distribution based on musl libc and busybox.
+
+![small-images](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6ddxmokutw9n3bfxgkgg.png)
+![dockerhub](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ue6g00pw3ph44w0xg6cs.png)
+
+### #5 Use caching
+
+As we know, docker images contains various layers and in a Dockerfile each command or instruction creates an image layer. So if we rebuild our docker image and the Dockerfile or the layer hasn't changed, Docker will just use the cached layer to build the image. This results in significantly faster image rebuilds.
+
+Below is an example of how we can cache `node_modules` by taking advantage of docker layer caching. This can be implemented for multiple situations depending on our Dockerfile.
+![caching](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ljpsoxijeby5gvfpj1s8.png)
+
+## Conclusion
+
+In this article we discussed best practices for Docker, I hope this article was helpful and as always if you have any questions feel free to reachout to me on [LinkedIn](https://www.linkedin.com/in/karan99/) or [Twitter](https://twitter.com/karan_6864).

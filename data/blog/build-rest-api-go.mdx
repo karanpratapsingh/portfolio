@@ -1,0 +1,459 @@
+---
+title: 'Build a REST API with Go - For Beginners'
+date: '2021-09-01'
+tags: ['go', 'beginners', 'tutorial']
+draft: false
+summary: 'Build a REST API with Go - For Beginners'
+images: ['/static/blogs/build-rest-api-go.png']
+authors: ['default']
+---
+
+In this article, we will build a simple REST CRUD API with Go.
+
+<iframe
+  className='sm:h-96'
+  height='100%'
+  width='100%'
+  src='https://www.youtube.com/embed/bFYZrEuEDLE'
+  allowFullScreen
+  frameborder='0'
+  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+></iframe>
+
+_I've also created a video if you will like to follow along!_
+
+## Setup
+
+Let's initialize a simple Go project and to keep things simple we won't be connecting to any database in this article.
+
+_All the code from this article is available [here](https://github.com/karanpratapsingh/tutorials/tree/master/go/crud)_
+
+```
+$ go mod init github.com/karanpratapsingh/tutorials/go/crud
+```
+
+Let's create our `main.go`
+
+```
+$ touch main.go
+```
+
+I will also install [Mux](https://github.com/gorilla/mux) which will help us with routing.
+
+**Hello world**
+
+```go
+package main
+
+import (
+	"log"
+	"net/http"
+  "encoding/json"
+
+	"github.com/gorilla/mux"
+)
+
+func main() {
+	router := mux.NewRouter()
+
+	router.HandleFunc("/books", func(w http.ResponseWriter, r *http.Request) {
+		json.NewEncoder(w).Encode("Hello World")
+	})
+
+	log.Println("API is running!")
+	http.ListenAndServe(":4000", router)
+}
+```
+
+Now let's run our app!
+
+```
+$ go run main.go
+```
+
+## Organize
+
+Before proceeding further, let's organize our code because we don't want to write all the code in `main.go`. We will create the following project structure
+
+```
+├── cmd
+│   └── main.go
+├── pkg
+│    ├── handlers
+│    │   ├── AddBook.go
+│    │   ├── DeleteBook.go
+│    │   ├── GetAllBooks.go
+│    │   ├── GetBook.go
+│    │   └── UpdateBook.go
+│    ├── mocks
+│    │   └── book.go
+│    └── models
+│        └── book.go
+├── go.sum
+└── go.mod
+```
+
+_Note: This is just a sample structure, feel free to create our own project structure if you like!_
+
+**Cmd**
+
+Let's move our `main.go` to `cmd`
+
+```go
+package main
+
+import (
+	"log"
+	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/karanpratapsingh/tutorials/go/crud/pkg/handlers"
+)
+
+func main() {
+	router := mux.NewRouter()
+
+	// Here we'll define our api endpoints
+
+	log.Println("API is running!")
+	http.ListenAndServe(":4000", router)
+}
+
+```
+
+**Models**
+
+Let's define our Book model at `pkg/models/book.go`
+
+```go
+package models
+
+type Book struct {
+	Id     int    `json:"id"`
+	Title  string `json:"title"`
+	Author string `json:"author"`
+	Desc   string `json:"desc"`
+}
+```
+
+**Mocks**
+
+Let's create our mocks `pkg/mocks/book.go`
+
+```go
+package mocks
+
+import "github.com/karanpratapsingh/tutorials/go/crud/pkg/models"
+
+var Books = []models.Book{
+	{
+		Id:     1,
+		Title:  "Golang",
+		Author: "Gopher",
+		Desc:   "A book for Go",
+	},
+}
+```
+
+## Handlers
+
+Now, let's start defining our handlers!
+
+**Get all Books**
+
+Let's add our endpoint to `cmd/main.go`
+
+```go
+router.HandleFunc("/books", handlers.GetAllBooks).Methods(http.MethodGet)
+```
+
+Create a new handler `pkg/handlers/GetBooks.go`
+
+In this handler, we'll simply return all our mock books.
+
+```go
+package handlers
+
+import (
+	"encoding/json"
+	"net/http"
+
+	"github.com/karanpratapsingh/tutorials/go/crud/pkg/mocks"
+)
+
+func GetAllBooks(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(mocks.Books)
+}
+
+```
+
+Let's start our server and try it out in Postman
+
+```
+$ go run cmd/main.go
+```
+
+This should print all the books we have, currently, it should print our mock books
+
+![get-books](https://user-images.githubusercontent.com/29705703/131474069-763d8206-ff7f-4acb-803e-7326251b5320.png)
+
+**Add a new Book**
+
+Let's add our endpoint to `cmd/main.go`
+
+```go
+router.HandleFunc("/books", handlers.AddBook).Methods(http.MethodPost)
+```
+
+Create a new handler `pkg/handlers/AddBook.go`
+
+In this handler we'll do the following:
+
+- Read to request body
+- Append to the Book mocks
+- Send a `201 created` response
+
+```go
+package handlers
+
+import (
+	"encoding/json"
+	"io/ioutil"
+	"log"
+	"math/rand"
+	"net/http"
+
+	"github.com/karanpratapsingh/tutorials/go/crud/pkg/mocks"
+	"github.com/karanpratapsingh/tutorials/go/crud/pkg/models"
+)
+
+func AddBook(w http.ResponseWriter, r *http.Request) {
+	// Read to request body
+	defer r.Body.Close()
+	body, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	var book models.Book
+	json.Unmarshal(body, &book)
+
+	// Append to the Book mocks
+	book.Id = rand.Intn(100)
+	mocks.Books = append(mocks.Books, book)
+
+	// Send a 201 created response
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode("Created")
+}
+```
+
+Let's start our server and try it out in Postman
+
+```
+$ go run cmd/main.go
+```
+
+We should be able to add a new book by providing `json` body
+
+![add-book](https://user-images.githubusercontent.com/29705703/131474103-1c9ecf7e-7a7d-492a-9a5b-3beb2ff704f8.png)
+
+**Get a Book by Id**
+
+Let's add our endpoint to `cmd/main.go`
+
+```go
+router.HandleFunc("/books/{id}", handlers.GetBook).Methods(http.MethodGet)
+```
+
+Create a new handler `pkg/handlers/GetBook.go`
+
+In this handler we'll do the following:
+
+- Read dynamic id parameter
+- Iterate over all the mock books
+- If ids are equal send book as a response
+
+```go
+package handlers
+
+import (
+	"encoding/json"
+	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
+	"github.com/karanpratapsingh/tutorials/go/crud/pkg/mocks"
+)
+
+func GetBook(w http.ResponseWriter, r *http.Request) {
+	// Read dynamic id parameter
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
+
+	// Iterate over all the mock books
+	for _, book := range mocks.Books {
+		if book.Id == id {
+			// If ids are equal send book as a response
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+
+			json.NewEncoder(w).Encode(book)
+			break
+		}
+	}
+}
+```
+
+Let's start our server and try it out in Postman
+
+```
+$ go run cmd/main.go
+```
+
+![get-book](https://user-images.githubusercontent.com/29705703/131474110-8de676ba-3231-4b3c-b741-b426f3707f40.png)
+
+**Update a Book by Id**
+
+Let's add our endpoint to `cmd/main.go`
+
+```go
+router.HandleFunc("/books/{id}", handlers.UpdateBook).Methods(http.MethodPut)
+```
+
+Create a new handler `pkg/handlers/UpdateBook.go`
+
+In this handler we'll do the following:
+
+- Read dynamic id parameter
+- Read request body
+- Iterate over all the mock Books
+- Update and send a response when book Id matches dynamic Id
+
+```go
+package handlers
+
+import (
+	"encoding/json"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
+	"github.com/karanpratapsingh/tutorials/go/crud/pkg/mocks"
+	"github.com/karanpratapsingh/tutorials/go/crud/pkg/models"
+)
+
+func UpdateBook(w http.ResponseWriter, r *http.Request) {
+	// Read dynamic id parameter
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
+
+	// Read request body
+	defer r.Body.Close()
+	body, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	var updatedBook models.Book
+	json.Unmarshal(body, &updatedBook)
+
+	// Iterate over all the mock Books
+	for index, book := range mocks.Books {
+		if book.Id == id {
+			// Update and send a response when book Id matches dynamic Id
+			book.Title = updatedBook.Title
+			book.Author = updatedBook.Author
+			book.Desc = updatedBook.Desc
+
+			mocks.Books[index] = book
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+
+			json.NewEncoder(w).Encode("Updated")
+			break
+		}
+	}
+}
+```
+
+Let's start our server and try it out in Postman
+
+```
+$ go run cmd/main.go
+```
+
+![update-book](https://user-images.githubusercontent.com/29705703/131474112-9f3e8036-abe4-426e-b91e-826b654879dd.png)
+
+**Delete a Book by Id**
+
+Let's add our endpoint to `cmd/main.go`
+
+```go
+router.HandleFunc("/books/{id}", handlers.DeleteBook).Methods(http.MethodDelete)
+```
+
+Create a new handler `pkg/handlers/DeleteBook.go`
+
+In this handler we'll do the following:
+
+- Read the dynamic id parameter
+- Iterate over all the mock Books
+- Delete book and send a response if the book Id matches dynamic Id
+
+```go
+package handlers
+
+import (
+	"encoding/json"
+	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
+	"github.com/karanpratapsingh/tutorials/go/crud/pkg/mocks"
+)
+
+func DeleteBook(w http.ResponseWriter, r *http.Request) {
+	// Read the dynamic id parameter
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
+
+	// Iterate over all the mock Books
+	for index, book := range mocks.Books {
+		if book.Id == id {
+			// Delete book and send a response if the book Id matches dynamic Id
+			mocks.Books = append(mocks.Books[:index], mocks.Books[index+1:]...)
+
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode("Deleted")
+			break
+		}
+	}
+}
+```
+
+Let's start our server and try it out in Postman
+
+```
+$ go run cmd/main.go
+```
+
+![delete-book](https://user-images.githubusercontent.com/29705703/131474108-0c33f982-da37-4148-a553-477c2c865a1e.png)
+
+## Next steps
+
+So, we built a basic CRUD API with Go! Our next step could be to connect our API with a real DB like PostgreSQL, which we will look into in the next part!
+
+As mentioned above, the code is available [here](https://github.com/karanpratapsingh/tutorials/tree/master/go/crud)
+
+I hope this was helpful, as always feel free to reach out if you face any issues.
+
+Have a great day!
