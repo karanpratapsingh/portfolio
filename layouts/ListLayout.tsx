@@ -63,7 +63,7 @@ export default function ListLayout({
 
         <ul>
           {!filteredBlogPosts.length && (
-            <p className='mt-8 text-center'>No posts found.</p>
+            <p className='mt-8 text-center'>No posts found</p>
           )}
           {displayPosts.map(frontMatter => {
             const { slug, date, title, summary, tags } = frontMatter;
