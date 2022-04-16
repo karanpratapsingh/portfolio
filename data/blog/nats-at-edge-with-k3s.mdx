@@ -1,0 +1,319 @@
+---
+title: 'NATS at edge with K3s'
+date: '2022-03-24'
+tags: ['nats', 'tutorial', 'distributedsystems']
+draft: false
+summary: 'NATS at edge with K3s'
+images: ['/static/blogs/nats-at-edge-with-k3s.jpeg']
+authors: ['default']
+---
+
+In this article, we will setup NATS with K3s which is a lightweight Kubernetes distribution by [Rancher](https://rancher.com/docs/k3s/latest/en/)
+
+### What is NATS?
+
+![https://nats.io/img/logos/nats-horizontal-color.png](https://nats.io/img/logos/nats-horizontal-color.png)
+
+NATS is a cloud native [open-source](https://github.com/nats-io/nats-server) messaging system. It provides a simple, secure, and performant communications system for digital systems, services, and devices. The core design principles of NATS are performance, scalability, and ease of use. Written in Go and distributed as a 15MB binary with no 3rd party dependencies it can run on-premise, in the cloud, at the edge, and even on a Raspberry Pi.
+
+NATS can secure and simplify the design and operation of modern distributed systems. It is a Cloud Native Computing Foundation (CNCF) project that is used by [thousands of companies](https://nats.io) globally.
+
+_Learn more about NATS in my [previous article](https://karanpratapsingh.com/blog/distributed-messaging-nats)_
+
+### What is K3s?
+
+![https://user-images.githubusercontent.com/29705703/157869118-990a95a9-10cb-4dac-a046-af4916da3729.png](https://user-images.githubusercontent.com/29705703/157869118-990a95a9-10cb-4dac-a046-af4916da3729.png)
+
+K3s is a highly available, certified Kubernetes distribution designed for production workloads in unattended, resource-constrained, remote locations or inside IoT appliances.
+
+K3s is packaged as a single `<50MB` binary that reduces the dependencies and steps needed to install, run and auto-update a production Kubernetes cluster.
+
+Both ARM64 and ARMv7 are supported with binaries and multi-arch images available for both. K3s works great from something as small as a Raspberry Pi to large-scale production servers.
+
+![https://user-images.githubusercontent.com/29705703/157868991-71186cb8-8067-45ca-9847-4eab914082eb.svg](https://user-images.githubusercontent.com/29705703/157868991-71186cb8-8067-45ca-9847-4eab914082eb.svg)
+
+### K3s Installation
+
+Let's start by installing K3s on ubuntu.
+
+_Note: If you're using MacOS or Windows, checkout [K3d](https://k3d.io/) which is a lightweight wrapper to run k3s (Rancher Lab's minimal Kubernetes distribution) in Docker_
+
+```
+$ curl -sfL https://get.k3s.io | sh -
+[INFO]  Finding release for channel stable
+[INFO]  Using v1.22.7+k3s1 as release
+[INFO]  Downloading hash https://github.com/k3s-io/k3s/releases/download/v1.22.7+k3s1/sha256sum-amd64.txt
+[INFO]  Downloading binary https://github.com/k3s-io/k3s/releases/download/v1.22.7+k3s1/k3s
+[INFO]  Verifying binary download
+[INFO]  Installing k3s to /usr/local/bin/k3s
+[INFO]  Skipping installation of SELinux RPM
+[INFO]  Skipping /usr/local/bin/kubectl symlink to k3s, command exists in PATH at /usr/bin/kubectl
+[INFO]  Creating /usr/local/bin/crictl symlink to k3s
+[INFO]  Skipping /usr/local/bin/ctr symlink to k3s, command exists in PATH at /usr/bin/ctr
+[INFO]  Creating killall script /usr/local/bin/k3s-killall.sh
+[INFO]  Creating uninstall script /usr/local/bin/k3s-uninstall.sh
+[INFO]  env: Creating environment file /etc/systemd/system/k3s.service.env
+[INFO]  systemd: Creating service file /etc/systemd/system/k3s.service
+[INFO]  systemd: Enabling k3s unit
+Created symlink /etc/systemd/system/multi-user.target.wants/k3s.service → /etc/systemd/system/k3s.service.
+[INFO]  systemd: Starting k3s
+```
+
+Now after a few seconds, our node should be ready.
+
+```
+$ k3s kubectl get node
+NAME     STATUS   ROLES                  AGE   VERSION
+ubuntu   Ready    control-plane,master   37s   v1.22.7+k3s1
+```
+
+Next, we need to export our `KUBECONFIG`
+
+```
+$ export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+```
+
+All done, Now we have K3s up and running!
+
+### Basic Setup
+
+Let's start by first deploying a basic NATS server on our K3s Kubernetes cluster.
+
+**Deployment**
+
+Let's declare our deployment in deployment.yml
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nats
+spec:
+  replicas: 1
+  strategy: {}
+  selector:
+    matchLabels:
+      app: nats
+  template:
+    metadata:
+      labels:
+        app: nats
+    spec:
+      containers:
+        - name: nats
+          image: nats:2.7.3-alpine
+          ports:
+            - containerPort: 4222
+```
+
+**Service**
+
+Let's declare a service in a service.yml file and expose our deployment.
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats
+spec:
+  selector:
+    app: nats
+  ports:
+    - port: 4222
+```
+
+**Apply**
+
+Time to create our resources
+
+```
+$ k3s kubectl apply -f nats.yaml
+deployment.apps/nats created
+service/nats created
+```
+
+```
+$ k3s kubectl get all
+NAME                        READY   STATUS              RESTARTS   AGE
+pod/nats-7698855f58-rkx9s   0/1     ContainerCreating   0          7s
+
+NAME                 TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+service/kubernetes   ClusterIP   10.43.0.1      <none>        443/TCP    135m
+service/nats         ClusterIP   10.43.51.217   <none>        4222/TCP   7s
+
+NAME                   READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nats   0/1     1            0           7s
+
+NAME                              DESIRED   CURRENT   READY   AGE
+replicaset.apps/nats-7698855f58   1         1         0       7s
+```
+
+```
+$ k3s kubectl logs svc/nats
+[1] 2022/03/11 12:14:19.598434 [INF] Starting nats-server
+[1] 2022/03/11 12:14:19.598525 [INF]   Version:  2.7.3
+[1] 2022/03/11 12:14:19.598528 [INF]   Git:      [not set]
+[1] 2022/03/11 12:14:19.598532 [INF]   Name:     NC5XVUFRET6XBDZBEKKRGAGNCTHFDZIQVI376OA537SRLACSR53LL5GQ
+[1] 2022/03/11 12:14:19.598535 [INF]   ID:       NC5XVUFRET6XBDZBEKKRGAGNCTHFDZIQVI376OA537SRLACSR53LL5GQ
+[1] 2022/03/11 12:14:19.598558 [INF] Using configuration file: /etc/nats/nats-server.conf
+[1] 2022/03/11 12:14:19.599375 [INF] Starting http monitor on 0.0.0.0:8222
+[1] 2022/03/11 12:14:19.599510 [INF] Listening for client connections on 0.0.0.0:4222
+[1] 2022/03/11 12:14:19.599729 [INF] Server is ready
+[1] 2022/03/11 12:14:19.599770 [INF] Cluster name is my_cluster
+[1] 2022/03/11 12:14:19.599792 [INF] Listening for route connections on 0.0.0.0:6222
+```
+
+### Helm
+
+In this section, let’s see how we can use helm to deploy a NATS server with high availability. Helm is the preferred way of setting up NATS for your production workloads.
+
+_Learn more about the NATS Helm chart [here](https://artifacthub.io/packages/helm/nats/nats)_
+
+**Install**
+
+We will start by installing helm and adding `nats` helm chart.
+
+```
+$ sudo snap install helm --classic
+```
+
+```
+$ helm repo add nats https://nats-io.github.io/k8s/helm/charts/
+"nats" has been added to your repositories
+```
+
+```
+$ helm repo update
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "nats" chart repository
+Update Complete. ⎈Happy Helming!⎈
+```
+
+```
+$ helm repo list
+NAME	URL
+nats	<https://nats-io.github.io/k8s/helm/charts/>
+```
+
+**Deploy**
+Now, let’s install the `nats/nats` helm chart.
+
+```
+$ helm install nats-k3s nats/nats
+NAME: nats-k3s
+LAST DEPLOYED: Fri Mar 11 03:47:58 2022
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+NOTES:
+You can find more information about running NATS on Kubernetes
+in the NATS documentation website:
+
+  https://docs.nats.io/nats-on-kubernetes/nats-kubernetes
+
+NATS Box has been deployed into your cluster, you can
+now use the NATS tools within the container as follows:
+
+  kubectl exec -n default -it deployment/nats-k3s-box -- /bin/sh -l
+
+  nats-box:~# nats-sub test &
+  nats-box:~# nats-pub test hi
+  nats-box:~# nc nats-k3s 4222
+
+Thanks for using NATS!
+```
+
+Let’s check the resources that got created. As we can see, we have helm automatically created statefulsets, services, pods, etc that will help us to run our NATS cluster effortlessly.
+
+```
+$ kubectl get all
+NAME                               READY   STATUS    RESTARTS   AGE
+pod/nats-k3s-box-76f896544-xs6nr   1/1     Running   0          59s
+pod/nats-k3s-0                     3/3     Running   0          59s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)                                                 AGE
+service/kubernetes   ClusterIP   10.43.0.1    <none>        443/TCP                                                 110m
+service/nats-k3s     ClusterIP   None         <none>        4222/TCP,6222/TCP,8222/TCP,7777/TCP,7422/TCP,7522/TCP   59s
+
+NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nats-k3s-box   1/1     1            1           59s
+
+NAME                                     DESIRED   CURRENT   READY   AGE
+replicaset.apps/nats-k3s-box-76f896544   1         1         1       59s
+
+NAME                        READY   AGE
+statefulset.apps/nats-k3s   1/1     59s
+```
+
+Finally, Let's check the logs to verify that it's up and running
+
+```
+$ k3s kubectl logs service/nats-k3s -c nats
+[8] 2022/03/11 11:48:17.227997 [INF] Starting nats-server
+[8] 2022/03/11 11:48:17.228130 [INF]   Version:  2.7.3
+[8] 2022/03/11 11:48:17.228132 [INF]   Git:      [1712ee3]
+[8] 2022/03/11 11:48:17.228133 [INF]   Name:     nats-k3s-0
+[8] 2022/03/11 11:48:17.228135 [INF]   ID:       NBGMR4X23BQRZQM5RNRQOR63JF674Y4ZQ4L6J7MMQOVO6AV273BCKQVU
+[8] 2022/03/11 11:48:17.228159 [INF] Using configuration file: /etc/nats-config/nats.conf
+[8] 2022/03/11 11:48:17.228967 [INF] Starting http monitor on 0.0.0.0:8222
+[8] 2022/03/11 11:48:17.229426 [INF] Listening for client connections on 0.0.0.0:4222
+[8] 2022/03/11 11:48:17.229761 [INF] Server is ready
+```
+
+**Interacting with NATS**
+
+If we look closely, we also have `nats-k3s-box`, which will help us interact with NATS. So, let’s ssh into the deployment.
+
+```bash
+$ kubectl exec -it deployment/nats-k3s-box -- sh
+~ #
+```
+
+Let’s run a simple benchmark
+
+```bash
+$ nats bench test --msgs=10000000 --pub 5 --sub 2
+07:44:03 Starting pub/sub benchmark [msgs=10,000,000, msgsize=128 B, pubs=5, subs=2, js=false]
+07:44:03 Starting subscriber, expecting 10,000,000 messages
+07:44:03 Starting subscriber, expecting 10,000,000 messages
+07:44:03 Starting publisher, publishing 2,000,000 messages
+07:44:03 Starting publisher, publishing 2,000,000 messages
+07:44:03 Starting publisher, publishing 2,000,000 messages
+07:44:03 Starting publisher, publishing 2,000,000 messages
+07:44:03 Starting publisher, publishing 2,000,000 messages
+Finished      8s [========================================] 100%
+Finished      8s [========================================] 100%
+Finished      8s [========================================] 100%
+Finished      8s [========================================] 100%
+Finished      8s [========================================] 100%
+Finished      8s [========================================] 100%
+Finished      8s [========================================] 100%
+
+NATS Pub/Sub stats: 3,403,491 msgs/sec ~ 415.47 MB/sec
+ Pub stats: 1,148,109 msgs/sec ~ 140.15 MB/sec
+  [1] 240,822 msgs/sec ~ 29.40 MB/sec (2000000 msgs)
+  [2] 232,254 msgs/sec ~ 28.35 MB/sec (2000000 msgs)
+  [3] 232,725 msgs/sec ~ 28.41 MB/sec (2000000 msgs)
+  [4] 229,803 msgs/sec ~ 28.05 MB/sec (2000000 msgs)
+  [5] 229,621 msgs/sec ~ 28.03 MB/sec (2000000 msgs)
+  min 229,621 | avg 233,045 | max 240,822 | stddev 4,085 msgs
+ Sub stats: 2,269,139 msgs/sec ~ 276.99 MB/sec
+  [1] 1,141,660 msgs/sec ~ 139.36 MB/sec (10000000 msgs)
+  [2] 1,134,570 msgs/sec ~ 138.50 MB/sec (10000000 msgs)
+  min 1,134,570 | avg 1,138,115 | max 1,141,660 | stddev 3,545 msgs
+```
+
+This is absolutely amazing performance by K3s and NATS. For context, this is running on a [SUSE Linux](https://www.suse.com/en-en/products/micro/) Enterprise Micro VM with 2GB memory!
+
+**Uninstall**
+
+As always, let’s cleanup our resources.
+
+```
+$ helm uninstall nats-k3s
+release "nats-k3s" uninstalled
+```
+
+### Conclusion
+
+In this article, we learned how to setup NATS with K3s which is a lightweight Kubernetes distribution by [Rancher](https://rancher.com/docs/k3s/latest/en/).

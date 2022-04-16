@@ -1,0 +1,323 @@
+---
+title: 'Introduction to Go Fiber'
+date: '2021-06-23'
+tags: ['go', 'node']
+draft: false
+summary: 'Introduction to Go Fiber'
+images: ['/static/blogs/introduction-go-fiber.png']
+authors: ['default']
+---
+
+### What is go fiber?
+
+[Fiber](https://github.com/gofiber/fiber) is a web framework heavily inspired by [Express](https://github.com/expressjs/express) and that makes it perfect to work with for node developers.
+
+It is built on top of [Fasthttp](https://github.com/valyala/fasthttp) engine, here are some [benchmarks](https://github.com/gofiber/fiber#-benchmarks). It also has quite a low memory allocation overhead. For example while writing this article it only took around only `~16mb` of memory, which was amazing!
+
+In this article let's implement very simple mock api routes to get a feel of the Fiber framework
+
+The code from the article is available in this [repository](https://github.com/karanpratapsingh/tutorials)
+
+<iframe
+  className='sm:h-96'
+  height='100%'
+  width='100%'
+  src='https://www.youtube.com/embed/EBMnR8Tl3TU'
+  allowFullScreen
+  frameborder='0'
+  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+></iframe>
+
+### Getting started
+
+You can install go directly on your system by installing the binary from go docs https://golang.org/doc/install
+
+![Alt Text](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/evwqwkwvdai74m9bcpi4.png)
+
+**(optional)**
+
+Personally, I like to use docker so I don't have to install anything on my system
+
+Let's pull the `golang` docker image
+
+```
+docker pull golang
+```
+
+Create your project directory
+
+```
+mkdir go-mock-api
+cd go-mock-api
+```
+
+Now we'll bind the port `4000` and mount the current directory (your go project dir) as volume and run our golang image
+
+```
+docker run -itd -p 4000:4000 --name golang -v "$(pwd):/app" golang
+```
+
+Let's run and connect to our running golang container
+
+```
+docker exec -it -w /app golang bash
+```
+
+This should drop us into the golang docker image. Now let's check the version of go and get started
+
+```
+go version
+```
+
+_Note: if you're using docker, all the step below are executed inside the golang container_
+
+### Installation
+
+Let initialise an `api` module
+
+```bash
+go mod init api
+```
+
+Install fiber
+
+```bash
+go get -u github.com/gofiber/fiber/v2
+```
+
+Let's create `api.go` with a sample hello world server on port `4000` as shown in the repository's readme.
+
+```go
+package main
+
+import "github.com/gofiber/fiber/v2"
+
+func main() {
+	app := fiber.New()
+
+	app.Get("/", func(ctx *fiber.Ctx) error {
+		return ctx.SendString("Hello, World!")
+	})
+
+	app.Listen(":4000")
+}
+```
+
+### Development
+
+[Reflex](https://github.com/cespare/reflex) helps with live reload for Go apps, which is great for development. It is quite similar to [nodemon](https://github.com/remy/nodemon), alternatively, you can simply use `go run` command to run your program.
+
+```bash
+go get github.com/cespare/reflex
+```
+
+Let's start!
+
+```bash
+reflex -g '*.go' go run api.go --start-service
+```
+
+```bash
+Starting service...
+
+ ┌───────────────────────────────────────────────────┐
+ │                   Fiber v2.13.0                   │
+ │               http://127.0.0.1:4000               │
+ │       (bound on host 0.0.0.0 and port 4000)       │
+ │                                                   │
+ │ Handlers ............. 2  Processes ........... 1 │
+ │ Prefork ....... Disabled  PID .............. 3315 │
+ └───────────────────────────────────────────────────┘
+```
+
+_Note: Make sure you have `PATH` exported in your `.bashrc` or `.zshrc` file as `export PATH=$PATH:$HOME/go/bin/`_
+
+Now you should be seeing your code running and it should auto reload when you change something, without having to re-run your go program!
+
+### Creating a GET route
+
+Let's import fiber
+
+```go
+import "github.com/gofiber/fiber/v2"
+```
+
+Add a `user` route to the main function
+
+```go
+app.Get("/user", getUserHandler)
+```
+
+Let's add `getUserHandler` which will handle the request. Here we will return a mock user.
+
+```go
+type User struct {
+	Name    string `json:"name"`
+	Twitter string `json:"twitter"`
+}
+
+func getUserHandler(ctx *fiber.Ctx) error {
+	user := User{
+		Name:    "Karan",
+		Twitter: "karan_6864",
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(user)
+}
+```
+
+### Creating a POST route
+
+Similarly, let's add a `post` route to the main function
+
+```go
+	app.Post("/user/create", createUserHandler)
+```
+
+Let's add a `createUserHandler` which will handle the request. Here we will simply parse the body and send it back in the response
+
+```go
+func createUserHandler(ctx *fiber.Ctx) error {
+	body := new(User)
+	err := ctx.BodyParser(body)
+
+	if err != nil {
+		ctx.Status(fiber.StatusBadRequest)
+		return err
+	}
+
+	user := User{
+		Name:    body.Name,
+		Twitter: body.Twitter,
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(user)
+}
+```
+
+### Middleware
+
+Let's add logging middleware that comes with fiber
+
+```go
+import (
+	"github.com/gofiber/fiber/v2/middleware/logger"
+)
+```
+
+Add this middleware to `main` function
+
+```go
+app.Use(logger.New())
+```
+
+This should give us some logs as shown below
+
+```
+12:04:01 | 200 |     1ms |      172.17.0.1 | GET     | /user
+12:04:27 | 200 |      0s |      172.17.0.1 | POST    | /user/create
+```
+
+We can define custom middlewares as well
+
+```go
+    app.Use(func(ctx *fiber.Ctx) error {
+        fmt.Println("Sample middleware")
+        return ctx.Next()
+    })
+```
+
+### Router
+
+We can organize our routes with `Group` function, very similar to how we do [routing](https://expressjs.com/en/guide/routing.html) in express.
+
+```go
+	userApi := app.Group("/user")
+
+	userApi.Get("/", getUserHander)
+
+	userApi.Post("/create", createUserHandler)
+```
+
+### Serving static file
+
+Let's assume we're trying to server `public` folder, we can simply use the `Static` function like below
+
+```go
+app.Static("/", "./public")
+```
+
+### Let's try it out!
+
+Here's our final `api.go`
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+)
+
+type User struct {
+	Name    string `json:"name"`
+	Twitter string `json:"twitter"`
+}
+
+func getUserHander(ctx *fiber.Ctx) error {
+	user := User{
+		Name:    "Karan",
+		Twitter: "karan_6864",
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(user)
+}
+
+func createUserHandler(ctx *fiber.Ctx) error {
+	body := new(User)
+	err := ctx.BodyParser(body)
+
+	if err != nil {
+		fmt.Println(err)
+		ctx.Status(fiber.StatusBadRequest)
+		return err
+	}
+
+	user := User{
+		Name:    body.Name,
+		Twitter: body.Twitter,
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(user)
+}
+
+func main() {
+	app := fiber.New()
+
+	app.Use(logger.New())
+
+	userApi := app.Group("/user")
+
+	userApi.Get("/", getUserHander)
+
+	userApi.Post("/create", createUserHandler)
+
+	app.Listen(":4000")
+}
+```
+
+I'm using [Insomnia](https://github.com/Kong/insomnia) to test out the mock endpoints
+
+**Get user**
+
+![get user](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/vg6lfspj556lhf4ia69i.png)
+
+**Create user**
+
+![create user](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/4t5f61ded95s6qe8vlli.png)
+
+Feel to reachout to me on [twitter](https://twitter.com/karan_6864) if you face any issues.
+
+Feedback is always welcome, Have fun!

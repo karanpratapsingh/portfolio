@@ -15,10 +15,8 @@
 
 ## Make it your own!
 
-This was written to be configurable since the start, so you can simply override all the interfaces present in `config` folder which contains all the config for `projects`, `articles`, `videos`.
-
-Custom providers can also be easily implemented. For example if you'd like to render articles from `medium.com` rather than `dev.to`.
+This portfolio was built on top of [Tailwind Next JS Starter Blog](https://github.com/timlrx/tailwind-nextjs-starter-blog) template.
 
 ## Demonstration
 
-<video src="https://user-images.githubusercontent.com/29705703/128995155-28a07d37-8d34-4050-a415-4b74ef62bd4d.mp4" autoplay />
+<video src="todo" autoplay />

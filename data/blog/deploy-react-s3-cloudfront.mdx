@@ -1,0 +1,341 @@
+---
+title: 'Deploy React app to S3 & Cloudfront'
+date: '2021-08-26'
+tags: ['react', 'aws', 'devops']
+draft: false
+summary: 'Deploy React app to S3 & Cloudfront'
+images: ['/static/blogs/deploy-react-s3-cloudfront.png']
+authors: ['default']
+---
+
+In this article, we will look at how we can deploy our webapp to [AWS S3](https://aws.amazon.com/s3/) with [AWS Cloudfront](https://aws.amazon.com/cloudfront/) as our CDN. We'll look at a simple way to automate our deployments as well.
+
+As a bonus, we'll also see how we can use [Terraform](https://www.terraform.io/) to manage our infrastructure in the long run!
+
+<iframe
+  className='sm:h-96'
+  height='100%'
+  width='100%'
+  src='https://www.youtube.com/embed/ZixbQ8n7FCE'
+  allowFullScreen
+  frameborder='0'
+  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+></iframe>
+
+_Note: All the code is available in [this repository](https://github.com/karanpratapsingh/tutorials/tree/master/react/s3-cloudfront)_
+
+### Project setup
+
+I'll be using React app I've initialized using [create react app (CRA)](https://github.com/facebook/create-react-app) but this guide is valid for pretty much any framework!
+
+```
+yarn create react-app s3-cloudfront
+```
+
+```
+├── node_modules
+├── public
+│   ├── favicon.ico
+│   ├── index.html
+│   ├── manifest.json
+│   └── robots.txt
+├── src
+│   ├── App.css
+│   ├── App.js
+│   ├── index.css
+│   ├── index.js
+│   └── logo.svg
+├── package.json
+└── yarn.lock
+```
+
+### Setup S3
+
+**Create Bucket**
+Let's create a new S3 bucket
+
+![s3 dashboard](https://user-images.githubusercontent.com/29705703/128028737-db1e1c74-c376-46a0-bd36-badb7e23fa69.png)
+
+For now, we can just enter our bucket name and leave everything as default
+
+![s3 create](https://user-images.githubusercontent.com/29705703/128028753-d01c3564-cc7e-4d3e-b891-b860ae6301ed.png)
+
+![s3 created](https://user-images.githubusercontent.com/29705703/128028759-f81f6fff-76ad-4a75-b86d-d2021526d159.png)
+
+**Enable static hosting**
+
+Here, we will enable hosting which is present under the `Properties` tab
+
+![s3 properties](https://user-images.githubusercontent.com/29705703/128028760-d4255156-cf0b-40ed-b598-06e11f9bb8b3.png)
+![s3 enable hosting](https://user-images.githubusercontent.com/29705703/128028763-45546c3a-975a-412d-98f5-dd9a74807718.png)
+![s3 hosting-done](https://user-images.githubusercontent.com/29705703/128028767-0e7479d1-a0a8-43d2-95e6-8476ef9abc12.png)
+
+**Allowing Public access**
+
+Now, let's go to the `Permissions` tab and edit the bucket settings to allow public access
+
+![s3 enable-public](https://user-images.githubusercontent.com/29705703/128028770-2d7fb85b-298b-4d8b-b5b0-f440eb75af52.png)
+![s3 public-enabled](https://user-images.githubusercontent.com/29705703/128028775-60f967d0-29f5-4929-b834-13709c703fdc.png)
+
+Scrolling down, we will also update our bucket policy to allow `s3:GetObject` to Principal `*`
+
+![s3 policy](https://user-images.githubusercontent.com/29705703/128028776-489fae2a-1243-4bc4-804f-f823b2ead82b.png)
+
+Here's the bucket policy json
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PublicReadGetObject",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": ["s3:GetObject"],
+      "Resource": ["arn:aws:s3:::YOUR_S3_NAME/*"]
+    }
+  ]
+}
+```
+
+![s3 policy-update](https://user-images.githubusercontent.com/29705703/128028781-2d5eb105-4227-49f0-8632-b1fe10aa0ac9.png)
+
+Perfect, now let's build our react app
+
+```
+yarn build
+```
+
+![build and upload](https://user-images.githubusercontent.com/29705703/128028784-679a40e8-2e9e-4a9d-a2ca-3c9c49321dcb.png)
+
+And sync the `build` with our `myapp.com` S3 bucket
+
+```
+aws s3 sync build s3://myapp.com
+```
+
+If you're new to using AWS CLI, feel free to checkout my other [article](https://karanpratapsingh.com/blog/configure-aws-cli) on setting up the CLI from scratch\_
+
+Great! seems like our build was synced with our S3 bucket
+
+![s3 done](https://user-images.githubusercontent.com/29705703/128028787-7571946d-979d-41f1-94d1-f4397203b8b8.png)
+
+Nice! now we should be able to access our website through the bucket endpoint.
+
+![bucket endpoint](https://user-images.githubusercontent.com/29705703/128035864-d144d484-d44e-49e9-9e16-75ecc68e65a8.png)
+
+_Note: You can view your bucket endpoint by re-visiting the static deployment section under the `Properties` tab_
+
+### Cloudfront
+
+Let's connect our Cloudfront with our S3 endpoint. If you're not familiar with Cloudfront, it's a content delivery network (CDN) that delivers our data (images, videos, API's, etc.) globally (based on customer's geographical location) at low latency, high transfer speeds.
+
+Let's create a Cloudfront distribution
+![cf dashboard](https://user-images.githubusercontent.com/29705703/128033315-0baa04f1-2503-45ba-9652-7ecbcda61ae0.png)
+
+You should be able to select your S3 endpoint directly from the dropdown.
+
+We'll also create a new [origin access identity (OAI)](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) and allow CloudFront to update bucket policy
+
+![cf create](https://user-images.githubusercontent.com/29705703/128028796-a9bc567e-bc3e-4225-b9a1-e914d1a0896e.png)
+
+Cloudfront should automatically update your bucket policy by adding an additional principal as shown below.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PublicReadGetObject",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::YOUR_BUCKET_NAME/*"
+    },
+    {
+      "Sid": "2",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity DISTRIBUTION_ID"
+      },
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::YOUR_BUCKET_NAME/*"
+    }
+  ]
+}
+```
+
+For now, I'll be leaving most of the fields as default but you can configure `ssl`, `logging`, `https redirection`, and much more here.
+
+![cf create ok](https://user-images.githubusercontent.com/29705703/128028797-f3901dd7-da71-4ca0-ae55-65fc1dc87d1f.png)
+
+![cf done](https://user-images.githubusercontent.com/29705703/128033338-f879f590-ae20-45b5-9323-9a43a36ebeb5.png)
+
+After a few minutes, your distribution would be deployed and you should be able to access your content at distribution DNS!
+
+**Invalidation**
+
+When we re-deploy or sync our updated build we need to also create an invalidation rule which basically removes an object cache before it expires. This can be really important when serving updates to your web app
+
+![invalidation](https://user-images.githubusercontent.com/29705703/128045664-a5b473ed-447f-4ad7-b961-236897015c6e.png)
+![invalidation create](https://user-images.githubusercontent.com/29705703/128045676-c9f8d5d4-5a1c-4c44-ba81-faccc5859342.png)
+
+_Note: Here, we just invalidate `*` all objects for simplicity, but you might want to customize this depending on your use case_
+
+### Automating deployments
+
+Now let's automate our deployment process so that we can use it from our CI (eg. Github actions) on events like pull request merge etc.
+
+Here's a simple deploy script that installs the dependencies, builds the app, syncs it with our S3 bucket, and then invalidates CloudFront distribution cache.
+
+```
+touch scripts/deploy.sh
+```
+
+```sh
+BUCKET_NAME=$1
+DISTRIBUTION_ID=$2
+
+echo "-- Install --"
+# Install dependencies
+yarn --production
+
+echo "-- Build --"
+# Build
+yarn build
+
+echo "-- Deploy --"
+# Sync build with our S3 bucket
+aws s3 sync build s3://$BUCKET_NAME
+# Invalidate cache
+aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*" --no-cli-pager
+```
+
+```
+chmod +x ./scripts/deploy.sh
+```
+
+Now, from our CI we can simply execute our script to create a deployment
+
+```
+./scripts/deploy.sh "YOUR_BUCKET_NAME" "YOUR_DISTRIBUTION_ID"
+```
+
+### Terraform (Bonus!)
+
+Too many clicks? Let's setup our infrastructure using [Terraform](https://www.terraform.io/). If you're not familiar with Terraform, you can checkout my other [article](https://karanpratapsingh.com/blog/introduction-to-iac-terraform)
+
+Here's a sample terraform
+
+```hcl
+provider "aws" {
+  region = "us-east-1"
+}
+
+variable "bucket_name" {
+  default = "myapp.com-sample"
+}
+
+resource "aws_s3_bucket_policy" "bucket_policy" {
+  bucket = aws_s3_bucket.deploy_bucket.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid       = "PublicReadGetObject"
+        Effect    = "Allow"
+        Principal = "*"
+        Action    = "s3:GetObject"
+        Resource  = "${aws_s3_bucket.deploy_bucket.arn}/*"
+      },
+    ]
+  })
+}
+
+resource "aws_s3_bucket" "deploy_bucket" {
+  bucket = var.bucket_name
+  acl    = "public-read"
+
+  website {
+    index_document = "index.html"
+    error_document = "index.html"
+  }
+}
+
+resource "aws_cloudfront_origin_access_identity" "cloudfront_oia" {
+  comment = "example origin access identify"
+}
+
+resource "aws_cloudfront_distribution" "website_cdn" {
+  enabled = true
+
+  origin {
+    origin_id   = "origin-bucket-${aws_s3_bucket.deploy_bucket.id}"
+    domain_name = aws_s3_bucket.deploy_bucket.website_endpoint
+
+    custom_origin_config {
+      http_port              = "80"
+      https_port             = "443"
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
+    }
+  }
+
+  default_root_object = "index.html"
+
+  default_cache_behavior {
+    allowed_methods        = ["GET", "HEAD", "DELETE", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods         = ["GET", "HEAD"]
+    min_ttl                = "0"
+    default_ttl            = "300"
+    max_ttl                = "1200"
+    target_origin_id       = "origin-bucket-${aws_s3_bucket.deploy_bucket.id}"
+    viewer_protocol_policy = "redirect-to-https"
+    compress               = true
+
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
+    }
+  }
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+}
+
+output "website_cdn_id" {
+  value = aws_cloudfront_distribution.website_cdn.id
+}
+
+output "website_endpoint" {
+  value = aws_cloudfront_distribution.website_cdn.domain_name
+}
+```
+
+Let's `tf apply` and see the magic!
+
+```
+$ tf apply
+
+...
+
+Outputs:
+
+website_cdn_id = "ABCDXYZ"
+website_endpoint = "abcdxyz.cloudfront.net"
+```
+
+### Next Steps?
+
+Now that we've deployed our static assets to S3 and using Cloudfront as our CDN. We can connect our distribution dns with `Route 53` to serve it through our own domain.
+
+Hope this was helpful, feel free to reach out to me [Twitter](https://twitter.com/karan_6864) if you face any issues. Have a great day!

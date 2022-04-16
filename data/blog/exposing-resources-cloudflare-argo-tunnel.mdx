@@ -1,0 +1,178 @@
+---
+title: 'Exposing resources securely with Argo Tunnel'
+date: '2021-09-25'
+tags: ['aws', 'terraform']
+draft: false
+summary: 'Exposing resources securely with Argo Tunnel'
+images: ['/static/blogs/exposing-resources-cloudflare-argo-tunnel.png']
+authors: ['default']
+---
+
+In this article, we'll see how to leverage Cloudflare's [argo tunnels](https://www.cloudflare.com/products/tunnel) without publicly exposing our services. In this setup we'll use EC2 as an example, but this is works with Fargate as well.
+
+![Dev Env CF & EC2](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/4dafyrnl7o19s74e7nhp.png)
+
+### What is an Argo Tunnel?
+
+Argo Tunnel provides a secure way to connect your origin to Cloudflare without a publicly routable IP address. With Argo Tunnel, you do not expose an external IP from your infrastructure to the Internet. Instead, a lightweight daemon runs in your infrastructure and creates outbound-only connections to Cloudflare’s edge.
+
+There are tons of use cases like using exposing internal applications, replacing VPN setup with Cloudflare Access possibilities are endless!
+
+Currently, I use this setup for developing remotely on EC2's securely.
+
+![tunnels](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/sf5x97wh4h1fw8ehgxv9.png)
+
+### What is Cloudflare Access?
+
+If we want to only expose this to your team internally, we can configure a zero trust access with [Cloudflare access](https://developers.cloudflare.com/cloudflare-one/)
+
+![no trust access](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/gby720b9otpw1xzkkynh.png)
+
+We'll use [Terraform](https://karanpratapsingh.com/blog/introduction-to-iac-terraform) to define our cloud resources
+
+Let's define the providers `aws` and `cloudflare` which we'll be using:
+
+```hcl
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 2.7.0"
+    }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 2.26.0"
+    }
+  }
+  required_version = ">= 0.13"
+}
+
+provider "cloudflare" {
+  api_token = var.cloudflare_api_token
+}
+```
+
+We can define our api keys and secrets as variables in `variables.tf`
+
+```hcl
+variable "region" {
+  type    = string
+  default = "us-west-2"
+}
+
+variable "cloudflare_api_token" {
+  type        = string
+  description = "Cloudflare api token"
+  default     = "<YOUR_API_TOKEN>"
+}
+
+variable "cloudflare_account_id" {
+  type        = string
+  description = "Cloudflare account id"
+  default     = "<YOUR_ACCOUNT_ID>"
+}
+
+variable "cloudflare_zone_id" {
+  type        = string
+  description = "Cloudflare zone id"
+  default     = "<YOUR_ZONE_ID>"
+}
+
+variable "subdomain" {
+  type        = string
+  description = "your subdomain"
+  default     = "pretty-cool"
+}
+```
+
+In our `main.tf` file, we'll define resources. We'll first create an argo tunnel and add a cloudflare proxied record `CNAME` for it so that we can use in our `user_data` init script.
+
+```hcl
+resource "random_id" "argo_secret" {
+  byte_length = 35
+}
+
+resource "cloudflare_argo_tunnel" "argo_tunnel" {
+  account_id = var.cloudflare_account_id
+  name       = "${var.subdomain}-tunnel"
+  secret     = random_id.argo_secret.b64_std
+}
+
+resource "cloudflare_record" "http_app" {
+  zone_id = var.cloudflare_zone_id
+  name    = var.subdomain
+  value   = "${cloudflare_argo_tunnel.argo_tunnel.id}.cfargotunnel.com"
+  type    = "CNAME"
+  proxied = true
+}
+```
+
+```hcl
+data "template_file" "init" {
+  template = file("my-project/init.tpl")
+
+  vars = {
+    subdomain   = var.subdomain
+    domain      = var.cloudflare_zone,
+    account     = var.cloudflare_account_id,
+    tunnel_id   = cloudflare_argo_tunnel.argo_tunnel.id,
+    tunnel_name = cloudflare_argo_tunnel.argo_tunnel.name,
+    secret      = random_id.argo_secret.b64_std
+  }
+}
+
+resource "aws_instance" "api" {
+  ami           = "ami-03d5c68bab01f3496"
+  instance_type = "t3.large"
+  user_data = data.template_file.init.rendered
+}
+```
+
+In the `init.tpl` we'll simply install `cloudflared` and create a `config.yml`and then run it in background as our EC2 starts.
+
+```sh
+#!/bin/bash
+
+# Logs are availabe at /var/logs/cloud-init-output.log
+
+# Install cloudflared
+wget https://bin.equinox.io/c/VdrWdbjqyF/cloudflared-stable-linux-amd64.deb
+sudo dpkg -i cloudflared-stable-linux-amd64.deb
+
+# Create required dirs
+mkdir ~/.cloudflared
+touch ~/.cloudflared/cert.json
+touch ~/.cloudflared/config.yml
+
+# Create cert.json
+cat > ~/.cloudflared/cert.json << "EOF"
+{
+    "AccountTag"   : "${account}",
+    "TunnelID"     : "${tunnel_id}",
+    "TunnelName"   : "${tunnel_name}",
+    "TunnelSecret" : "${secret}"
+}
+EOF
+
+# Add a config file
+cat > ~/.cloudflared/config.yml << "EOF"
+tunnel: ${tunnel_id}
+credentials-file: /etc/cloudflared/cert.json
+logfile: /var/log/cloudflared.log
+loglevel: info
+
+ingress:
+  - hostname: ${subdomain}.${domain}
+    service: http://localhost:80
+  - service: http_status:404
+EOF
+
+# Start Cloudflared service
+sudo cloudflared service install
+sudo cp -via ~/.cloudflared/cert.json /etc/cloudflared/
+sudo service cloudflared start
+```
+
+Once our EC2 starts, we'll be able to access it via `https://pretty-cool.your-cloudflare-domain.com` and all without allowing any ingress in the security group!
+
+Hope this was helpful!

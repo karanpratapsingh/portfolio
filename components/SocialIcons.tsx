@@ -23,7 +23,7 @@ function SocialIcons(props: SocialIconsProps): React.ReactElement {
   const { className } = props;
 
   return (
-    <div className={clsx('flex mt-2', className)}>
+    <div className={clsx('mt-2 flex', className)}>
       {React.Children.toArray(Object.entries(contact.links).map(resolveIcon))}
     </div>
   );

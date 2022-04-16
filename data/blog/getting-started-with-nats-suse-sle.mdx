@@ -1,0 +1,166 @@
+---
+title: 'Getting started with NATS on SLE Micro'
+date: '2022-03-15'
+tags: ['nats', 'tutorial', 'distributedsystems']
+draft: false
+summary: 'Getting started with NATS on SLE Micro'
+images: ['/static/blogs/getting-started-with-nats-suse-sle.png']
+authors: ['default']
+---
+
+In this short article, we will install and explore NATS on SUSE Linux Enterprise Micro (SLE Micro).
+
+### What is SUSE Linux Enterprise Micro
+
+![suse-banner](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3l5la3aytf1g8xbyogqd.png)
+
+[SLE Micro](https://www.suse.com/en-en/products/micro/) is an ultra-reliable, lightweight operating system purpose built for containerized and virtualized workloads. It leverages the enterprise hardened security and compliance components of SUSE Linux Enterprise and merges them with a modern, immutable, developer-friendly OS platform.
+
+Enterprises want edge and embedded applications that are secure, require minimal maintenance and are easy to deploy at scale.
+
+SLE Micro is built from the ground up to support containers and microservices. Workloads are isolated from the core filesystem to guard against malicious applications compromising the system.
+
+### Installation
+
+There are multiple ways to install a NATS, some of them are:
+
+- Docker
+- Kubernetes
+- Package Manager
+- Release Zip
+
+_Here, we will use the release zip. More info can be found in the [official docs](https://docs.nats.io/running-a-nats-service/introduction/installation)_
+
+**Server**
+
+Let's start by installing [NATS server](https://github.com/nats-io/nats-server) on SLE Micro.
+
+```
+$ cat /etc/os-release
+NAME="SLE Micro"
+VERSION="5.1"
+VERSION_ID="5.1"
+PRETTY_NAME="SUSE Linux Enterprise Micro 5.1"
+ID="suse-microos"
+ID_LIKE="suse"
+ANSI_COLOR="0;32"
+CPE_NAME="cpe:/o:suse:suse-microos:5.1"
+```
+
+We will be installing NATS server natively
+
+```
+$ curl -L <https://github.com/nats-io/nats-server/releases/download/v2.7.3/nats-server-v2.7.3-linux-amd64.zip> -o nats-server.zip
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   669  100   669    0     0   1050      0 --:--:-- --:--:-- --:--:--  1065
+100 4389k  100 4389k    0     0  1610k      0  0:00:02  0:00:02 --:--:-- 4248k
+```
+
+```
+$ unzip nats-server.zip -d nats-server
+Archive:  nats-server.zip
+  inflating: nats-server/nats-server-v2.7.3-linux-amd64/LICENSE
+  inflating: nats-server/nats-server-v2.7.3-linux-amd64/README.md
+  inflating: nats-server/nats-server-v2.7.3-linux-amd64/nats-server
+```
+
+```
+$ sudo cp nats-server/nats-server-v2.7.3-linux-amd64/nats-server /usr/bin
+```
+
+Like before, our NATS server installation is simple.
+
+**CLI**
+
+Next, we will need the NATS CLI. We can simply install it for Linux from the [GitHub releases](https://github.com/nats-io/natscli/releases/) page.
+
+```
+$ wget <https://github.com/nats-io/natscli/releases/download/v0.0.30/nats-0.0.30-amd64.rpm>
+$ sudo rpm -i nats-0.0.30-amd64.rpm
+```
+
+### Benchmark
+
+For the benchmark, let's first start our NATS server
+
+```
+$ nats-server
+[47795] 2022/03/14 17:06:20.968158 [INF] Starting nats-server
+[47795] 2022/03/14 17:06:20.968277 [INF]   Version:  2.7.3
+[47795] 2022/03/14 17:06:20.968280 [INF]   Git:      [not set]
+[47795] 2022/03/14 17:06:20.968282 [INF]   Name:     NCXNSBKZDHGEBPELZWIIGSGELPTHOP7R74XT2MHYIF732F264CZRDLND
+[47795] 2022/03/14 17:06:20.968285 [INF]   ID:       NCXNSBKZDHGEBPELZWIIGSGELPTHOP7R74XT2MHYIF732F264CZRDLND
+[47795] 2022/03/14 17:06:20.968692 [INF] Listening for client connections on 0.0.0.0:4222
+[47795] 2022/03/14 17:06:20.968913 [INF] Server is ready
+```
+
+Perfect, now we can simply use the built in [bench](https://docs.nats.io/using-nats/nats-tools/nats_cli/natsbench) command in the NATS CLI to benchmark.
+
+We will use the following flags:
+
+- `--msgs`: Number of messages to publish
+- `-pub`: Number of concurrent publishers
+- `-sub`: Number of concurrent subscribers
+- `-csv`: Save benchmark data to CSV file
+
+We will run the benchmark for 1 million messages with 4 concurrent publishers and subscribers.
+
+```
+$ nats bench my_subject --msgs 1000000 --pub 4 --sub 4 --csv=results.csv
+17:36:48 Starting pub/sub benchmark [subject=my_subject, msgs=1,000,000, msgsize=128 B, pubs=4, subs=4, js=false]
+17:36:48 Starting subscriber, expecting 1,000,000 messages
+17:36:48 Starting subscriber, expecting 1,000,000 messages
+17:36:48 Starting subscriber, expecting 1,000,000 messages
+17:36:48 Starting subscriber, expecting 1,000,000 messages
+17:36:48 Starting publisher, publishing 250,000 messages
+17:36:48 Starting publisher, publishing 250,000 messages
+17:36:48 Starting publisher, publishing 250,000 messages
+17:36:48 Starting publisher, publishing 250,000 messages
+Finished      0s [===================================================] 100%
+Finished      0s [===================================================] 100%
+Finished      0s [===================================================] 100%
+Finished      0s [===================================================] 100%
+Finished      0s [===================================================] 100%
+Finished      0s [===================================================] 100%
+Finished      0s [===================================================] 100%
+Finished      0s [===================================================] 100%
+
+NATS Pub/Sub stats: 7,323,895 msgs/sec ~ 894.03 MB/sec
+ Pub stats: 1,471,256 msgs/sec ~ 179.60 MB/sec
+  [1] 372,417 msgs/sec ~ 45.46 MB/sec (250000 msgs)
+  [2] 371,332 msgs/sec ~ 45.33 MB/sec (250000 msgs)
+  [3] 371,941 msgs/sec ~ 45.40 MB/sec (250000 msgs)
+  [4] 371,441 msgs/sec ~ 45.34 MB/sec (250000 msgs)
+  min 371,332 | avg 371,782 | max 372,417 | stddev 432 msgs
+ Sub stats: 5,861,333 msgs/sec ~ 715.49 MB/sec
+  [1] 1,467,646 msgs/sec ~ 179.16 MB/sec (1000000 msgs)
+  [2] 1,467,235 msgs/sec ~ 179.11 MB/sec (1000000 msgs)
+  [3] 1,466,538 msgs/sec ~ 179.02 MB/sec (1000000 msgs)
+  [4] 1,465,424 msgs/sec ~ 178.88 MB/sec (1000000 msgs)
+  min 1,465,424 | avg 1,466,710 | max 1,467,646 | stddev 841 msgs
+
+Saved metric data in csv file results.csv
+```
+
+Here's our results CSV file
+
+```
+#RunID,ClientID,MsgCount,MsgBytes,MsgsPerSec,BytesPerSec,DurationSecs
+oOn6aUsifPY3PToofcaO1O,S0,1000000,128000000,1467646,187858690.485677,0.681363
+oOn6aUsifPY3PToofcaO1O,S1,1000000,128000000,1467235,187806090.364291,0.681554
+oOn6aUsifPY3PToofcaO1O,S2,1000000,128000000,1466538,187716910.005906,0.681878
+oOn6aUsifPY3PToofcaO1O,S3,1000000,128000000,1465424,187574290.043182,0.682396
+oOn6aUsifPY3PToofcaO1O,P0,250000,32000000,372417,47669498.405688,0.671289
+oOn6aUsifPY3PToofcaO1O,P1,250000,32000000,371332,47530537.906439,0.673251
+oOn6aUsifPY3PToofcaO1O,P2,250000,32000000,371941,47608547.667213,0.672148
+oOn6aUsifPY3PToofcaO1O,P3,250000,32000000,371441,47544470.508769,0.673054
+```
+
+This is a little hard to read, so let's plot it
+
+![benchmark](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/7bf3j9v0qhv02xz18otk.png)
+
+### Conclusion
+
+In this article, we installed and benchmarked NATS running on SUSE Linux Enterprise Micro. And as expected, NATS delivers robust and consistent performance!

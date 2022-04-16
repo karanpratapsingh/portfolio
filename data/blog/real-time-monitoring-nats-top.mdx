@@ -1,0 +1,74 @@
+---
+title: 'Real-time monitoring with nats-top'
+date: '2022-04-05'
+tags: ['nats', 'distributedsystems', 'tutorial', 'monitoring']
+draft: false
+summary: 'Real-time monitoring with nats-top'
+images: ['/static/blogs/real-time-monitoring-nats-top.png']
+authors: ['default']
+---
+
+In this article, we will take a quick look at [nats-top](https://github.com/nats-io/nats-top) and see how we can use it for monitoring
+
+### What is nats-top?
+
+[nats-top](https://github.com/nats-io/nats-top) is a [top](https://linuxhint.com/top_-command-_linux/)-like tool that provides a dynamic real-time view of a NATS server. This is a great tool for not only sys admins but developers to quickly glance at their NATS server statistics.
+
+### Installation
+
+We can install `nats-top` using go
+
+```
+$ go install github.com/nats-io/nats-top@latest
+```
+
+Or using the release binaries from [here](https://github.com/nats-io/nats-top/releases)
+
+### Usage
+
+Start the NATS server with the monitoring port enabled
+
+```
+$ nats-server -m 8222
+```
+
+![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/kihl965iqwako2jg22ul.gif](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/kihl965iqwako2jg22ul.gif)
+
+If you’re using the [config](https://docs.nats.io/running-a-nats-service/configuration), then use the `http_port` option
+
+```
+http_port: 8222
+```
+
+Let’s see how can we use `nats-top`
+
+```
+$ nats-top --help
+
+usage: nats-top [-s server] [-m http_port] [-ms https_port] [-n num_connections] [-d delay_secs] [-r max] [-o FILE] [-l DELIMITER] [-sort by]
+                [-cert FILE] [-key FILE ][-cacert FILE] [-k] [-b]
+```
+
+We can configure our monitoring port, key, cert, and much more! For now, let’s start `nats-top` with default options.
+
+![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/hgwynescmamhs71pvtex.gif](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/hgwynescmamhs71pvtex.gif)
+
+Here we can see some general data such as CPU and memory usage, and input/output bandwidth.
+
+Notice the incredible `msgs/sec` metric? NATS is quite performant!
+
+Now let’s use the [NATS CLI](https://github.com/nats-io/natscli) and do a simple benchmark to generate some publish/subscribe events.
+
+```
+$ nats bench test --msgs 10000000 --pub 5 --sub 5
+```
+
+![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/heiu6zuy1jveim5ws4o2.gif](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/heiu6zuy1jveim5ws4o2.gif)
+
+Now if we look at the `nats-top` we can see all the real-time info about our messages such as size, host, version, and even the programming language used by the client! Amazing right?
+
+![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/lj57l4ojy325xktl9n2d.gif](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/lj57l4ojy325xktl9n2d.gif)
+
+### Conclusion
+
+So in this short article, we looked at how we can use `nats-top` for real-time monitoring. For advanced usage, make sure to explore the [docs](https://docs.nats.io/using-nats/nats-tools/nats_top). In the next article, we will look at how you can do extensive historical monitoring of NATS clusters with the NATS Surveyor.

@@ -1,0 +1,133 @@
+---
+title: 'Private, Public and Restricted routes in React'
+date: '2020-10-30'
+tags: ['react', 'javascript', 'typescript']
+draft: false
+summary: 'Let us learn about ArangoDB'
+images: ['/static/blogs/private-public-routing-react.png']
+authors: ['default']
+---
+
+In this article, we'll be implementing private, public, and restricted routes. I'll be using [React Router](https://reactrouter.com/web/guides/quick-start), but the idea should be similar across other routing libraries.
+
+Let's take an example of the following components:
+
+<b>Home</b>: or a similar public route that everyone can access.
+
+<b>Login</b>: is a restricted route, which means it should only be accessible by
+unauthenticated users because it doesn't make much sense if an authenticated
+user can access login/signup pages.
+
+<b>Dashboard</b>: is a private route that should only be accessed by
+authenticated users.
+
+Let's consider the following abstractions before we start with the code:
+
+`isAuthenticated` which tells us if the user is authenticated or not.
+
+`ROUTES` can be an enum to access our routes.
+
+```ts
+enum ROUTES {
+  HOME = '/',
+  LOGIN = '/login'
+  DASHBOARD = '/dashboard'
+}
+```
+
+### Private Route
+
+The idea here is to render our component if the user is authenticated or redirect the user to login if not authenticated.
+
+```tsx
+import React from 'react';
+import { Route, Redirect, RouteProps } from 'react-router-dom';
+import { ROUTES } from '../constants';
+import { isAuthenticated } from '../auth.utils';
+
+function PrivateRoute(props: RouteProps): React.ReactElement {
+  const { component: Component, ...rest } = props;
+
+  const render = props => {
+    if (!isAuthenticated) {
+      return <Redirect to={ROUTES.LOGIN} />;
+    }
+
+    return <Component {...props} />;
+  };
+
+  return <Route {...rest} render={render} />;
+}
+
+export default PrivateRoute;
+```
+
+### Public and Restricted Routes
+
+The `Route` component from `react-router` is public by default but we can build upon it to make it restricted.
+
+We can add a `restricted` prop with a default value of `false` and use the condition if the user is authenticated and the route is restricted, then we redirect the user back to the `Dashboard` component.
+
+```tsx
+import React from 'react';
+import { Route, Redirect, RouteProps } from 'react-router-dom';
+import { ROUTES } from '../constants';
+import { isAuthenticated } from '../auth.utils';
+
+interface PublicRouteProps {
+  restricted?: boolean;
+}
+
+function PublicRoute(props: PublicRouteProps & RouteProps): React.ReactElement {
+  const { component: Component, restricted = false, ...rest } = props;
+
+  const render = props => {
+    if (isAuthenticated && restricted) {
+      return <Redirect to={ROUTES.DASHBOARD} />;
+    }
+
+    return <Component {...props} />;
+  };
+
+  return <Route {...rest} render={render} />;
+}
+
+export default PublicRoute;
+```
+
+### Putting it together
+
+Finally, let's declare all the routes in our `App.tsx` component and see how our routing looks now.
+
+```tsx
+import React from 'react';
+import { BrowserRouter, Switch } from 'react-router-dom';
+import { ROUTES } from './constants';
+import { Home, Dashboard, Login } from './pages';
+import { PrivateRoute, PublicRoute } from './components';
+
+function App(): React.ReactElement {
+  return (
+    <BrowserRouter>
+      <Switch>
+        <PublicRoute component={Home} path={ROUTES.HOME} exact />
+        <PublicRoute restricted component={Login} path={ROUTES.LOGIN} exact />
+        <PrivateRoute component={Dashboard} path={ROUTES.DASHBOARD} exact />
+      </Switch>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+<br />
+
+Hopefully, this gave you an insight into how we can organize private and protected routes.
+
+<i>
+  Feel free to reach out to me on [Twitter
+  (@karan_6864)](https://twitter.com/karan_6864) if you face any issues.
+</i>
+
+Happy Coding 🎉

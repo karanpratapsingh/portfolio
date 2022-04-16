@@ -1,0 +1,102 @@
+---
+title: 'HyperTrade - Distributed cryptocurrency trading bot'
+date: '2022-03-30'
+tags: ['go', 'typescript', 'react', 'python', 'kubernetes']
+draft: false
+summary: 'HyperTrade - Distributed cryptocurrency trading bot'
+images: ['/static/blogs/hypertrade-distributed-cryptocurrency-trading-bot.jpeg']
+authors: ['default']
+---
+
+Hi everyone, I wanted to share a recent weekend project of mine. HyperTrade, a ready to deploy, distributed cryptocurrency trading bot. I had a lot of fun building this and recently [opensourced](https://github.com/karanpratapsingh/HyperTrade) it.
+
+**_Note: use this software at your own risk. The author assumes no liability for your trading outcomes_**
+
+### 💡 Motivation
+
+A few months ago I got into the crypto market. It was all new and fascinating to me. The idea of this project originally came from a script I used to automate buying and selling of fiat assets.
+
+I was curious and wanted to scale it into a real system which can execute trades for me. I had a lot of fun building this. I got to play with lots of different technologies while growing my financial knowledge.
+
+Feel free to [reach out](https://karanpratapsingh.com/?action=contact) to me if you have any additional questions. There are lots of fixes and features to be done!
+
+_It is important to note that this project is under active development and was developed as an experiment. Currently, only [Binance](https://binance.com/) is supported but contributions are welcome!_
+
+### 🔍 Overview
+
+Here's a short overview of the project.
+[![overview](https://user-images.githubusercontent.com/29705703/160863938-a8350ddd-5bf7-442e-beb9-fe590b28a725.png)](https://youtu.be/jHBlUlIY4AQ)
+
+### 📷 Screenshots
+
+Here are some screenshots from the web interface.
+
+![charts](https://user-images.githubusercontent.com/29705703/160771112-fa2c20df-318c-42c4-b686-88d81123af9f.png)
+
+![dataframe](https://user-images.githubusercontent.com/29705703/160771122-1e1f5aa5-c386-4899-80ba-660227adb95d.png)
+
+![](https://user-images.githubusercontent.com/29705703/160771129-c5599e84-239c-4073-8621-2a9ce7845f18.png)
+
+![https://user-images.githubusercontent.com/29705703/160771120-d114a872-22e5-4636-a49d-f6cad69e7675.png](https://user-images.githubusercontent.com/29705703/160771120-d114a872-22e5-4636-a49d-f6cad69e7675.png)
+
+![https://user-images.githubusercontent.com/29705703/160771097-99820002-bc18-4975-90ce-c73ae5648c32.png](https://user-images.githubusercontent.com/29705703/160771097-99820002-bc18-4975-90ce-c73ae5648c32.png)
+
+![https://user-images.githubusercontent.com/29705703/160771117-a1cc31eb-e96b-4f15-9ca9-ec7b6e5a7742.png](https://user-images.githubusercontent.com/29705703/160771117-a1cc31eb-e96b-4f15-9ca9-ec7b6e5a7742.png)
+
+![https://user-images.githubusercontent.com/29705703/160771686-3513b071-9ee6-4ce0-98f0-27df2778de5c.png](https://user-images.githubusercontent.com/29705703/160771686-3513b071-9ee6-4ce0-98f0-27df2778de5c.png)
+
+![https://user-images.githubusercontent.com/29705703/160771663-41d44210-7f1a-4dca-a8cb-7c3b9b48e6f7.png](https://user-images.githubusercontent.com/29705703/160771663-41d44210-7f1a-4dca-a8cb-7c3b9b48e6f7.png)
+
+### ✨ Features
+
+This system has lots of features such as:
+
+- **Web UI**: Real-time access for charts, technical indicators, and portfolio.
+- **Configurable**: Supports assets and strategies customization easily without touching any code!
+- **Portable**: Export your trades and real-time data frame to CSV.
+- **Multiple Assets**: Trade multiple crypto assets simultaneously!
+- **Telegram Support**: On the move? Use [Telegram](https://www.notion.so/HyperTrade-177f87a4313c469c9542fd80126fb303) bot to receive real-time notifications and much more.
+- **Ready to deploy**: Comes with [Infrastructure as Code](https://karanpratapsingh.com/blog/introduction-to-iac-terraform) which is ready to deploy to [Digital Ocean](https://www.digitalocean.com/).
+- **Easy to upgrade**: Modify the system easily to your needs.
+
+### ⚡️ Technologies
+
+![https://user-images.githubusercontent.com/29705703/160770691-f4b73985-7c6a-4a7c-b370-dc6d6481fcc2.png](https://user-images.githubusercontent.com/29705703/160770691-f4b73985-7c6a-4a7c-b370-dc6d6481fcc2.png)
+
+### 🏭 Architecture
+
+It's a microservices based architecture with event driven approach for decoupling. It uses distributed streams and messaging which keeps the system simple yet robust to make sure it can grow in future.
+
+![https://user-images.githubusercontent.com/29705703/160770666-5fd144f2-623b-4e30-9037-6e93c49d7b2f.png](https://user-images.githubusercontent.com/29705703/160770666-5fd144f2-623b-4e30-9037-6e93c49d7b2f.png)
+
+![https://user-images.githubusercontent.com/29705703/160770680-39efcb84-48a9-4841-85ac-d25f658d1f0c.png](https://user-images.githubusercontent.com/29705703/160770680-39efcb84-48a9-4841-85ac-d25f658d1f0c.png)
+
+_Note: Kubernetes diagram was generated using [Lens - The Kubernetes IDE](https://github.com/nevalla/lens-resource-map-extension/)_
+
+**Why so many technologies?**
+
+This started as an all Go project, but then I decided to add Python to the mix as it has a really good ecosystem for technical indicators and mathematical use cases.
+
+For the web, I used React as it's easy and TypeScript provides some sanity to JavaScript projects!
+
+Nginx and Postgres fit right in as the use case grew. As always, use what's right for the project!
+
+**Why event driven?**
+
+Originally I made this using HTTP REST, but systems like this are event driven by nature. Plus this approach helps to decouple services even more.
+
+**How do services communicate?**
+
+All the messaging infrastructure use cases are handled by [NATS](https://nats.io). Inter-service communications are mainly via publish-subscribe and request-reply patterns. Essentially, NATS acts as our service mesh!
+
+We also use [JetStream](https://docs.nats.io/nats-concepts/jetstream) for real-time, persisted data streams.
+
+![https://user-images.githubusercontent.com/29705703/156038663-61d9c242-de32-41da-9a59-a2452a0ead11.png](https://user-images.githubusercontent.com/29705703/156038663-61d9c242-de32-41da-9a59-a2452a0ead11.png)
+
+![https://user-images.githubusercontent.com/29705703/156039685-bb32987e-a11f-4246-a6fa-1d74f6388119.png](https://user-images.githubusercontent.com/29705703/156039685-bb32987e-a11f-4246-a6fa-1d74f6388119.png)
+
+_Read more about [Distributed communication patterns with NATS](https://karanpratapsingh.com/blog/distributed-communication-patterns-nats)_
+
+### 💬 Conclusion
+
+Hope you liked the idea! Feel free to [reachout](https://www.karanpratapsingh.com/?action=contact) to me if you have any questions. Getting started and the deployment guide for this project can be found in this [repository](https://github.com/karanpratapsingh/HyperTrade).

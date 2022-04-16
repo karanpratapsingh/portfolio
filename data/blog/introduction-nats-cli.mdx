@@ -1,0 +1,404 @@
+---
+title: 'Introduction to NATS CLI'
+date: '2022-04-08'
+tags: ['nats', 'tutorial', 'distributedsystems']
+draft: false
+summary: 'Introduction to NATS CLI'
+images: ['/static/blogs/introduction-nats-cli.png']
+authors: ['default']
+---
+
+In this article, we’ll take a look at [NATS CLI](https://github.com/nats-io/natscli) and learn some basics commands. In my opinion NATS CLI is quite underrated, it offers many features and can help eliminate most of the manual scripts used to manage a NATS server.
+
+## Installation
+
+For OS X `brew` can be used to install the latest version:
+
+```bash
+$ brew tap nats-io/nats-tools
+$ brew install nats-io/nats-tools/nats
+```
+
+_For more installation options, check [Github releases](https://github.com/nats-io/natscli/releases/)_
+
+## Features
+
+- JetStream management
+- JetStream data and configuration backup
+- Message publish and subscribe
+- Service requests and creation
+- Benchmarking and Latency testing
+- Super Cluster observation
+- Configuration context maintenance
+- NATS ecosystem schema registry
+
+## Commands
+
+Let’s learn about some basic commands. But first, let’s start our [nats-server](https://github.com/nats-io/nats-server) locally with JetStream so that we can try out the commands.
+
+_Note: To enable JetStream we can use the `-js` or `--jetstream` flag._
+
+```bash
+$ nats-server -js
+[48351] 2022/04/04 17:01:50.947435 [INF] Starting nats-server
+[48351] 2022/04/04 17:01:50.947518 [INF]   Version:  2.7.4
+[48351] 2022/04/04 17:01:50.947521 [INF]   Git:      [not set]
+[48351] 2022/04/04 17:01:50.947524 [INF]   Name:     NDYZJMTC6C6D2DJHVJEPWOF5SE4BZVKE5WFDJOUBFYE6JMP5EUDL27SZ
+[48351] 2022/04/04 17:01:50.947529 [INF]   Node:     MiRXijo7
+[48351] 2022/04/04 17:01:50.947532 [INF]   ID:       NDYZJMTC6C6D2DJHVJEPWOF5SE4BZVKE5WFDJOUBFYE6JMP5EUDL27SZ
+[48351] 2022/04/04 17:01:50.947792 [INF] Starting JetStream
+[48351] 2022/04/04 17:01:50.948188 [INF]     _ ___ _____ ___ _____ ___ ___   _   __  __
+[48351] 2022/04/04 17:01:50.948202 [INF]  _ | | __|_   _/ __|_   _| _ \ __| /_\ |  \/  |
+[48351] 2022/04/04 17:01:50.948204 [INF] | || | _|  | | \__ \ | | |   / _| / _ \| |\/| |
+[48351] 2022/04/04 17:01:50.948206 [INF]  \__/|___| |_| |___/ |_| |_|_\___/_/ \_\_|  |_|
+[48351] 2022/04/04 17:01:50.948207 [INF]
+[48351] 2022/04/04 17:01:50.948209 [INF]          https://docs.nats.io/jetstream
+[48351] 2022/04/04 17:01:50.948211 [INF]
+[48351] 2022/04/04 17:01:50.948213 [INF] ---------------- JETSTREAM ----------------
+[48351] 2022/04/04 17:01:50.948217 [INF]   Max Memory:      12.00 GB
+[48351] 2022/04/04 17:01:50.948221 [INF]   Max Storage:     275.69 GB
+[48351] 2022/04/04 17:01:50.948223 [INF]   Store Directory: "/var/folders/zj/t9pthq5n5s109_02bq2gf13w0000gn/T/nats/jetstream"
+[48351] 2022/04/04 17:01:50.948225 [INF] -------------------------------------------
+[48351] 2022/04/04 17:01:50.948639 [INF] Listening for client connections on 0.0.0.0:4222
+[48351] 2022/04/04 17:01:50.948849 [INF] Server is ready
+```
+
+### Context
+
+The `nats` CLI supports multiple named configurations. We refer to these configurations as _“context”_. In these contexts, we can configure the server, credentials, certs, and much more.
+
+**Usage**
+
+To manage nats configuration contexts, we use the `context` command.
+
+```bash
+usage: nats context <command> [<args> ...]
+```
+
+**Save**
+
+To create or update a context we can use the `context save` sub-command.
+
+```bash
+$ nats context save my-context --server=demo.nats.io
+NATS Configuration Context "my-context"
+
+      Server URLs: demo.nats.io
+             Path: /..../.config/nats/context/my-context.json
+```
+
+_Note: we can also use the `--user` and `--password` flags to add credentials to the context_.
+
+**Select**
+
+Now that have created our context, we can select it using the `context select` sub-command.
+
+```bash
+$ nats context select my-context
+NATS Configuration Context "my-context"
+
+      Server URLs: demo.nats.io
+             Path: /..../.config/nats/context/my-context.json
+```
+
+**List**
+
+And now if we list known contexts using the `context ls` sub-command, we can see our `my-context` being selected.
+
+```bash
+$ nats context ls
+╭───────────────────────────╮
+│      Known Contexts       │
+├─────────────┬─────────────┤
+│ Name        │ Description │
+├─────────────┼─────────────┤
+│ my-context* │             │
+╰─────────────┴─────────────╯
+```
+
+**Removing**
+
+We can also easily remove the context using the `context rm` sub-command.
+
+```bash
+$ nats context rm my-context
+? Really delete context "my-context" Yes
+```
+
+### **Account**
+
+**Info**
+
+We can use `info` command to view account information and connection
+
+```bash
+$ nats account info
+Connection Information:
+
+               Client ID: 4
+               Client IP: 127.0.0.1
+                     RTT: 77.542µs
+       Headers Supported: true
+         Maximum Payload: 1.0 MiB
+           Connected URL: nats://127.0.0.1:4222
+       Connected Address: 127.0.0.1:4222
+     Connected Server ID: ND5TMCZ32LWFSFQGTMMADGCERCQE4C6A2P6DAVPK76WFE4LAM56AZ26N
+
+JetStream Account Information:
+
+Configuration Requirements:
+
+   Requires Max Bytes Set: false
+
+Stream Resource Usage Limits:
+
+      Memory: 0 B of Unlimited
+     Storage: 0 B of Unlimited
+     Streams: 0 of Unlimited
+   Consumers: 0 of Unlimited
+```
+
+**connections**
+
+`report connections` as the name suggest report connection for our command
+
+```bash
+$ nats account report connections
+
+╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│                                                                          Top 1 Connections out of 1 by subs                                                                          │
+├─────┬─────────────────────────┬──────────────────────────────────────────────────────────┬─────────┬───────────┬─────────┬────────┬─────────┬──────────┬──────────┬───────────┬──────┤
+│ CID │ Name                    │ Server                                                   │ Cluster │ IP        │ Account │ Uptime │ In Msgs │ Out Msgs │ In Bytes │ Out Bytes │ Subs │
+├─────┼─────────────────────────┼──────────────────────────────────────────────────────────┼─────────┼───────────┼─────────┼────────┼─────────┼──────────┼──────────┼───────────┼──────┤
+│ 5   │ NATS CLI Version 0.0.30 │ ND5TMCZ32LWFSFQGTMMADGCERCQE4C6A2P6DAVPK76WFE4LAM56AZ26N │         │ 127.0.0.1 │         │ 0s     │ 0       │ 0        │ 0 B      │ 0 B       │ 1    │
+╰─────┴─────────────────────────┴──────────────────────────────────────────────────────────┴─────────┴───────────┴─────────┴────────┴─────────┴──────────┴──────────┴───────────┴──────╯
+
+╭──────────────────────────────────────────────────────────────────────────────────╮
+│                              Connections per server                              │
+├──────────────────────────────────────────────────────────┬─────────┬─────────────┤
+│ Server                                                   │ Cluster │ Connections │
+├──────────────────────────────────────────────────────────┼─────────┼─────────────┤
+│ ND5TMCZ32LWFSFQGTMMADGCERCQE4C6A2P6DAVPK76WFE4LAM56AZ26N │         │ 1           │
+╰──────────────────────────────────────────────────────────┴─────────┴─────────────╯
+```
+
+### **Publish**
+
+`publish` command is a generic data publish utility. This is useful to quickly publish and test without having to write a script.
+
+**Usage**
+
+```bash
+nats publish [<flags>] <subject> [<body>]
+```
+
+Let’s try to publish some data on the subject `hello`
+
+```bash
+$ nats publish hello my-data
+14:09:46 Published 7 bytes to "hello"
+```
+
+_Note: To publish multiple messages, we can use the `--count` flag_
+
+### **Subscribe**
+
+Similarly to `publish` command we also have `subscribe` command which acts as a generic subscription client.
+
+**Usage**
+
+```bash
+nats subscribe [<flags>] [<subject>]
+```
+
+To try out `subscribe` command first, we will subscribe to the `hello` subject and then publish some data on the same subject using the `nats publish "hello there"` command.
+
+```bash
+$ nats subscribe hello
+14:13:20 Subscribing on hello
+[#1] Received on "hello"
+hi there
+```
+
+_Note: Learn more about publish/subscribe in the [distributed communication patterns in NATS](https://karanpratapsingh.com/blog/distributed-communication-patterns-nats) article._
+
+### **Request**
+
+`request` command is a generic request-reply request utility.
+
+**Usage**
+
+```bash
+nats request <subject>
+```
+
+**Example**
+
+```bash
+$ nats request hello
+14:43:06 Reading payload from STDIN
+```
+
+### **Reply**
+
+`reply` command gives us access to the generic service reply utility. The "command" supports extracting some information from the subject the request came in on.
+
+**Usage**
+
+```bash
+nats reply <subject> <data>
+```
+
+**Example**
+
+```bash
+$ nats reply hello data
+14:48:36 Listening on "hello" in group "NATS-RPLY-22"
+```
+
+We can also use request/reply together to measure latency. For example, using `nats bench --reply` and `nats bench --request` in two terminals at the same time. Then we can invert the number of requests per second to get the latency.
+
+_Note: Learn more about request/reply in the [distributed communication patterns in NATS](https://karanpratapsingh.com/blog/distributed-communication-patterns-with-nats-g17) article._
+
+### **KV**
+
+NATS KV is a JetStream based Key-Value store. Key-Value stores are specialized NoSQL databases that store values in a data bucket under a specific key.
+
+**Config**
+
+Before we start storing our key-value pairs, we need to create a config. For this, let’s add a custom `my-config`. This config helps us create a new bucket with built-in replication.
+
+_Note: KV requires JetSteam to be enabled._
+
+```bash
+$ nats kv add my-config
+my-config Key-Value Store Status
+
+         Bucket Name: my-config
+        History Kept: 1
+       Values Stored: 0
+  Backing Store Kind: JetStream
+ Maximum Bucket Size: unlimited
+  Maximum Value Size: unlimited
+    JetStream Stream: KV_my-config
+            Storage: File
+```
+
+**PUT and GET**
+
+Once we have the config, we have `PUT` or `GET` our key-value pairs. In the example below, we will store value `myvalue` in the key `mykey` and later retrieve it.
+
+```bash
+$ nats kv put my-config mykey myvalue
+myvalue
+
+$ nats kv get my-config mykey
+my-config > mykey created @ 04 Apr 22 11:32 UTC
+
+myvalue
+```
+
+### **Bench**
+
+`bench` command might be the most used command. This is basically a benchmark utility that comes with the CLI.
+
+**Basic Usage**
+
+```bash
+nats bench [<flags>] <subject>
+```
+
+**Example**
+Here, we are using the `bench` command to benchmark our NATS server with 1 million message with 2 publisher and 2 subscribers on the `test` subject.
+
+```bash
+$ nats bench --msgs 1000000 --pub 2 --sub 2 test
+14:57:01 Starting pub/sub benchmark [subject=test, msgs=1,000,000, msgsize=128 B, pubs=2, subs=2, js=false, pubsleep=0s, subsleep=0s]
+14:57:01 Starting subscriber, expecting 1,000,000 messages
+14:57:01 Starting subscriber, expecting 1,000,000 messages
+14:57:01 Starting publisher, publishing 500,000 messages
+14:57:01 Starting publisher, publishing 500,000 messages
+Finished      0s [===============================================] 100%
+Finished      0s [===============================================] 100%
+Finished      0s [===============================================] 100%
+Finished      0s [===============================================] 100%
+
+NATS Pub/Sub stats: 7,907,082 msgs/sec ~ 965.22 MB/sec
+ Pub stats: 3,060,110 msgs/sec ~ 373.55 MB/sec
+  [1] 1,541,921 msgs/sec ~ 188.22 MB/sec (500000 msgs)
+  [2] 1,530,055 msgs/sec ~ 186.77 MB/sec (500000 msgs)
+  min 1,530,055 | avg 1,535,988 | max 1,541,921 | stddev 5,933 msgs
+ Sub stats: 5,275,380 msgs/sec ~ 643.97 MB/sec
+  [1] 2,680,372 msgs/sec ~ 327.19 MB/sec (1000000 msgs)
+  [2] 2,638,306 msgs/sec ~ 322.06 MB/sec (1000000 msgs)
+  min 2,638,306 | avg 2,659,339 | max 2,680,372 | stddev 21,033 msgs
+```
+
+**JetStream**
+
+We can also use `--js` with `--pub` to publish first and replay using `--js --pull` and `--sub` to separately measure the speed of putting and getting messages from the stream.
+
+```go
+# Put messages in the stream
+$ nats bench --msgs 1000000 --pub 2 test --js
+
+# Pull messages from the stream
+$ nats bench --msgs 1000000 --sub 2 test --js --pull
+```
+
+_Note: We can use the `bench` command not just to see how fast it goes “all out” but to also generate traffic (using `--pubsleep` ) and processing times (using `--subsleep` )_
+
+### **Events**
+
+`events` command shows advisories and events in the NATS server.
+
+```bash
+$ nats events
+Listening for Client Connection events on $SYS.ACCOUNT.*.CONNECT
+Listening for Client Disconnection events on $SYS.ACCOUNT.*.DISCONNECT
+Listening for Authentication Errors events on $SYS.SERVER.*.CLIENT.AUTH.ERR
+```
+
+### **Cheat**
+
+`cheat` is arguably the most awesome command. It helps us see what’s all there is in the NATS CLI in a quick and easy-to-digest format.
+
+```bash
+$ nats cheat --sections
+Known sections:
+
+   account
+   bench
+   cheats
+   consumer
+   contexts
+   errors
+   events
+   governor
+   kv
+   latency
+   obj
+   pub
+   reply
+   schemas
+   server
+   stream
+   sub
+```
+
+Now, we can simply view info about any of the sections like the following:
+
+```bash
+$ nats cheat account
+# To view account information and connection
+nats account info
+
+# To report connections for your command
+nats account report connections
+```
+
+_Note: We can also use the `nats <cmd> --help` to get some info about the commands._
+
+## Conclusion
+
+In this article, we took a brief look at NATS CLI and learned about some basic CLI commands. This will help us to manage our NATS server easily and any extra dependency! Feel free to [reachout](https://www.karanpratapsingh.com/?action=contact) if you have any questions.

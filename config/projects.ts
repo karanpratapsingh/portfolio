@@ -36,8 +36,7 @@ export const projects: Project[] = [
     id: 0,
     title: 'HyperTrade',
     slug: 'hypertrade',
-    banner:
-      'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fhypertrade%2Fbanner.png?alt=media&token=cc28372e-46d4-4a60-98a0-25dafb64f849',
+    banner: '/static/projects/hypertrade/banner.png',
     website: 'https://github.com/karanpratapsingh/HyperTrade',
     description:
       'Ready to deploy, distributed cryptocurrency trading bot. The idea of this project originally came from a script I used to automate buying and selling of fiat assets. I was curious and wanted to scale it into a real system which can execute trades for me. I had a lot of fun building this. I got to play with lots of different technologies while growing my financial knowledge.',
@@ -70,10 +69,9 @@ export const projects: Project[] = [
     id: 1,
     title: 'Peapods',
     slug: 'peapods',
-    banner:
-      'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fpeapods%2Fbanner.png?alt=media&token=20726ab4-332d-4cd7-afb1-2d1764deaf6b',
+    banner: '/static/projects/peapods/banner.png',
     website: 'https://peapods.com',
-    description: 'Upcoming decentralized social media platform for web 3.0',
+    description: `Peapods is a new type of decentralized social network that values real human interaction. The platform helps you become closer with your friends and make new ones. We value kindness, friendship, user privacy, and genuine connection. Together we can cure boredom, conquer loneliness, and fulfill the original promise of the internet - to connect us in ways that matter.`,
     repository: null,
     stack: [
       Stack.javascript,
@@ -93,8 +91,7 @@ export const projects: Project[] = [
     title: 'Proximity',
     slug: 'proximity',
     website: 'https://proximity-mobile.web.app',
-    banner:
-      'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fproximity%2Fbanner.jpeg?alt=media&token=4d1d49e3-20ac-491e-8947-57a4e8520cc6',
+    banner: '/static/projects/proximity/banner.jpeg',
     description:
       'An open source social media app that does not use your data against you.',
     repository: 'https://github.com/karanpratapsingh/Proximity',
@@ -127,8 +124,7 @@ export const projects: Project[] = [
     id: 3,
     title: 'Velvet Live',
     slug: 'velvet-live',
-    banner:
-      'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fvelvet%2Fbanner.png?alt=media&token=1c8fef8b-397e-434e-8ae8-48b6a5bc2ed2',
+    banner: '/static/projects/velvet-live/banner.png',
     website: 'https://boom.london',
     description:
       'Connect with shoppers who need your advice and expertise when they’re shopping online. Assist and sell to customers the same way you would in-store, but now through chat and video straight from the app.',
@@ -162,8 +158,7 @@ export const projects: Project[] = [
     slug: 'stewards',
     website: 'https://stewards.app',
     repository: null,
-    banner:
-      'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fstewards%2Fbanner.png?alt=media&token=51bb3366-f4e8-4db1-9bfc-c8ebc8c63953',
+    banner: '/static/projects/stewards/banner.png',
     description:
       'Mobile ordering solution with robot delivery. Stewards also provides variety of tools like staff application to manage orders, self checkout solution and admin dashboard.',
     stack: [
@@ -223,8 +218,7 @@ export const projects: Project[] = [
     title: 'Celebrify',
     slug: 'celebrify',
     website: 'https://celebrify.in',
-    banner:
-      'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fcelebrify%2Fbanner.jpeg?alt=media&token=94cd7e6c-6360-4f65-b08a-b95f5ce7d12c',
+    banner: '/static/projects/celebrify/banner.jpeg',
     description:
       'Get personalized videos from your favorite celebrities at just one click. Request personalized video messages for your friends, family, loved ones or even yourself. Be it a doubt or even a special wish from your favorite celebrity.',
     repository: null,
@@ -250,8 +244,7 @@ export const projects: Project[] = [
     id: 6,
     title: 'KCards',
     slug: 'kcards',
-    banner:
-      'https://firebasestorage.googleapis.com/v0/b/portfolio-8fa71.appspot.com/o/projects%2Fkcards%2Fbanner.jpeg?alt=media&token=39dc0d23-0edf-49f2-b662-f2f6ed99cfec',
+    banner: '/static/projects/kcards/banner.jpeg',
     description:
       'KCards is your one-stop replacement for paper cards. KCards help you to easily share your cards with other users and get real-time analytics on the shared cards.',
     repository: 'https://github.com/karanpratapsingh/KCards',

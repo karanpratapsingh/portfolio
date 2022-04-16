@@ -1,0 +1,148 @@
+---
+title: 'Continuous Integration and Deployment with React Native using App Center'
+date: '2020-03-28'
+tags: ['javascript', 'reactnative', 'devops']
+draft: false
+summary: 'Setup React Native continuous integration and deploy with App Center'
+images: ['/static/blogs/continuous-integration-appcenter-react-native.jpeg']
+authors: ['default']
+---
+
+Greeting React Native Community, in this article I will be helping you with setting up continuous integration and deployment using Microsoft App Center which is very easy to setup, however, might be confusing for new users.
+
+#### What is continuous integration and deployment anyways?
+
+Continuous integration is a coding philosophy and set of practices that drive development teams to implement small changes and check-in code to version control repositories frequently.
+
+Continuous deployment/delivery picks up after continuous integration. CD automates the delivery of applications to selected infrastructures (like Play Store and App Store in our case). Most teams work with multiple environments other than the production, such as development and testing environments, and CD ensures there is an automated way to push code changes to them.
+
+You can read more about CI/CD [here](https://www.infoworld.com/article/3271126/what-is-cicd-continuous-integration-and-continuous-delivery-explained.html)
+
+#### This is interesting but how does it benefit me?
+
+If you're an experienced developer you already know the benefits, but in case you're a React Native developer just getting started then it is a great way to setup automatic builds and also ensuring smooth delivery to the App Store/Play Store.
+
+The main advantage is that it saves a lot of manual build time on a developer's machine and especially if you work in a team with different machines/environments then it's better to do automatic builds and if they fail then it is easier to debug as there are less external factors versions which might be the case with different developer machines in a team.
+
+Last but not the least, It's a great thing to know in general from an engineering perspective.
+
+#### Let's get started :rocket:
+
+Let us start by setting up our first build with App Center, for this, We will be following by example of one of my app [Proximity](https://github.com/karanpratapsingh/Proximity)
+
+- Navigate to Microsoft's [App Center](https://appcenter.ms/) and sign in with your account.
+
+![appcenter-signin](https://user-images.githubusercontent.com/29705703/77619171-a939ca80-6f5d-11ea-8d70-67bd0ac3352c.png)
+
+- This is the main dashboard we'll be working with, But right now we don't see anything. Let's add a new app.
+
+![appcenter-add-app](https://user-images.githubusercontent.com/29705703/77617259-b6ed5100-6f59-11ea-93e0-18b048345d03.png)
+
+- Now you will be prompted with app details and platform setup. Select `iOS` or `Android` with the platform as `React Native` . After that click `Add new app`
+
+![appcenter-add-app-config](https://user-images.githubusercontent.com/29705703/77617263-b785e780-6f59-11ea-80aa-6c4528d4e089.png)
+
+- Now you will be directed to your new app's overview. On the left click on `Build` to start setting up the build.
+
+![appcenter-add-build](https://user-images.githubusercontent.com/29705703/77617280-c53b6d00-6f59-11ea-94b6-bf222b5b8019.png)
+
+- Here we have to link our repository with the app we created. We are presented with a bunch of options. Let's go with Github since my repository is on Github.
+
+![appcenter-add-build-config](https://user-images.githubusercontent.com/29705703/77617292-ca98b780-6f59-11ea-9eba-346f40f9faa7.png)
+
+- You will be prompted with Github login, after that you should be able to search and add your repository.
+
+![appcenter-add-repo](https://user-images.githubusercontent.com/29705703/77617307-d7b5a680-6f59-11ea-92a5-6b7046dd9e21.png)
+
+- After a successful connection with a repository, you should be able to see all the active branches. Now let us start setting up the `development` branch.
+
+![appcenter-branch](https://user-images.githubusercontent.com/29705703/77617312-da180080-6f59-11ea-86d8-f537d2316a23.png)
+
+- This is the build configuration prompt, here we can select different config options we would like to use.
+
+<i>
+  As this is a setup for an iOS application, we should also see additional
+  options like `Scheme` and `XCode` version, we can leave these as default for
+  now.
+</i>
+
+There's is also an option to set up `Build Scripts` . They help us execute custom scripts in different phases of our build process.
+For example, I have a `Pre-build` setup which helps me to [jetify](https://github.com/mikehardy/jetifier) my `node_modules` if there's an `androidx` issue and update my config for production release.
+
+```sh
+#!/usr/bin/env bash
+#Jetify
+node node_modules/jetifier/bin/jetify
+
+# Update config
+mkdir app/config
+echo "$APP_CONFIG" | base64 --decode > app/config/index.ts
+```
+
+You can read about `Build Scripts` in detail [here](https://docs.microsoft.com/en-us/appcenter/build/custom/scripts/)
+
+We can now also control how often we want to build our branch. For instance, in larger teams, you might want to run build for every commit.
+
+![appcenter-build-config-1](https://user-images.githubusercontent.com/29705703/77617344-e8661c80-6f59-11ea-8540-a38f5326a9a5.png)
+
+- Scrolling down, we see additional config. `Build numbers` can also be incremented automatically which might save additional time.
+
+`Environment variables` are extremely helpful when working with tokens and secrets which only certain members of the team should have access to or you want your custom `Build Script` to have access to.
+
+<i>For example: swapping your development config with production config.</i>
+
+![appcenter-build-config-2](https://user-images.githubusercontent.com/29705703/77617329-e0a67800-6f59-11ea-8182-85347659efbd.png)
+
+- Signing Build is the most essential feature of any CI/CD. Here we can see how this differs for `iOS` and `Android` .
+
+On `iOS` we need to add our provisioning profile along with certificates. You can checkout this [guide](https://mobincube.zendesk.com/hc/en-us/articles/200511933-How-to-get-the-p12-file-and-provisioning-profile-for-publishing-an-app-on-App-Store) for generating certificates.
+
+![appcenter-build-signing-ios](https://user-images.githubusercontent.com/29705703/77617336-e308d200-6f59-11ea-958b-d1c614143825.png)
+
+On `Android` we just need our `Keystore file` along with its credentials.
+You can checkout this [guide](https://docs.oracle.com/cd/E19798-01/821-1841/gjrgy/) for generating a `Keystore file`
+
+![appcenter-build-signing-android](https://user-images.githubusercontent.com/29705703/77617361-f9169280-6f59-11ea-941c-22c842a00c9e.png)
+
+- With build signing in place, let us now move to continuous deployment/delivery. Build distribution helps us upload our built binaries `*.apk or *.ipa` to beta testers using `Groups` or to the respective stores directly by using `Stores` . Start by clicking on `Connect to Stores`
+
+<i>
+  Note: We can also skip distribution if we just want to quickly build and test
+  our `*.apk or *.ipa`{' '}
+</i>
+
+![appcenter-build-distribute](https://user-images.githubusercontent.com/29705703/77617350-ec923a00-6f59-11ea-95e0-9576540dfb9b.png)
+
+- Here depending on your platform you selected earlier you should see `Google Play` or `App Store Connect` . You can follow this simple wizard and authenticate your account. Then App Center should handle the rest.
+
+![appcenter-connect-playstore](https://user-images.githubusercontent.com/29705703/77617321-dd12f100-6f59-11ea-8e84-cc50ad6f9d4b.png)
+
+![appcenter-connect-appstore](https://user-images.githubusercontent.com/29705703/77617365-fb78ec80-6f59-11ea-806c-4b452b13de4e.png)
+
+- With our build configuration complete. Let's head back to build overview where now we can also clone configuration from different branches without having to go through the setup again. This is especially helpful for larger teams working with multiple branches.
+
+![appcenter-build-config-clone](https://user-images.githubusercontent.com/29705703/77617355-f3b94800-6f59-11ea-867d-71fad235a1ae.png)
+
+- Now to the moment of truth. Let's kick off our first build :fire:
+
+![appcenter-build-start](https://user-images.githubusercontent.com/29705703/77617379-0895db80-6f5a-11ea-9cfe-9c4499e31a53.png)
+
+- Okay building... building... building. Typically it takes 6 minutes for `Android` and 10 minutes for `iOS`
+
+![appcenter-build-progress](https://user-images.githubusercontent.com/29705703/77617376-03389100-6f5a-11ea-925a-61a89016d871.png)
+
+- Yay :tada: our build was a success. It should be available on `App Store Connect` or `Google Play Console` shortly after being processed. You can also download build directly after the build has completed as shown below.
+
+![appcenter-build-success](https://user-images.githubusercontent.com/29705703/77820095-c9a48900-7105-11ea-8c1f-f868dd1d233e.png)
+
+Well, this was all about setting up CI/CD with App Center. However App Center has tons of great features like Analytics, Test Runs, Diagnostics, Push Notification, Crash Reportingand most importantly Codepush which is a game-changer for app distributions.
+
+Hopefully, now you have a better understanding of CI/CD and were able to setup your build with App Center.
+
+<i>
+  If you liked this article, or faced any issues, feel free to reach out via
+  [Twitter](https://twitter.com/karan_6864) or
+  [Email](mailto:karan.pratapsingh686@gmail.com) 🚀
+</i>
+
+Happy Coding :tada:

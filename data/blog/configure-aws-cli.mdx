@@ -1,0 +1,129 @@
+---
+title: 'Configuring AWS CLI'
+date: '2021-08-11'
+tags: ['aws', 'devops', 'beginners']
+draft: false
+summary: 'Configuring AWS CLI'
+images: ['/static/blogs/configure-aws-cli.png']
+authors: ['default']
+---
+
+In this article we'll be setting up AWS CLI and credentials which is useful when we want to interact with our aws services or resources programmatically.
+
+<iframe
+  className='sm:h-96'
+  height='100%'
+  width='100%'
+  src='https://www.youtube.com/embed/Z55UdT0fl7U'
+  allowFullScreen
+  frameborder='0'
+  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+></iframe>
+
+## Setting up AWS Credentials
+
+Before we can install and setup our AWS CLI we will require `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.
+So, let's look at how we can get those from the aws console
+
+_Note: we will be creating a new IAM user rather than creating access keys on the root aws account which is generally a good practice_
+
+**Add a new user**
+
+Let's start by going over to IAM dashboard and add a new user
+
+![dashboard](https://user-images.githubusercontent.com/29705703/126896341-d47c464f-bb69-4619-a4af-400125d8a24a.png)
+
+Give a user name and allow programmatic access
+
+![details](https://user-images.githubusercontent.com/29705703/126896342-fe522c3c-97b5-401d-a1eb-98f8518260d0.png)
+
+**Attach policies**
+
+This is the most important part. Here, we will attach policies that will give the user appropriate access to the AWS services.
+
+_For demonstration purposes I've attached a AWS managed policy `AmazonS3FullAccess`_
+
+![policies](https://user-images.githubusercontent.com/29705703/126896343-27640f9c-8dda-4fc7-8d38-adfa54c0089a.png)
+
+**Tags (optional)**
+
+It's always good to tag our resources but this is optional.
+
+![tags](https://user-images.githubusercontent.com/29705703/126896345-3ba15b7e-b17e-4bbb-9a66-2aa94253707b.png)
+
+**Review**
+
+Let's give it a final review and then click `Create user`
+![review](https://user-images.githubusercontent.com/29705703/126896347-299d3f8d-4807-4772-b2b0-65a7d4750e3e.png)
+
+**Secrets**
+
+The user has been created and now we will be able to get our secrets
+
+_Note: This is the only time you’ll be able to view the Secret Access Key ID so be sure to write it down or download the CSV._
+
+![secrets](https://user-images.githubusercontent.com/29705703/126896350-4ad6a609-4b7d-4358-a2ed-9aa56307ca43.png)
+
+Our new user was created!
+
+![user created](https://user-images.githubusercontent.com/29705703/126896351-b8bcc944-48c0-4291-89d5-4154972e152a.png)
+
+## Install AWS CLI
+
+We can install AWS CLI from docs [here](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
+
+## Configure AWS CLI
+
+Let's configure the CLI for single user
+
+**Single user**
+
+```
+$ aws configure
+AWS Access Key ID [None]: <Your Access Key ID>
+AWS Secret Access Key [None]: <Your Secret Access Key ID>
+Default region name [None]: <Your preferred AWS region>
+Default output format [None]: json
+```
+
+After the configuration the credentials will be stored at `~/.aws/credentials`
+
+_Here's a list of all the [aws regions](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html#Concepts.RegionsAndAvailabilityZones.Regions)_
+
+**Multiple profiles (optional)**
+
+Profiles are really helpful if you're working with multiple users/accounts.
+
+```
+$ aws configure --profile xyz
+```
+
+We can switch between profiles using `AWS_PROFILE` environment variable.
+For example: `export AWS_PROFILE=xyz`
+
+_Note: it is recommended to create a new IAM user with limited permissions and generating access keys for that user instead [read more](https://docs.aws.amazon.com/general/latest/gr/aws-access-keys-best-practices.html)_
+
+```
+$ aws configure list
+
+Name                    Value               Type      Location
+----                    -----               ----      --------
+profile                 ********           manual    --profile
+access_key            *********ABCD   shared-credentials-file
+secret_key            *********ABCD   shared-credentials-file
+region                  <not set>             None      None
+```
+
+Finally, Let's see if it works!
+
+```
+$ aws s3 ls
+```
+
+If everything is setup correctly, we should see an output.
+
+### Next steps
+
+Now that we've created our aws credentials securely, we can can now use them with AWS CLI or SDK and even terraform!
+
+Thanks for Reading, I hope this was helpful. As always feel free to reach out to me on [Twitter](https://twitter.com/karan_6864) if you face any issues!

@@ -1,0 +1,145 @@
+---
+title: 'An in-depth guide to Sign in with Apple using React Native'
+date: '2020-03-16'
+tags: ['javascript', 'reactnative', 'typescript']
+draft: false
+summary: 'Step-by-step guide for integrating Apple Sign-in using React Native'
+images: ['/static/blogs/sign-in-with-apple-react-native.png']
+authors: ['default']
+---
+
+Greetings, React Native Community!
+
+<br /> In this article, I will be breaking down the step-by-step process of
+integrating Apple Sign-in using React Native.
+
+### Why do I need to do this?
+
+As per App Store's latest guidelines, it is now compulsory to add sign in with Apple in your iOS app if you're using any other social logins like Google, Facebook, Twitter, etc.
+
+Moreover, if you already have an established app, Sign-in with Apple might help you gain more iOS users who might not want to sign in using other options.
+
+### Steps:
+
+- Apple Developer dashboard setup
+- Adding the capability to our project
+- Integrating React Native package
+
+For the purpose of the demonstration, suppose we created a fresh React Native project called `Proximity` with bundleId `com.proximity.app`
+
+#### Apple Developer dashboard setup
+
+- Head over to [Apple's developer console](https://developer.apple.com/). Click `Account` in the nav bar at the top and sign in with your developer account.
+
+![apple-developer-signin](https://user-images.githubusercontent.com/29705703/76698864-8261d580-66cd-11ea-9c88-0e9ae4ca156d.png)
+
+- Your account dashboard should look like this. If you do not see `Certificates, IDs & profiles` as an option in the left-hand sidebar, it means you have not yet enrolled in the [Apple developer program](https://developer.apple.com/programs/) which is a prerequisite for Apple product development.
+
+![apple-developer-dashboard](https://user-images.githubusercontent.com/29705703/76698862-7ece4e80-66cd-11ea-95e7-c1925b0e835c.png)
+
+- Click on `Identifiers` in the left-hand sidebar. Click on your project bundleId in the list, in our case, `com.proximity.app`
+
+![identifiers-setup](https://user-images.githubusercontent.com/29705703/76698872-8db50100-66cd-11ea-9ee7-f1be899b0a55.png)
+
+- Tick the checkbox for `Sign in with Apple` and click the `Edit` button.
+
+![identifiers-enable-applesignin](https://user-images.githubusercontent.com/29705703/76698869-8988e380-66cd-11ea-928a-5fc3787e33cc.png)
+
+- Select `Enable as a primary App ID` and click the `Save` button.
+
+![identifiers-enable-primaryid](https://user-images.githubusercontent.com/29705703/76698870-8b52a700-66cd-11ea-8577-6e2614582743.png)
+
+- Click the `Save` button at the top of the screen.
+
+![identifiers-save](https://user-images.githubusercontent.com/29705703/76698871-8c83d400-66cd-11ea-85c2-ffb0d9836dd9.png)
+
+- If you're enabling for the first time then choose the `Group with existing primary App ID` option and then select your app ID from the drop-down.
+
+- Click on `keys` in the left-hand sidebar and create a new key.
+
+![key-add](https://user-images.githubusercontent.com/29705703/76698875-8f7ec480-66cd-11ea-9e78-667d339ab842.png)
+
+- Give your new key a descriptive name, something like `Apple sign in key for XYZ` where XYZ can be your app. Tick the checkbox next to `Sign In with Apple`, and click `Configure`.
+
+![key-add-setup](https://user-images.githubusercontent.com/29705703/76698876-91488800-66cd-11ea-9c06-b76337d7799b.png)
+
+- Select `Proximity` as our primary app ID.
+
+![key-configure](https://user-images.githubusercontent.com/29705703/76698879-9279b500-66cd-11ea-9d65-1494276282ec.png)
+
+- Register your key (My advice is to download and keep it securely). The initial setup for Apple sign in from the developer dashboard is now complete.
+
+![key-register](https://user-images.githubusercontent.com/29705703/76698881-93aae200-66cd-11ea-8646-6e77873b7b72.png)
+
+#### Adding the capability to our project
+
+Before we start tinkering with our project, let's enable sign in with Apple capability for our app. Here I am using Xcode 11 for demonstration.
+
+- Open your project in Xcode by clicking `Open another project` and navigate to the file: `Proximity/ios/Proximity.xcworkspace` or `Proximity/ios/Proximity.xcodeproj`
+
+![open-with-xcode](https://user-images.githubusercontent.com/29705703/76699451-990b2b00-66d3-11ea-99ad-de15891fcdca.png)
+
+- Click `Proximity` under the target's header on the left as shown below and then select `Signing and Capabilities` on the top tab bar.
+
+![select-target](https://user-images.githubusercontent.com/29705703/76699449-97d9fe00-66d3-11ea-916e-c2eba1376759.png)
+
+- Click on `+ capability` to add a new capability. Now you should see a dialog. Select `Sign In with Apple` to enable this capability.
+
+![enable-capability](https://user-images.githubusercontent.com/29705703/76699447-94467700-66d3-11ea-902e-35f41d20ebe8.png)
+
+- Make sure to select your team and verify that this screen looks similar to one given below without any error.
+
+![verify-update-team](https://user-images.githubusercontent.com/29705703/76699446-8e509600-66d3-11ea-86fa-ca25e1ca86b6.png)
+
+#### Integrating React Native package
+
+Phew!!
+
+<br /> Finally, we can start with the actual code.
+<br /> For this section, we'll be using React Native 0.60+ and [@invertase/react-native-apple-authentication](https://github.com/invertase/react-native-apple-authentication)
+by [Invertase](http://invertase.io/). They're the team behind [react-native-firebase](https://github.com/invertase/react-native-firebase),
+do check them out!
+
+- Let's add [@invertase/react-native-apple-authentication](https://github.com/invertase/react-native-apple-authentication) to our project.
+
+```
+yarn add @invertase/react-native-apple-authentication
+```
+
+- Update the cocoapods dependencies.
+
+```
+cd ios && pod install && cd ..
+```
+
+- Now we'll be implementing a simple screen with login and logout button to see the whole process in action.
+
+![screen-setup](https://user-images.githubusercontent.com/29705703/76702297-bb5e7200-66ee-11ea-8dea-3c767b77bb81.png)
+
+- Here's how the basic code setup might look like.
+
+![setup](https://user-images.githubusercontent.com/29705703/76702315-e5b02f80-66ee-11ea-8834-59974591271f.png)
+
+- To perform a login request, we can use [performRequest](https://github.com/invertase/react-native-apple-authentication/blob/master/docs/interfaces/_lib_index_d_.rnappleauth.module.md#performrequest) method with [requestedOperation](https://github.com/invertase/react-native-apple-authentication/blob/master/docs/interfaces/_lib_index_d_.rnappleauth.appleauthrequestoptions.md#optional-requestedoperation) to perform `Login | Logout | Implicit | Refresh` requests. We can also request basic information from the user using [requestedScopes](https://github.com/invertase/react-native-apple-authentication/blob/master/docs/interfaces/_lib_index_d_.rnappleauth.appleauthrequestoptions.md#optional-requestedscopes) option as shown in the example below.
+
+![login](https://user-images.githubusercontent.com/29705703/76702313-e3e66c00-66ee-11ea-8300-4d9caa0fdd7e.png)
+
+- Similar to the login request, we can just change [requestedOperation](https://github.com/invertase/react-native-apple-authentication/blob/master/docs/interfaces/_lib_index_d_.rnappleauth.appleauthrequestoptions.md#optional-requestedoperation) to `AppleAuthRequestOperation.LOGOUT`. Here's an example for logging out the user.
+
+![logout](https://user-images.githubusercontent.com/29705703/76702314-e5179900-66ee-11ea-84dc-f8a49fe17515.png)
+
+- Listen to the credentials revoked event using `useEffect` hook. This is useful when you want to actively listen if the user logs out.
+
+![event](https://user-images.githubusercontent.com/29705703/76702309-de892180-66ee-11ea-9116-68d36af2ff3f.png)
+
+Check out the [complete code](https://github.com/karanpratapsingh/guides-and-articles/blob/master/Articles/Sign%20in%20with%20apple/code%20snippets/AppleLogin.tsx) on Github for the example to get started faster.
+
+I hope all the steps worked and you gained an understanding of how to integrate Apple sign in with React Native. <br />
+If you wish to see this live in action check out [Proximity](https://github.com/karanpratapsingh/Proximity) where I recently implemented Apple Sign in.
+
+<i>
+  Did you face any issues during the integration? feel free to leave a comment
+  or reach out to me via [twitter](https://twitter.com/karan_6864)
+</i>
+
+Happy Coding! 🎉

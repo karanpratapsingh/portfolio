@@ -1,0 +1,152 @@
+---
+title: 'Deploying Next.js on AWS App Runner'
+date: '2021-08-06'
+tags: ['aws', 'nextjs', 'react', 'docker']
+draft: false
+summary: 'Deploying Next.js on AWS App Runner'
+images: ['/static/blogs/deploying-nextjs-aws-app-runner.png']
+authors: ['default']
+---
+
+Last week I was playing around with AWS App runner which is a new and exciting offering by AWS. So, In this article we'll be deploying our Next.js app on AWS App Runner
+
+## What is AWS App runner?
+
+AWS App runner is a fully managed service that makes it easy to deploy containerized web applications, APIs at scale without any prior infrastructure experience or knowledge.
+
+Here are some features:
+
+- Automatic builds and deploys
+- Out of the box load balancing
+- Simple Auto scaling
+- SSL enabled by default!
+
+Best thing is we can just start with your source code (on Github) without even writing a `Dockerfile` using automatic builds!
+
+<iframe
+  className='sm:h-96'
+  height='100%'
+  width='100%'
+  src='https://www.youtube.com/embed/XMIgCgkzhfk'
+  allowFullScreen
+  frameborder='0'
+  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+></iframe>
+
+_Note: I will also add that the AWS App Runner is still a relatively new service when compared to [AWS ECS](https://aws.amazon.com/ecs/) or [AWS EKS](https://aws.amazon.com/eks/)_
+
+## Setup
+
+I've initialized a new next project using `next-app` and committed it to a github repository
+
+```
+yarn create next-app --typescript
+```
+
+## Let's deploy it!
+
+### Find our AWS App Runner service
+
+Login into AWS console and let's search for `AWS App Runner`
+
+![search](https://user-images.githubusercontent.com/29705703/126870951-de56a64d-e640-4cbe-abc3-21a0225d4aa2.png)
+
+### Create an App Runner service
+
+![dashboard](https://user-images.githubusercontent.com/29705703/126870954-ed458385-6d74-4287-a1e4-263199ce117d.png)
+
+### Source setup
+
+Here i'll add a connection with my github account to keep things simple.
+But you can also build and push your docker image to [AWS ECR](https://aws.amazon.com/ecr/) and use that as well.
+
+![connect](https://user-images.githubusercontent.com/29705703/126870955-e4133b5c-830f-4978-89ba-847a65eb8e6d.png)
+
+It'll now create a connection with github using [AWS CodeStar](https://aws.amazon.com/codestar/)
+
+![connecting](https://user-images.githubusercontent.com/29705703/126872238-a4d05f21-11d5-4401-b58b-cf9fee975ca8.png)
+
+### Configure build
+
+In this step we need to tell App Runner how to build and start our application.
+
+We can either configure it from the console or you can also add a `apprunner.yaml` to root of your repository as below
+
+```yaml
+version: 1.0
+runtime: nodejs12
+build:
+  commands:
+    build:
+      - yarn --production
+      - yarn build
+run:
+  command: yarn start
+  network:
+    port: 3000
+```
+
+To keep things simple, let's add config directly from the console.
+
+![build](https://user-images.githubusercontent.com/29705703/126870957-bc2ddc87-c7d2-42c3-a5e3-a25559bee951.png)
+
+_Note: at the time of writing this article, AWS App Runner only supports python 3 and nodejs 12 environment_
+
+### Configure service
+
+We're almost there! In this step we can configure things like compute CPU and memory, environment variables, autoscaling, health checks and tags.
+
+![configs](https://user-images.githubusercontent.com/29705703/126870959-9884bd12-1a8c-4ec3-8b71-7640527e3b06.png)
+
+**Auto scaling (optional)**
+
+As App Runner supports autoscaling by default we can just tweak the config to fit our needs
+
+![autoscaling](https://user-images.githubusercontent.com/29705703/126870960-abaac445-4ff1-4421-a125-f250fb6d5715.png)
+
+We can add a custom auto scaling config if required!
+![autoscaling config](https://user-images.githubusercontent.com/29705703/126870961-24f4b7bb-e842-4a3f-bab2-13416016eabe.png)
+
+**Health checks (optional)**
+
+It's always good to have health check setup, currently App Runner only supports TCP based health checks
+![healthcheck](https://user-images.githubusercontent.com/29705703/126870963-2bccbe49-fcb4-4946-a675-fbe492b058f3.png)
+
+**Security (optional)**
+
+Here, we can configure an [IAM](https://aws.amazon.com/iam/) role for our instance. This is required if you are using `aws-sdk` to integrate with other AWS services.
+
+_Example: Nodejs server using AWS S3 to store images_
+
+![security](https://user-images.githubusercontent.com/29705703/126870964-f6242cc3-1ad5-42c0-b367-0b2ac6593cc0.png)
+
+**Security (optional)**
+
+It's never a bad idea to tag your AWS resources!
+
+![tags](https://user-images.githubusercontent.com/29705703/126870965-6374243b-011d-4644-a01f-9179647aa51f.png)
+
+### Review and Deploy!
+
+At last, let's review our setup and deploy!
+![review](https://user-images.githubusercontent.com/29705703/126870966-fabba7ed-f8b9-485a-b6c1-476f7a220a05.png)
+
+Okay, now our deploy has been created.
+
+_Note: this usually takes 2-3 minutes as App Runner dockerize's our app and starts it. If you're using already built docker image available on AWS ECR, then deploys would be instant!_
+
+![created deploy](https://user-images.githubusercontent.com/29705703/126870967-919411c8-2b0b-44c8-8577-97858d4cdf51.png)
+
+### It's showtime!
+
+Our deployment was a success and we can access our service via the `default domain` url given by the App Runner
+
+![running](https://user-images.githubusercontent.com/29705703/126870969-4f298f7f-c793-44a5-9bd1-a33169a30d3e.png)
+
+### Next Steps?
+
+We might want to add a custom domain to our AWS App Runner service, this can be done by going to the `Custom domains` tab
+
+![custom domain](https://user-images.githubusercontent.com/29705703/126870968-28bd790d-6a89-439a-be9c-b30020ad9640.png)
+
+Thanks for Reading, I hope that it was exciting for you as well as it was for me. As always feel free to reach out to me on [Twitter](https://twitter.com/karan_6864) if you face any issues!

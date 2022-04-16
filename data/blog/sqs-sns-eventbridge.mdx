@@ -1,0 +1,48 @@
+---
+title: 'AWS SQS vs SNS vs EventBridge'
+date: '2021-09-13'
+tags: ['aws', 'backend']
+draft: false
+summary: 'AWS SQS vs SNS vs EventBridge'
+images: ['/static/blogs/sqs-sns-eventbridge.png']
+authors: ['default']
+---
+
+In this article we will take a look at following AWS messaging services - SQS, SNS and EventBridge.
+
+On the first look, these services can seem quite similar as they pretty much do the same thing, which is decoupling the producer from the consumer. Which makes our architecture asynchronous and loosely coupled. But looking closely these services have different capabilities.
+
+## SQS (Simple Queue Service)
+
+[AWS Simple Queue Service (SQS)](https://aws.amazon.com/sqs) is a distributed message queuing service which helps with sending, storing and receiving messages between services easier using the pull model.
+
+- Ordered processing of the events
+- Consumer can pull the message with long-polling
+- Only one consumer can read an individual message
+- Cost Effective and Automatic scaling
+- Cannot invoke consumer based on the message (needs SNS message filtering for this)
+- Message encryption at rest with KMS available
+- HIPAA compliant
+
+## SNS (Simple Notification Service)
+
+[AWS Simple Notification Service (SNS)](https://aws.amazon.com/sns) is a notification service that is based on publisher subscriber model.
+
+- Can have multiple consumers like Lambda, HTTP, SQS etc.
+- Message Fanout gives asynchronous event notifications, which in turn allows for parallel processing
+- Can invoke the subscriber based on the message
+- Message encryption at rest with KMS available
+- SNS is also HIPAA compliant
+
+## EventBridge
+
+[AWS EventBrige](https://aws.amazon.com/eventbridge) is a relatively newer service compared to SQS or SNS. It's very similar to SNS but with tons of added on features.
+
+- Provides great integration options with third-party SaaS applications
+- Can transform events before sending
+- Event filtering and routing based on message
+- No encryption at rest with KMS
+- Message order is not maintained
+- Has a Schema Registry/Discovery feature
+- Message archiving is available
+- Can re-play events

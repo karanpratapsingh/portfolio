@@ -1,0 +1,323 @@
+---
+title: 'Introduction to Infrastructure as Code with Terraformh'
+date: '2021-08-17'
+tags: ['aws', 'terraform', 'devops']
+draft: false
+summary: 'Introduction to Infrastructure as Code with Terraformh'
+images: ['/static/blogs/introduction-to-iac-terraform.png']
+authors: ['default']
+---
+
+In this article we will be learning about Infrastructure as Code, approaches, benefits and then we'll learn basics of [Terraform](https://www.terraform.io/) by understanding some of its fundamentals and useful commands.
+
+We will also create a basic Terraform project and provision some resources!
+
+<iframe
+  className='sm:h-96'
+  height='100%'
+  width='100%'
+  src='https://www.youtube.com/embed/zqSbi0i0-Mo'
+  allowFullScreen
+  frameborder='0'
+  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+></iframe>
+
+## What is Infrastructure as Code?
+
+Infrastructure as Code (IaC) can be defined as managing and provisioning of infrastructure through code instead of through manual processes like provisioning resources through AWS, GCP console etc.
+
+### Approaches
+
+There are two approaches Infrastructure as Code (IaC):
+
+- **Imperative**
+
+With this approach, we define our desired configuration as a sequence of commands executed in a certain order.
+
+For example, using a bash script using [AWS CLI](https://aws.amazon.com/cli/) to provision our resources.
+
+- **Declarative**
+
+A declarative approach defines the system's desired state, including what resources you need and any properties they should have.
+
+For example, [AWS Cloudformation](https://aws.amazon.com/cloudformation/), [Terraform](https://terraform.io), [Ansible](https://www.ansible.com/), etc.
+
+### Benefits
+
+Here are some benefits of using Infrastructure as Code (IaC):
+
+- **Consistency**
+
+The goal of IaC is to eliminate manual processes which helps us iterate faster while maintaining consistency as our infrastructure evolves
+
+- **Simplicity**
+
+IaC allows us to spin up an entire infrastructure architecture by running few scripts. We can pretty much provision not only for development but also for staging, production environments which makes our software development life cycle (SDLC) much simpler.
+
+- **Increased efficiency**
+
+IaC shifts power back into the developer's hand. As provisioning becomes more reliable and automated, engineers spend less time performing manual work, and more time executing higher-value tasks.
+
+- **Risk minimization**
+
+Imagine having a DevOps engineer who's the only one who knows your infrastructure setup and its ins and outs. Now imagine that engineer is leaving your company.
+
+Here, IaC is a perfect fit because as a new engineer is onboarded, they won't need to spend much time understanding how our infrastructure is provisioned.
+
+## What is Terraform?
+
+![terraform](https://res.cloudinary.com/practicaldev/image/fetch/s--mbKT5mmr--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://learn.hashicorp.com/img/terraform/terraform-iac.png)
+
+[Reference: Terraform docs](https://learn.hashicorp.com/tutorials/terraform/infrastructure)
+
+Terraform is an infrastructure as code (IaC) tool that allows us to build, change, and version infrastructure safely and efficiently.
+
+Terraform uses HashiCorp Language (HCL) as its language to define a resource regardless of the provider being used.
+
+### Fundamentals
+
+Let's look at some fundamentals and building blocks of a basic terraform project.
+
+**State**
+
+Terraform must store state about our infrastructure and configuration. This state is used by Terraform to map our resources to our configuration and keep track of metadata.
+
+Terraform also provides tons of options for how we want to store our state. For example, if we are working with multiple people in the team we can store our state to something like AWS S3 or Consul rather than storing it locally
+
+**Provider**
+
+Providers are basically plugins that terraform uses to interact with cloud providers like AWS, GCP, Azure, etc. Terraform has tons of providers for pretty much any infrastructure needs and can be found at [terraform registry](https://registry.terraform.io/browse/providers)
+
+Example:
+
+```hcl
+# AWS
+provider "aws" {
+  region = "us-east-1"
+}
+
+# Google Cloud
+provider "google" {
+  project     = "example"
+  region      = "us-west1"
+}
+```
+
+**Resource**
+
+Resource blocks can describe any infrastructure object such as compute, network or any higher-level component
+
+Example:
+
+```hcl
+resource "aws_apprunner_service" "some_name" {
+  tags = {
+    Name = "example-apprunner-service"
+  }
+}
+```
+
+**Data Sources**
+
+While Resource is used to manage a new infrastructure component. Data sources gives us a read-only view into pre-existing resources in our infrastructure that might or might not have been provisioned by Terraform itself.
+
+Example:
+
+```hcl
+data "aws_ebs_volume" "ebs_volume" {
+  most_recent = true
+
+  filter {
+    name   = "volume-type"
+    values = ["gp2"]
+  }
+}
+```
+
+**Modules**
+
+Terraform modules are containers for multiple resources that are used together.
+
+Imagine you want to provision an [EKS](https://aws.amazon.com/eks) cluster but as we know it's not as simple as defining an eks resource, we'll also need a vpc, subnets and the list goes on.
+
+So modules become a nice way to organize your infrastructure, for example, we can just define our eks specific resources in eks module!
+
+Example:
+
+```hcl
+module "eks" {
+  vpc       = "..."
+  instances = 10
+}
+```
+
+But wait, there's more!
+
+There are tons of modules and resources present on [Terraform registry](https://registry.terraform.io/browse/modules) so we can probably find a module that fits our needs. Such as ready to use [EKS module](https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest)
+
+_You can also publish your own module to [Terraform registry](https://registry.terraform.io/browse/modules)!_
+
+**Functions**
+
+Terraform comes with tons of functions from String functions like `join`, `format` to FileSystem functions.
+
+**Variables**
+
+Variables can serve as input for resources, data sources, modules, functions, etc., and help us organize common config in a better way.
+
+Example:
+
+```hcl
+variable "bucket_name" {
+  type    = string
+  default = "example-value"
+}
+```
+
+Or a temporary local variable
+
+Example:
+
+```hcl
+locals {
+  random = "hello"
+}
+```
+
+**Output**
+
+Output in Terraform helps us define outputs we expect when our terraform script runs.
+
+Example:
+
+```hcl
+output "service_endpoint" {
+  value = aws_apprunner_service.service.domain_name
+}
+```
+
+## Commands
+
+Here are some important terraform commands we'll be using:
+
+**Init**
+Prepare and initialize our project
+
+**Plan**
+Shows changes that'd be done by the configuration change
+
+**Apply**
+Applies our changes
+
+**Destroy**
+Destroys all the resources in our configuration
+
+### Installation
+
+**Terraform**
+
+Terraform cli can be installed from [here](https://learn.hashicorp.com/tutorials/terraform/install-cli)
+
+_Note: HashiCorp also provides [terraform docker image](https://hub.docker.com/r/hashicorp/terraform), if you don't like installing extra dependencies_
+
+**AWS Access**
+
+We'll also need programmatic access and AWS CLI configured with our `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.
+
+You can refer to my [earlier article](https://karanpratapsingh.com/blog/configure-aws-cli), where I cover AWS CLI installation in detail
+
+## Hands on!
+
+Enough theory, now let's actually use what we learned and provision something. To keep things simple, we'll be provisioning
+a S3 bucket on AWS
+
+I'll create a `terraform` directory with a `main.tf` file.
+
+```
+$ mkdir terraform
+$ touch main.tf
+```
+
+Let's define our AWS provider with our preferred region
+
+```hcl
+provider "aws" {
+  region = "us-east-1"
+}
+```
+
+Create a variable for our bucket name.
+
+_Note: make sure the bucket name is unique_
+
+```hcl
+variable "bucket_name" {
+  type    = string
+  default = "sample-bucket"
+}
+```
+
+Define our `aws_s3_bucket` resource
+
+```hcl
+resource "aws_s3_bucket" "deploy_bucket" {
+  bucket = var.bucket_name
+  acl    = "private"
+}
+```
+
+Add some output
+
+```hcl
+output "s3_bucket_arn" {
+    value = aws_s3_bucket.s3_bucket.arn
+}
+```
+
+Let's initialize our project
+
+<img
+  width='695'
+  alt='init'
+  src='https://user-images.githubusercontent.com/29705703/128762282-91549ff5-93ff-4899-af7c-8f4a4af09c3a.png'
+/>
+
+Great, our project has been initialized. Let's plan our changes
+
+```
+$ terraform plan
+```
+
+<img
+  width='515'
+  alt='plan'
+  src='https://user-images.githubusercontent.com/29705703/128762288-ed5515f4-837d-4448-925b-8b60fb2a0ba8.png'
+/>
+
+Everything seems good, Let's apply
+
+```
+$ terraform apply
+```
+
+<img
+  width='535'
+  alt='apply'
+  src='https://user-images.githubusercontent.com/29705703/128762261-dece6d63-1923-4c95-8186-d12d0197d053.png'
+/>
+
+Finally, let's cleanup our resources
+
+```
+$ terraform destroy
+```
+
+<img
+  width='648'
+  alt='destroy'
+  src='https://user-images.githubusercontent.com/29705703/128762279-d1a12e61-d434-41ef-a51d-7024d6308473.png'
+/>
+
+### Conclusion
+
+In this article we covered Infrastructure as Code, it's approaches, benefits along with Terraform. I hope this was helpful and as always feel free to reach out on [twitter](https://twitter.com/karan_6864) if you face any issues!

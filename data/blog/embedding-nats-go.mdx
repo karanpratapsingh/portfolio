@@ -1,0 +1,197 @@
+---
+title: 'Embedding NATS in Go'
+date: '2022-02-23'
+tags: ['nats', 'go', 'microservices']
+draft: false
+summary: 'Embedding NATS in Go'
+images: ['/static/blogs/embedding-nats-go.png']
+authors: ['default']
+---
+
+In this article, we will look at how we can embed NATS server within our Go application. After that, we will also do a little performance benchmark between embedded and external service.
+
+_Note: As always, all the code will be available [here](https://github.com/karanpratapsingh/tutorials/tree/master/nats)_
+
+### Why do we need this?
+
+![architecture](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ghe36acu8p6f5i6szii2.png)
+
+While running [nats server](https://github.com/nats-io/nats-server) using [cli](https://github.com/nats-io/natscli) or [docker](https://hub.docker.com/_/nats) container is usually the preferred way but in some instances, it can be unnecessary, one such example is testing. While testing, it’s often cumbersome to spin up new instances for external services, this can be completely avoided by using an in-memory server. Luckily, NATS server package provides this functionality out of the box!
+
+### Setup
+
+Before writing any code, let’s quickly set up our go project.
+
+**Go module**
+
+```bash
+$ go mod init example
+$ touch main.go
+```
+
+**Dependencies**
+
+```go
+$ go get -d github.com/nats-io/nats-server/v2
+$ go get github.com/nats-io/nats.go
+```
+
+### Code
+
+After the setup, we can now start by initializing a new server with options
+
+```go
+opts := &server.Options{}
+ns, err := server.NewServer(opts)
+
+if err != nil {
+	panic(err)
+}
+```
+
+_Note: You can configure things like `Host`, `Port`, `Authorization`, and much more using `server.Options`._
+
+Next, we will start the server via goroutine and wait for the server to be ready for connections
+
+```go
+go ns.Start()
+
+if !ns.ReadyForConnections(4 * time.Second) {
+	panic("not ready for connection")
+}
+```
+
+Once our server is ready, we can connect to it with [nats.go](https://github.com/nats-io/nats.go) client using `ClientURL` function given by the server.
+
+```go
+nc, err := nats.Connect(ns.ClientURL())
+
+if err != nil {
+	panic(err)
+}
+```
+
+Let's subscribe to a subject, and print message data. Optionally, we can call `Shutdown` function to stop the nats server.
+
+```go
+subject := "my-subject"
+
+nc.Subscribe(subject, func(msg *nats.Msg) {
+	data := string(msg.Data)
+	fmt.Println(data)
+	ns.Shutdown()
+})
+```
+
+Finally, we will publish the data to our subject and call `WaitForShutdown` to keep our server running until shutdown.
+
+```go
+nc.Publish(subject, []byte("Hello embedded NATS!"))
+ns.WaitForShutdown()
+```
+
+Our complete example should look like this!
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+
+	"github.com/nats-io/nats-server/v2/server"
+	"github.com/nats-io/nats.go"
+)
+
+func main() {
+	opts := &server.Options{}
+
+	// Initialize new server with options
+	ns, err := server.NewServer(opts)
+
+	if err != nil {
+		panic(err)
+	}
+
+	// Start the server via goroutine
+	go ns.Start()
+
+	// Wait for server to be ready for connections
+	if !ns.ReadyForConnections(4 * time.Second) {
+		panic("not ready for connection")
+	}
+
+	// Connect to server
+	nc, err := nats.Connect(ns.ClientURL())
+
+	if err != nil {
+		panic(err)
+	}
+
+	subject := "my-subject"
+
+	// Subscribe to the subject
+	nc.Subscribe(subject, func(msg *nats.Msg) {
+		// Print message data
+		data := string(msg.Data)
+		fmt.Println(data)
+
+		// Shutdown the server (optional)
+		ns.Shutdown()
+	})
+
+	// Publish data to the subject
+	nc.Publish(subject, []byte("Hello embedded NATS!"))
+
+	// Wait for server shutdown
+	ns.WaitForShutdown()
+}
+```
+
+### Build and Run!
+
+Let's build and run our example binary with an embedded NATS server.
+
+```bash
+$ go build
+$ ./example
+Hello embedded NATS!
+```
+
+As we can see, we get the output from our subscriber!
+
+### Performance
+
+Performance is an important aspect of every application, so let’s compare the performance for using NATS as an embedded or external service (cli, docker etc). We will run a benchmark for 1 million messages for 8 intervals.
+
+**Setup**
+
+First, we’ll need to start the external nats server
+
+```bash
+$ nats-server
+[5868] 2022/02/22 20:09:21.073386 [INF] Starting nats-server
+[5868] 2022/02/22 20:09:21.073657 [INF]   Version:  2.7.0
+[5868] 2022/02/22 20:09:21.073660 [INF]   Git:      [not set]
+[5868] 2022/02/22 20:09:21.073662 [INF]   Name:     NCFHZUA6H6YRJHE65OXRW5X5NL2XDTR7Q4NBZG5Q2KEHZTFN6JMUK4HU
+[5868] 2022/02/22 20:09:21.073665 [INF]   ID:       NCFHZUA6H6YRJHE65OXRW5X5NL2XDTR7Q4NBZG5Q2KEHZTFN6JMUK4HU
+[5868] 2022/02/22 20:09:21.076236 [INF] Listening for client connections on 0.0.0.0:4222
+[5868] 2022/02/22 20:09:21.076659 [INF] Server is ready
+```
+
+**Results**
+
+Benchmark code can be found [here](https://github.com/karanpratapsingh/tutorials/tree/master/nats/embedding/benchmark), and can be run as below.
+
+```bash
+$ go run benchmark/benchmark.go
+Results have been saved to results.html
+```
+
+Seems like there is not much difference in performance, that’s really impressive considering we are testing for millions of messages.
+
+![benchmark](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/kk5zai8358a7fm7bpk3m.png)
+
+### Conclusion
+
+In this article, we learned how we can embed nats server in our go applications. And also did a small performance benchmark. Make sure to checkout the [official docs](https://docs.nats.io/).

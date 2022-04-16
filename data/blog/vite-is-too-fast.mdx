@@ -1,0 +1,84 @@
+---
+title: 'Vite is too fast!'
+date: '2021-07-18'
+tags: ['javascript', 'react', 'productivity']
+draft: false
+summary: 'Vite is too fast!'
+images: ['/static/blogs/vite-is-too-fast.jpeg']
+authors: ['default']
+---
+
+Recently I tried [Vite](https://vitejs.dev/) and I was blown away by how fast it was. I re-checked if I started the app correctly because I couldn't belive that it started the dev server under `200ms`!
+
+So, here's a short article on what is Vite and how can we create a new react project with it.
+
+<iframe
+  className='sm:h-96'
+  height='100%'
+  width='100%'
+  src='https://www.youtube.com/embed/x-kEyibIM1o'
+  allowFullScreen
+  frameborder='0'
+  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+></iframe>
+
+## What is Vite?
+
+[Vite](https://vitejs.dev/) is build tool created by Evan You (creator of [Vue](https://vuejs.org/)), it provides faster developement experience with instant server start, super fast Hot Module Replacement (HMR) and out of the box support for TypeScript as well.
+
+Vite pre-bundles dependencies using esbuild. Esbuild is written in Go and pre-bundles dependencies 10-100x faster than other JavaScript-based bundlers.
+
+_[Blazing fast TypeScript with Webpack and ESBuild](https://karanpratapsingh.com/blog/blazing-typescript-webpack-esbuild) If you'd like to learn more about esbuild setup with Webpack 5_
+
+## Create a new project
+
+Let's create a new project with Vite
+
+```
+yarn create vite
+```
+
+![vite select framework](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/jppg9dtz2xdio63fekwl.png)
+
+![template select](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/lk75zsr0bx1949wqotq9.png)
+
+![vite done](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3bg4cv1egwt85cqzh60f.png)
+
+And we have our vite project 🎉!
+
+```
+├── index.html
+├── package.json
+├── src
+│   ├── App.css
+│   ├── App.tsx
+│   ├── favicon.svg
+│   ├── index.css
+│   ├── logo.svg
+│   ├── main.tsx
+│   └── vite-env.d.ts
+├── tsconfig.json
+└── vite.config.ts
+```
+
+Let's start our dev server
+
+```
+cd vite-project
+yarn install
+yarn dev
+```
+
+![vite dev](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/00g4uk2a0748lyvnmvqm.png)
+
+## Build
+
+Vite uses [rollup](https://rollupjs.org/) to build and optimize static assets. Let's build our project
+
+```
+yarn build
+```
+
+![vite build](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/nidopbydbgrdex4fmzfw.png)
+
+We have our static assets ready to be served!

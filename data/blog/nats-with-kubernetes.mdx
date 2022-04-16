@@ -1,0 +1,318 @@
+---
+title: 'NATS with Kubernetes'
+date: '2022-02-03'
+tags: ['nats', 'kubernetes', 'opensource']
+draft: false
+summary: 'NATS with Kubernetes'
+images: ['/static/blogs/nats-with-kubernetes.png']
+authors: ['default']
+---
+
+In the [last article](https://karanpratapsingh.com/blog/distributed-messaging-nats), we got started with [NATS](https://nats.io) by trying it locally, but the question of running it in production still remains. So in this article we'll setup NATS with [Kubernetes](https://kubernetes.io/).
+
+_Note: All the code from this article will be available in this [repository](https://github.com/karanpratapsingh/tutorials/tree/master/nats)._
+
+### Prerequisites
+
+![minikube](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/htvwzmzktffz4firza8p.jpeg)
+
+To try out our setup locally, we'll use [Minikube](https://minikube.sigs.k8s.io/docs/start/) and [Kubectl](https://kubernetes.io/docs/tasks/tools/). So let's start our local kubernetes cluster.
+
+```
+$ minikube start
+😄  minikube v1.25.1 on Darwin 11.6.2
+✨  Using the virtualbox driver based on existing profile
+👍  Starting control plane node minikube in cluster minikube
+🏃  Updating the running virtualbox "minikube" VM ...
+🐳  Preparing Kubernetes v1.23.1 on Docker 20.10.12 ...
+    ▪ kubelet.housekeeping-interval=5m
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+```
+
+### Minimal setup
+
+For our minimal setup, we can use a simple deployment and service. This can also be used during development or to try NATS with the minimal number of components.
+
+**Deployment**
+
+Let's declare our deployement in `deployment.yml`
+
+```yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nats
+spec:
+  replicas: 1
+  strategy: {}
+  selector:
+    matchLabels:
+      app: nats
+  template:
+    metadata:
+      labels:
+        app: nats
+    spec:
+      containers:
+        - name: nats
+          image: nats:2.7.0-alpine
+          ports:
+            - containerPort: 4222
+```
+
+**Service**
+
+Let's declare a service in a `service.yml` file and expose our deployment.
+
+```yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats
+spec:
+  selector:
+    app: nats
+  ports:
+    - port: 4222
+```
+
+Finally, let's apply our configurations with `kubectl`
+
+```
+$ kubectl apply -f deployment.yml
+$ kubectl apply -f service.yml
+```
+
+```
+$ kubectl get deployments
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+nats   1/1     1            1           81s
+```
+
+```
+$ kubectl get service
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+nats   1/1     1            1           21s
+```
+
+Check our logs...
+
+```
+$ kubectl logs service/nats
+[1] 2022/01/28 16:14:30.897212 [INF] Starting nats-server
+[1] 2022/01/28 16:14:30.897266 [INF]   Version:  2.7.0
+[1] 2022/01/28 16:14:30.897268 [INF]   Git:      [not set]
+[1] 2022/01/28 16:14:30.897272 [INF]   Name:     NDNJ3HKFIBVY4IA47E64VFTDI5CNBFYQUJGRM3IIVMSSEHAP4LS3JZM4
+[1] 2022/01/28 16:14:30.897275 [INF]   ID:       NDNJ3HKFIBVY4IA47E64VFTDI5CNBFYQUJGRM3IIVMSSEHAP4LS3JZM4
+[1] 2022/01/28 16:14:30.897291 [INF] Using configuration file: /etc/nats/nats-server.conf
+[1] 2022/01/28 16:14:30.898080 [INF] Starting http monitor on 0.0.0.0:8222
+[1] 2022/01/28 16:14:30.899187 [INF] Listening for client connections on 0.0.0.0:4222
+[1] 2022/01/28 16:14:30.900983 [INF] Server is ready
+[1] 2022/01/28 16:14:30.902026 [INF] Cluster name is my_cluster
+[1] 2022/01/28 16:14:30.902063 [INF] Listening for route connections on 0.0.0.0:6222
+```
+
+**Cleanup**
+Let's cleanup our resources!
+
+```
+$ kubectl delete -f service.yml -f deployment.yml
+service "nats" deleted
+deployment.apps "nats" deleted
+```
+
+### High availability setup
+
+In order to have higher availability we can setup NATS servers to run in a clustering mode. Here, we will setup a 3 node NATS cluster.
+
+_Note: More than one node should be available in your Kubernetes cluster in order for this to work. So in case of deploying onto minikube please try the single node installer instead_
+
+**Configmap**
+
+```yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nats-config
+data:
+  nats.conf: |
+    pid_file: "/var/run/nats/nats.pid"
+    http: 8222
+
+    cluster {
+      port: 6222
+      routes [
+        nats://nats-0.nats.default.svc:6222
+        nats://nats-1.nats.default.svc:6222
+        nats://nats-2.nats.default.svc:6222
+      ]
+
+      cluster_advertise: $CLUSTER_ADVERTISE
+      connect_retries: 30
+    }
+
+    leafnodes {
+      port: 7422
+    }
+```
+
+**Service**
+
+```yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nats
+  labels:
+    app: nats
+spec:
+  selector:
+    app: nats
+  clusterIP: None
+  ports:
+    - name: client
+      port: 4222
+    - name: cluster
+      port: 6222
+    - name: monitor
+      port: 8222
+    - name: metrics
+      port: 7777
+    - name: leafnodes
+      port: 7422
+    - name: gateways
+      port: 7522
+```
+
+Let's start our resources.
+
+```
+$ kubectl apply -f configmap.yml -f service.yml -f statefulset.yaml
+configmap/nats-config created
+service/nats created
+statefulset.apps/nats created
+```
+
+Check our logs...
+
+```
+$ kubectl logs statefulsets/nats
+[8] 2022/01/28 16:25:54.710676 [INF] Starting nats-server
+[8] 2022/01/28 16:25:54.710724 [INF]   Version:  2.7.0
+[8] 2022/01/28 16:25:54.710728 [INF]   Git:      [not set]
+[8] 2022/01/28 16:25:54.710732 [INF]   Name:     NARIIE65ZKD6O4HCL53K4HVZ4Q2EDYLMFVLYOV66NDJHO5I6XRCIOJMM
+[8] 2022/01/28 16:25:54.710737 [INF]   ID:       NARIIE65ZKD6O4HCL53K4HVZ4Q2EDYLMFVLYOV66NDJHO5I6XRCIOJMM
+[8] 2022/01/28 16:25:54.710758 [INF] Using configuration file: /etc/nats-config/nats.conf
+[8] 2022/01/28 16:25:54.711562 [INF] Starting http monitor on 0.0.0.0:8222
+[8] 2022/01/28 16:25:54.711624 [INF] Listening for leafnode connections on 0.0.0.0:7422
+[8] 2022/01/28 16:25:54.713372 [INF] Listening for client connections on 0.0.0.0:4222
+[8] 2022/01/28 16:25:54.713718 [INF] Server is ready
+[8] 2022/01/28 16:25:54.713844 [INF] Cluster name is i9dhpw0tcqKR40VL6ni1U8
+[8] 2022/01/28 16:25:54.713986 [WRN] Cluster name was dynamically generated, consider setting one
+[8] 2022/01/28 16:25:54.714161 [INF] Listening for route connections on 0.0.0.0:6222
+```
+
+**Cleanup**
+Let's cleanup!
+
+```
+$ kubectl apply -f service.yml
+configmap "nats-config" deleted
+service "nats" deleted
+statefulset.apps "nats" deleted
+```
+
+### Helm
+
+Great! we're done with our HA setup. But what if we want to deploy another server? At some point, writing and maintaining multiple configuration files becomes a chore. So, let's see how we can make use of [Helm](https://helm.sh/) which helps us define, install, and upgrade even the most complex Kubernetes applications.
+
+**Adding a helm repo**
+
+First, we'll start by adding the official [NATS helm repo](https://artifacthub.io/packages/helm/nats/nats)
+
+```
+$ helm repo add nats https://nats-io.github.io/k8s/helm/charts/
+"nats" has been added to your repositories
+```
+
+```
+$ helm repo update
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "nats" chart repository
+Update Complete. ⎈Happy Helming!⎈
+```
+
+```
+$ helm repo list
+NAME	URL
+nats	https://nats-io.github.io/k8s/helm/charts/
+```
+
+Now that we've added our helm repo, let's give it a try by simply _installing_ our helm chart.
+
+```
+$ helm install my-app nats/nats
+NAME: my-app
+LAST DEPLOYED: Wed Feb  2 12:10:59 2022
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+NOTES:
+You can find more information about running NATS on Kubernetes
+in the NATS documentation website:
+
+  https://docs.nats.io/nats-on-kubernetes/nats-kubernetes
+
+NATS Box has been deployed into your cluster, you can
+now use the NATS tools within the container as follows:
+
+  kubectl exec -n default -it deployment/my-app-box -- /bin/sh -l
+
+  nats-box:~# nats-sub test &
+  nats-box:~# nats-pub test hi
+  nats-box:~# nc my-nats 4222
+
+Thanks for using NATS!
+```
+
+Awesome! Helm just deployed a production ready NATS server with just one command. But what resources did it create?
+
+```
+$ kubectl get all
+NAME                               READY   STATUS    RESTARTS   AGE
+pod/my-app-0                      3/3     Running   0          3m37s
+pod/my-app-box-594cdf8cd7-5vfgj   1/1     Running   0          3m37s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)                                                 AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP                                                 47h
+service/my-app       ClusterIP   None         <none>        4222/TCP,6222/TCP,8222/TCP,7777/TCP,7422/TCP,7522/TCP   3m37s
+
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/my-app-box    1/1     1            1           3m37s
+
+NAME                                     DESIRED   CURRENT   READY   AGE
+replicaset.apps/my-app-box-594cdf8cd7    1         1         1       3m37s
+
+NAME                       READY   AGE
+statefulset.apps/my-app    1/1     3m37s
+```
+
+As we can see it created all the required resources like `deployments`, `services`, `stateful sets`, `config maps` etc for running a highly available NATS server in our Kubernetes cluster. Now we should be able to fit this to our needs and upgrade our application by configuring things like limits, logging, TLS, clustering, leafnodes etc. much easily.
+
+**Cleanup**
+
+Let's do a quick cleanup so we don't leave it running on our machine!
+
+```
+$ helm uninstall my-nats
+release "my-nats" uninstalled
+```
+
+_Note: If you want more of a managed solution for your NATS server, make sure to look into [NGS](https://synadia.com/ngs/pricing) which is an easy to use, secure by default, global communications system built on NATS.io available in all the major cloud providers._
+
+### Conclusion
+
+For more info, make sure to visit official documentation at [nats.io](https://docs.nats.io/). I hope this was helpful!

@@ -1,0 +1,100 @@
+---
+title: 'Amazing image placeholders with blurhash'
+date: '2020-10-30'
+tags: ['react', 'javascript', 'typescript']
+draft: false
+summary: 'Amazing image placeholders with blurhash'
+images: ['/static/blogs/amazing-placeholder-blurhash.jpeg']
+authors: ['default']
+---
+
+Few weeks ago I was playing around with [Wolt](https://wolt.com/en) iOS app, I was really impressed by how the app handled image load and placeholders. After looking around I finally found [Blurhash](https://blurha.sh)
+
+## Why would I need it?
+
+Blurhash can help with transforming boring image placeholders into something more.
+
+![Example](https://dev-to-uploads.s3.amazonaws.com/i/oxy902cd021lo5tdv32i.png)
+
+<i>[source](https://blurha.sh/)</i>
+
+## Using with TypeScript and React
+
+#### Install
+
+```bash
+yarn add blurhash
+```
+
+#### Encode an image
+
+```ts
+import { encode } from 'blurhash';
+
+const loadImage = async (src: string): Promise<HTMLImageElement> =>
+  new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = (...args) => reject(args);
+    img.src = src;
+  });
+
+const getImageData = (image: HTMLImageElement): ImageData => {
+  const canvas = document.createElement('canvas');
+  canvas.width = image.width;
+  canvas.height = image.height;
+  const context = canvas.getContext('2d');
+  context.drawImage(image, 0, 0);
+  return context.getImageData(0, 0, image.width, image.height);
+};
+
+const encodeImage = async (url: string) => {
+  const image: HTMLImageElement = await loadImage(url);
+  const imageData: ImageData = getImageData(image);
+  return encode(imageData.data, imageData.width, imageData.height, 4, 4);
+};
+```
+
+#### Store blurhash alongside your images
+
+When storing images to S3 bucket, I usually run encode function on the image from S3 and store it alongside the image url in the database so that it's easier.
+
+Personally I store image in it's own object representation as follows:
+
+```json
+...
+"image": {
+  "url": "https://project-uploads.s3.amazonaws.com/i/...",
+  "blurhash": "LKO2?U%2Tw=w]~RBVZRi};RPxuwH"
+}
+...
+```
+
+#### Using with React
+
+After storing the hash on the server, it's quite easier to use it with React without any manual decoding with [react-blurhash](https://github.com/woltapp/react-blurhash).
+
+```jsx
+import { BlurhashCanvas } from 'react-blurhash';
+
+<Blurhash
+  hash='<image_hash>'
+  width={400}
+  height={300}
+  resolutionX={32}
+  resolutionY={32}
+/>;
+```
+
+<i>
+  Note: you can also decode the hash manually, checkout [blurhash
+  docs](https://github.com/woltapp/blurhash) for more details
+</i>
+
+## Experiment online!
+
+There's an online generator available if would like to try it out yourself.
+
+![generator](https://dev-to-uploads.s3.amazonaws.com/i/bww7xkxb2izzt56nu6vw.png)
+
+Happy Coding 🎉

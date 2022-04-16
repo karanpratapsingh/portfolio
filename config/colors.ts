@@ -6,6 +6,7 @@ export const Colors: Record<string, string> = {
   javascript: '#F7DF1E',
 
   // Frontend
+  web: '#2D2D2D',
   react: '#61DAF6',
   nextjs: '#000000',
 

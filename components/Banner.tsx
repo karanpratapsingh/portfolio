@@ -1,74 +1,48 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
+import { useRandomColorPair } from '@/lib/hooks/useRandomColor';
 import config from 'config';
-import { useRouter } from 'next/dist/client/router';
-import { memo, useEffect, useMemo } from 'react';
-import { Query } from 'types';
-import { getRandomColorPair } from 'utils';
-import ColorText from './ColorText';
-import Conditional from './Conditional';
+import { memo } from 'react';
+import { RoughNotation } from 'react-rough-notation';
 
 const { personal } = config;
 
-interface BannerProps {
-  onAbout: VoidFunction;
-  onContact: VoidFunction;
-}
-
-function Banner(props: BannerProps): React.ReactElement {
-  const { onAbout, onContact } = props;
-  const [aboutColor, contactColor] = useMemo(getRandomColorPair, []);
-
-  const router = useRouter();
-
-  useEffect(() => {
-    const query: Query = router.query;
-
-    if (query?.action) {
-      switch (query.action) {
-        case 'about':
-          onAbout();
-          break;
-        case 'contact':
-          onContact();
-          break;
-        default:
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+function Banner(): React.ReactElement {
+  const [aboutColor, contactColor] = useRandomColorPair();
 
   return (
-    <div className='banner flex flex-col flex-1 justify-center px-6 lg:px-10 py-10 dark:text-white'>
-      <h1 className='text-3xl lg:text-5xl font-bold dark:text-white'>
+    <div className='fade-in banner flex flex-1 flex-col justify-center px-6 py-10 dark:text-white lg:px-10'>
+      <h1 className='text-3xl font-bold dark:text-white lg:text-5xl'>
         Hi, I am {personal.name}
       </h1>
-      <p className='my-2 text-lg lg:my-4 lg:text-2xl font-light'>
+      <p className='my-2 text-lg font-light lg:my-4 lg:text-2xl'>
         {personal.title}
       </p>
-      <p className='lg:text-xl font-light'>
+      <p className='font-light lg:text-xl'>
         Read more
-        <ColorText
-          className='mx-2'
-          text='about me'
-          backgroundColor={aboutColor}
-          onClick={onAbout}
-        />
+        <a className='ml-2 mr-2 font-normal text-black' href='/about'>
+          <RoughNotation
+            show
+            type='highlight'
+            animationDelay={250}
+            animationDuration={2000}
+            color={aboutColor}
+          >
+            about me
+          </RoughNotation>
+        </a>
         or
-        <ColorText
-          className='ml-2'
-          text='contact me'
-          backgroundColor={contactColor}
-          onClick={onContact}
-        />
+        <a className='ml-2 font-normal text-black' href='/contact'>
+          <RoughNotation
+            show
+            type='highlight'
+            animationDelay={250}
+            animationDuration={2000}
+            color={contactColor}
+          >
+            contact me
+          </RoughNotation>
+        </a>
       </p>
-      <Conditional condition={personal.available}>
-        <p className='lg:text-xl font-light mt-4 lg:mt-6'>
-          <ColorText
-            className='bg-black text-white dark:bg-white dark:text-black'
-            text={`I'm available for hire!`}
-            onClick={onContact}
-          />
-        </p>
-      </Conditional>
     </div>
   );
 }

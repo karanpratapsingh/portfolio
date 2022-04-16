@@ -1,0 +1,156 @@
+---
+title: 'Blazing fast TypeScript with Webpack and ESBuild'
+date: '2021-06-28'
+tags: ['typescript', 'node', 'webpack']
+draft: false
+summary: 'Blazing fast TypeScript with Webpack and ESBuild'
+images: ['/static/blogs/blazing-typescript-webpack-esbuild.jpeg']
+authors: ['default']
+---
+
+Recently, I migrated a project I've been working on to TypeScript. I decided to use Webpack in combination with esbuild loader. The reason being esbuild ecosystem is still relatively new when compared to other bundlers like Webpack, rollup, parcel etc. in terms of plugins and loaders.
+
+Code for this article is available [here](https://github.com/karanpratapsingh/tutorials/tree/master/node).
+
+<iframe
+  className='sm:h-96'
+  height='100%'
+  width='100%'
+  src='https://www.youtube.com/embed/N1ENKIirPjs'
+  allowFullScreen
+  frameborder='0'
+  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+></iframe>
+
+_I've also made a video for you, if you're a visual learner like me!_
+
+### What is Webpack?
+
+At its core, webpack is a static module bundler for modern JavaScript applications. Basically it takes all your code, assets, dependencies and bundles them into static files that are easier to work with and deploy. You can read more about it [here](https://webpack.js.org/concepts/)
+
+### What is esbuild?
+
+esbuild is an extremely fast JavaScript bundler, upto 10-100x fast. You can check the benchmark and read more [here](https://esbuild.github.io/).
+
+![esbuild-benchmark](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/0h4rc5ypulmwu5yc3mwv.png)
+
+### Getting started
+
+Let's assume we have simple hello world typescript project
+
+```
+├── dist
+├── index.ts
+├── package.json
+├── tsconfig.json
+└── yarn.lock
+```
+
+### Installing Webpack
+
+Let's install [webpack](https://github.com/webpack/webpack) and [webpack-cli](https://github.com/webpack/webpack-cli), we'll be using `Webpack 5`
+
+```bash
+yarn add -D webpack webpack-cli
+```
+
+### Let's install the plugins
+
+Now we'll install the following plugins:
+
+[esbuild-loader](https://github.com/privatenumber/esbuild-loader) (secret sauce!)
+[fork-ts-checker-webpack-plugin](https://github.com/TypeStrong/fork-ts-checker-webpack-plugin) (helps us with typechecking)
+[nodemon-webpack-plugin](https://github.com/Izhaki/nodemon-webpack-plugin) (We can also use [webpack-dev-server](https://github.com/webpack/webpack-dev-server))
+
+```bash
+yarn add -D esbuild-loader fork-ts-checker-webpack-plugin nodemon-webpack-plugin
+```
+
+### Let's create our Webpack config
+
+Let's build our webpack config! You can read more about the config [here](https://webpack.js.org/configuration/)
+
+```js
+// External modules
+const path = require('path');
+
+// Webpack plugins
+const NodemonPlugin = require('nodemon-webpack-plugin');
+const ForkTsCheckerPlugin = require('fork-ts-checker-webpack-plugin');
+
+// Environment config
+const isDevelopment = process.env.NODE_ENV !== 'production';
+const mode = isDevelopment ? 'development' : 'production';
+
+// Bundle config options
+const BUNDLE = {
+  entry: './index.ts',
+  output: {
+    filename: 'app.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+};
+
+module.exports = {
+  mode,
+  target: 'node',
+  entry: BUNDLE.entry,
+  stats: 'errors-only',
+  module: getLoaders(),
+  plugins: getPlugins(),
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js', '.json'],
+  },
+  output: BUNDLE.output,
+};
+
+/**
+ * Loaders used by the application.
+ */
+function getLoaders() {
+  const esbuild = {
+    test: /\.(js|jsx|ts|tsx)?$/,
+    loader: 'esbuild-loader',
+    options: {
+      loader: 'tsx',
+      target: 'es2015',
+    },
+    exclude: /node_modules/,
+  };
+
+  const loaders = {
+    rules: [esbuild],
+  };
+
+  return loaders;
+}
+
+/**
+ * Plugins
+ */
+function getPlugins() {
+  const nodemon = new NodemonPlugin();
+  const tsChecker = new ForkTsCheckerPlugin();
+
+  return [tsChecker, nodemon];
+}
+```
+
+### Adding scripts
+
+Let's add some `scripts` to our package.json. During development we'll take advantage of Webpack's [Hot Module Replacement](https://webpack.js.org/concepts/hot-module-replacement) with the `--hot` flag
+
+```json
+"start": "yarn build --watch --hot",
+"build": "webpack --color --progress"
+```
+
+### Let's start our app!
+
+```
+yarn start
+```
+
+_Note: You can use [webpack-node-externals](https://github.com/liady/webpack-node-externals) to ignore any `node_modules` from your bundle_
+
+Great! Now you should be up and running! Feel free to reach out to me on [Twitter](https://twitter.com/karan_6864) if you face any issues.

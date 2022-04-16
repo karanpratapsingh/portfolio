@@ -1,0 +1,479 @@
+---
+title: 'Connecting to PostgreSQL using GORM'
+date: '2021-12-01'
+tags: ['go', 'postgres', 'docker']
+draft: false
+summary: 'Connecting to PostgreSQL using GORM'
+images: ['/static/blogs/connecting-postgresql-gorm.png']
+authors: ['default']
+---
+
+This article builds up on the last part where we built a simple [REST API with Go](https://karanpratapsingh.com/blog/build-rest-api-go). Now, let's connect our API with a real database! Here, we will use PostgreSQL and [GORM](https://gorm.io/) to accomplish this.
+
+**All the code from this article is available [here](https://github.com/karanpratapsingh/tutorials/tree/master/go/gorm)**
+
+<iframe
+  className='sm:h-96'
+  height='100%'
+  width='100%'
+  src='https://www.youtube.com/embed/Yk5ZjKq4qDQ'
+  allowFullScreen
+  frameborder='0'
+  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+></iframe>
+
+_I've also created a video if you will like to follow along!_
+
+## Setup
+
+Before we start working with the code, we will need postgres database for development. Easiest way to do this is by using [Docker](https://www.docker.com/). So make sure you have [docker installed](https://www.docker.com/get-started).
+
+Now let's define our [`docker-compose.yml`](https://docs.docker.com/compose/) file that will make it even easier to work with the database.
+
+```yml
+version: '3.8'
+
+services:
+  database:
+    container_name: database
+    image: postgres:12.8
+    restart: always
+    environment:
+      - POSTGRES_USER=pg
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=crud
+    ports:
+      - 5432:5432
+    volumes:
+      - db:/var/lib/postgresql/data
+
+volumes:
+  db:
+```
+
+Let's start our Postgres container!
+
+```
+$ docker compose up -d
+```
+
+**Connecting to our database**
+
+Once we have our database running, we can connect to it via any database management tool such as [pgAdmin](https://www.pgadmin.org/). Here, I'll use [TablePlus](https://tableplus.com/) and create a connection of type PostgreSQL.
+
+![table-plus](https://user-images.githubusercontent.com/29705703/144038896-a92a3481-8aee-41ad-858a-1de4b9a61506.png)
+
+Let's add all the details same as we did in `docker-compose.yml`. So, our user is `pg`, password is `pass` and database is `crud`. After that, we can click on test to verify that we can reach our database. Then click connect.
+
+![table-plus-connection](https://user-images.githubusercontent.com/29705703/144038905-47173435-8bcb-426b-84e4-773e69e598d4.png)
+
+Now we should be able to see our tables.
+![table-plus-tables](https://user-images.githubusercontent.com/29705703/144038907-3412a63c-509e-4198-8733-b402e60e22b8.png)
+
+## Setting up GORM
+
+Let's install GORM and Postgres driver.
+
+```
+$ go get -u gorm.io/gorm
+$ go get -u gorm.io/driver/postgres
+```
+
+**Update Models**
+
+Let's go to `pkg/models/book.go` and declare our `Id` as `primaryKey` in our struct tags.
+
+```go
+package models
+
+type Book struct {
+	Id     int    `json:"id" gorm:"primaryKey"`
+	Title  string `json:"title"`
+	Author string `json:"author"`
+	Desc   string `json:"desc"`
+}
+```
+
+**DB package**
+
+Now, let's create a `db` package in `pkg/db/db.go`. In our `Init` function we'll simply open a connection to our Postgres database using the `dbURL`.
+
+Also, we can use `db.AutoMigrate` to migrate our models.
+
+_Note: We can also store the `dbURL` as an environment variable, but to keep things simple we'll just add it right here._
+
+```go
+package db
+
+import (
+	"log"
+
+	"github.com/tutorials/go/crud/pkg/models"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+)
+
+func Init() *gorm.DB {
+	dbURL := "postgres://pg:pass@localhost:5432/crud"
+
+	db, err := gorm.Open(postgres.Open(dbURL), &gorm.Config{})
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	db.AutoMigrate(&models.Book{})
+
+	return db
+}
+```
+
+**Dependency Injection**
+
+Now that we have db setup, let's think how we'll use that in our handlers. We cannot call `Init` in each handler as this will create lots of database connections. So we will initialize it once and pass it to our handlers. For that, we can make use of dependency injection. Here, let's declare `handler` struct.
+
+```go
+package handlers
+
+import "gorm.io/gorm"
+
+type handler struct {
+	DB *gorm.DB
+}
+
+func New(db *gorm.DB) handler {
+	return handler{db}
+}
+```
+
+Now, let's update our handlers to be receiver functions.
+
+`pkg/handlers/GetAllBooks.go`
+
+```go
+func (h handler) GetAllBooks(w http.ResponseWriter, r *http.Request) {}
+```
+
+`pkg/handlers/GetBook.go`
+
+```go
+func (h handler) GetBook(w http.ResponseWriter, r *http.Request) {}
+```
+
+`pkg/handlers/AddBook.go`
+
+```go
+func (h handler) AddBook(w http.ResponseWriter, r *http.Request) {}
+```
+
+`pkg/handlers/UpdateBook.go`
+
+```go
+func (h handler) UpdateBook(w http.ResponseWriter, r *http.Request) {}
+```
+
+`pkg/handlers/DeleteBook.go`
+
+```go
+func (h handler) DeleteBook(w http.ResponseWriter, r *http.Request) {}
+```
+
+**Update main**
+
+Putting it all together, let's initialize our database and handlers like below.
+
+```go
+package main
+
+import (
+	"log"
+	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/tutorials/go/crud/pkg/db"
+	"github.com/tutorials/go/crud/pkg/handlers"
+)
+
+func main() {
+	DB := db.Init()
+	h := handlers.New(DB)
+	router := mux.NewRouter()
+
+	router.HandleFunc("/books", h.GetAllBooks).Methods(http.MethodGet)
+	router.HandleFunc("/books/{id}", h.GetBook).Methods(http.MethodGet)
+	router.HandleFunc("/books", h.AddBook).Methods(http.MethodPost)
+	router.HandleFunc("/books/{id}", h.UpdateBook).Methods(http.MethodPut)
+	router.HandleFunc("/books/{id}", h.DeleteBook).Methods(http.MethodDelete)
+
+	log.Println("API is running!")
+	http.ListenAndServe(":4000", router)
+}
+```
+
+Let's now run our API.
+
+```
+$ go run cmd/main.go
+```
+
+## Update handlers
+
+Now, let's update our handlers by replacing mock implementation with GORM.
+
+**AddBook**
+
+Here, we can use `h.DB.Create` to create our book.
+
+```go
+package handlers
+
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+
+	"github.com/tutorials/go/crud/pkg/models"
+)
+
+func (h handler) AddBook(w http.ResponseWriter, r *http.Request) {
+	// Read to request body
+	defer r.Body.Close()
+	body, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	var book models.Book
+	json.Unmarshal(body, &book)
+
+	// Append to the Books table
+	if result := h.DB.Create(&book); result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	// Send a 201 created response
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode("Created")
+}
+```
+
+Let's test it with Postman and create a book. And also check how it reflects in our database.
+
+![addbook-postman](https://user-images.githubusercontent.com/29705703/144048983-461065b8-c4e2-40a9-b873-17171791d405.png)
+
+Looks like we added a new book!
+
+![addbook-table-plus](https://user-images.githubusercontent.com/29705703/144048974-2e2816b7-3089-44f8-8c98-452d7c833e74.png)
+
+**DeleteBook**
+
+Here, we can first query the book by using `h.DB.First` and then simply delete the book we found using `h.DB.Delete`.
+
+```go
+package handlers
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
+	"github.com/tutorials/go/crud/pkg/models"
+)
+
+func (h handler) DeleteBook(w http.ResponseWriter, r *http.Request) {
+	// Read the dynamic id parameter
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
+
+	// Find the book by Id
+
+	var book models.Book
+
+	if result := h.DB.First(&book, id); result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	// Delete that book
+	h.DB.Delete(&book)
+
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode("Deleted")
+}
+```
+
+Let's send a delete request using Postman.
+
+![deletebook-postman](https://user-images.githubusercontent.com/29705703/144049460-a8c6d14c-a393-46f8-af72-7e752b6d44a2.png)
+
+And if we check the database we'll see that the book was deleted.
+
+![deletebook-table-plus](https://user-images.githubusercontent.com/29705703/144049468-52f8d992-5730-4cd9-bd8f-2e88d8b40875.png)
+
+**GetAllBooks**
+
+Here, we can simply fetch all the books using `h.DB.Find`.
+
+```go
+package handlers
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+
+	"github.com/tutorials/go/crud/pkg/models"
+)
+
+func (h handler) GetAllBooks(w http.ResponseWriter, r *http.Request) {
+	var books []models.Book
+
+	if result := h.DB.Find(&books); result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(books)
+}
+```
+
+![getallbooks-postman](https://user-images.githubusercontent.com/29705703/144050154-bdbc9ba5-467f-4149-851a-860cd5c678ec.png)
+![getallbooks-table-plus](https://user-images.githubusercontent.com/29705703/144050159-5da370b7-1c56-4b13-9522-f1692580c716.png)
+
+**GetBook**
+
+Here, we will use `h.DB.Find` with book id from request body to query for the book by id.
+
+```go
+package handlers
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
+	"github.com/tutorials/go/crud/pkg/models"
+)
+
+func (h handler) GetBook(w http.ResponseWriter, r *http.Request) {
+	// Read dynamic id parameter
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
+
+	// Find book by Id
+	var book models.Book
+
+	if result := h.DB.First(&book, id); result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(book)
+}
+```
+
+Let's try this with Postman.
+![getbook-postman](https://user-images.githubusercontent.com/29705703/144050343-eef2ba93-aa4e-448a-ad34-6f549132dd87.png)
+
+**UpdateBook**
+
+Finally, we will first find our book by id similar to `GetBook` handler and update the fields with the request body we received. Then we can simply save it.
+
+```go
+package handlers
+
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
+	"github.com/tutorials/go/crud/pkg/models"
+)
+
+func (h handler) UpdateBook(w http.ResponseWriter, r *http.Request) {
+	// Read dynamic id parameter
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
+
+	// Read request body
+	defer r.Body.Close()
+	body, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	var updatedBook models.Book
+	json.Unmarshal(body, &updatedBook)
+
+	var book models.Book
+
+	if result := h.DB.First(&book, id); result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	book.Title = updatedBook.Title
+	book.Author = updatedBook.Author
+	book.Desc = updatedBook.Desc
+
+	h.DB.Save(&book)
+
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode("Updated")
+}
+```
+
+Let's do a quick request from Postman and check our `books` table.
+
+![updatebook-postman](https://user-images.githubusercontent.com/29705703/144054993-c77722c9-e426-4259-8340-860149f4d9d2.png)
+
+And sure enough, the book was updated.
+
+![updatebook-table-plus](https://user-images.githubusercontent.com/29705703/144050799-5398802c-d9a3-462c-bff8-4444fd19cae1.png)
+
+**Cleanup**
+
+Finally, let's delete `pkg/mocks` and our project structure should look like this.
+
+```
+├── cmd
+│   └── main.go
+├── pkg
+│    ├── handlers
+│    │   ├── handler.go
+│    │   ├── AddBook.go
+│    │   ├── DeleteBook.go
+│    │   ├── GetAllBooks.go
+│    │   ├── GetBook.go
+│    │   └── UpdateBook.go
+│    ├── db
+│    │   └── db.go
+│    └── models
+│        └── book.go
+├── docker-compose.yml
+├── go.sum
+└── go.mod
+```
+
+## Next steps
+
+So, we finally connected our CRUD API with PostgreSQL! Our next step could be to adding tests and doing some refactoring, which we will do in the next part!
+
+I hope this was helpful, as always feel free to reach out if you face any issues.
+
+Have a great day!

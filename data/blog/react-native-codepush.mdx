@@ -1,0 +1,269 @@
+---
+title: "Update your React Native apps seamlessly using Microsoft's CodePush"
+date: '2020-05-13'
+tags: ['react', 'reactnative', 'javascript', 'devops']
+draft: false
+summary: 'Integrate Microsoft Codepush in React Native'
+authors: ['default']
+---
+
+Greetings React Native Community, today I'll be helping you setup Microsoft's Codepush into your app. So that you can do seamless releases.
+
+#### What is CodePush?
+
+CodePush a technology that helps in the delivery of app updates and improvements to the end users instantly.
+
+This is especially great if you want to do critical bug fixes and deliver instantly without going through the app store reviews.
+
+You can think of it as "web-like" agility of side-loading updates as soon as they are available.
+
+Moreover, it provides rollbacks if the new update crashed the app
+
+![codepush-about](https://user-images.githubusercontent.com/29705703/81784598-b9f8cc80-951a-11ea-8609-233306ccb522.png)
+
+#### How does it work?
+
+CodePush keeps your app's javascript bundle in sync with the CodePush server, and every time the user opens the app it checks with the CodePush server if a new update is available to the bundle. And of course, it comes with tons of awesome configuration which can help us fine-tune our user's experience.
+
+I personally use CodePush in almost all the React Native projects I work with as it is a very promising technology.
+
+![codepush-working](https://user-images.githubusercontent.com/29705703/81784604-bcf3bd00-951a-11ea-915a-43d043334ebc.png)
+
+You can read more about it [here](https://github.com/Microsoft/react-native-code-push#how-does-it-work)
+
+#### Let's get started :rocket:
+
+Let's get started by first creating standard deployments for CodePush in AppCenter.
+
+<i>
+  I'll be assuming that you already know how to log in with AppCenter and create
+  or link a new Android/iOS app, if you don't then please check out
+  adding/linking part of this guide
+  [here](https://karanpratapsingh.com/blog/continuous-integration-appcenter-react-native)
+</i>
+
+- Navigate to `Codepush` under `Distribute` and click on `Create Standard Deployment`
+
+![navigate-deployment](https://user-images.githubusercontent.com/29705703/81784621-c41acb00-951a-11ea-998a-54983c0a0f5b.png)
+
+- Now, to the top right you should be able to select your environment
+
+![available-environments](https://user-images.githubusercontent.com/29705703/81784511-97ff4a00-951a-11ea-8225-52bc29e36691.png)
+
+- Click on the settings items at the top right and keys panel should open reveling your keys (we'll be needing them later)
+
+![check-keys](https://user-images.githubusercontent.com/29705703/81784562-ac434700-951a-11ea-9522-5cf16a287a40.png)
+
+### Integration
+
+With the keys now available, let's integrate CodePush into our apps. For this we'll need to install [react-native-code-push](https://github.com/Microsoft/react-native-code-push)
+
+```
+yarn add react-native-code-push
+```
+
+Or if you prefer npm then,
+
+```
+npm i --save react-native-code-push
+```
+
+#### Android
+
+In this section, we'll see how to integrate CodePush plugin with our native android project.
+
+- In your `android/settings.gradle`, add the following:
+
+```gradle
+include ':app', ':react-native-code-push'
+project(':react-native-code-push').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-code-push/android/app')
+```
+
+- In your `android/app/build.gradle`, add the `codepush.gradle` file as an additional build task definition underneath `react.gradle`
+
+```gradle
+...
+apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
+...
+```
+
+- Update the `MainApplication.java` file to use CodePush via the following changes:
+
+```java
+...
+// 1. Import the plugin class.
+import com.microsoft.codepush.react.CodePush;
+
+public class MainApplication extends Application implements ReactApplication {
+
+    private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+        ...
+
+        // 2. Override the getJSBundleFile method in order to let
+        // the CodePush runtime determine where to get the JS
+        // bundle location from on each app start
+        @Override
+        protected String getJSBundleFile() {
+            return CodePush.getJSBundleFile();
+        }
+    };
+}
+```
+
+- Optional: You can add key in `android/app/src/main/res/values/strings.xml` file like this or You can also skip adding deployment key here as you can dynamically override it via js (isn't that amazing 🤩), which we'll get to soon.
+
+```xml
+  <resources>
+     <string name="app_name">AppName</string>
+     <string moduleConfig="true" name="CodePushDeploymentKey">DeploymentKey</string>
+  </resources>
+```
+
+{' '}
+
+<i>
+  Note: you can checkout the official CodePush android docs
+  [here](https://github.com/microsoft/react-native-code-push/blob/master/docs/setup-android.md)
+  for more in depth look.
+</i>
+#### iOS
+
+In this section, we'll see how to integrate CodePush plugin with our native iOS project.
+
+- Run `cd ios && pod install && cd ..` to install all the necessary CocoaPods dependencies.
+  ​
+- Open up the `ios/<Your-Project>/AppDelegate.m` file, and add an import statement for the CodePush headers:
+
+  ```objective-c
+  #import <CodePush/CodePush.h>
+  ```
+
+- Find the following line of code, which sets the source URL for bridge for production releases:
+
+  ```objective-c
+  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+  ```
+
+  And Replace it with this line:
+
+  ```objective-c
+  return [CodePush bundleURL];
+  ```
+
+- Optional: Go to `ios/<Your-Project>/Info.plist` and add a new key as `CodePushDeploymentKey` of type `string` and add your iOS key.
+
+```xml
+<key>CodePushDeploymentKey</key>
+<string>DeploymentKey</string>
+```
+
+<i>
+  Note: you can checkout the official CodePush ios docs
+  [here](https://github.com/microsoft/react-native-code-push/blob/master/docs/setup-ios.md)
+  for more in depth look.
+</i>
+
+#### Initialization
+
+In this section we'll be following a simple example for initializing our CodePush plugin as there's no way I can do justice to all the options and configuration available in this plugin, so make sure to checkout the official CodePush js api reference [here](https://github.com/microsoft/react-native-code-push/blob/master/docs/api-js.md)
+
+```js
+import codePush from 'react-native-code-push';
+
+...
+
+const codePushOptions = {
+  installMode: codePush.InstallMode.IMMEDIATE,
+  deploymentKey: "<YOUR KEY HERE>",
+  checkFrequency: codePush.CheckFrequency.ON_APP_START,
+};
+
+export default codePush(codePushOptions)(App);
+```
+
+As always, Make sure to clean, rebuild, and reset your cache before running the app.
+
+```bash
+rm -rf ios/build android/app/build
+```
+
+```bash
+yarn start -c
+
+# or if you use npm
+
+npm start --reset-cache
+```
+
+### Deployments
+
+As our app is now ready to use CodePush, let's now look into how we'll be releasing updates. For this we'll need [appcenter-cli](https://github.com/microsoft/appcenter-cli)
+
+```bash
+yarn global add appcenter-cli
+```
+
+Or if you prefer npm then,
+
+```bash
+npm i -g appcenter-cli
+```
+
+<i>
+  Note: You can also use `npx` if you don't like installing a lot of packages
+  globally
+</i>
+
+- Now, we have to login with the cli. We can do that simply using the command below and authenticating with our AppCenter account.
+
+```bash
+appcenter login
+```
+
+- That's it, we're almost there. We can use the command below to make releases.
+
+```
+appcenter codepush release-react -a <user>/<app> -d <environment>
+```
+
+For Example:
+
+```bash
+appcenter codepush release-react -a Karan-Pratap-Singh/CodePushDemo -d Staging
+```
+
+<i>
+  Note: To find out which apps are currently available to use in the `-a`
+  argument then just use `appcenter apps list` command (you need to be
+  authenticated)
+</i>
+
+- Bonus Tip :fire:
+
+Typing these might get tedious, so what I like to do is add these scripts to my package.json like:
+
+```json
+"scripts": {
+  "codepush:ios": "appcenter codepush release-react -a Karan-Pratap-Singh/CodePushDemo -d Staging",
+  "codepush:android": "appcenter codepush release-react -a Karan-Pratap-Singh/CodePushDemo-Android -d Staging"
+}
+```
+
+- After making the release it should be visible on your dashboard with tons of cool info about no. of installs, rollbacks etc.
+
+![after-release-activity](https://user-images.githubusercontent.com/29705703/81784462-86b63d80-951a-11ea-8e7d-dd732a5234b5.png)
+
+Well, this was all about setting up Codepush with App Center. However App Center has tons of great features like CI/CD, Analytics, Test Runs, Diagnostics, Push Notification, Crash Reporting.
+
+If you're interested in CI/CD with AppCenter, checkout my other [article](https://karanpratapsingh.com/blog/continuous-integration-appcenter-react-native) about it.
+
+Hopefully, you were able to integrate CodePush into your build and enjoy seamless updates :smile:
+
+<i>
+  If you liked this article, or faced any issues, feel free to reach out via
+  [Twitter](https://twitter.com/karan_6864) or
+  [Email](mailto:karan.pratapsingh686@gmail.com) 🚀
+</i>
+
+Happy Coding :tada:

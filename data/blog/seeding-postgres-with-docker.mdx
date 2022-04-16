@@ -1,0 +1,93 @@
+---
+title: 'Seeding Postgres with Docker'
+date: '2021-11-13'
+tags: ['docker', 'postgres', 'productivity']
+draft: false
+summary: 'Seeding Postgres with Docker'
+images: ['/static/blogs/seeding-postgres-with-docker.png']
+authors: ['default']
+---
+
+Seeding postgres container during local development can be bit cumbersome, at least during the initial setup. Usually, we connect to the container and execute the seed script.
+
+But now, let's see how we can automate that by using `docker-entrypoint-initdb.d`, which runs all the `*.sh` or `*.sql` scripts on initialization.
+
+**Setup**
+
+Let's assume we have this folder structure:
+
+```
+├── Dockerfile
+├── docker-compose.yml
+└── scripts
+    └── db
+        ├── dump.sql
+        └── init.sh
+```
+
+Here, `dump.sql` can be sql script that we want to seed the db with
+
+```sql
+-- CreateTable
+CREATE TABLE IF NOT EXISTS users (
+  "id" TEXT NOT NULL,
+  "name" TEXT NOT NULL,
+  "email" TEXT NOT NULL,
+
+  PRIMARY KEY ("id")
+);
+
+-- Seed
+INSERT INTO users (id, name, email) VALUES ('userid', 'Gopher', 'hello@gopher.com');
+```
+
+In the `init.sh`, we will just execute our `*.sql` script.
+
+```sh
+#!/bin/bash
+
+psql -U $POSTGRES_USER -d $POSTGRES_DB -a -f /app/scripts/db/dump.sql
+```
+
+In the `Dockerfile`, we will copy our `init.sh` to `docker-entrypoint-initdb.d` directory.
+
+```dockerfile
+FROM postgres:12 as db
+WORKDIR /app
+COPY ./scripts/db/init.sh /docker-entrypoint-initdb.d
+COPY ./scripts/db/dump.sql ./scripts/db/dump.sql
+```
+
+We will define our `docker-compose.yml` like below:
+
+```yml
+version: '3.8'
+
+services:
+  db:
+    image: db
+    container_name: db
+    build:
+      context: .
+      target: db
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=database
+    ports:
+      - 5432:5432
+```
+
+Let's start our containers!
+
+```
+$ docker compose up
+```
+
+**Output**
+
+![output](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/l58wtcv4a9kzk8g4hfvu.png)
+
+**Conclusion**
+
+I hope this was helpful, feel free to reach out to me on [twitter](https://twitter.com/karan_6864) if you face any issues. Thanks for reading!

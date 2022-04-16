@@ -1,0 +1,56 @@
+---
+title: 'Introduction to Dockerize series'
+date: '2021-07-08'
+tags: ['docker', 'react', 'go', 'node']
+draft: false
+summary: 'Introduction to Dockerize series'
+images: ['/static/blogs/introduction-dockerize-series.jpeg']
+authors: ['default']
+---
+
+## Introduction
+
+Hey, welcome to the Dockerize series. Here, I will be discussing how to use docker with your applications during both development and production.
+
+We'll also use techniques like Builder pattern, multi stage builds to optimize our production builds.
+
+This will serve as in introduction to upcoming articles where we'll dockerize our React, Node, Go applications!
+
+## Docker...What and Why?
+
+![docker](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/yxmtjpt9xsbw9ekirvtb.png)
+
+Docker is a software platform for building applications based on containers, which are small and lightweight execution environments.
+
+It also helps to eliminate environment specific issues since you can replicate your production environment locally, which provides consistency across our teams.
+
+## Docker compose
+
+![docker compose](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/dggbomqzi96semopyqj7.jpeg)
+
+Compose is a tool for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application's services. Then, with a single command, you create and start all the containers from your configuration.
+
+_Note: It's is not advised to use `docker-compose` to run your application in production environment. Use a container orchestration tools like [Kubernetes](https://kubernetes.io/), [Openshift](https://www.openshift.com/), [AWS ECS](https://aws.amazon.com/ecs/) etc._
+
+## Builder pattern
+
+In Builder pattern we use a docker image (which usually contains the whole runtime) to create small build artifacts and then use those binaries/artifacts in another smaller image hence reducing size of our built image.
+
+Let's take Node images for example, They're usually upwards of `850mb` in general (some slim variants are bit smaller) as they contain the full runtime and other things which might not be useful to us in production. So we can use builder pattern to do the following:
+
+- Derive from a Node base image with the whole runtime/SDK
+- Copy your source code
+- Install dependencies
+- Produce build artifact/bundle (usually done with bundlers like [webpack](https://webpack.js.org/), [parcel](https://parceljs.org/)) etc
+- Use the built artifacts in a much smaller images like [Alpine](https://hub.docker.com/_/alpine/)
+- Push the small image to a repository of your choice like [AWS ECS](https://aws.amazon.com/ecr/), [Dockerhub](https://hub.docker.com/) etc.
+
+## Multi stage builds
+
+Multi-stage builds makes it easier to use the builder pattern without hassle of creating multiple files, copying builds to host system and other things we had to do to implement builder pattern. More info [here](https://docs.docker.com/develop/develop-images/multistage-build/)
+
+![multistage-builds](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/wr60sw1164d4eye8lew7.png)
+
+_I go over builder pattern and multistage builds in [this article](https://karanpratapsingh.com/blog/art-of-building-small-container)_
+
+We're good to go! See you in the next part!

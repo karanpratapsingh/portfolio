@@ -1,5 +1,5 @@
 interface ConditionalProps {
-  condition: any;
+  condition: boolean;
   children: React.ReactNode;
 }
 

@@ -1,0 +1,88 @@
+---
+title: 'Simplify your store! A brief introduction to Zustand'
+date: '2020-10-13'
+tags: ['react', 'javascript', 'typescript']
+draft: false
+summary: 'Introduction to Zustand'
+images: ['/static/blogs/introduction-to-zustand.png']
+authors: ['default']
+---
+
+State management has always been opinionated in React community. Redux was a revolutionary tech for the React ecosystem when it was first released. It allowed applications to have a global store that was immutable and solved challenges like [prop drilling](https://kentcdodds.com/blog/prop-drilling) elegantly. To this day, it continues to be great and scalable.
+
+I've used redux and similar solutions for years and one thing that always bothered me was the amount of boilerplate required to get started with it. [Redux toolkit](https://redux-toolkit.js.org/) largely solves the boilerplate issue but when compared to excellent solutions like [MobX](https://mobx.js.org/README.html), [MST](https://mobx-state-tree.js.org/intro/philosophy) it still seemed verbose for small to medium size projects.
+
+A couple of weeks ago I wanted to refactor a decent sized write-heavy [context](https://reactjs.org/docs/context.html) state to a better solution, and naturally Redux, MobX came to mind. However, I wanted something simpler and more elegant.
+
+[Zustand](https://github.com/pmndrs/zustand) to the rescue!!
+
+As stated in the docs, "Zustand is a small, fast and scaleable barebones state-management solution. Has a comfy api based on hooks, isn't boilerplatey or opinionated, but still just enough to be explicit and flux-like".
+
+What really motivated me to use Zustand was how simple it was to get started with it and great features like [transient updates](https://github.com/pmndrs/zustand#transient-updates-for-often-occuring-state-changes) for often occurring state changes, [memorized selectors](https://github.com/pmndrs/zustand#memoizing-selectors), integration with [immer](https://github.com/immerjs/immer)! and the best no [Providers](https://react-redux.js.org/api/provider)!!
+
+Let's go over a basic store example with Zustand using Typescript.
+
+#### Install zustand
+
+```sh
+yarn add zustand
+```
+
+#### Creating a store
+
+```ts
+import create, { SetState, GetState } from 'zustand';
+
+type CountStore {
+  count: number;
+  increment: () => void;
+};
+
+const useCountStore = create<CountStore>((set: SetState<CountStore>, get: GetState<CountStore>) => ({
+  count: 0,
+  increment: (): void =>  {
+    const { count } = get();
+    set({ count: count + 1 });
+  }
+});
+```
+
+`create` gives two arguments `set` and `get`. The `set` function (you guessed it right!) merges the state, similar to `setState` in class-based react components. And through the `get` function we can access the current state of the store, especially helps when we want to access the state within an action. Quite useful!
+
+#### Usage with components
+
+Now, let's see how we can make use of our store in a component using hooks!
+
+```tsx
+function Counter(): React.ReactElement {
+  const count = useCountStore(state => state.count);
+  const increment = useCountStore(state => state.increment);
+
+  return (
+    <div>
+      <h1>count: {count}</h1>
+      <button onClick={increment}>+1</button>
+    </div>
+  );
+}
+```
+
+The store itself acts as a selector hook! Neat. We can also do [multiple selects](https://github.com/pmndrs/zustand#selecting-multiple-state-slices) for the same.
+
+```tsx
+const [count, increment] = useCountStore(state => [
+  state.counter,
+  state.increment,
+]);
+```
+
+And that's it, we now have a simple store without any extra boilerplate code.
+
+We haven't even scratched the surface with zustand yet. There are tons of amazing features like transient updates, immer integration, memorized selectors, async actions, middleware...and the list goes on. I feel they are better explained in the [docs](https://github.com/pmndrs/zustand)
+
+Hopefully, this article helps as a brief introduction to Zustand. So far I am really enjoying using it.
+
+<i>
+  Are you using Zustand already? Or want to talk all things javascript with me?
+  Find me on twitter [@karan_6864](https://twitter.com/karan_6864)
+</i>

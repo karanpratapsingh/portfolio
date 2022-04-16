@@ -1,0 +1,180 @@
+---
+title: 'Dockerize your Node app'
+date: '2021-07-13'
+tags: ['node', 'docker', 'devops', 'javascript']
+draft: false
+summary: 'Dockerize your Node app'
+images: ['/static/blogs/dockerize-node.png']
+authors: ['default']
+---
+
+Hey, welcome back. This article is part of the Dockerize series, make sure to checkout the [Introduction](https://karanpratapsingh.com/blog/introduction-dockerize-series) where I go over some concepts we are going to use.
+
+Today we'll dockerize our Node application, very similar to how we dockerized our React app in the last part by taking advantage of builder pattern with multi stage builds!
+
+<iframe
+  className='sm:h-96'
+  height='100%'
+  width='100%'
+  src='https://www.youtube.com/embed/Lfog4RK4S_I'
+  allowFullScreen
+  frameborder='0'
+  allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+></iframe>
+
+_I've also made a video, if you'd like to follow along_
+
+### Project setup
+
+I've initialized a simple express app
+
+```
+├── node_modules
+├── index.js
+├── package.json
+└── yarn.lock
+```
+
+```js
+const express = require('express');
+
+const app = express();
+const PORT = process.env.PORT || 4000;
+
+app.get('/', (request, response) => {
+  response.status(200).json({
+    message: 'Hello Docker!',
+  });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is up on localhost:${PORT}`);
+});
+```
+
+I've also setup [esbuild](https://esbuild.github.io/) to bundle our project.
+
+```
+"build": "esbuild --bundle src/index.js --outfile=build/app.js --minify --platform=node"
+```
+
+For more details, you can checkout my previous article _[Blazing fast TypeScript with Webpack and ESBuild](https://karanpratapsingh.com/blog/blazing-fast-typescript-with-webpack-and-esbuild-4mhh)_.
+
+### For development
+
+Let's start by adding a `Dockerfile`
+
+```dockerfile
+FROM node:14-alpine AS development
+ENV NODE_ENV development
+# Add a work directory
+WORKDIR /app
+# Cache and Install dependencies
+COPY package.json .
+COPY yarn.lock .
+RUN yarn install
+# Copy app files
+COPY . .
+# Expose port
+EXPOSE 4000
+# Start the app
+CMD [ "yarn", "start" ]
+```
+
+Let's create a `docker-compose.dev.yml`. Here we'll also mount our code in a [volume](https://www.cloudsavvyit.com/7500/what-are-docker-volumes-and-how-do-you-use-them/) so that we can sync our changes with the container while developing.
+
+```yml
+version: '3.8'
+
+services:
+  app:
+    container_name: app-dev
+    image: app-dev
+    build:
+      context: .
+      target: development
+    volumes:
+      - ./src:/app/src
+    ports:
+      - 4000:4000
+```
+
+Let's update our `package.json` scripts
+
+```json
+"dev": "docker-compose -f docker-compose.dev.yml up"
+```
+
+_we can use the `-d` flag to run in daemon mode_
+
+Let's start developing!
+
+```
+yarn dev
+```
+
+Great, our dev server is up!
+
+```
+Attaching to app-dev
+app-dev  | yarn run v1.22.5
+app-dev  | $ nodemon src/index.js
+app-dev  | [nodemon] to restart at any time, enter `rs`
+app-dev  | [nodemon] watching path(s): *.*
+app-dev  | [nodemon] starting `node src/index.js`
+app-dev  | Server is up on localhost:4000
+```
+
+### For production
+
+```dockerfile
+FROM node:14-alpine AS builder
+ENV NODE_ENV production
+# Add a work directory
+WORKDIR /app
+# Cache and Install dependencies
+COPY package.json .
+COPY yarn.lock .
+RUN yarn install --production
+# Copy app files
+COPY . .
+# Build
+CMD yarn build
+
+FROM node:14-alpine AS production
+# Copy built assets/bundle from the builder
+COPY --from=builder /app/build .
+EXPOSE 80
+# Start the app
+CMD node app.js
+```
+
+Let's add a `docker-compose.prod.yml` for production
+
+```yml
+version: '3.8'
+
+services:
+  app:
+    container_name: app-prod
+    image: app-prod
+    build:
+      context: .
+      target: production
+```
+
+```
+docker-compose -f docker-compose.prod.yml build
+```
+
+let's start our production container on port `80` with the name `react-app`
+
+```
+docker run -p 80:4000 --name node-app app-prod
+```
+
+## Next steps
+
+With that, we should be able to take advantage of docker in our workflow and deploy our production images faster to any platform of our choice.
+
+Feel free to reach out to me on [Twitter](https://twitter.com/karan_6864) if you face any issues.
