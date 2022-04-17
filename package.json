@@ -13,8 +13,8 @@
     "preview": "npm run build && npm run serve"
   },
   "dependencies": {
-    "@fontsource/fira-code": "^4.5.8",
-    "@fontsource/open-sans": "4.5.8",
+    "@fontsource/ibm-plex-mono": "4.5.7",
+    "@fontsource/ibm-plex-sans": "4.5.7",
     "@mailchimp/mailchimp_marketing": "^3.0.58",
     "@tailwindcss/forms": "^0.4.0",
     "@tailwindcss/line-clamp": "^0.3.1",

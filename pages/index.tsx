@@ -7,6 +7,7 @@ import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
 
 // TODO: Video list?
 // TODO: Share functionality
+// TODO: Try IBM Plex Sans (https://fontsource.org/fonts/ibm-plex-sans)
 
 // @ts-ignore
 export const getStaticProps: GetStaticProps<{
