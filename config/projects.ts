@@ -126,8 +126,7 @@ export const projects: Project[] = [
     slug: 'velvet-live',
     banner: '/static/projects/velvet-live/banner.png',
     website: 'https://boom.london',
-    description:
-      'Connect with shoppers who need your advice and expertise when they’re shopping online. Assist and sell to customers the same way you would in-store, but now through chat and video straight from the app.',
+    description: `Connect with shoppers who need your advice and expertise when they're shopping online. Assist and sell to customers the same way you would in-store, but now through chat and video straight from the app.`,
     repository: null,
     stack: [
       Stack.javascript,

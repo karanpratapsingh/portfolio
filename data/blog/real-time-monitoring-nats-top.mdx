@@ -34,13 +34,13 @@ $ nats-server -m 8222
 
 ![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/kihl965iqwako2jg22ul.gif](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/kihl965iqwako2jg22ul.gif)
 
-If you’re using the [config](https://docs.nats.io/running-a-nats-service/configuration), then use the `http_port` option
+If you're using the [config](https://docs.nats.io/running-a-nats-service/configuration), then use the `http_port` option
 
 ```
 http_port: 8222
 ```
 
-Let’s see how can we use `nats-top`
+Let's see how can we use `nats-top`
 
 ```
 $ nats-top --help
@@ -49,7 +49,7 @@ usage: nats-top [-s server] [-m http_port] [-ms https_port] [-n num_connections]
                 [-cert FILE] [-key FILE ][-cacert FILE] [-k] [-b]
 ```
 
-We can configure our monitoring port, key, cert, and much more! For now, let’s start `nats-top` with default options.
+We can configure our monitoring port, key, cert, and much more! For now, let's start `nats-top` with default options.
 
 ![https://dev-to-uploads.s3.amazonaws.com/uploads/articles/hgwynescmamhs71pvtex.gif](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/hgwynescmamhs71pvtex.gif)
 
@@ -57,7 +57,7 @@ Here we can see some general data such as CPU and memory usage, and input/output
 
 Notice the incredible `msgs/sec` metric? NATS is quite performant!
 
-Now let’s use the [NATS CLI](https://github.com/nats-io/natscli) and do a simple benchmark to generate some publish/subscribe events.
+Now let's use the [NATS CLI](https://github.com/nats-io/natscli) and do a simple benchmark to generate some publish/subscribe events.
 
 ```
 $ nats bench test --msgs 10000000 --pub 5 --sub 5

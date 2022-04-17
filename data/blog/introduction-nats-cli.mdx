@@ -8,7 +8,7 @@ images: ['/static/blogs/introduction-nats-cli.png']
 authors: ['default']
 ---
 
-In this article, we’ll take a look at [NATS CLI](https://github.com/nats-io/natscli) and learn some basics commands. In my opinion NATS CLI is quite underrated, it offers many features and can help eliminate most of the manual scripts used to manage a NATS server.
+In this article, we'll take a look at [NATS CLI](https://github.com/nats-io/natscli) and learn some basics commands. In my opinion NATS CLI is quite underrated, it offers many features and can help eliminate most of the manual scripts used to manage a NATS server.
 
 ## Installation
 
@@ -34,7 +34,7 @@ _For more installation options, check [Github releases](https://github.com/nats-
 
 ## Commands
 
-Let’s learn about some basic commands. But first, let’s start our [nats-server](https://github.com/nats-io/nats-server) locally with JetStream so that we can try out the commands.
+Let's learn about some basic commands. But first, let's start our [nats-server](https://github.com/nats-io/nats-server) locally with JetStream so that we can try out the commands.
 
 _Note: To enable JetStream we can use the `-js` or `--jetstream` flag._
 
@@ -192,7 +192,7 @@ $ nats account report connections
 nats publish [<flags>] <subject> [<body>]
 ```
 
-Let’s try to publish some data on the subject `hello`
+Let's try to publish some data on the subject `hello`
 
 ```bash
 $ nats publish hello my-data
@@ -266,7 +266,7 @@ NATS KV is a JetStream based Key-Value store. Key-Value stores are specialized N
 
 **Config**
 
-Before we start storing our key-value pairs, we need to create a config. For this, let’s add a custom `my-config`. This config helps us create a new bucket with built-in replication.
+Before we start storing our key-value pairs, we need to create a config. For this, let's add a custom `my-config`. This config helps us create a new bucket with built-in replication.
 
 _Note: KV requires JetSteam to be enabled._
 
@@ -361,7 +361,7 @@ Listening for Authentication Errors events on $SYS.SERVER.*.CLIENT.AUTH.ERR
 
 ### **Cheat**
 
-`cheat` is arguably the most awesome command. It helps us see what’s all there is in the NATS CLI in a quick and easy-to-digest format.
+`cheat` is arguably the most awesome command. It helps us see what's all there is in the NATS CLI in a quick and easy-to-digest format.
 
 ```bash
 $ nats cheat --sections

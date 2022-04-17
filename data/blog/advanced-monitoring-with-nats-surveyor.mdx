@@ -8,7 +8,7 @@ images: ['/static/blogs/advanced-monitoring-with-nats-surveyor.png']
 authors: ['default']
 ---
 
-In this article, we’ll set up [nats-surveyor](https://github.com/nats-io/nats-surveyor) for advanced monitoring of our [NATS servers](https://github.com/nats-io/nats-server) through [Prometheus](https://prometheus.io/) and [Grafana](https://grafana.com/).
+In this article, we'll set up [nats-surveyor](https://github.com/nats-io/nats-surveyor) for advanced monitoring of our [NATS servers](https://github.com/nats-io/nats-server) through [Prometheus](https://prometheus.io/) and [Grafana](https://grafana.com/).
 
 ### What is NATS Surveyor?
 
@@ -16,15 +16,15 @@ In this article, we’ll set up [nats-surveyor](https://github.com/nats-io/nats-
 
 NATS surveyor polls the NATS server for [Statz](https://docs.nats.io/running-a-nats-service/nats_admin/monitoring#monitoring-endpoints) messages to generate data for Prometheus. This allows a single exporter to connect to any NATS server and get an entire picture of a NATS deployment without requiring extra monitoring components or sidecars.
 
-It’s really powerful as we can now just connect the data generated for [Prometheus](https://prometheus.io/) and setup dashboards on observability platforms like [Grafana](https://grafana.com/).
+It's really powerful as we can now just connect the data generated for [Prometheus](https://prometheus.io/) and setup dashboards on observability platforms like [Grafana](https://grafana.com/).
 
 ### Setup
 
-Let’s setup our local super cluster and start our surveyor service.
+Let's setup our local super cluster and start our surveyor service.
 
 **Local cluster**
 
-To setup our local super cluster, we can use [this repo](https://github.com/ColinSullivan1/nats-local-supercluster.git). Here’s the topology.
+To setup our local super cluster, we can use [this repo](https://github.com/ColinSullivan1/nats-local-supercluster.git). Here's the topology.
 
 ```bash
 $ git clone https://github.com/ColinSullivan1/nats-local-supercluster.git
@@ -38,7 +38,7 @@ $ ./start_supercluster.sh
 
 Now that our local super cluster is up and running, we can setup [nats-surveyor](https://github.com/nats-io/nats-surveyor).
 
-For now, we’ll do it with [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/).
+For now, we'll do it with [docker](https://docs.docker.com/engine/install/) and [docker-compose](https://docs.docker.com/compose/install/).
 
 _Note: We can also install `nats-surveyor` directly from the [Github releases](https://github.com/nats-io/nats-surveyor/releases) as well_
 
@@ -94,7 +94,7 @@ Now we should be able to go to [Grafana](https://grafana.com/) running on `[loca
 
 _Note: You might be presented with a login screen, the default user is `admin` and the password is `admin`_
 
-Here we can see we have different dashboards such as Clients, Clusters, NATS Overview, Network Usage, Super Cluster, etc. So let’s explore these dashboards one by one!
+Here we can see we have different dashboards such as Clients, Clusters, NATS Overview, Network Usage, Super Cluster, etc. So let's explore these dashboards one by one!
 
 ![dashboard](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/i2w6b06py84498apzkdj.png)
 
@@ -114,7 +114,7 @@ In the cluster dashboard, we can see how many clusters we are running with bandw
 
 The overview dashboard provides basic information about how many servers and clusters we are running with route or gateway connections.
 
-_Check out that insane 300k messages/sec, and that’s on a development machine!_
+_Check out that insane 300k messages/sec, and that's on a development machine!_
 
 ![overview](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/efpln8xw2i1r8uh7vqdn.png)
 
@@ -140,6 +140,6 @@ This makes it really easy to monitor multiple super clusters.
 
 ### Conclusion
 
-In this article, we set up NATS Surveyor, which is an incredible tool that makes it easy to setup monitoring for our NATS services as easily as a single command. It’s a must have if you’re running distributed systems with NATS at scale. Make sure to checkout the [docs](https://docs.nats.io/) for more info.
+In this article, we set up NATS Surveyor, which is an incredible tool that makes it easy to setup monitoring for our NATS services as easily as a single command. It's a must have if you're running distributed systems with NATS at scale. Make sure to checkout the [docs](https://docs.nats.io/) for more info.
 
 I hope this article was helpful, feel free to [reachout](https://karanpratapsingh.com?action=contact) to me if you face any issues. Have a great day!

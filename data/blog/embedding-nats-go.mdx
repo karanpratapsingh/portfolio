@@ -16,11 +16,11 @@ _Note: As always, all the code will be available [here](https://github.com/karan
 
 ![architecture](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ghe36acu8p6f5i6szii2.png)
 
-While running [nats server](https://github.com/nats-io/nats-server) using [cli](https://github.com/nats-io/natscli) or [docker](https://hub.docker.com/_/nats) container is usually the preferred way but in some instances, it can be unnecessary, one such example is testing. While testing, it’s often cumbersome to spin up new instances for external services, this can be completely avoided by using an in-memory server. Luckily, NATS server package provides this functionality out of the box!
+While running [nats server](https://github.com/nats-io/nats-server) using [cli](https://github.com/nats-io/natscli) or [docker](https://hub.docker.com/_/nats) container is usually the preferred way but in some instances, it can be unnecessary, one such example is testing. While testing, it's often cumbersome to spin up new instances for external services, this can be completely avoided by using an in-memory server. Luckily, NATS server package provides this functionality out of the box!
 
 ### Setup
 
-Before writing any code, let’s quickly set up our go project.
+Before writing any code, let's quickly set up our go project.
 
 **Go module**
 
@@ -162,11 +162,11 @@ As we can see, we get the output from our subscriber!
 
 ### Performance
 
-Performance is an important aspect of every application, so let’s compare the performance for using NATS as an embedded or external service (cli, docker etc). We will run a benchmark for 1 million messages for 8 intervals.
+Performance is an important aspect of every application, so let's compare the performance for using NATS as an embedded or external service (cli, docker etc). We will run a benchmark for 1 million messages for 8 intervals.
 
 **Setup**
 
-First, we’ll need to start the external nats server
+First, we'll need to start the external nats server
 
 ```bash
 $ nats-server
@@ -188,7 +188,7 @@ $ go run benchmark/benchmark.go
 Results have been saved to results.html
 ```
 
-Seems like there is not much difference in performance, that’s really impressive considering we are testing for millions of messages.
+Seems like there is not much difference in performance, that's really impressive considering we are testing for millions of messages.
 
 ![benchmark](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/kk5zai8358a7fm7bpk3m.png)
 

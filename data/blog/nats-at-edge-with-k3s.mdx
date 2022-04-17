@@ -165,7 +165,7 @@ $ k3s kubectl logs svc/nats
 
 ### Helm
 
-In this section, let’s see how we can use helm to deploy a NATS server with high availability. Helm is the preferred way of setting up NATS for your production workloads.
+In this section, let's see how we can use helm to deploy a NATS server with high availability. Helm is the preferred way of setting up NATS for your production workloads.
 
 _Learn more about the NATS Helm chart [here](https://artifacthub.io/packages/helm/nats/nats)_
 
@@ -196,7 +196,7 @@ nats	<https://nats-io.github.io/k8s/helm/charts/>
 ```
 
 **Deploy**
-Now, let’s install the `nats/nats` helm chart.
+Now, let's install the `nats/nats` helm chart.
 
 ```
 $ helm install nats-k3s nats/nats
@@ -223,7 +223,7 @@ now use the NATS tools within the container as follows:
 Thanks for using NATS!
 ```
 
-Let’s check the resources that got created. As we can see, we have helm automatically created statefulsets, services, pods, etc that will help us to run our NATS cluster effortlessly.
+Let's check the resources that got created. As we can see, we have helm automatically created statefulsets, services, pods, etc that will help us to run our NATS cluster effortlessly.
 
 ```
 $ kubectl get all
@@ -262,14 +262,14 @@ $ k3s kubectl logs service/nats-k3s -c nats
 
 **Interacting with NATS**
 
-If we look closely, we also have `nats-k3s-box`, which will help us interact with NATS. So, let’s ssh into the deployment.
+If we look closely, we also have `nats-k3s-box`, which will help us interact with NATS. So, let's ssh into the deployment.
 
 ```bash
 $ kubectl exec -it deployment/nats-k3s-box -- sh
 ~ #
 ```
 
-Let’s run a simple benchmark
+Let's run a simple benchmark
 
 ```bash
 $ nats bench test --msgs=10000000 --pub 5 --sub 2
@@ -307,7 +307,7 @@ This is absolutely amazing performance by K3s and NATS. For context, this is run
 
 **Uninstall**
 
-As always, let’s cleanup our resources.
+As always, let's cleanup our resources.
 
 ```
 $ helm uninstall nats-k3s
