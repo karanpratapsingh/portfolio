@@ -18,6 +18,7 @@ function Contact(): React.ReactElement {
     const config = {
       url: contact.calendly,
     };
+
     openPopupWidget(config);
   }
 

@@ -5,10 +5,7 @@ import { GetStaticProps } from 'next';
 import dynamic from 'next/dynamic';
 import { PostFrontMatter } from 'types/PostFrontMatter';
 
-// TODO: choose a primary color, font (https://tailwindcss.com/docs/font-family) open sans
 // TODO: share functionality
-// TODO: update summary for blogs
-// TODO: demo video
 export const getStaticProps: GetStaticProps<{
   posts: PostFrontMatter[];
 }> = async () => {
