@@ -5,6 +5,7 @@ import { useRandomColorPair } from '@/lib/hooks/useRandomColorPair';
 import config from 'config';
 import { WorkStack } from 'config/stack';
 import Image from 'next/image';
+import { IGetPlaiceholderReturn } from 'plaiceholder';
 import { ReactNode } from 'react';
 import { RoughNotation } from 'react-rough-notation';
 import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
@@ -12,12 +13,13 @@ import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
 const { personal } = config;
 
 interface Props {
+  avatar: IGetPlaiceholderReturn;
   children: ReactNode;
   frontMatter: AuthorFrontMatter;
 }
 
-export default function AuthorLayout({ children, frontMatter }: Props) {
-  const { name, avatar, occupation, company } = frontMatter;
+export default function AuthorLayout({ children, frontMatter, avatar }: Props) {
+  const { name, occupation, company } = frontMatter;
   const [resumeColor] = useRandomColorPair();
 
   return (
@@ -28,11 +30,13 @@ export default function AuthorLayout({ children, frontMatter }: Props) {
         <div className='items-start space-y-2 xl:grid xl:grid-cols-3 xl:gap-x-8 xl:space-y-0'>
           <div className='flex flex-col items-center space-x-2 pt-8'>
             <Image
-              src={avatar}
+              src={avatar.img}
               alt='avatar'
               width='192px'
               height='192px'
               className='h-48 w-48 rounded-full'
+              placeholder='blur'
+              blurDataURL={avatar.base64}
             />
             <h3 className='pt-4 pb-2 text-2xl font-bold leading-8 tracking-tight'>
               {name}

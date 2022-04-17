@@ -3,8 +3,23 @@ import config from '../config';
 import Card from '@/components/Card';
 import { PageSEO } from '@/components/SEO';
 import { Header } from '@/components/Form';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import { getPlaiceholder, IGetPlaiceholderReturn } from 'plaiceholder';
+import { projects } from 'config/projects';
 
-export default function Projects() {
+export const getStaticProps: GetStaticProps<{
+  banners: IGetPlaiceholderReturn[];
+}> = async () => {
+  const images = projects.map(({ banner }) => getPlaiceholder(banner));
+
+  const banners = await Promise.all(images);
+
+  return { props: { banners } };
+};
+
+export default function Projects({
+  banners,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
       <PageSEO
@@ -18,15 +33,17 @@ export default function Projects() {
         />
         <div className='container py-12'>
           <div className='-m-4 flex flex-wrap'>
-            {config.projects.map(({ id, slug, title, description, banner }) => (
-              <Card
-                key={id}
-                title={title}
-                description={description}
-                banner={banner}
-                href={`/project/${slug}`}
-              />
-            ))}
+            {config.projects.map(
+              ({ id, slug, title, description, banner }, index) => (
+                <Card
+                  key={id}
+                  title={title}
+                  description={description}
+                  banner={banners[index]}
+                  href={`/project/${slug}`}
+                />
+              ),
+            )}
           </div>
         </div>
       </div>

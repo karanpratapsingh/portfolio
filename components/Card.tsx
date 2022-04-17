@@ -5,10 +5,12 @@ function Card({ title, description, banner, href }): React.ReactElement {
   const image = (
     <Image
       alt={title}
-      src={banner}
+      src={banner.img}
       className='object-cover object-center md:h-36 lg:h-48'
       width={544}
       height={306}
+      placeholder='blur'
+      blurDataURL={banner.base64}
     />
   );
 
