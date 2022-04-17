@@ -1,5 +1,4 @@
-/* eslint-disable @next/next/no-html-link-for-pages */
-import { useRandomColorPair } from '@/lib/hooks/useRandomColor';
+import { useRandomColorPair } from '@/lib/hooks/useRandomColorPair';
 import config from 'config';
 import { memo } from 'react';
 import { RoughNotation } from 'react-rough-notation';
