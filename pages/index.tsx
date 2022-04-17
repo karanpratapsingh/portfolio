@@ -5,7 +5,8 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import dynamic from 'next/dynamic';
 import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
 
-// TODO: share functionality
+// TODO: Video list?
+// TODO: Share functionality
 
 // @ts-ignore
 export const getStaticProps: GetStaticProps<{
