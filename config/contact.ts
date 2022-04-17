@@ -15,7 +15,7 @@ export interface Contact {
 }
 
 export const contact: Contact = {
-  twitter: '@karan__6864',
+  twitter: '@karan_6864',
   site: 'karanpratapsingh.com',
   calendly: 'https://calendly.com/karanpratapsingh',
   links: {

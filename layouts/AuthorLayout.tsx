@@ -2,14 +2,11 @@ import { Header } from '@/components/Form';
 import StackList from '@/components/list/StackList';
 import { PageSEO } from '@/components/SEO';
 import { useRandomColorPair } from '@/lib/hooks/useRandomColorPair';
-import config from 'config';
 import { WorkStack } from 'config/stack';
 import Image from 'next/image';
 import { ReactNode } from 'react';
 import { RoughNotation } from 'react-rough-notation';
 import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
-
-const { personal } = config;
 
 interface Props {
   children: ReactNode;
@@ -17,7 +14,7 @@ interface Props {
 }
 
 export default function AuthorLayout({ children, frontMatter }: Props) {
-  const { name, avatar, occupation, company } = frontMatter;
+  const { name, avatar, occupation, company, resume } = frontMatter;
   const [resumeColor] = useRandomColorPair();
 
   return (
@@ -48,7 +45,7 @@ export default function AuthorLayout({ children, frontMatter }: Props) {
             <p className='mt-8'>
               <a
                 className='!font-normal !text-black !no-underline dark:!text-white'
-                href={personal.resume}
+                href={resume}
                 target='_blank'
                 rel='noreferrer'
               >

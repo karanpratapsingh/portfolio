@@ -1,4 +1,3 @@
-// TODO: fill this out
 const siteMetadata = {
   title: 'Karan Pratap Singh',
   author: 'Karan Pratap Singh',
@@ -9,7 +8,7 @@ const siteMetadata = {
   siteUrl: 'https://karanpratapsingh.com',
   siteRepo: 'https://github.com/karanpratapsingh/portfolio',
   siteLogo: '/static/images/logo.png',
-  image: '/static/images/avatar.png',
+  image: '/static/avatar.jpg',
   socialBanner: '/static/images/twitter-card.png',
   email: 'contact@karanpratapsingh.com',
   github: 'https://github.com/karanpratapsingh',
