@@ -1,8 +1,8 @@
-import siteMetadata from '@/data/siteMetadata';
-import config from '../config';
 import Card from '@/components/Card';
-import { PageSEO } from '@/components/SEO';
 import { Header } from '@/components/Form';
+import { PageSEO } from '@/components/SEO';
+import siteMetadata from '@/data/siteMetadata';
+import config from 'config';
 
 export default function Projects() {
   return (
@@ -24,7 +24,7 @@ export default function Projects() {
                 title={title}
                 description={description}
                 banner={banner}
-                href={`/project/${slug}`}
+                href={`/projects/${slug}`}
               />
             ))}
           </div>
