@@ -4,12 +4,11 @@ import '@/css/tailwind.css';
 import 'katex/dist/katex.css';
 
 import '@fontsource/fira-code';
-import '@fontsource/open-sans/300.css';
-import '@fontsource/open-sans/400.css';
-import '@fontsource/open-sans/500.css';
-import '@fontsource/open-sans/600.css';
-import '@fontsource/open-sans/700.css';
-import '@fontsource/open-sans/800.css';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+import '@fontsource/roboto/900.css';
 
 import { ThemeProvider } from 'next-themes';
 import type { AppProps } from 'next/app';
