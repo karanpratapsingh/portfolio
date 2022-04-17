@@ -1,5 +1,4 @@
-/* eslint-disable @next/next/no-html-link-for-pages */
-import { useRandomColorPair } from '@/lib/hooks/useRandomColor';
+import { useRandomColorPair } from '@/lib/hooks/useRandomColorPair';
 import config from 'config';
 import { memo } from 'react';
 import { RoughNotation } from 'react-rough-notation';
@@ -14,9 +13,7 @@ function Banner(): React.ReactElement {
       <h1 className='text-3xl font-bold dark:text-white lg:text-5xl'>
         Hi, I am {personal.name}
       </h1>
-      <p className='my-2 text-lg font-light lg:my-4 lg:text-2xl'>
-        {personal.title}
-      </p>
+      <p className='my-2 text-lg lg:my-4 lg:text-2xl'>{personal.title}</p>
       <p className='font-light lg:text-xl'>
         Read more
         <a className='ml-2 mr-2 font-normal text-black' href='/about'>

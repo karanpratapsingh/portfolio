@@ -1,7 +1,7 @@
 import { Header } from '@/components/Form';
 import { PageSEO } from '@/components/SEO';
 import siteMetadata from '@/data/siteMetadata';
-import { useRandomColorPair } from '@/lib/hooks/useRandomColor';
+import { useRandomColorPair } from '@/lib/hooks/useRandomColorPair';
 import { contact } from 'config/contact';
 import { openPopupWidget } from 'react-calendly';
 import { RoughNotation } from 'react-rough-notation';

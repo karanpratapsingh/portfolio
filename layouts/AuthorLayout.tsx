@@ -1,7 +1,7 @@
 import { Header } from '@/components/Form';
 import StackList from '@/components/list/StackList';
 import { PageSEO } from '@/components/SEO';
-import { useRandomColorPair } from '@/lib/hooks/useRandomColor';
+import { useRandomColorPair } from '@/lib/hooks/useRandomColorPair';
 import config from 'config';
 import { WorkStack } from 'config/stack';
 import Image from 'next/image';
