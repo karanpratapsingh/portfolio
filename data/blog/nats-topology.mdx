@@ -1,0 +1,61 @@
+---
+title: 'NATS Topology'
+date: '2022-04-21'
+tags: ['nats', 'architecture', 'distributedsystems']
+draft: false
+summary: 'Learn about NATS topology'
+images: ['/static/blogs/nats-topology.png']
+authors: ['default']
+---
+
+In this article, we will learn about [NATS](https://nats.io) topology and how different components such as Clusters, Servers, Supercluster, and Leaf Node are organized.
+
+## Topology
+
+Below is a diagrammatic representation of the NATS topology.
+
+_Clients require no awareness of server topology beyond a connection URL_
+
+![topology](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/vm6dl9z6sbcy65lq0du3.png)
+
+### Server
+
+Here we have a single NATS server with clients connected to it. With the ability to process millions of messages a second per server, you'll find unparalleled efficiency with NATS server.
+
+![server](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ue15bnhefg2jw8yplnbt.png)
+
+### Cluster
+
+NATS Clusters are made up of any number of NATS servers that communicate with each other, service, or any number of clients.
+
+_NATS Cluster provides great fault tolerance and scalability._
+
+![cluster](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/v92thyj7mcfszh1hkabw.png)
+
+### Super Cluster
+
+But sometimes super clusters aren't enough, for this NATS has a concept of Super Clusters.
+
+Superclusters are made up of NATS clusters that are connected together by gateway connections.
+
+Gateway connections route messages between clusters. They use a spline based technology to ensure resiliency and optimize traffic across clusters. This improves disaster recovery as well.
+
+_Fun fact: Super cluster are smart enough to only send requests if there is an active consumer._
+
+![supercluster.png](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/wl9eboiwtudkn3pvdpxt.png)
+
+Multiple clusters can be linked together to form vast network topologies that consider WAN network links and latency.
+
+![supercluster-2](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/b9htq9xss5idlr5fkpzp.png)
+
+### Leaf Node
+
+A leaf node is a single NATS server extended out from a cluster or remote server. Leaf nodes extend clusters via a hub and spoke topology. Leaf nodes allow you to bridge separate security domains.
+
+![leaf-node.png](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/u9asnga64vn5t6teob41.png)
+
+Leaf nodes are ideal for edge computing, IoT hubs, or data centers that need to be connected to a global, regional, or national NATS deployment. Transparently bridge on-premise and cloud deployments.
+
+## Conclusion
+
+In this short article, we took a look at NATS topology. For more information, make sure to checkout the [docs](https://docs.nats.io/) for more.
