@@ -1,7 +1,9 @@
+import Link from '@/components/Link';
 import { useRandomColorPair } from '@/lib/hooks/useRandomColorPair';
 import { memo } from 'react';
 import { RoughNotation } from 'react-rough-notation';
 import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
+
 interface BannerProps {
   frontMatter: AuthorFrontMatter;
 }
@@ -20,7 +22,7 @@ function Banner(props: BannerProps): React.ReactElement {
       </p>
       <p className='font-light lg:text-xl'>
         Read more
-        <a className='ml-2 mr-2 font-normal text-black' href='/about'>
+        <Link className='ml-2 mr-2 font-normal text-black' href='/about'>
           <RoughNotation
             show
             type='highlight'
@@ -30,9 +32,9 @@ function Banner(props: BannerProps): React.ReactElement {
           >
             about me
           </RoughNotation>
-        </a>
+        </Link>
         or
-        <a className='ml-2 font-normal text-black' href='/contact'>
+        <Link className='ml-2 font-normal text-black' href='/contact'>
           <RoughNotation
             show
             type='highlight'
@@ -42,7 +44,7 @@ function Banner(props: BannerProps): React.ReactElement {
           >
             contact me
           </RoughNotation>
-        </a>
+        </Link>
       </p>
     </div>
   );
