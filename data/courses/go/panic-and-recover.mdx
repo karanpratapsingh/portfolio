@@ -92,13 +92,13 @@ If so then this brings us to the question, when should we use `panic`?
 
 There are two valid use cases for `panic`:
 
-- An unrecoverable error
+- **An unrecoverable error**
 
 Which can be a situation where the program cannot simply continue its execution.
 
 For example, reading a configuration file which is important to start the program, as there is nothing else to do if the file read itself fails.
 
-- Developer error
+- **Developer error**
 
 This is the most common situation.
 

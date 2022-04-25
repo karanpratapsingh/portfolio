@@ -12,7 +12,7 @@ So, A `struct` is a user-defined type that contains a collection of named fields
 
 If you're coming from an objected-oriented background, think of structs as lightweight classes which that support composition but not inheritance.
 
-### Defining
+## Defining
 
 We can define a `struct` like this
 
@@ -41,7 +41,7 @@ type Person struct {
 }
 ```
 
-### Declaring and initializing
+## Declaring and initializing
 
 Now that we have our struct, we can declare it the same as other datatypes
 
@@ -124,7 +124,7 @@ Person 3: {Tony Stark 0}
 
 As we can see, the age field of person 3 has defaulted to the zero value.
 
-### Without field name
+## Without field name
 
 Go structs also supports initialization without field names
 
@@ -204,7 +204,7 @@ func main() {
 }
 ```
 
-### Accessing fields
+## Accessing fields
 
 Let's cleanup our example our bit and see how we can access individual fields
 
@@ -274,7 +274,7 @@ $ go run main.go
 true
 ```
 
-### Exported fields
+## Exported fields
 
 Now let's learn what is exported and unexported fields in a struct. Same as the rules for variables and functions, if a struct field is declared with a lower case identifier, it will not be exported and only be visible to the package it is defined in.
 
@@ -296,7 +296,7 @@ type person struct {
 }
 ```
 
-### Embedding and composition
+## Embedding and composition
 
 As we discussed earlier, Go doesn't necessarily support inheritance, but we can do something similar with embedding
 
@@ -364,7 +364,7 @@ $ go run main.go
 
 Again there is no right or wrong here, but nonetheless, embedding comes in handy sometimes.
 
-### Struct tags
+## Struct tags
 
 A struct tag is just a tag that allows us to attach metadata information to the field which can be used for custom behavior using the `reflect` package.
 
@@ -388,7 +388,7 @@ type Animal struct {
 }
 ```
 
-### Properties
+## Properties
 
 Finally, let's discuss the properties of structs.
 

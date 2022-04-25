@@ -25,16 +25,16 @@ export const courses: Course[] = [
         name: 'Getting Started',
         content: [
           {
-            name: 'Welcome',
-            slug: 'welcome',
+            name: 'Welcome to the course',
+            slug: 'welcome-to-the-course',
           },
           {
             name: 'What is Go and why learn it?',
-            slug: 'what-is-go-and-why-learn-go',
+            slug: 'what-is-go-and-why-learn-it',
           },
           {
-            name: 'Installation',
-            slug: 'installation',
+            name: 'Installation and Setup',
+            slug: 'installation-and-setup',
           },
         ],
       },

@@ -70,7 +70,7 @@ $ go run main.go
 
 This must be the value of the memory address of the variable `a`
 
-### Dereferencing
+## Dereferencing
 
 We can also use the `*` asterisk operator to value stored in the variable that the pointer points to. This is called **dereferencing**
 
@@ -126,7 +126,7 @@ after: 20
 
 I think this is pretty neat!
 
-**Pointers as function args**
+### Pointers as function args
 
 Pointers can also be used as arguments for a function when we need to pass some data by reference.
 
@@ -139,7 +139,7 @@ myFunction(&a)
 func myFunction(ptr *int) {}
 ```
 
-### New function
+## New function
 
 There's also another way to initialize a pointer. We can use the `new` function which takes a type as an argument, allocates enough memory to accommodate a value of that type, and returns a pointer to it
 
@@ -165,7 +165,7 @@ value 100
 address 0xc000018030
 ```
 
-**pointer to pointer**
+### Pointer to a Pointer
 
 Here's an interesting idea...can we create a pointer to a pointer. And the answer is yes!
 
@@ -213,7 +213,7 @@ p1 := &a
 fmt.Println(p == p1)
 ```
 
-### Why?
+## But Why?
 
 This brings us to the million-dollar question, why do we need pointers?
 

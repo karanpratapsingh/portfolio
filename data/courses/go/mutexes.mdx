@@ -8,11 +8,11 @@ authors: ['default']
 
 In this tutorial, we will learn about mutex.
 
-**So what is a mutex?**
+### What is a mutex?
 
 Mutex prevents other processes from entering a critical section of data while a process occupies it to prevent race conditions from happening.
 
-**Wait, what's a critical section?**
+### What's a critical section?
 
 So a critical section can be a piece of code that must not be run by multiple threads at once because the code contains shared resources.
 
@@ -123,6 +123,8 @@ Result is 49
 ```
 
 Looks like we solved our issue and the output looks correct as well.
+
+### The `sync` package
 
 So far we've discussed `sync.WaitGroup` and `sync.Mutex` but there are lots of other features available in the `sync` package that can come in handy while writing concurrent code.
 

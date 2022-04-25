@@ -98,19 +98,19 @@ As expected, methods with pointer receivers can modify the value to which the re
 
 Let's also see some properties of the methods!
 
-1. Go is smart enough to interpret our function call correctly and hence, pointer receiver method calls are just syntactic sugar provided by Go for convenience.
+- Go is smart enough to interpret our function call correctly and hence, pointer receiver method calls are just syntactic sugar provided by Go for convenience.
 
 ```go
 (&c).UpdateName(...)
 ```
 
-1. We can omit the variable part of the receiver as well if we're not using it
+- We can omit the variable part of the receiver as well if we're not using it
 
 ```go
 func (Car) UpdateName(...) {}
 ```
 
-1. Methods are not limited to structs but can also be used with non-struct types as well
+- Methods are not limited to structs but can also be used with non-struct types as well
 
 ```go
 package main
@@ -130,7 +130,7 @@ func main() {
 }
 ```
 
-### Why methods instead of functions
+### Why methods instead of functions?
 
 So the question is, why methods instead of functions?
 

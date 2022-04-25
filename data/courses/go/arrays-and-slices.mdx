@@ -8,15 +8,15 @@ authors: ['default']
 
 In this tutorial, we will learn about arrays and slices in Go.
 
-### Arrays
+## Arrays
 
-**So what's an array?**
+### So what's an array?
 
 An array is a fixed-size collection of elements of the same type. The elements of the array are stored sequentially and can be accessed using their `index`
 
 ![array](/static/courses/go/chapter-II/arrays-and-slices/array.png)
 
-**Declaration**
+### Declaration
 
 We can declare an array as follows
 
@@ -43,7 +43,7 @@ $ go run main.go
 
 By default, all the array elements are initialized with the zero value of the corresponding array type.
 
-**Initialization**
+### Initialization
 
 We can also initialize an array using an array literal
 
@@ -71,7 +71,7 @@ We can even do a shorthand declaration
 arr := [4]int{1, 2, 3, 4}
 ```
 
-**Access**
+### Access
 
 And similar to other languages, we can access the elements using the `index` as they're stored sequentially
 
@@ -88,7 +88,7 @@ $ go run main.go
 1
 ```
 
-**Iteration**
+### Iteration
 
 Now, let's talk about iteration.
 
@@ -148,7 +148,7 @@ for i := range arr {} // Use index only
 for range arr {} // Simply loop over the array
 ```
 
-**Multi dimensional**
+### Multi dimensional
 
 All the arrays that we created so far are one dimensional. We can also create multi-dimensional arrays in Go.
 
@@ -194,7 +194,7 @@ Index: 0, Element: [1 2 3 4]
 Index: 1, Element: [5 6 7 8]
 ```
 
-**Properties**
+### Properties
 
 Now let's talk about some properties of arrays.
 
@@ -233,7 +233,7 @@ func main() {
 }
 ```
 
-### Slices
+## Slices
 
 I know what you're thinking, arrays are useful but a bit inflexible due to the limitation caused by their fixed size.
 
@@ -271,7 +271,7 @@ func main() {
 
 Don't worry, we are going to discuss everything shown here in detail.
 
-**Declaration**
+### Declaration
 
 Let's see how we can declare a slice
 
@@ -300,7 +300,7 @@ true
 
 So, unlike arrays, the zero value of a slice is `nil`
 
-**Initialization**
+### Initialization
 
 There are multiple ways to initialize our slice. One way is to use the built-in `make` function
 
@@ -383,11 +383,11 @@ Thing to note here is we can create slice from other slices too and not just arr
 	}
 ```
 
-**Iteration**
+### Iteration
 
 We can iterate over a slice in the same way you iterate over an array, by using the for loop with either `len` function or `range` keyword.
 
-**functions**
+### functions
 
 So now let's talk about built-in slice functions provided in Go.
 
@@ -458,7 +458,7 @@ But If the given slice doesn't have sufficient capacity for the new elements the
 
 All the elements from the underlying array of the existing slice are copied to this new array, and then the new elements are appended.
 
-**properties**
+### Properties
 
 Finally, let's discuss some properties of slices.
 
