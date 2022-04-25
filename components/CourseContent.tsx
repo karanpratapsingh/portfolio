@@ -35,7 +35,7 @@ export default function CourseContent(
         <Conditional condition={!!content}>
           {content?.map(({ name, slug }) => (
             <Link key={name} href={getSlug(courseSlug, slug)}>
-              <h3 className='mb-1 text-lg font-normal text-gray-500 dark:text-gray-400'>
+              <h3 className='mb-2 text-lg text-gray-500 dark:text-gray-400'>
                 {name}
               </h3>
             </Link>

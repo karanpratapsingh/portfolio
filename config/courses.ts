@@ -15,7 +15,7 @@ export interface Course {
 
 export const courses: Course[] = [
   {
-    title: `Let's learn Go`,
+    title: `Go programming language`,
     slug: 'go',
     banner: '/static/courses/go/banner.png',
     description: `Let's master the fundamentals and advanced features of the Go programming language`,
@@ -24,8 +24,16 @@ export const courses: Course[] = [
         name: 'Getting Started',
         content: [
           {
+            name: 'Welcome',
+            slug: 'welcome',
+          },
+          {
             name: 'What is Go and why learn it?',
             slug: 'what-is-go-and-why-learn-go',
+          },
+          {
+            name: 'Installation',
+            slug: 'installation',
           },
         ],
       },
