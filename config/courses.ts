@@ -15,7 +15,7 @@ export interface Course {
 
 export const courses: Course[] = [
   {
-    title: `Go programming language`,
+    title: 'Learn Go',
     slug: 'go',
     banner: '/static/courses/go/banner.png',
     description:
@@ -29,8 +29,8 @@ export const courses: Course[] = [
             slug: 'welcome-to-the-course',
           },
           {
-            name: 'What is Go and why learn it?',
-            slug: 'what-is-go-and-why-learn-it',
+            name: 'Why learn Go?',
+            slug: 'why-learn-go',
           },
           {
             name: 'Installation and Setup',
@@ -46,7 +46,7 @@ export const courses: Course[] = [
             name: 'Variables and Data Types',
             slug: 'variables-and-data-types',
           },
-          { name: 'String Formatting', slug: 'flow-control' },
+          { name: 'String Formatting', slug: 'string-formatting' },
           { name: 'Flow Control', slug: 'flow-control' },
           { name: 'Functions', slug: 'functions' },
           { name: 'Modules', slug: 'modules' },
@@ -70,7 +70,7 @@ export const courses: Course[] = [
         name: 'Chapter III',
         content: [
           { name: 'Interfaces', slug: 'interfaces' },
-          { name: 'Error Handling', slug: 'error-handling' },
+          { name: 'Errors', slug: 'errors' },
           { name: 'Panic and Recover', slug: 'panic-and-recover' },
           { name: 'Testing', slug: 'testing' },
           { name: 'Generics', slug: 'generics' },
@@ -83,13 +83,10 @@ export const courses: Course[] = [
           { name: 'Goroutines', slug: 'goroutines' },
           { name: 'Channels', slug: 'channels' },
           { name: 'Select', slug: 'select' },
-          { name: 'Waitgroups', slug: 'waitgroups' },
+          { name: 'WaitGroups', slug: 'waitgroups' },
           { name: 'Mutexes', slug: 'mutexes' },
+          { name: 'Next Steps', slug: 'next-steps' },
         ],
-      },
-      {
-        name: 'Next Steps',
-        content: [{ name: 'Next Steps', slug: 'next-steps' }],
       },
     ],
   },
