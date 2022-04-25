@@ -12,7 +12,7 @@ interface Props {
   pagination?: ComponentProps<typeof Pagination>;
 }
 
-export default function ListLayout({
+export default function CourseListLayout({
   courses,
   title,
   initialDisplayPosts = [],
@@ -36,10 +36,10 @@ export default function ListLayout({
         <Header title={title}>
           <div className='relative max-w-lg'>
             <input
-              aria-label='Search articles'
+              aria-label='Search tutorials'
               type='text'
               onChange={({ target }) => setSearchValue(target.value)}
-              placeholder='Search articles'
+              placeholder='Search tutorials'
               className='block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-900 dark:bg-gray-800 dark:text-gray-100'
             />
             <svg
@@ -61,7 +61,7 @@ export default function ListLayout({
 
         <ul>
           {!filteredBlogPosts.length && (
-            <p className='mt-8 text-center'>No posts found</p>
+            <p className='mt-8 text-center'>No tutorials found</p>
           )}
           {displayPosts.map(frontMatter => {
             const { slug, date, title, summary } = frontMatter;

@@ -14,7 +14,7 @@ export const getStaticProps: GetStaticProps<{
   pagination: ComponentProps<typeof CourseListLayout>['pagination'];
 }> = async () => {
   const courses = (await getAllFilesFrontMatter('courses')).filter(course =>
-    course.slug.includes('go'),
+    course.slug.includes('go/'),
   );
 
   const initialDisplayPosts = courses.slice(0, POSTS_PER_PAGE);
