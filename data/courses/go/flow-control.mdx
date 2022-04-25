@@ -1,0 +1,199 @@
+---
+title: 'Flow control'
+date: '2022-04-29'
+draft: false
+summary: 'In this tutorial, we will learn about if/else, switch, and for loops in Go'
+images: ['/static/courses/go/banner.png']
+authors: ['default']
+---
+
+Let's talk about flow control, starting with if/else
+
+### if/else
+
+This works pretty much the same as you expect but the expression doesn't need to be surrounded by parentheses `()`
+
+```go
+func main() {
+	x := 10
+
+	if x > 5 {
+		fmt.Println("x is gt 5")
+	} else if x > 10 {
+		fmt.Println("x is gt 10")
+	} else {
+		fmt.Println("else case")
+	}
+}
+```
+
+```bash
+$ go run main.go
+x is gt 5
+```
+
+**compact if**
+
+we can also compact our if statements
+
+```go
+func main() {
+	if x := 10; x > 5 {
+		fmt.Println("x is gt 5")
+	}
+}
+```
+
+_Note: this pattern is quite common_
+
+### switch
+
+Next, we have `switch` statement, which is often a shorter way to write conditional logic.
+
+In Go, the switch case only runs the first case whose value is equal to the condition expression and not all the cases that follow. Hence, unlike other languages, `break` statement is automatically added at the end of each case.
+
+This means that it evaluates cases from top to bottom, stopping when a case succeeds. Let's take an example
+
+```go
+func main() {
+	day := "monday"
+
+	switch day {
+	case "monday":
+		fmt.Println("time to work!")
+	case "friday":
+		fmt.Println("let's party")
+	default:
+		fmt.Println("browse memes")
+	}
+}
+```
+
+```bash
+$ go run main.go
+time to work!
+```
+
+Switch also supports shorthand declaration like this
+
+```go
+	switch day := "monday"; day {
+	case "monday":
+		fmt.Println("time to work!")
+	case "friday":
+		fmt.Println("let's party")
+	default:
+		fmt.Println("browse memes")
+	}
+```
+
+We can also use the `fallthrough` keyword to transfer control to the next case even though the current case might have matched.
+
+```go
+	switch day := "monday"; day {
+	case "monday":
+		fmt.Println("time to work!")
+		fallthrough
+	case "friday":
+		fmt.Println("let's party")
+	default:
+		fmt.Println("browse memes")
+	}
+```
+
+And if we run this, we'll see that after the first case match the switch statement continues to the next case because of the `fallthrough` keyword
+
+```go
+$ go run main.go
+time to work!
+let's party
+```
+
+We can also use it without any condition, which is the same as `switch true`
+
+```go
+x := 10
+
+switch {
+	case x > 5:
+		fmt.Println("x is greater")
+	default:
+		fmt.Println("x is not greater")
+}
+```
+
+### Loops
+
+Now, let's turn our attention toward loops.
+
+So in Go, we only have one type of loop which is the `for` loop.
+
+But it's incredibly versatile. Same as if statement, for loop, doesn't need any parenthesis `()` unlike other languages.
+
+Let's start with the basic for loop.
+
+```go
+func main() {
+	for i := 0; i < 10; i++ {
+		fmt.Println(i)
+	}
+}
+```
+
+The basic `for` loop has three components separated by semicolons:
+
+- **_init statement_**: which is executed before the first iteration
+- **_condition expression_**: which is evaluated before every iteration
+- **_post statement_**: which is executed at the end of every iteration
+
+**Break and continue**
+
+As expected, Go also supports both `break` and `continue` statements for loop control. Let's try a quick example
+
+```go
+func main() {
+	for i := 0; i < 10; i++ {
+		if i < 2 {
+			continue
+		}
+
+		fmt.Println(i)
+
+		if i > 5 {
+			break
+    }
+	}
+
+	fmt.Println("We broke out!")
+}
+```
+
+So, the `continue` statement is used when we want to skip the remaining portion of the loop, and `break` statement is used when we want to break out of the loop.
+
+Also, Init and post statements are optional, hence we can make our `for` loop behave like a while loop as well.
+
+```go
+func main() {
+	i := 0
+
+	for ;i <	10; {
+		i += 1
+	}
+}
+```
+
+_Note: we can also remove the additional semi-colons to make it a little cleaner_
+
+**forever**
+
+Lastly, If we omit the loop condition it loops forever, so an infinite loop can be compactly expressed. This is also known as forever loop
+
+```go
+func main() {
+	for {
+		// do stuff here
+	}
+}
+```
+
+Well, this is pretty much it on flow control, I'll see you in the next one!

@@ -1,0 +1,303 @@
+---
+title: 'Variables and Datatypes'
+date: '2022-04-27'
+draft: false
+summary: 'In this tutorial, we will learn about variables and datatypes in Go'
+images: ['/static/courses/go/banner.png']
+authors: ['default']
+---
+
+In this tutorial, we will learn about variables. We will also learn about the different data types that Go provides us.
+
+## **Variables**
+
+Let's start with declaring a variable
+
+This is also known as declaration without initialization
+
+```go
+var foo string
+```
+
+Declaration with initialization
+
+```go
+var foo string = "Go is awesome"
+```
+
+Multiple declarations
+
+```go
+var foo, bar string = "Hello", "World"
+// OR
+var (
+	foo string = "Hello"
+	bar string  = "World"
+)
+```
+
+Type is omitted but will be inferred
+
+```go
+var foo = "What's my type?"
+```
+
+Shorthand, here we omit `var` keyword and type is always implicit. This is how we will see variables being declared most of the time. We also use the `:=` for declaration plus assignment
+
+```go
+foo := "Shorthand!"
+```
+
+_Note: Shorthand only works inside `function` bodies_
+
+## **Constants**
+
+We can also declare constants with the `const` keyword. Which as the name suggests are fixed values that cannot be reassigned
+
+```go
+const constant = "This is a constant"
+```
+
+### Basic **Datatypes**
+
+Perfect! Now let's look at some basic data types available in Go. Starting with string.
+
+### S**tring**
+
+In Go, string is a sequence of bytes.
+
+They are declared either using double quotes or back ticks which can span multiple lines
+
+```go
+var name string = "My name is Go"
+
+var bio string = `I am statically typed.
+									I was designed at Google.`
+```
+
+### B**ool**
+
+Next is `bool` which is used to store boolean values. It can have two possible values - `true` or `false`.
+
+```go
+var value bool = false
+var isItTrue bool = true
+```
+
+**Operators**
+
+We can use the following operators on boolean types
+
+| Logical  | &&   |     | !   |
+| -------- | ---- | --- | --- |
+| Equality | == ≠ |
+
+### Numeric types
+
+Now let's talk about numeric types, starting with
+
+**Signed and Unsigned integers**
+
+Go has several built-in integer types of varying size for storing signed and unsigned integers
+
+The size of generic `int` and `uint` type is platform dependent. Which means it is 32 bits wide on a 32-bit system and 64-bits wide on a 64-bit system.
+
+```go
+var i int = 404                     // Platform dependent
+var i8 int8 = 127                   // -128 to 127
+var i16 int16 = 32767               // -2^15 to 2^15 - 1
+var i32 int32 = -2147483647         // -2^31 to 2^31 - 1
+var i64 int64 = 9223372036854775807 // -2^63 to 2^63 - 1
+```
+
+Similar to signed integers, we have unsigned integers.
+
+```go
+var ui uint = 404                     // Platform dependent
+var ui8 uint8 = 255                   // 0 to 255
+var ui16 uint16 = 65535               // 0 to 2^16
+var ui32 uint32 = 2147483647          // 0 to 2^32
+var ui64 uint64 = 9223372036854775807 // 0 to 2^64
+var uiptr uintptr                     // Integer representation of a memory address
+```
+
+If you noticed, there's also an unsigned integer pointer `uintptr` type, which is an integer representation of a memory address. It is not recommended to use this, so we don't have to worry about it.
+
+**So which one should we use?**
+
+It is recommended that whenever we need an integer value we should just use `int` unless we have a specific reason to use a sized or unsigned integer type.
+
+**Integer alias types**
+
+Next, let's discuss integer alias types.
+
+B**yte and Rune**
+
+Golang has two additional integer types called `byte` and `rune` that are aliases for `uint8` and `int32` data types respectively.
+
+```go
+type byte = uint8
+type rune = int32
+```
+
+_A `rune` represents a unicode code point._
+
+```go
+var b byte = 'a'
+var r rune = '🍕'
+```
+
+F**loating point**
+
+Next, we have floating point types which are used to store numbers with a decimal component.
+
+Go has two floating point types `float32` and `float64`. Both types follow IEEE-754 standard.
+
+_The default type for floating point values is float64_
+
+```go
+var f32 float32 = 1.7812 // IEEE-754 32-bit
+var f64 float64 = 3.1415 // IEEE-754 64-bit
+```
+
+**Operators**
+
+Go provides several operators for performing operations on numeric types.
+
+```
+| Arithmetic | +   -   *   /   % |
+| --- | --- |
+| Comparison | ==   !=   <   >   <=   ≥ |
+| Bitwise | &  |   ^   <<   >> |
+| Increment/Decrement | ++   — |
+| Assignment | +=   -=.  *=   /=   %=   <<=   >>=   &=   |=   ^= |
+```
+
+C**omplex**
+
+There are 2 complex types in Go. complex128 where both real and imaginary parts are float64 and complex64 where real and imaginary are float32.
+
+We can define complex numbers either using the built-in complex function or as literals.
+
+```go
+var c1 complex128 = complex(10, 1)
+var c2 complex64 = 12 + 4i
+```
+
+### **Zero Values**
+
+Now let's discuss zero values. So in Go any variable declared without an explicit initial value are given their _zero value_. For example, let's declare some variables and see
+
+```go
+var i int
+var f float64
+var b bool
+var s string
+
+fmt.Printf("%v %v %v %q\n", i, f, b, s)
+```
+
+```bash
+$ go run main.go
+0 0 false ""
+```
+
+So, as we can see `int` and `float` are assigned as 0, `bool` as false, and `string` as an empty string. This is quite different from how other languages do it. For example, most languages initialize unassigned variables as null or undefined
+
+This is great, but what are those percent symbols in our `Printf` function? As you've already guessed, they are used for formatting and we will learn about them in the next video.
+
+### **Type Conversion**
+
+Moving on, now that we have seen how data types work, let's see how to do type conversion.
+
+```go
+i := 42
+f := float64(i)
+u := uint(f)
+
+fmt.Printf("%T %T", f, u)
+```
+
+```bash
+$ go run main.go
+float64 uint
+```
+
+And as we can see, it prints the type as `float64` and `uint`.
+
+_Note that this is different from parsing_
+
+### Alias types
+
+Alias types were introduced in Go 1.9
+
+They allow developers to provide an alternate name for an existing type and use it interchangeably with the underlying type.
+
+```go
+package main
+
+import "fmt"
+
+type MyAlias = string
+
+func main() {
+	var str MyAlias = "I am an alias"
+
+	fmt.Printf("%T - %s", str, str) // Output: I am an alias
+}
+```
+
+### Defined types
+
+Lastly, we have defined types that unlike alias types do not use an equals sign.
+
+```go
+package main
+
+import "fmt"
+
+type MyDefined string
+
+func main() {
+	var str MyDefined = "I am defined"
+
+	fmt.Printf("%T - %s", str, str) // Output: main.MyDefined - I am defined
+}
+```
+
+**But wait...What's the difference?**
+
+So, defined types do more than just give a name to a type.
+
+It first defines a new named type with an underlying type. However, this defined type is different from any other type, including its underline type.
+
+Hence, it cannot be used interchangeably with the underlying type like alias types.
+
+It's bit confusing at first, hopefully, this example will make things clear.
+
+```go
+package main
+
+import "fmt"
+
+type MyAlias = string
+
+type MyDefined string
+
+func main() {
+	var alias MyAlias
+	var def MyDefined
+
+	// ✅ Works
+	var copy1 string = alias
+
+	// ❌ cannot use str (variable of type MyDefined) as string value in variable
+	var copy2 string = def
+
+	fmt.Println(copy1, copy2)
+}
+```
+
+As we can see, we cannot use the defined type interchangeably with the underlying type, unlike _alias types._
+
+Well, this is pretty much it for variables and data types in Go. I'll see you in the next one.

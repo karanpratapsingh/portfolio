@@ -1,0 +1,123 @@
+---
+title: 'Workspaces'
+date: '2022-05-02'
+draft: false
+summary: 'In this tutorial, we will learn about workspaces in Go'
+images: ['/static/courses/go/banner.png']
+authors: ['default']
+---
+
+In this tutorial, we will learn about multi-module workspaces that were introduced in Go 1.18
+
+Workspaces allow us to work with multiple modules simultaneously without having to edit `go.mod` files for each module. Each module within a workspace is treated as a root module when resolving dependencies.
+
+To understand this better, let's start by creating a `hello` module
+
+```bash
+$ mkdir workspaces && cd workspaces
+$ mkdir hello && cd hello
+$ go mod init hello
+```
+
+For demonstration purposes, I will add a simple `main.go` and install an example package.
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"golang.org/x/example/stringutil"
+)
+
+func main() {
+	result := stringutil.Reverse("Hello Workspace")
+	fmt.Println(result)
+}
+```
+
+```bash
+$ go get golang.org/x/example
+go: downloading golang.org/x/example v0.0.0-20220412213650-2e68773dfca0
+go: added golang.org/x/example v0.0.0-20220412213650-2e68773dfca0
+```
+
+And if we run this, we should see our output in reverse.
+
+```bash
+$ go run main.go
+ecapskroW olleH
+```
+
+This is great, but what if we want to modify the `stringutil` module that our code depends on?
+
+Until now we had to do it using the `replace` directive in the `go.mod` file, but now let's see how we can use workspaces here.
+
+So let's create our workspace in the `workspace` directory
+
+```bash
+$ go work init
+```
+
+This will create a `[go.work](http://go.work)` file
+
+```bash
+$ cat go.work
+go 1.18
+```
+
+We will also add our `hello` module to the workspace.
+
+```bash
+$ go work use ./hello
+```
+
+This should update the `[go.work](http://go.work)` file with a reference to our `hello` module
+
+```go
+go 1.18
+
+use ./hello
+```
+
+Now let's download and modify the `stringutil` package and update the `Reverse` function implementation
+
+```go
+$ git clone https://go.googlesource.com/example
+Cloning into 'example'...
+remote: Total 204 (delta 39), reused 204 (delta 39)
+Receiving objects: 100% (204/204), 467.53 KiB | 363.00 KiB/s, done.
+Resolving deltas: 100% (39/39), done.
+```
+
+`example/stringutil/reverse.go`
+
+```go
+func Reverse(s string) string {
+	return fmt.Sprintf("I can do whatever!! %s", s)
+}
+```
+
+Finally, let's add `example` package to our workspace
+
+```bash
+$ go work use ./example
+$ cat go.work
+go 1.18
+
+use (
+	./example
+	./hello
+)
+```
+
+Perfect, now if we run our `hello` module we will notice that the `Reverse` function has been modified.
+
+```go
+$ go run hello
+I can do whatever!! Hello Workspace
+```
+
+_This is a very underrated feature from Go 1.18 but it is quite useful in certain circumstances._
+
+So this is pretty much it for workspaces in Go, I'll see you in the next tutorial.

@@ -1,0 +1,84 @@
+---
+title: 'Build'
+date: '2022-05-05'
+draft: false
+summary: 'In this tutorial, we will learn about building binaries in Go'
+images: ['/static/courses/go/banner.png']
+authors: ['default']
+---
+
+Building static binaries is one of the best features of Go which enables us to ship our code efficiently
+
+We can do this very easily using the `go build` command
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("I am a binary!")
+}
+```
+
+```bash
+$ go build
+```
+
+This should produce a binary with the name of our module. For example, here we have `example`
+
+We can also specify the output
+
+```bash
+$ go build -o app
+```
+
+Now to run this, we simply need to execute it
+
+```go
+$ ./app
+I am a binary!
+```
+
+_Yes, it's as simple as that!_
+
+Now, let's talk about some important build time variables, starting with
+
+- `GOOS` and `GOARCH`
+
+these environment variables help use build go programs for different [operating systems](https://en.wikipedia.org/wiki/Operating_system)
+and underlying processor [architectures](https://en.wikipedia.org/wiki/Microarchitecture)
+
+We can list all the supported architecture using `go tool` command
+
+```bash
+$ go tool dist list
+android/amd64
+ios/amd64
+js/wasm
+linux/amd64
+windows/arm64
+.
+.
+.
+```
+
+Here's an example for building a window's executable from macOS!
+
+```go
+$ GOOS=windows GOARCH=amd64 go build -o app.exe
+```
+
+- `CGO_ENABLED`
+
+This variable allows us to configure [CGO](https://go.dev/blog/cgo) which is a way in Go to call C code.
+
+This helps us to produce [statically linked binary](https://en.wikipedia.org/wiki/Static_build) that works without any external dependencies.
+
+This is quite helpful for let's say when we want to run our go binaries in a docker container with minimum external dependencies.
+
+Here's an example how to use it
+
+```go
+$ CGO_ENABLED=0 go build -o app
+```

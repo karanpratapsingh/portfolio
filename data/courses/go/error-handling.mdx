@@ -1,0 +1,279 @@
+---
+title: 'Error Handling'
+date: '2022-05-12'
+draft: false
+summary: 'In this tutorial, we will learn about error handling in Go'
+images: ['/static/courses/go/banner.png']
+authors: ['default']
+---
+
+In this tutorial, let's talk about error handling.
+
+Notice I said errors and not exceptions as there is no exception handling in Go.
+
+Instead, we can just return a built-in `error` type which is an interface type.
+
+```go
+type error interface {
+    Error() string
+}
+```
+
+We will circle back to this shortly. First, let's try to understand the basics.
+
+So, Let's declare a simple `Divide` function which as the name suggests, will divide integer `a` by `b`
+
+```go
+func Divide(a, b int) int {
+	return a/b
+}
+```
+
+Great. Now, we want to return an error, let's say to prevent the division by zero. This brings us to error construction.
+
+**Constructing Errors**
+
+There are multiple ways to do this but we will look at the two most common one.
+
+**errors package**
+
+The first is by using the `New` function provided by the `errors` package.
+
+```go
+package main
+
+import "errors"
+
+func main() {}
+
+func Divide(a, b int) (int, error) {
+	if b == 0 {
+		return 0, errors.New("cannot divide by zero")
+	}
+
+	return a/b, nil
+}
+```
+
+Notice, how we return error with the result. And if there is no error we simply return `nil` as it is the zero value of an error because after all, it's an interface.
+
+But how do we handle it? So, for that let's call the `Divide` function in our `main` function.
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+func main() {
+	result, err := Divide(4, 0)
+
+	if err != nil {
+		fmt.Println(err)
+		// Do something with the error
+		return
+	}
+
+	fmt.Println(result)
+	// Use the result
+}
+
+func Divide(a, b int) (int, error) {...}
+```
+
+```bash
+$ go run main.go
+cannot divide by zero
+```
+
+As you can see, we simply check if the error is `nil` and build our logic accordingly. This is considered quite idiomatic in Go and you will see this being used a lot.
+
+Another way to construct our errors is by using the `fmt.Errorf` function.
+
+This function is similar to `fmt.Sprintf` and lets us format our error but instead of returning a string, it returns an error.
+
+It is often used to add some context or detail to our errors.
+
+```go
+...
+func Divide(a, b int) (int, error) {
+	if b == 0 {
+		return 0, fmt.Errorf("cannot divide %d by zero", a)
+	}
+
+	return a/b, nil
+}
+```
+
+And it should work similarly
+
+```bash
+$ go run main.go
+cannot divide 4 by zero
+```
+
+### Sentinel Errors
+
+Another important technique in Go is defining expected Errors so they can be checked explicitly in other parts of the code. These are sometimes referred to as sentinel errors.
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+var ErrDivideByZero = errors.New("cannot divide by zero")
+
+func main() {...}
+
+func Divide(a, b int) (int, error) {
+	if b == 0 {
+		return 0, ErrDivideByZero
+	}
+
+	return a/b, nil
+}
+```
+
+In Go, it is considered conventional to prefix the variable with `Err`.
+
+For example, `ErrNotFound`
+
+**But what's the point?**
+
+So, this becomes useful when we need to execute a different branch of code if a certain kind of error is encountered.
+
+For example, now we can check explicitly which error occurred using the `[errors.Is](http://errors.Is)` function
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+func main() {
+	result, err := Divide(4, 0)
+
+	if err != nil {
+		switch {
+    case errors.Is(err, ErrDivideByZero):
+        fmt.Println(err)
+				// Do something with the error
+    default:
+        fmt.Println("no idea!")
+    }
+
+		return
+	}
+
+	fmt.Println(result)
+	// Use the result
+}
+
+func Divide(a, b int) (int, error) {...}
+```
+
+```bash
+$ go run main.go
+cannot divide by zero
+```
+
+### Custom Errors
+
+This strategy covers most of the error handling use cases. But sometimes we need additional functionalities such as dynamic values inside of our errors.
+
+Earlier we saw that `error` is just an interface. So basically, anything can be an `error` as long as it implements the `Error()` method which returns an error message as a string.
+
+So let's define our custom `DivisionError` struct which will contain an error code and a message.
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+type DivisionError struct {
+	Code int
+	Msg  string
+}
+
+func (d DivisionError) Error() string {
+	return fmt.Sprintf("code %d: %s", d.Code, d.Msg)
+}
+
+func main() {...}
+
+func Divide(a, b int) (int, error) {
+	if b == 0 {
+		return 0, DivisionError{
+			Code: 2000,
+			Msg:  "cannot divide by zero",
+		}
+	}
+
+	return a/b, nil
+}
+```
+
+Here, we will use `[errors.As](http://errors.As)` instead of `[errors.Is](http://errors.Is)` function, to convert the error to the correct type.
+
+```go
+func main() {
+	result, err := Divide(4, 0)
+
+	if err != nil {
+		var divErr DivisionError
+
+		switch {
+		case errors.As(err, &divErr):
+			fmt.Println(divErr)
+			// Do something with the error
+		default:
+			fmt.Println("no idea!")
+		}
+
+		return
+	}
+
+	fmt.Println(result)
+	// Use the result
+}
+
+func Divide(a, b int) (int, error) {...}
+```
+
+```bash
+$ go run man.go
+code 2000: cannot divide by zero
+```
+
+**But what's the difference between `errors.Is` and `errors.As`?**
+
+The difference is that this function checks whether the error has a specific type, unlike the `[Is()](https://pkg.go.dev/errors#Is)`, which examines if it is a particular error object.
+
+We can also use type assertions, but it's not preferred
+
+```go
+func main() {
+	result, err := Divide(4, 0)
+
+	if e, ok := err.(DivisionError); ok {
+		fmt.Println(e.Code, e.Msg) // Output: 2000 cannot divide by zero
+		return
+	}
+
+	fmt.Println(result)
+}
+```
+
+Lastly, I will say that error handling in Go is quite different compared to the traditional `try/catch` idiom in other languages. But it is very powerful as it encourages the developer to actually handle the error in an explicit way, which improves readability as well.
+
+I hope this tutorial helped you learn about errors in Go and how to handle them. I'll see you in the next one!

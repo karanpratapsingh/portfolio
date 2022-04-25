@@ -1,0 +1,259 @@
+---
+title: 'Channels'
+date: '2022-05-18'
+draft: false
+summary: 'In this tutorial, we will learn about channels in Go'
+images: ['/static/courses/go/banner.png']
+authors: ['default']
+---
+
+In this lesson, we will learn about Channels.
+
+**So what are channels?**
+
+Well, simply defined.
+
+A channel is a communications pipe between goroutines. Things go in one end and come out another in the same order until the channel is closed.
+
+![channel](/static/courses/go/chapter-IV/channels/channel.png)
+
+As we learned earlier, channels in Go are based on Communicating Sequential Processes (CSP).
+
+### **Creating a channel**
+
+Now that we understand what channels are, let's see how we can declare them
+
+```go
+var ch chan T
+```
+
+Here, We prefix our type `T` which is the data type of the value we want to send and receive with the keyword `chan` which stands for a channel.
+
+Let's try printing the value of our channel `c` of type `string`.
+
+```go
+func main() {
+	var ch chan string
+
+	fmt.Println(c)
+}
+```
+
+```bash
+$ go run main.go
+<nil>
+```
+
+As we can see, the zero value of a channel is `nil` and if we try to send data over the channel our program will panic.
+
+So similar to slices we can initialize our channel using the built-in `make` function.
+
+```go
+func main() {
+	ch := make(chan string)
+
+	fmt.Println(c)
+}
+```
+
+And if we run this we can see our channel was initialized.
+
+```bash
+$ go run main.go
+0x1400010e060
+```
+
+### Sending and Receiving data
+
+Now that we have a basic understanding of channels, let us implement our earlier example using channels to learn how we can use them to communicate between our goroutines.
+
+```go
+package main
+
+import "fmt"
+
+func speak(arg string, ch chan string) {
+	ch <- arg // Send
+}
+
+func main() {
+	ch := make(chan string)
+
+	go speak("Hello World", ch)
+
+	data := <-ch // Receive
+	fmt.Println(data)
+}
+```
+
+Notice how we _can send data using the `channel<-data` and receive data using the `data := <-channel` syntax._
+
+And if we run this
+
+```go
+$ go run main.go
+Hello World
+```
+
+Perfect, our program ran as we expected.
+
+### **Buffered Channels**
+
+We also have buffered channels that accept a limited number of values without a corresponding receiver for those values.
+
+![buffered-channel](/static/courses/go/chapter-IV/channels/buffered-channel.png)
+
+This _buffer length_ or _capacity_ can be specified using the second argument to the `make` function.
+
+```go
+func main() {
+	ch := make(chan string, 2)
+
+	go speak("Hello World", ch)
+	go speak("Hi again", ch)
+
+	data1 := <-ch
+	fmt.Println(data1)
+
+	data2 := <-ch
+	fmt.Println(data2)
+}
+```
+
+Because this channel is buffered, we can send these values into the channel without a corresponding concurrent receive.
+
+By default a channel is unbuffered and has a capacity of 0, hence we omit the second argument to the `make` function.
+
+Next, we have directional channels.
+
+### \***\*Directional channels\*\***
+
+When using channels as function parameters, we can specify if a channel is meant to only send or receive values. This increases the type-safety of our program as by default a channel can both send and receive values.
+
+![directional-channels](/static/courses/go/chapter-IV/channels/directional-channels.png)
+
+In our example, we can update our `speak` function's second argument such that it can only send a value.
+
+```go
+func speak(arg string, ch chan<- string) {
+	ch <- arg // Send Only
+}
+```
+
+Here, `chan<-` can only be used for sending values and will panic if we try to receive values.
+
+### Closing channels
+
+Also, just like any other resource, once we're done with our channel we need to close it. This can be achieved using the built-in `close` function.
+
+Here, we can just pass our channel to the `close` function.
+
+```go
+func main() {
+	ch := make(chan string, 2)
+
+	go speak("Hello World", ch)
+	go speak("Hi again", ch)
+
+	data1 := <-ch
+	fmt.Println(data1)
+
+	data2 := <-ch
+	fmt.Println(data2)
+
+	close(ch)
+}
+```
+
+Optionally, receivers can test whether a channel has been closed by assigning a second parameter to the receive expression.
+
+```go
+func main() {
+	ch := make(chan string, 2)
+
+	go speak("Hello World", ch)
+	go speak("Hi again", ch)
+
+	data1 := <-ch
+	fmt.Println(data1)
+
+	data2, ok := <-ch
+	fmt.Println(data2, ok)
+
+	close(ch)
+}
+```
+
+if `ok` is `false` then there are no more values to receive and the channel is closed.
+
+_In a way_, _this is similar to how we check if a key exists or not in a map._
+
+### Range over channel
+
+We can also range over channel
+
+[https://gobyexample.com/range-over-channels](https://gobyexample.com/range-over-channels)
+
+### Properties of Channels
+
+Lastly, let's discuss some properties of channels
+
+- A send to a nil channel blocks forever
+
+```go
+var c chan string
+c <- "Hello, World!" // Panic: all goroutines are asleep - deadlock!
+```
+
+- A receive from a nil channel blocks forever
+
+```go
+var c chan string
+fmt.Println(<-c) // Panic: all goroutines are asleep - deadlock!
+```
+
+- A send to a closed channel panics
+
+```go
+var c = make(chan string, 1)
+c <- "Hello, World!"
+close(c)
+c <- "Hello, Panic!" // Panic: send on closed channel
+```
+
+- A receive from a closed channel returns the zero value immediately
+
+```go
+var c = make(chan int, 2)
+c <- 5
+c <- 4
+close(c)
+for i := 0; i < 4; i++ {
+    fmt.Printf("%d ", <-c) // Output: 5 4 0 0
+}
+```
+
+- Range over channels
+
+We can also use `for` and `range` to iterate over values received from a channel
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	ch := make(chan string, 2)
+
+	ch <- "Hello"
+	ch <- "World"
+
+	close(ch)
+
+	for data := range ch {
+		fmt.Println(data)
+	}
+}
+```
+
+And with that, we learned how goroutines and channels work in Go. I hope this was helpful. I'll see you in the next tutorial.

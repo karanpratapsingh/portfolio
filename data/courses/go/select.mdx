@@ -1,0 +1,98 @@
+---
+title: 'Select'
+date: '2022-05-19'
+draft: false
+summary: 'In this tutorial, we will learn about select in Go'
+images: ['/static/courses/go/banner.png']
+authors: ['default']
+---
+
+In this tutorial, we will learn about the `select` statement in Go
+
+The `select` statement blocks the code and waits for multiple channel opera­tions simul­taneously.
+
+A `select` blocks until one of its cases can run, then it executes that case. It chooses one at random if multiple are ready.
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	one := make(chan string)
+	two := make(chan string)
+
+	go func() {
+		time.Sleep(time.Second * 2)
+		one <- "One"
+	}()
+
+	go func() {
+		time.Sleep(time.Second * 1)
+		two <- "Two"
+	}()
+
+	select {
+	case result := <-one:
+		fmt.Println("Received:", result)
+	case result := <-two:
+		fmt.Println("Received:", result)
+	}
+
+	close(one)
+	close(two)
+}
+```
+
+Similar to `switch` , `select` also has a default case which runs if no other case is ready. This will help us send or receive without blocking.
+
+```go
+func main() {
+	one := make(chan string)
+	two := make(chan string)
+
+	for x := 0; x < 10; x++ {
+		go func() {
+			time.Sleep(time.Second * 2)
+			one <- "One"
+		}()
+
+		go func() {
+			time.Sleep(time.Second * 1)
+			two <- "Two"
+		}()
+	}
+
+	for x := 0; x < 10; x++ {
+		select {
+		case result := <-one:
+			fmt.Println("Received:", result)
+		case result := <-two:
+			fmt.Println("Received:", result)
+		default:
+			fmt.Println("Default...")
+			time.Sleep(200 * time.Millisecond)
+		}
+	}
+
+	close(one)
+	close(two)
+}
+```
+
+It's also important to know that an empty `select {}` blocks forever.
+
+```go
+func main() {
+	...
+	select {}
+
+	close(one)
+	close(two)
+}
+```
+
+That's pretty much it for `select` statement in Go. I'll see you in the next one.

@@ -1,0 +1,510 @@
+---
+title: 'Arrays and Slices'
+date: '2022-05-09'
+draft: false
+summary: 'In this tutorial, we will learn about arrays and slices in Go'
+images: ['/static/courses/go/banner.png']
+authors: ['default']
+---
+
+In this tutorial, we will learn about arrays and slices in Go.
+
+### Arrays
+
+**So what's an array?**
+
+An array is a fixed-size collection of elements of the same type. The elements of the array are stored sequentially and can be accessed using their `index`
+
+![array](/static/courses/go/chapter-II/arrays-and-slices/array.png)
+
+**Declaration**
+
+We can declare an array as follows
+
+```go
+var a [n]T
+```
+
+Here `n` is the length and `T` can be any type like integer, string, or user-defined structs.
+
+Now, let's declare an array of integers with length 4 and print it.
+
+```go
+func main() {
+	var arr [4]int
+
+	fmt.Println(arr)
+}
+```
+
+```bash
+$ go run main.go
+[0 0 0 0]
+```
+
+By default, all the array elements are initialized with the zero value of the corresponding array type.
+
+**Initialization**
+
+We can also initialize an array using an array literal
+
+```go
+var a [n]T = [n]T{V1, V2, ... Vn}
+```
+
+```go
+func main() {
+	var arr = [4]int{1, 2, 3, 4}
+
+	fmt.Println(arr)
+}
+```
+
+```bash
+$ go run main.go
+[1 2 3 4]
+```
+
+We can even do a shorthand declaration
+
+```go
+...
+arr := [4]int{1, 2, 3, 4}
+```
+
+**Access**
+
+And similar to other languages, we can access the elements using the `index` as they're stored sequentially
+
+```go
+func main() {
+	arr := [4]int{1, 2, 3, 4}
+
+	fmt.Println(arr[0])
+}
+```
+
+```bash
+$ go run main.go
+1
+```
+
+**Iteration**
+
+Now, let's talk about iteration.
+
+So there are multiple ways to iterate over arrays.
+
+The first one is using the for loop with the `len` function which gives us the length of the array
+
+```go
+func main() {
+	arr := [4]int{1, 2, 3, 4}
+
+	for i := 0; i < len(arr); i++ {
+		fmt.Printf("Index: %d, Element: %d\n", i, arr[i])
+	}
+}
+```
+
+```bash
+$ go run main.go
+Index: 0, Element: 1
+Index: 1, Element: 2
+Index: 2, Element: 3
+Index: 3, Element: 4
+```
+
+Another way is to use the `range` keyword with the for loop
+
+```go
+func main() {
+	arr := [4]int{1, 2, 3, 4}
+
+	for i, e := range arr {
+		fmt.Printf("Index: %d, Element: %d\n", i, e)
+	}
+}
+```
+
+```bash
+$ go run main.go
+Index: 0, Element: 1
+Index: 1, Element: 2
+Index: 2, Element: 3
+Index: 3, Element: 4
+```
+
+As we can see our example works the same as before.
+
+But the range keyword is quite versatile and can be used in multiple ways.
+
+```go
+for i, e := range arr {} // Normal usage of range
+
+for _, e := range arr {} // Omit index with _ and use element
+
+for i := range arr {} // Use index only
+
+for range arr {} // Simply loop over the array
+```
+
+**Multi dimensional**
+
+All the arrays that we created so far are one dimensional. We can also create multi-dimensional arrays in Go.
+
+Let's take an example
+
+```go
+func main() {
+	arr := [2][4]int{
+		{1, 2, 3, 4},
+		{5, 6, 7, 8},
+	}
+
+	for i, e := range arr {
+		fmt.Printf("Index: %d, Element: %d\n", i, e)
+	}
+}
+```
+
+```bash
+$ go run main.go
+Index: 0, Element: [1 2 3 4]
+Index: 1, Element: [5 6 7 8]
+```
+
+We can also let compiler infer the length of the array by using `...` ellipses instead of the length
+
+```go
+func main() {
+	arr := [...][4]int{
+		{1, 2, 3, 4},
+		{5, 6, 7, 8},
+	}
+
+	for i, e := range arr {
+		fmt.Printf("Index: %d, Element: %d\n", i, e)
+	}
+}
+```
+
+```bash
+$ go run main.go
+Index: 0, Element: [1 2 3 4]
+Index: 1, Element: [5 6 7 8]
+```
+
+**Properties**
+
+Now let's talk about some properties of arrays.
+
+The array's length is part of its type. So, the array `a` and `b` are completely distinct types, and we cannot assign one to the other.
+
+This also means that we cannot resize an array, because resizing an array would mean changing its type.
+
+```go
+package main
+
+func main() {
+	var a = [4]int{1, 2, 3, 4}
+	var b [2]int = a // Error, cannot use a (type [4]int) as type [2]int in assignment
+}
+```
+
+Arrays in Go are value types unlike other languages like C, C++, and Java where arrays are reference types.
+
+This means that when we assign an array to a new variable or pass an array to a function, the entire array is copied.
+
+So, if we make any changes to this copied array, the original array won't be affected and will remain unchanged.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var a = [7]string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}
+	var b = a // Copy of a is assigned to b
+
+	b[0] = "Monday"
+
+	fmt.Println(a) // Output: [Mon Tue Wed Thu Fri Sat Sun]
+	fmt.Println(b) // Output: [Monday Tue Wed Thu Fri Sat Sun]
+}
+```
+
+### Slices
+
+I know what you're thinking, arrays are useful but a bit inflexible due to the limitation caused by their fixed size.
+
+This brings us to Slice, so what is a slice?
+
+A Slice is a segment of an array. Slices build on arrays and provide more power, flexibility, and convenience.
+
+![slice](/static/courses/go/chapter-II/arrays-and-slices/slices.png)
+
+A slice consists of three things:
+
+- A pointer reference to an underlying array.
+- The length of the segment of the array that the slice contains.
+- And, the capacity, which is the maximum size up to which the segment can grow.
+
+Just like `len` function, we can determine the capacity of a slice using the built-in `cap` function. Here's an example,
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	a := [5]int{20, 15, 5, 30, 25}
+
+	s := a[1:4]
+
+	// Output: Array: [20 15 5 30 25], Length: 5, Capacity: 5
+	fmt.Printf("Array: %v, Length: %d, Capacity: %d\n", a, len(a), cap(a))
+
+	// Output: Slice [15 5], Length: 3, Capacity: 4
+	fmt.Printf("Slice: %v, Length: %d, Capacity: %d", s, len(s), cap(s))
+}
+```
+
+Don't worry, we are going to discuss everything shown here in detail.
+
+**Declaration**
+
+Let's see how we can declare a slice
+
+```go
+var s []T
+```
+
+As we can see, we don't need to specify any length
+
+Let's declare a slice of integers and see how it works
+
+```go
+func main() {
+	var s []string
+
+	fmt.Println(s)
+	fmt.Println(s == nil)
+}
+```
+
+```go
+$ go run main.go
+[]
+true
+```
+
+So, unlike arrays, the zero value of a slice is `nil`
+
+**Initialization**
+
+There are multiple ways to initialize our slice. One way is to use the built-in `make` function
+
+```go
+make([]T, len, cap) []T
+```
+
+```go
+func main() {
+var s = make([]string, 0, 0)
+
+	fmt.Println(s)
+}
+```
+
+```go
+$ go run main.go
+[]
+```
+
+Similar to arrays, we can use the slice literal to initialize our slice
+
+```go
+func main() {
+	var s = []string{"Go", "TypeScript"}
+
+	fmt.Println(s)
+}
+```
+
+```go
+$ go run main.go
+[Go TypeScript]
+```
+
+Another way is to create a slice from an array. Since a slice is a segment of an array, we can create a slice from index `low` to `high` as follows
+
+```go
+a[low:high]
+```
+
+```go
+func main() {
+	var a = [4]string{
+		"C++",
+		"Go",
+		"Java",
+		"TypeScript",
+	}
+
+	s1 := a[0:2] // Select from 0 to 2
+	s2 := a[:3]  // Select first 3
+	s3 := a[2:]  // Select last 2
+
+	fmt.Println("Array:", a)
+	fmt.Println("Slice 1:", s1)
+	fmt.Println("Slice 2:", s2)
+	fmt.Println("Slice 3:", s3)
+}
+```
+
+```bash
+$ go run main.go
+Array: [C++ Go Java TypeScript]
+Slice 1: [C++ Go]
+Slice 2: [C++ Go Java]
+Slice 3: [Java TypeScript]
+```
+
+_Missing low index implies 0 and missing high index implies `len(a)`_
+
+Thing to note here is we can create slice from other slices too and not just arrays
+
+```go
+	var a = []string{
+		"C++",
+		"Go",
+		"Java",
+		"TypeScript",
+	}
+```
+
+**Iteration**
+
+We can iterate over a slice in the same way you iterate over an array, by using the for loop with either `len` function or `range` keyword.
+
+**functions**
+
+So now let's talk about built-in slice functions provided in Go.
+
+- **copy**
+
+The `copy()` function copies elements from one slice to another. It takes 2 slices, a destination, and a source. It also returns the number of elements copied.
+
+```go
+func copy(dst, src []T) int
+```
+
+Let's see how we can use it
+
+```go
+func main() {
+	s1 := []string{"a", "b", "c", "d"}
+	s2 := make([]string, 0)
+
+	e := copy(s2, s1)
+
+	fmt.Println("Src:", s1)
+	fmt.Println("Dst:", s2)
+	fmt.Println("Elements:", e)
+}
+```
+
+```bash
+$ go run main.go
+Src: [a b c d]
+Dst: [a b c d]
+Elements: 4
+```
+
+As expected, our 4 elements from the source slice were copied to the destination slice
+
+- **append**
+
+Now let's look at how we can append data to our slice using the built-in `append` function which appends new elements at the end of a given slice.
+
+It takes a slice and a variable number of arguments. It then returns a new slice containing all the elements.
+
+```go
+append(slice []T, elems ...T) []T
+```
+
+Let's try it in an example by appending elements to our slice
+
+```go
+func main() {
+	s1 := []string{"a", "b", "c", "d"}
+
+	s2 := append(a1, "e", "f")
+
+	fmt.Println("a1:", a1)
+	fmt.Println("a2:", a2)
+}
+```
+
+```bash
+$ go run main.go
+a1: [a b c d]
+a2: [a b c d e f]
+```
+
+As we can see, the new elements were appended and a new slice was returned.
+
+But If the given slice doesn't have sufficient capacity for the new elements then a new underlying array is allocated with a bigger capacity.
+
+All the elements from the underlying array of the existing slice are copied to this new array, and then the new elements are appended.
+
+**properties**
+
+Finally, let's discuss some properties of slices.
+
+Slices are reference types, unlike arrays.
+
+This means modifying the elements of a slice will modify the corresponding elements in the referenced array.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	a := [7]string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}
+
+	s := a[0:2]
+
+	s[0] = "Sun"
+
+	fmt.Println(a) // Output: [Sun Tue Wed Thu Fri Sat Sun]
+	fmt.Println(s) // Output: [Sun Tue]
+}
+```
+
+Slices can be used with variadic types as well.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	values := []int{1, 2, 3}
+	sum := add(values...)
+	fmt.Println(sum)
+}
+
+func add(values ...int) int {
+	sum := 0
+	for _, v := range values {
+		sum += v
+	*}
+
+	return sum*
+}
+```
+
+Well, this is pretty much it for arrays and slices in Go, see you in the next one!

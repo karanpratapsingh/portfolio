@@ -1,0 +1,113 @@
+---
+title: 'Modules'
+date: '2022-05-01'
+draft: false
+summary: 'In this tutorial, we will learn about modules in Go'
+images: ['/static/courses/go/banner.png']
+authors: ['default']
+---
+
+In this tutorial, we will learn about modules.
+
+**So what are modules?**
+
+Simply defined, A module is a collection of [Go packages](https://go.dev/ref/spec#Packages) stored in a file tree with a `go.mod` file at its root, provided the directory is _outside_ `$GOPATH/src`
+
+Go modules were introduced in Go 1.11, which brings native support for versions and modules. Earlier we needed the `GO111MODULE=on` flag to turn on the modules functionality when it was experimental but now after Go 1.13 modules mode is the default for all development
+
+But wait what is `GOPATH`?
+
+Well, `GOPATH` is a variable that defines the root of your workspace and it contains the following folders:
+
+- **src**: contains Go source code organized in a hierarchy
+- **pkg**: contains compiled package code
+- **bin**: contains compiled binaries and executables.
+
+![gopath](/static/courses/go/chapter-I/modules/gopath.png)
+
+Like earlier, let's create a new module using `go mod init` command which creates a new module and initializes the `go.mod` file that describes it
+
+```bash
+$ go mod init example
+```
+
+_The important thing to note here is that a Go module can correspond to a Github repository as well if you plan to publish this module. For example,_
+
+```bash
+$ go mod init **[github.com/e](http://github.com/karanpratapsingh/go-course)xample/repo
+```
+
+Now, let's explore `go.mod` which is the file that defines the module's _module path_ and also the import path used for the root directory, and its _dependency requirements_
+
+```go
+module <name>
+
+go <version>
+
+require (
+	...
+)
+```
+
+And if we want to add a new dependency, we will use `go install` command
+
+```bash
+$ go install github.com/rs/zerolog
+```
+
+As we can see a `go.sum` file was also created. This file contains the expected [hashes](https://go.dev/cmd/go/#hdr-Module_downloading_and_verification) of the content of the new modules.
+
+We can list all the dependencies using `go list` command as follows
+
+```bash
+$ go list -m all
+```
+
+If the dependency is not used, we can simply remove it using `go mod tidy` command.
+
+```bash
+$ go mod tidy
+```
+
+Finishing up our discussion on modules, let's also discuss vendoring.
+
+Vendoring is the act of making your own copy of the 3rd party packages your project is using. Those copies are traditionally placed inside each project and then saved in the project repository.
+
+This can be done through `go mod vendor` command
+
+So let's reinstall the removed module using `go mod tidy`
+
+```go
+package main
+
+import "github.com/rs/zerolog/log"
+
+func main() {
+	log.Info().Msg("Hello")
+}
+```
+
+```bash
+$ go mod tidy
+go: finding module for package github.com/rs/zerolog/log
+go: found github.com/rs/zerolog/log in github.com/rs/zerolog v1.26.1
+```
+
+```bash
+$ go mod vendor
+```
+
+```
+├── go.mod
+├── go.sum
+├── go.work
+├── main.go
+└── vendor
+    ├── github.com
+    │   └── rs
+    │       └── zerolog
+    │           └── ...
+    └── modules.txt
+```
+
+So this is pretty much it for modules, I'll see you in the next tutorial.
