@@ -1,16 +1,11 @@
 import Conditional from '@/components/Conditional';
 import Link from '@/components/Link';
 import { Collapse } from '@geist-ui/core';
-import config from 'config';
 import type { Course, CourseContent } from 'config/courses';
 import React from 'react';
 
 interface CourseContentProps {
-  courseSlug: string;
-}
-
-function getCourse(slug: string): Course {
-  return config.courses.find(course => course.slug === slug);
+  course: Course;
 }
 
 function getSlug(course: string, slug: string): string {
@@ -20,11 +15,13 @@ function getSlug(course: string, slug: string): string {
 export default function CourseContent(
   props: CourseContentProps,
 ): React.ReactElement {
-  const { courseSlug } = props;
+  const { course } = props;
+  const { content } = course;
 
   function renderCourseList(item: CourseContent): React.ReactNode {
     const { name, description, content } = item;
 
+    // As title does not support React.ReactNode
     const title: any = <span className='font-bold'>{name}</span>;
 
     return (
@@ -36,7 +33,7 @@ export default function CourseContent(
       >
         <Conditional condition={!!content}>
           {content?.map(({ name, slug }) => (
-            <Link key={name} href={getSlug(courseSlug, slug)}>
+            <Link key={name} href={getSlug(course.slug, slug)}>
               <h3 className='my-1 text-lg text-gray-500 dark:text-gray-400'>
                 {name}
               </h3>
@@ -46,8 +43,6 @@ export default function CourseContent(
       </Collapse>
     );
   }
-
-  const { content } = getCourse(courseSlug);
 
   return (
     <div className='pt-12'>

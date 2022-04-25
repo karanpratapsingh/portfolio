@@ -18,7 +18,8 @@ export const courses: Course[] = [
     title: `Go programming language`,
     slug: 'go',
     banner: '/static/courses/go/banner.png',
-    description: `Let's master the fundamentals and advanced features of the Go programming language`,
+    description:
+      'Master the fundamentals and advanced features of the Go programming language',
     content: [
       {
         name: 'Getting Started',
