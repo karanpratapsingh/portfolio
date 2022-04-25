@@ -1,13 +1,13 @@
-import fs from 'fs';
-import PageTitle from '@/components/PageTitle';
-import generateRss from '@/lib/generate-rss';
+import Draft from '@/components/Draft';
 import { MDXLayoutRenderer } from '@/components/MDXComponents';
+import generateRss from '@/lib/generate-rss';
 import {
   formatSlug,
   getAllFilesFrontMatter,
   getFileBySlug,
   getFiles,
 } from '@/lib/mdx';
+import fs from 'fs';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
 import { PostFrontMatter } from 'types/PostFrontMatter';
@@ -18,9 +18,9 @@ const DEFAULT_LAYOUT = 'PostLayout';
 export async function getStaticPaths() {
   const posts = getFiles('blog');
   return {
-    paths: posts.map(p => ({
+    paths: posts.map(post => ({
       params: {
-        slug: formatSlug(p).split('/'),
+        slug: formatSlug(post).split('/'),
       },
     })),
     fallback: false,
@@ -87,14 +87,7 @@ export default function Blog({
           next={next}
         />
       ) : (
-        <div className='mt-24 text-center'>
-          <PageTitle>
-            Under Construction{' '}
-            <span role='img' aria-label='roadwork sign'>
-              🚧
-            </span>
-          </PageTitle>
-        </div>
+        <Draft />
       )}
     </>
   );
