@@ -1,6 +1,5 @@
 export type CourseFrontMatter = {
   title: string;
-  date: string;
   lastmod?: string;
   draft?: boolean;
   summary?: string;
