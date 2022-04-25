@@ -7,9 +7,9 @@ export interface Course {
 
 export const courses: Course[] = [
   {
-    title: 'Go course',
+    title: `Let's learn Go`,
     slug: 'go',
     banner: '/static/courses/go/banner.png',
-    description: 'Learn about Go',
+    description: `Let's master the fundamentals and advanced features of the Go programming language`,
   },
 ];
