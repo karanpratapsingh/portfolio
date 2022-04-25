@@ -33,10 +33,7 @@ export default function Blog({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
-      <PageSEO
-        title={`Blog - ${siteMetadata.author}`}
-        description={siteMetadata.description}
-      />
+      <PageSEO title='Go course' description={siteMetadata.description} />
       <CourseListLayout
         courses={courses}
         initialDisplayPosts={initialDisplayPosts}

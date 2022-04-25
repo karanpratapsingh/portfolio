@@ -1,10 +1,10 @@
 import { PageSEO } from '@/components/SEO';
 import siteMetadata from '@/data/siteMetadata';
-import ListLayout from '@/layouts/ListLayout';
+import CourseListLayout from '@/layouts/CourseListLayout';
 import { getAllFilesFrontMatter } from '@/lib/mdx';
 import { POSTS_PER_PAGE } from 'config';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
-import { PostFrontMatter } from 'types/PostFrontMatter';
+import { CourseFrontMatter } from 'types/CourseFrontMatter';
 
 export const getStaticPaths: GetStaticPaths<{ page: string }> = async () => {
   const totalPCourse = await getAllFilesFrontMatter('courses');
@@ -20,8 +20,8 @@ export const getStaticPaths: GetStaticPaths<{ page: string }> = async () => {
 };
 
 export const getStaticProps: GetStaticProps<{
-  courses: PostFrontMatter[];
-  initialDisplayPosts: PostFrontMatter[];
+  courses: CourseFrontMatter[];
+  initialDisplayPosts: CourseFrontMatter[];
   pagination: { currentPage: number; totalPages: number };
 }> = async context => {
   const {
@@ -58,11 +58,11 @@ export default function PostPage({
         title={siteMetadata.title}
         description={siteMetadata.description}
       />
-      <ListLayout
-        posts={courses}
+      <CourseListLayout
+        courses={courses}
         initialDisplayPosts={initialDisplayPosts}
         pagination={pagination}
-        title='All Posts'
+        title='All Course Posts'
       />
     </>
   );

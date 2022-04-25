@@ -3,12 +3,12 @@ import Link from '@/components/Link';
 import Pagination from '@/components/Pagination';
 import formatDate from '@/lib/utils/formatDate';
 import { ComponentProps, useState } from 'react';
-import { PostFrontMatter } from 'types/PostFrontMatter';
+import { CourseFrontMatter } from 'types/CourseFrontMatter';
 
 interface Props {
-  courses: PostFrontMatter[];
+  courses: CourseFrontMatter[];
   title: string;
-  initialDisplayPosts?: PostFrontMatter[];
+  initialDisplayPosts?: CourseFrontMatter[];
   pagination?: ComponentProps<typeof Pagination>;
 }
 
@@ -97,6 +97,7 @@ export default function ListLayout({
       </div>
       {pagination && pagination.totalPages > 1 && !searchValue && (
         <Pagination
+          type='courses'
           currentPage={pagination.currentPage}
           totalPages={pagination.totalPages}
         />
