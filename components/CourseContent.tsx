@@ -45,7 +45,7 @@ export default function CourseContent(
   }
 
   return (
-    <div className='pt-12'>
+    <div className='pt-4 md:pt-8 xl:pt-12'>
       <Collapse.Group>
         {React.Children.toArray(content.map(renderCourseList))}
       </Collapse.Group>
