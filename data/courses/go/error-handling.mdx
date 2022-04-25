@@ -1,6 +1,5 @@
 ---
 title: 'Error Handling'
-date: '2022-05-12'
 draft: false
 summary: 'In this tutorial, we will learn about error handling in Go'
 images: ['/static/courses/go/banner.png']
@@ -223,7 +222,7 @@ func Divide(a, b int) (int, error) {
 }
 ```
 
-Here, we will use `[errors.As](http://errors.As)` instead of `[errors.Is](http://errors.Is)` function, to convert the error to the correct type.
+Here, we will use `errors.As` instead of `errors.Is` function, to convert the error to the correct type.
 
 ```go
 func main() {
@@ -257,7 +256,7 @@ code 2000: cannot divide by zero
 
 **But what's the difference between `errors.Is` and `errors.As`?**
 
-The difference is that this function checks whether the error has a specific type, unlike the `[Is()](https://pkg.go.dev/errors#Is)`, which examines if it is a particular error object.
+The difference is that this function checks whether the error has a specific type, unlike the [`Is()`](https://pkg.go.dev/errors#Is), which examines if it is a particular error object.
 
 We can also use type assertions, but it's not preferred
 

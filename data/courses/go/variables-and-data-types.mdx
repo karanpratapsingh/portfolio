@@ -1,15 +1,14 @@
 ---
-title: 'Variables and Datatypes'
-date: '2022-04-27'
+title: 'Variables and Data Types'
 draft: false
-summary: 'In this tutorial, we will learn about variables and datatypes in Go'
+summary: 'In this tutorial, we will learn about variables and data types in Go'
 images: ['/static/courses/go/banner.png']
 authors: ['default']
 ---
 
 In this tutorial, we will learn about variables. We will also learn about the different data types that Go provides us.
 
-## **Variables**
+## Variables
 
 Let's start with declaring a variable
 
@@ -50,7 +49,7 @@ foo := "Shorthand!"
 
 _Note: Shorthand only works inside `function` bodies_
 
-## **Constants**
+## Constants
 
 We can also declare constants with the `const` keyword. Which as the name suggests are fixed values that cannot be reassigned
 
@@ -58,11 +57,11 @@ We can also declare constants with the `const` keyword. Which as the name sugges
 const constant = "This is a constant"
 ```
 
-### Basic **Datatypes**
+### Basic Data Types
 
 Perfect! Now let's look at some basic data types available in Go. Starting with string.
 
-### S**tring**
+### String
 
 In Go, string is a sequence of bytes.
 
@@ -75,7 +74,7 @@ var bio string = `I am statically typed.
 									I was designed at Google.`
 ```
 
-### B**ool**
+### Bool
 
 Next is `bool` which is used to store boolean values. It can have two possible values - `true` or `false`.
 
@@ -131,7 +130,7 @@ It is recommended that whenever we need an integer value we should just use `int
 
 Next, let's discuss integer alias types.
 
-B**yte and Rune**
+**Byte and Rune**
 
 Golang has two additional integer types called `byte` and `rune` that are aliases for `uint8` and `int32` data types respectively.
 
@@ -147,7 +146,7 @@ var b byte = 'a'
 var r rune = '🍕'
 ```
 
-F**loating point**
+Floating point
 
 Next, we have floating point types which are used to store numbers with a decimal component.
 
@@ -173,7 +172,7 @@ Go provides several operators for performing operations on numeric types.
 | Assignment | +=   -=.  *=   /=   %=   <<=   >>=   &=   |=   ^= |
 ```
 
-C**omplex**
+**Complex**
 
 There are 2 complex types in Go. complex128 where both real and imaginary parts are float64 and complex64 where real and imaginary are float32.
 
@@ -184,7 +183,7 @@ var c1 complex128 = complex(10, 1)
 var c2 complex64 = 12 + 4i
 ```
 
-### **Zero Values**
+### Zero Values
 
 Now let's discuss zero values. So in Go any variable declared without an explicit initial value are given their _zero value_. For example, let's declare some variables and see
 
@@ -206,7 +205,7 @@ So, as we can see `int` and `float` are assigned as 0, `bool` as false, and `str
 
 This is great, but what are those percent symbols in our `Printf` function? As you've already guessed, they are used for formatting and we will learn about them in the next video.
 
-### **Type Conversion**
+### Type Conversion
 
 Moving on, now that we have seen how data types work, let's see how to do type conversion.
 

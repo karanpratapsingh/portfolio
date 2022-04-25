@@ -1,6 +1,5 @@
 ---
 title: 'Maps'
-date: '2022-05-10'
 draft: false
 summary: 'In this tutorial, we will learn about maps in Go'
 images: ['/static/courses/go/banner.png']
@@ -175,7 +174,7 @@ Key c: {Steve}
 Key d: {}
 ```
 
-### E\***\*xists\*\***
+### Exists
 
 When you retrieve the value assigned to a given key, it returns an additional boolean value as well. The boolean variable will be `true` if the key exists, and `false` otherwise.
 
@@ -196,7 +195,7 @@ Key c: {Steve} Present: true
 Key d: {} Present: false
 ```
 
-### **Updating**
+### Updating
 
 We can also update the value for a key by simply re-assigning a key
 
@@ -210,7 +209,7 @@ $ go run main.go
 map[a:{Roger} b:{Seth} c:{Steve}]
 ```
 
-### **Deleting**
+### Deleting
 
 Or, we can delete the key using the built-in `delete` function.
 
@@ -230,7 +229,7 @@ $ go run main.go
 map[a:{Roger} c:{Steve}]
 ```
 
-### **Iteration**
+### Iteration
 
 Similar to arrays or slices, we can iterate over maps with the `range` keyword
 
@@ -262,7 +261,7 @@ Key: b, Value: {Seth}
 
 Note that, A map is an unordered collection, and therefore the iteration order of a map is not guaranteed to be the same every time we iterate over it.
 
-### **Properties**
+### Properties
 
 Lastly, let's talk about map properties.
 

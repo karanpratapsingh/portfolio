@@ -1,6 +1,5 @@
 ---
 title: 'Functions'
-date: '2022-04-30'
 draft: false
 summary: 'In this tutorial, we will learn about functions in Go'
 images: ['/static/courses/go/banner.png']
@@ -96,7 +95,7 @@ Notice how we added a `return` statement without any arguments, this is also kno
 
 I will say that, although this feature is interesting, please use it with care as this might reduce readability for larger functions
 
-### F**unctions as values**
+### Functions as values
 
 Next, let's talk about functions as values, in Go functions are first class and we can use them as values. so let's cleanup our function and try it out!
 
@@ -122,7 +121,7 @@ func myFunction() {
 
 *Notice how we execute it using the parenth*es*is at the end*
 
-### C**losures**
+### Closures
 
 Why stop there? let's also return a function and hence create something called a closure. A simple definition can be that a closure is a function value that references variables from outside its body.
 
@@ -151,7 +150,7 @@ fmt.Println(add(10))
 
 As we can see, we get a result of 15 as `sum` variable is _bound_ to the function. This is a very powerful concept and definitely, a must know
 
-### **Variadic Functions**
+### Variadic Functions
 
 Now let's look at variadic functions, which are functions that can take zero or multiple arguments using the `...` ellipses operator.
 
@@ -178,7 +177,7 @@ Pretty cool huh? Also, don't worry about the `range` keyword, we will discuss it
 
 Fun fact*: `fmt.Println` is a variadic function, that's how we were able to pass multiple values to it.*
 
-### **defer**
+### defer
 
 Lastly, let's discuss the `defer` keyword, which lets us postpones the execution of a function until the surrounding function returns.
 
