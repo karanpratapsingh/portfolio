@@ -18,9 +18,9 @@ export default function Projects() {
         />
         <div className='container py-12'>
           <div className='-m-4 flex flex-wrap'>
-            {config.projects.map(({ id, slug, title, description, banner }) => (
+            {config.projects.map(({ slug, title, description, banner }) => (
               <Card
-                key={id}
+                key={slug}
                 title={title}
                 description={description}
                 banner={banner}
