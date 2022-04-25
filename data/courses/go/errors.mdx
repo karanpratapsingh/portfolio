@@ -1,8 +1,8 @@
 ---
-title: 'Error Handling'
+title: 'Errors'
 draft: false
-summary: 'In this tutorial, we will learn about error handling in Go'
-images: ['/static/courses/go/banner.png']
+summary: 'In this tutorial, we will learn about errors in Go'
+images: ['/static/courses/go/chapter-III/errors/banner.png']
 authors: ['default']
 ---
 
@@ -30,11 +30,11 @@ func Divide(a, b int) int {
 
 Great. Now, we want to return an error, let's say to prevent the division by zero. This brings us to error construction.
 
-**Constructing Errors**
+## Constructing Errors
 
 There are multiple ways to do this but we will look at the two most common one.
 
-**errors package**
+### `errors` package
 
 The first is by using the `New` function provided by the `errors` package.
 
@@ -183,7 +183,7 @@ $ go run main.go
 cannot divide by zero
 ```
 
-### Custom Errors
+## Custom Errors
 
 This strategy covers most of the error handling use cases. But sometimes we need additional functionalities such as dynamic values inside of our errors.
 

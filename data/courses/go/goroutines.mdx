@@ -2,7 +2,7 @@
 title: 'Goroutines'
 draft: false
 summary: 'In this tutorial, we will learn about goroutines in Go'
-images: ['/static/courses/go/banner.png']
+images: ['/static/courses/go/chapter-IV/goroutines/banner.png']
 authors: ['default']
 ---
 
@@ -12,7 +12,7 @@ But before we start our discussion, I wanted to share an important Go proverb.
 
 _“Don't communicate by sharing memory, share memory by communicating.”_ - Rob Pike
 
-**So, what is a goroutine?**
+## What is a goroutine?
 
 A _goroutine_ is a lightweight thread of execution that is managed by the Go runtime and essentially let us write asynchronous code in a synchronous manner.
 
@@ -28,7 +28,7 @@ go fn(x, y, z)
 
 Before we write any code, it is important to briefly discuss the fork-join model.
 
-### Fork-Join Model
+## Fork-Join Model
 
 Go uses the idea of the fork-join model of concurrency behind goroutines. The fork-join model essentially implies that a child process splits from its parent process to run concurrently with the parent process. After completing its execution, the child process merges back into the parent process. The point where it joins back is called the **_join point_**.
 
