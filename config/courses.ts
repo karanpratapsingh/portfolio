@@ -29,6 +29,10 @@ export const courses: Course[] = [
             slug: 'welcome-to-the-course',
           },
           {
+            name: 'What is Go?',
+            slug: 'what-is-go',
+          },
+          {
             name: 'Why learn Go?',
             slug: 'why-learn-go',
           },
