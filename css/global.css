@@ -25,10 +25,6 @@
   @apply mr-0;
 }
 
-.title {
-  @apply font-bold;
-}
-
 .content {
   @apply !pb-0;
 }
