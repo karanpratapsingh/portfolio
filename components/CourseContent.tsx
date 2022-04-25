@@ -25,17 +25,19 @@ export default function CourseContent(
   function renderCourseList(item: CourseContent): React.ReactNode {
     const { name, description, content } = item;
 
+    const title: any = <span className='font-bold'>{name}</span>;
+
     return (
       <Collapse
         key={name}
         className='!border-0'
-        title={name}
+        title={title}
         subtitle={description}
       >
         <Conditional condition={!!content}>
           {content?.map(({ name, slug }) => (
             <Link key={name} href={getSlug(courseSlug, slug)}>
-              <h3 className='mb-2 text-lg text-gray-500 dark:text-gray-400'>
+              <h3 className='my-1 text-lg text-gray-500 dark:text-gray-400'>
                 {name}
               </h3>
             </Link>
