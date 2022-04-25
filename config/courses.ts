@@ -1,6 +1,7 @@
 export type CourseContent = {
   name: string;
   slug?: string;
+  description?: string;
   content?: CourseContent[];
 };
 
@@ -79,7 +80,7 @@ export const courses: Course[] = [
       },
       {
         name: 'Next Steps',
-        slug: 'next-steps',
+        content: [{ name: 'Next Steps', slug: 'next-steps' }],
       },
     ],
   },
