@@ -22,10 +22,7 @@ export default function CourseContent(
 ): React.ReactElement {
   const { courseSlug } = props;
 
-  function renderCourseList(
-    item: CourseContent,
-    index: number,
-  ): React.ReactNode {
+  function renderCourseList(item: CourseContent): React.ReactNode {
     const { name, description, content } = item;
 
     return (
@@ -34,7 +31,6 @@ export default function CourseContent(
         className='!border-0'
         title={name}
         subtitle={description}
-        initialVisible={!index}
       >
         <Conditional condition={!!content}>
           {content?.map(({ name, slug }) => (
