@@ -3,7 +3,7 @@ import Link from '@/components/Link';
 interface Props {
   totalPages: number;
   currentPage: number;
-  type?: 'blog' | 'courses';
+  type?: 'blog';
 }
 
 export default function Pagination({
