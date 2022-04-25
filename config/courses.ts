@@ -7,7 +7,7 @@ export interface Course {
 
 export const courses: Course[] = [
   {
-    title: 'Go Course',
+    title: 'Go course',
     slug: 'go',
     banner: '/static/courses/go/banner.png',
     description: 'Learn about Go',
