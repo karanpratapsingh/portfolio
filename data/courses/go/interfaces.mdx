@@ -224,7 +224,7 @@ Some examples are:
 
 To use a value of type empty `interface{}`, we can use _type assertion_ or a _type switch_ to determine the type of the value.
 
-**Type Assertion**
+### Type Assertion
 
 A _type assertion_ provides access to an interface value's underlying concrete value.
 
@@ -271,7 +271,7 @@ f = i.(float64)
 fmt.Println(f) // Panic!
 ```
 
-```go
+```bash
 $ go run main.go
 hello
 hello true
@@ -279,7 +279,7 @@ hello true
 panic: interface conversion: interface {} is string, not float64
 ```
 
-T**ype Switch**
+### Type Switch
 
 Here, a `switch` statement can be used to determine the type of a variable of type empty `interface{}`.
 

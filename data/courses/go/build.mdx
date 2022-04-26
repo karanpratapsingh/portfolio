@@ -35,7 +35,7 @@ $ go build -o app
 
 Now to run this, we simply need to execute it
 
-```go
+```bash
 $ ./app
 I am a binary!
 ```
@@ -65,7 +65,7 @@ windows/arm64
 
 Here's an example for building a window's executable from macOS!
 
-```go
+```bash
 $ GOOS=windows GOARCH=amd64 go build -o app.exe
 ```
 
@@ -79,6 +79,6 @@ This is quite helpful for let's say when we want to run our go binaries in a doc
 
 Here's an example how to use it
 
-```go
+```bash
 $ CGO_ENABLED=0 go build -o app
 ```
