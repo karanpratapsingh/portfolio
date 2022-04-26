@@ -89,8 +89,11 @@ export const courses: Course[] = [
           { name: 'Select', slug: 'select' },
           { name: 'WaitGroups', slug: 'waitgroups' },
           { name: 'Mutexes', slug: 'mutexes' },
-          { name: 'Next Steps', slug: 'next-steps' },
         ],
+      },
+      {
+        name: 'Appendix',
+        content: [{ name: 'Next Steps', slug: 'next-steps' }],
       },
     ],
   },
