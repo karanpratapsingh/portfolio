@@ -1,0 +1,408 @@
+---
+title: 'Interfaces'
+draft: false
+summary: 'In this tutorial, we will learn about interface in Go'
+images: ['/static/courses/go/chapter-III/interfaces/banner.png']
+authors: ['default']
+---
+
+In this section, let's talk about the interfaces.
+
+### What is an interface?
+
+So, an interface in Go is an **abstract type** that is defined using a set of method signatures. The interface defines the **behavior** for similar types of objects.
+
+_Here, **behavior** is a key term that we will discuss shortly._
+
+Let's take an example to understand this better.
+
+One of the best real-world examples of interfaces is the power socket. Imagine that we need to connect different devices to the power socket.
+
+![no-interface](/static/courses/go/chapter-III/interfaces/no-interface.png)
+
+Let's try to implement this. Here are the device types we will be using.
+
+```go
+type mobile struct {
+	brand string
+}
+
+type laptop struct {
+	cpu string
+}
+
+type toaster struct {
+	amount int
+}
+
+type kettle struct {
+	quantity string
+}
+
+type socket struct{}
+```
+
+Now let's define a `Draw` method on a type, let's say `mobile`. Here we will simply print the properties of the type.
+
+```go
+func (m mobile) Draw(power int) {
+	fmt.Printf("%T -> brand: %s, power: %d", m, m.brand, power)
+}
+```
+
+Great, now we will define the `Plug` method on the `socket` type which accepts our `mobile` type as an argument.
+
+```go
+func (socket) Plug(device mobile, power int) {
+	device.Draw(power)
+}
+```
+
+Let's try to _“connect”_ or _“plug in”_ the `mobile` type to our `socket` type in the `main` function
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	m := mobile{"Apple"}
+
+	s := socket{}
+	s.Plug(m, 10)
+}
+```
+
+And if we run this we'll see the following
+
+```bash
+$ go run main.go
+main.mobile -> brand: Apple, power: 10
+```
+
+This is interesting but let's say now we want to connect \*\*our `laptop` type.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	m := mobile{"Apple"}
+	l := laptop{"Intel i9"}
+
+	s := socket{}
+
+	s.Plug(m, 10)
+	s.Plug(l, 50) // Error: cannot use l as mobile value in argument
+}
+```
+
+As we can see this will throw an error.
+
+**What should we do now? Define another method? Such as `PlugLaptop`?**
+
+Sure, but then every time we add a new device type we will need to add a new method to the socket type as well and that's not ideal.
+
+This is where the `interface` comes in. Essentially we want to define a **contract** which in the future must be implemented.
+
+We can simply define an interface such as `PowerDrawer` and use it in our `Plug` function to allow any device that satisfies the criteria, which is that the type must have a `Draw` method matching the signature that the interface requires.
+
+And anyways the socket doesn't need to know anything about our device and can simply call the `Draw` method.
+
+![interface](/static/courses/go/chapter-III/interfaces/interface.png)
+
+Now let's try to implement our `PowerDrawer` interface. Here's how it will look.
+
+The convention is to use **“-er”** as a suffix in the name. And as we discussed earlier, an interface should only describe the **expected behavior**. Which in our case is the `Draw` method.
+
+![interface-implementation](/static/courses/go/chapter-III/interfaces/interface-implementation.png)
+
+```go
+type PowerDrawer interface {
+	Draw(power int)
+}
+```
+
+Now we need to update our `Plug` method to accept a device that implements the `PowerDrawer` interface as an argument.
+
+```go
+func (socket) Plug(device PowerDrawer, power int) {
+	device.Draw(power)
+}
+```
+
+And to satisfy the interface, we can simply add `Draw` methods to all the device types.
+
+```go
+type mobile struct {
+	brand string
+}
+
+func (m mobile) Draw(power int) {
+	fmt.Printf("%T -> brand: %s, power: %d\n", m, m.brand, power)
+}
+
+type laptop struct {
+	cpu string
+}
+
+func (l laptop) Draw(power int) {
+	fmt.Printf("%T -> cpu: %s, power: %d\n", l, l.cpu, power)
+}
+
+type toaster struct {
+	amount int
+}
+
+func (t toaster) Draw(power int) {
+	fmt.Printf("%T -> amount: %d, power: %d\n", t, t.amount, power)
+}
+
+type kettle struct {
+	quantity string
+}
+
+func (k kettle) Draw(power int) {
+	fmt.Printf("%T -> quantity: %s, power: %d\n", k, k.quantity, power)
+}
+```
+
+Now we can connect all our devices to the socket with the help of our interface!
+
+```go
+func main() {
+	m := mobile{"Apple"}
+	l := laptop{"Intel i9"}
+	t := toaster{4}
+	k := kettle{"50%"}
+
+	s := socket{}
+
+	s.Plug(m, 10)
+	s.Plug(l, 50)
+	s.Plug(t, 30)
+	s.Plug(k, 25)
+}
+```
+
+And just as we expected, it works.
+
+```bash
+$ go run main.go
+main.mobile -> brand: Apple, power: 10
+main.laptop -> cpu: Intel i9, power: 50
+main.toaster -> amount: 4, power: 30
+main.kettle -> quantity: Half Empty, power: 25
+```
+
+**But why is this considered such a powerful concept?**
+
+Well, an interface can help us decouple our types. For example, because we have the interface, we don't need to update our `socket` implementation. We can just define a new device type with a `Draw` method.
+
+Unlike other languages, Go Interfaces are implemented **implicitly** so we don't need something like an `implements` keyword. This means, that a type satisfies an interface automatically when it has _"all the methods”_ of the interface.
+
+### Empty Interface
+
+Next, let's talk about the empty interface. An empty interface can take on a value of any type.
+
+Here's how we declare it.
+
+```go
+var x interface{}
+```
+
+**But why do we need it?**
+
+Empty interfaces can be used to handle values of unknown type.
+
+Some examples are:
+
+- Reading heterogeneous data from an API
+- Variables of an unknown type, like in the `fmt.Prinln` function
+
+To use a value of type empty `interface{}`, we can use _type assertion_ or a _type switch_ to determine the type of the value.
+
+**Type Assertion**
+
+A _type assertion_ provides access to an interface value's underlying concrete value.
+
+_For example_
+
+```go
+func main() {
+	var i interface{} = "hello"
+
+	s := i.(string)
+	fmt.Println(s)
+}
+```
+
+This statement asserts that the interface value holds a concrete type and assigns the underlying type value to the variable.
+
+We can also test whether an interface value holds a specific type.
+
+A type assertion can return two values:
+
+- The first one is the underlying value
+- The second is a boolean value that reports whether the assertion succeeded.
+
+```go
+s, ok := i.(string)
+fmt.Println(s, ok)
+```
+
+This can help us test whether an interface value holds a specific type or not.
+
+In a way, this is similar to how we read values from a map.
+
+And If this is not the case then, `ok` will be false and the value will be the zero value of the type, and no panic will occur.
+
+```go
+f, ok := i.(float64)
+fmt.Println(f, ok)
+```
+
+But If the interface does not hold the type, the statement will trigger a panic.
+
+```go
+f = i.(float64)
+fmt.Println(f) // Panic!
+```
+
+```go
+$ go run main.go
+hello
+hello true
+0 false
+panic: interface conversion: interface {} is string, not float64
+```
+
+T**ype Switch**
+
+Here, a `switch` statement can be used to determine the type of a variable of type empty `interface{}`.
+
+```go
+var t interface{}
+t = "hello"
+
+switch t := t.(type) {
+case string:
+	fmt.Printf("string: %s\n", t)
+case bool:
+	fmt.Printf("boolean: %v\n", t)
+case int:
+	fmt.Printf("integer: %d\n", t)
+default:
+	fmt.Printf("unexpected: %T\n", t)
+}
+```
+
+And if run this, we can verify that we have a `string` type
+
+```bash
+$ go run main.go
+string: hello
+```
+
+### Properties
+
+Let's discuss some properties of interfaces.
+
+**Zero value**
+
+The zero value of an interface is `nil`
+
+```go
+package main
+
+import "fmt"
+
+type MyInterface interface {
+	Method()
+}
+
+func main() {
+	var i MyInterface
+
+	fmt.Println(i) // Output: <nil>
+}
+```
+
+**Embedding**
+
+We can embed interfaces like structs.
+
+_For example_
+
+```go
+type interface1 interface {
+    Method1()
+}
+
+type interface2 interface {
+    Method2()
+}
+
+type interface3 interface {
+    interface1
+    interface2
+}
+```
+
+**Values**
+
+Interface values are comparable
+
+```go
+package main
+
+import "fmt"
+
+type MyInterface interface {
+	Method()
+}
+
+type MyType struct{}
+
+func (MyType) Method() {}
+
+func main() {
+	t := MyType{}
+	var i MyInterface = MyType{}
+
+	fmt.Println(t == i)
+}
+```
+
+**Interface Values**
+
+Under the hood, an interface value can be thought of as a tuple consisting of a value and a concrete type.
+
+```go
+package main
+
+import "fmt"
+
+type MyInterface interface {
+	Method()
+}
+
+type MyType struct {
+	property int
+}
+
+func (MyType) Method() {}
+
+func main() {
+	var i MyInterface
+
+	i = MyType{10}
+
+	fmt.Printf("(%v, %T)\n", i, i) // Output: ({10}, main.MyType)
+}
+```
+
+With that, we covered interfaces in Go.
+
+It's a really powerful feature but remember _“Bigger the interface, the weaker the abstraction”_ - Rob Pike.

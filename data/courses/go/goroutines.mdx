@@ -1,0 +1,86 @@
+---
+title: 'Goroutines'
+draft: false
+summary: 'In this tutorial, we will learn about goroutines in Go'
+images: ['/static/courses/go/chapter-IV/goroutines/banner.png']
+authors: ['default']
+---
+
+In this lesson, we will learn about Goroutines.
+
+But before we start our discussion, I wanted to share an important Go proverb.
+
+_“Don't communicate by sharing memory, share memory by communicating.”_ - Rob Pike
+
+## What is a goroutine?
+
+A _goroutine_ is a lightweight thread of execution that is managed by the Go runtime and essentially let us write asynchronous code in a synchronous manner.
+
+It is important to know that they are not actual OS threads and the main function itself runs as a goroutine.
+
+A single thread may run thousands of goroutines in them by using the Go runtime scheduler which uses cooperative scheduling. This implies that if the current goroutine is blocked or has been completed, the scheduler will move the other goroutines to another OS thread. Hence, we achieve efficiency in scheduling where no routine is blocked forever.
+
+We can turn any function into a goroutine by simply using the **go** keyword
+
+```go
+go fn(x, y, z)
+```
+
+Before we write any code, it is important to briefly discuss the fork-join model.
+
+## Fork-Join Model
+
+Go uses the idea of the fork-join model of concurrency behind goroutines. The fork-join model essentially implies that a child process splits from its parent process to run concurrently with the parent process. After completing its execution, the child process merges back into the parent process. The point where it joins back is called the **_join point_**.
+
+![fork-join](/static/courses/go/chapter-IV/goroutines/fork-join.png)
+
+Now let's write some code and create our own goroutine
+
+```go
+package main
+
+import "fmt"
+
+func speak(arg string) {
+	fmt.Println(arg)
+}
+
+func main() {
+	go speak("Hello World")
+}
+```
+
+Here the `speak` function call is prefixed with the `go` keyword. This will allow it to run as a separate goroutine. And that's it, we just created our first goroutine. It's that simple!
+
+Great, let's run this
+
+```bash
+$ go run main.go
+
+```
+
+Interesting, it seems like our program did not run completely as it's missing some output. This is because our main goroutine exited and did not wait for the goroutine that we created.
+
+What if we make our program wait using the `time.Sleep` function?
+
+```go
+func main() {
+	...
+	time.Sleep(1 * time.Second)
+}
+```
+
+And now if we run this
+
+```bash
+$ go run main.go
+Hello World
+```
+
+There we go, we can see our complete output now.
+
+**Okay so this works but it's not ideal. So how do we improve this?**
+
+Well, the most tricky part about using goroutines is knowing when they will stop. It is important to know that goroutines run in the same address space, so access to shared memory must be synchronized.
+
+This brings us to channels, which we will discuss in the next.

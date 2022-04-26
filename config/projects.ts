@@ -17,7 +17,6 @@ export interface SubProject {
 export const defaultDimensions: Tuple<number> = [450, 220];
 
 export interface Project {
-  id: number;
   title: string;
   slug: string;
   website: string;
@@ -33,7 +32,6 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    id: 0,
     title: 'HyperTrade',
     slug: 'hypertrade',
     banner: '/static/projects/hypertrade/banner.png',
@@ -66,7 +64,6 @@ export const projects: Project[] = [
     subProjects: [],
   },
   {
-    id: 1,
     title: 'Peapods',
     slug: 'peapods',
     banner: '/static/projects/peapods/banner.png',
@@ -87,7 +84,6 @@ export const projects: Project[] = [
     subProjects: [],
   },
   {
-    id: 2,
     title: 'Proximity',
     slug: 'proximity',
     website: 'https://proximity-mobile.web.app',
@@ -121,7 +117,6 @@ export const projects: Project[] = [
     subProjects: [],
   },
   {
-    id: 3,
     title: 'Velvet Live',
     slug: 'velvet-live',
     banner: '/static/projects/velvet-live/banner.png',
@@ -152,7 +147,6 @@ export const projects: Project[] = [
     subProjects: [],
   },
   {
-    id: 4,
     title: 'Stewards',
     slug: 'stewards',
     website: 'https://stewards.app',
@@ -213,7 +207,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: 5,
     title: 'Celebrify',
     slug: 'celebrify',
     website: 'https://celebrify.in',
@@ -240,7 +233,6 @@ export const projects: Project[] = [
     subProjects: [],
   },
   {
-    id: 6,
     title: 'KCards',
     slug: 'kcards',
     banner: '/static/projects/kcards/banner.jpeg',

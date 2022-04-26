@@ -1,0 +1,435 @@
+---
+title: 'Structs'
+draft: false
+summary: 'In this tutorial, we will learn about structs in Go'
+images: ['/static/courses/go/chapter-II/structs/banner.png']
+authors: ['default']
+---
+
+In this tutorial, we will learn about structs.
+
+So, A `struct` is a user-defined type that contains a collection of named fields. Basically, It is used to group related data together to form a single unit.
+
+If you're coming from an objected-oriented background, think of structs as lightweight classes which that support composition but not inheritance.
+
+## Defining
+
+We can define a `struct` like this
+
+```go
+type Person struct {}
+```
+
+We use the `type` keyword to introduce a new type, followed by the name and then the `struct` keyword to indicate that we're defining a struct
+
+Now let's give it some fields
+
+```go
+type Person struct {
+	FirstName string
+	LastName  string
+  Age       int
+}
+```
+
+And, If the fields have the same type, we can collapse them as well
+
+```go
+type Person struct {
+	FirstName, LastName string
+	Age                 int
+}
+```
+
+## Declaring and initializing
+
+Now that we have our struct, we can declare it the same as other datatypes
+
+```go
+func main() {
+	var p1 Person
+
+	fmt.Println("Person 1:", p1)
+}
+```
+
+```bash
+$ go run main.go
+Person 1: {  0}
+```
+
+As we can see, all the struct fields are initialized with their zero values. So the `FirstName` and `LastName` are set to `“”` empty string and `Age` is set to 0.
+
+We can simply initialize it as _“struct literal”_ also
+
+```go
+func main() {
+	var p1 Person
+
+	fmt.Println("Person 1:", p1)
+
+	var p2 = Person{FirstName: "Karan", LastName: "Pratap Singh", Age: 22}
+
+	fmt.Println("Person 2:", p2)
+}
+```
+
+For readability, we can separate by new line but this will also require a trialing comma
+
+```go
+	var p2 = Person{
+		FirstName: "Karan",
+		LastName:  "Pratap Singh",
+		Age:       22,
+	}
+```
+
+```bash
+$ go run main.go
+Person 1: {  0}
+Person 2: {Karan Pratap Singh 22}
+```
+
+We can also initialize only a subset of fields
+
+```go
+func main() {
+	var p1 Person
+
+	fmt.Println("Person 1:", p1)
+
+	var p2 = Person{
+		FirstName: "Karan",
+		LastName:  "Pratap Singh",
+		Age:       22,
+	}
+
+	fmt.Println("Person 2:", p2)
+
+	var p3 = Person{
+		FirstName: "Tony",
+		LastName:  "Stark",
+	}
+
+	fmt.Println("Person 3:", p3)
+}
+```
+
+```bash
+$ go run main.go
+Person 1: {  0}
+Person 2: {Karan Pratap Singh 22}
+Person 3: {Tony Stark 0}
+```
+
+As we can see, the age field of person 3 has defaulted to the zero value.
+
+## Without field name
+
+Go structs also supports initialization without field names
+
+```go
+func main() {
+	var p1 Person
+
+	fmt.Println("Person 1:", p1)
+
+	var p2 = Person{
+		FirstName: "Karan",
+		LastName:  "Pratap Singh",
+		Age:       22,
+	}
+
+	fmt.Println("Person 2:", p2)
+
+	var p3 = Person{
+		FirstName: "Tony",
+		LastName:  "Stark",
+	}
+
+	fmt.Println("Person 3:", p3)
+
+	var p4 = Person{"Bruce", "Wayne"}
+
+	fmt.Println("Person 4:", p4)
+}
+```
+
+But here's the catch, we will need to provide all the values during the initialization or it will fail
+
+```bash
+$ go run main.go
+# command-line-arguments
+./main.go:30:27: too few values in Person{...}
+```
+
+```go
+	var p4 = Person{"Bruce", "Wayne", 40}
+
+	fmt.Println("Person 4:", p4)
+```
+
+We can also declare an anonymous struct
+
+```go
+func main() {
+	var p1 Person
+
+	fmt.Println("Person 1:", p1)
+
+	var p2 = Person{
+		FirstName: "Karan",
+		LastName:  "Pratap Singh",
+		Age:       22,
+	}
+
+	fmt.Println("Person 2:", p2)
+
+	var p3 = Person{
+		FirstName: "Tony",
+		LastName:  "Stark",
+	}
+
+	fmt.Println("Person 3:", p3)
+
+	var p4 = Person{"Bruce", "Wayne", 40}
+
+	fmt.Println("Person 4:", p4)
+
+	var a = struct {
+		Name string
+	}{"Golang"}
+
+	fmt.Println("Anonymous:", a)
+}
+```
+
+## Accessing fields
+
+Let's cleanup our example our bit and see how we can access individual fields
+
+```go
+func main() {
+	var p = Person{
+		FirstName: "Karan",
+		LastName:  "Pratap Singh",
+		Age:       22,
+	}
+
+	fmt.Println("FirstName", p.FirstName)
+}
+```
+
+We can also create pointer to structs as well
+
+```go
+func main() {
+	var p = Person{
+		FirstName: "Karan",
+		LastName:  "Pratap Singh",
+		Age:       22,
+	}
+
+	ptr := &p
+
+	fmt.Println((*ptr).FirstName)
+	fmt.Println(ptr.FirstName)
+}
+```
+
+Both statements are equal as in Go we don't need to explicitly dereference the pointer
+
+We can also use the built-in `new` function
+
+```go
+func main() {
+	p := new(Person)
+
+	p.FirstName = "Karan"
+	p.LastName = "Pratap Singh"
+	p.Age = 22
+
+	fmt.Println("Person", p)
+}
+```
+
+```bash
+$ go run main.go
+Person &{Karan Pratap Singh 22}
+```
+
+As a side note, two structs are equal if all their corresponding fields are equal as well
+
+```go
+func main() {
+	var p1 = Person{"a", "b", 20}
+	var p2 = Person{"a", "b", 20}
+
+	fmt.Println(p1 == p2)
+}
+```
+
+```bash
+$ go run main.go
+true
+```
+
+## Exported fields
+
+Now let's learn what is exported and unexported fields in a struct. Same as the rules for variables and functions, if a struct field is declared with a lower case identifier, it will not be exported and only be visible to the package it is defined in.
+
+```go
+type Person struct {
+	FirstName, LastName  string
+  Age                  int
+	zipCode              string
+}
+```
+
+So, the `zipCode` field won't be exported. Also, the same goes for the `Person` struct if we rename it as `person` it won't be exported as well.
+
+```go
+type person struct {
+	FirstName, LastName  string
+  Age                  int
+	zipCode              string
+}
+```
+
+## Embedding and composition
+
+As we discussed earlier, Go doesn't necessarily support inheritance, but we can do something similar with embedding
+
+```go
+type Person struct {
+	FirstName, LastName  string
+  Age                  int
+}
+
+type SuperHero struct {
+  Person
+	Power   int
+}
+```
+
+So our new struct will have all the properties of the original struct. And this should behave same as our normal struct.
+
+```go
+func main() {
+	s := SuperHero{}
+
+	s.FirstName = "Bruce"
+	s.LastName = "Wayne"
+	s.Age = 40
+	s.Alias = "batman"
+
+	fmt.Println(s)
+}
+```
+
+```bash
+$ go run main.go
+{{Bruce Wayne 40} batman}
+```
+
+However, this is usually not recommended and in most cases, composition is preferred. So rather than embedding, we will just define it as a normal field.
+
+```go
+type Person struct {
+	FirstName, LastName  string
+  Age                  int
+}
+
+type SuperHero struct {
+  Person  Person
+	Alias   string
+}
+```
+
+Hence, we can re-write our example with composition as well
+
+```go
+func main() {
+	p := Person{"Bruce", "Wayne", 40}
+	s := SuperHero{p, "batman"}
+
+	fmt.Println(s)
+}
+```
+
+```bash
+$ go run main.go
+{{Bruce Wayne 40} batman}
+```
+
+Again there is no right or wrong here, but nonetheless, embedding comes in handy sometimes.
+
+## Struct tags
+
+A struct tag is just a tag that allows us to attach metadata information to the field which can be used for custom behavior using the `reflect` package.
+
+Let's learn how we can define struct tags.
+
+```go
+type Animal struct {
+	Name    string `key:"value1"`
+  Age     int    `key:"value2"`
+}
+```
+
+You will often find tags in encoding packages, such as XML, JSON, YAML, ORMs, and Configuration management.
+
+Here's a tags example for JSON encoder.
+
+```go
+type Animal struct {
+	Name    string `json:"name"`
+  Age     int    `json:"age"`
+}
+```
+
+## Properties
+
+Finally, let's discuss the properties of structs.
+
+Structs are value types. When we assign one `struct` variable to another, a new copy of the `struct` is created and assigned.
+
+Similarly, when we pass a `struct` to another function, the function gets its own copy of the `struct`.
+
+```go
+package main
+
+import "fmt"
+
+type Point struct {
+	X, Y float64
+}
+
+func main() {
+	p1 := Point{1, 2}
+	p2 := p1 // Copy of p1 is assigned to p2
+
+	p2.X = 2
+
+	fmt.Println(p1) // Output: {1 2}
+	fmt.Println(p2) // Output: {2 2}
+}
+```
+
+Empty struct occupies zero bytes of storage
+
+```go
+package main
+
+import (
+	"fmt"
+	"unsafe"
+)
+
+func main() {
+	var s struct{}
+	fmt.Println(unsafe.Sizeof(s)) // Output: 0
+}
+```
+
+Well, this wraps up our discussion on `structs`. Next, we will learn how to extend our structs with methods.

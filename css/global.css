@@ -24,3 +24,7 @@
 .social-icons:last-child .icon {
   @apply mr-0;
 }
+
+.content {
+  @apply !pb-0;
+}

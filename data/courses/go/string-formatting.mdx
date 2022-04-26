@@ -1,0 +1,134 @@
+---
+title: 'String Formatting'
+draft: false
+summary: 'In this tutorial, we will learn about string formatting in Go'
+images: ['/static/courses/go/chapter-I/string-formatting/banner.png']
+authors: ['default']
+---
+
+In this video, we will learn about string formatting or sometimes also known as templating.
+
+`fmt` package contains lots of functions. So to save time, we will discuss the most frequently used functions...Let's start with `fmt.Print` inside our main function.
+
+```go
+...
+
+fmt.Print("What", "is", "your", "name?")
+fmt.Print("My", "name", "is", "golang")
+...
+```
+
+```bash
+$ go run main.go
+Whatisyourname?Mynameisgolang
+```
+
+As we can see, `Print` does not format anything, it simply takes a string and prints it
+
+Next, we have `Println` which is the same as `Print` but it adds a new line at the end and also inserts space between the arguments
+
+```go
+...
+
+fmt.Println("What", "is", "your", "name?")
+fmt.Println("My", "name", "is", "golang")
+...
+```
+
+```bash
+$ go run main.go
+What is your name?
+My name is golang
+```
+
+That's much better!
+
+Next, we have `Printf` also known as *“Print Formatter”, w*hich allows us to format numbers, strings, booleans, and much more.
+
+Let's look at an example
+
+```go
+...
+name := "golang"
+
+fmt.Println("What is your name?")
+fmt.Printf("My name is %s", name)
+...
+```
+
+```bash
+$ go run main.go
+What is your name?
+My name is golang
+```
+
+As we can see that `%s` was substituted with our `name` variable.
+
+But the question is what is `%s` and what does it mean?
+
+So these are called annotation verbs and they tell the function how to format the arguments. We can control things like width, types, and precision with these and there are lots of them. Here's a [cheatsheet](https://pkg.go.dev/fmt)
+
+Now let's quickly look at some more examples. Here we will try to calculate a percentage and print it to the console
+
+```go
+...
+percent := (3/5) * 100
+fmt.Printf("%f", percent)
+...
+```
+
+```bash
+$ go run main.go
+58.181818
+```
+
+Let's say we want just `58.18` which is 2 points precision, we can do that as well by using `.2f`
+
+Also, to add an actual percent sign we will need to _escape it._
+
+```go
+...
+percent := (3/5) * 100
+fmt.Printf("%.2f %%", percent)
+...
+```
+
+```bash
+$ go run main.go
+58.18 %
+```
+
+This brings us to `Sprint`, `Sprintln`, and `Sprintf`. These are basically the same as the print functions, the only difference being they return the string instead of printing it.
+
+Let's take an example
+
+```go
+...
+s := fmt.Sprintf("hex:%x bin:%b", 10 ,10)
+fmt.Println(s)
+...
+```
+
+```bash
+$ go run main.go
+hex:a bin:1010
+```
+
+So, as we can see `Sprintf` formats our integer as hex or binary and returns it as a string.
+
+Lastly, we have multiline string literals, which can be used like this
+
+```go
+...
+msg := `
+Hello from
+multiline
+`
+
+fmt.Println(msg)
+...
+```
+
+Great! But this is just the tip of the iceberg...so make sure to checkout the go doc for `fmt` package.
+
+For those who are coming from C/C++ background, this should feel natural but if you're coming from let's say Python or JavaScript this might be a little strange at first. But it is very powerful and you'll see this functionality used quite extensively.

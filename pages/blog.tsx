@@ -4,8 +4,7 @@ import ListLayout from '@/layouts/ListLayout';
 import { PageSEO } from '@/components/SEO';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { ComponentProps } from 'react';
-
-export const POSTS_PER_PAGE = 8;
+import { POSTS_PER_PAGE } from 'config';
 
 export const getStaticProps: GetStaticProps<{
   posts: ComponentProps<typeof ListLayout>['posts'];

@@ -12,15 +12,12 @@ export default function Projects() {
         description={siteMetadata.description}
       />
       <div className='fade-in divide-y-2 divide-gray-100 dark:divide-gray-800'>
-        <Header
-          title='Projects'
-          subtitle={`Projects I've worked on recently`}
-        />
+        <Header title='Projects' />
         <div className='container py-12'>
           <div className='-m-4 flex flex-wrap'>
-            {config.projects.map(({ id, slug, title, description, banner }) => (
+            {config.projects.map(({ slug, title, description, banner }) => (
               <Card
-                key={id}
+                key={slug}
                 title={title}
                 description={description}
                 banner={banner}

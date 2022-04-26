@@ -1,0 +1,107 @@
+---
+title: 'Concurrency'
+draft: false
+summary: 'In this tutorial, we will learn about concurrency in Go'
+images: ['/static/courses/go/chapter-IV/concurrency/banner.png']
+authors: ['default']
+---
+
+In this lesson, we will learn about concurrency which is one of the most powerful features of Go.
+
+So let's start by asking What is _“concurrency”_?
+
+## What is Concurrency
+
+Concurrency, by definition, is the ability to break down a computer program or algorithm into individual parts, which can be executed independently.
+
+The final outcome of a concurrent program is same as that of a program that has been executed sequentially.
+
+Using concurrency, we are able to achieve the same results in lesser time, thus increasing the overall performance and efficiency of our programs.
+
+## Concurrency vs Parallelism
+
+![concurrency-vs-parallelism](/static/courses/go/chapter-IV/concurrency/concurrency-vs-parallelism.png)
+
+A lot of people confuse concurrency with parallelism because they both somewhat imply executing code simultaneously but they are two completely different concepts.
+
+Concurrency is the task of running and managing multiple computations at the same time. While parallelism is the task of running multiple computations simultaneously.
+
+A simple quote from Rob Pike pretty much sums it up.
+
+_“Concurrency is about dealing with lots of things at once. Parallelism is about doing lots of things at once”_
+
+But concurrency in Go is more than just syntax. In order to harness the power of Go, we need to first understand how Go approaches concurrent execution of code. Go relies on a concurrency model called CSP (Communicating Sequential Processes).
+
+## Communicating Sequential Processes (CSP)
+
+[Communicating Sequential Processes](https://dl.acm.org/doi/10.1145/359576.359585) (CSP) is a model put forth by Tony Hoare in 1978 which describes interactions between concurrent processes. It made a breakthrough in Computer Science, especially in the field of concurrency.
+
+Languages like Go and Erlang have been highly inspired by the concept of communicating sequential processes (CSP).
+
+Concurrency is hard but CSP allows us to give a better structure to our concurrent code and provides a model for thinking about concurrency in a way that makes it a little easier. Here, processes are independent and they communicate by sharing channels between them.
+
+![csp](/static/courses/go/chapter-IV/concurrency/csp.png)
+
+_We'll learn how Golang implements it using goroutines and channels later in the course._
+
+## Basic Concepts
+
+Now let's get familiar with some basic concurrency concepts
+
+### Data Race
+
+A data race occurs when processes have to access the same variable concur­rently.
+
+_For example, one process reads while another simultaneously writes to the exact same variable._
+
+### Race Conditions
+
+A race condition occurs when the timing or order of events affects the correctness of a piece of code.
+
+### Deadlocks
+
+A deadlock occurs when all processes are blocked while waiting for each other and the program cannot proceed further.
+
+**Coffman Conditions**
+
+There are four conditions, known as the Coffman conditions, all of them must be satisfied for a deadlock to occur.
+
+- **Mutual Exclusion**
+
+A concurrent process holds at least one resource at any one time making it non-sharable.
+
+_In the diagram below, there is a single instance of Resource 1 and it is held by Process 1 only._
+
+![mutual-exclusion](/static/courses/go/chapter-IV/concurrency/mutual-exclusion.png)
+
+- **Hold and wait**
+
+A concurrent process holds a resource and is waiting for an additional resource.
+
+_In the diagram given below, Process 2 holds Resource 2 and Resource 3 and is requesting the Resource 1 which is held by Process 1._
+
+![hold-and-wait](/static/courses/go/chapter-IV/concurrency/hold-and-wait.png)
+
+- **No preemption**
+
+A resource held by a concurrent process cannot be taken away by the system. It can only be freed by the process holding it.
+
+_In the diagram below, Process 2 cannot preempt Resource 1 from Process 1. It will only be released when Process 1 relinquishes it voluntarily after its execution is complete._
+
+![no-preemption](/static/courses/go/chapter-IV/concurrency/no-preemption.png)
+
+- **Circular wait**
+
+A process is waiting for the resource held by the second process, which is waiting for the resource held by the third process, and so on, till the last process is waiting for a resource held by the first process. Hence, forming a circular chain.
+
+_In the diagram below, Process 1 is allocated Resource2 and it is requesting Resource 1. Similarly, Process 2 is allocated Resource 1 and it is requesting Resource 2. This forms a circular wait loop._
+
+![circular-wait](/static/courses/go/chapter-IV/concurrency/circular-wait.png)
+
+### Starvation
+
+Starvation happens when a process is deprived of necessary resources and is unable to complete its function.
+
+Starvation can happen because of deadlocks or inefficient scheduling algorithms for processes. In order to solve starvation, we need to employ better resource-allotment algorithms that make sure that every process gets its fair share of resources.
+
+This wraps up our discussion on the basics of concurrency in Go. I'll see you in the next lesson where we will learn about channels and goroutines.

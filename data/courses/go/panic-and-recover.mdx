@@ -1,0 +1,107 @@
+---
+title: 'Panic and Recover'
+draft: false
+summary: 'In this tutorial, we will learn about panic and recover in Go'
+images: ['/static/courses/go/chapter-III/panic-and-recover/banner.png']
+authors: ['default']
+---
+
+So earlier we learned that the idiomatic way of handling abnormal conditions in a Go program is using errors. While errors are sufficient for most cases, there are some situations where the program cannot continue.
+
+In those cases, we can use the built-in `panic` function.
+
+```go
+func panic(interface{})
+```
+
+The panic is a built-in function that stops the normal execution of the current `goroutine`. When a function calls `panic`, the normal execution of the function stops immediately and the control is returned back to the caller. This is repeated until the program exits with the panic message and stack trace.
+
+_Note: We will discuss `goroutines` later in the course_
+
+So let's see how we can use the `panic` function
+
+```go
+package main
+
+func main() {
+	WillPanic()
+}
+
+func WillPanic() {
+	panic("Woah")
+}
+```
+
+And if we run this, we can see `panic` in action
+
+```bash
+$ go run main.go
+panic: Woah
+
+goroutine 1 [running]:
+main.WillPanic(...)
+        .../main.go:8
+main.main()
+        .../main.go:4 +0x38
+exit status 2
+```
+
+As expected, our program printed the panic message, followed by the stack trace, and then it was terminated.
+
+So the question is, what to do when an unexpected panic happens?
+
+Well, It is possible to regain control of a panicking program using the built-in `recover` function along with the `defer` keyword.
+
+```go
+func recover() interface{}
+```
+
+Let's try an example by creating a `handlePanic` function. And then we can all it using `defer`
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	WillPanic()
+}
+
+func handlePanic() {
+	data := recover()
+	fmt.Println("Recovered:", data)
+}
+
+func WillPanic() {
+	defer handlePanic()
+
+	panic("Woah")
+}
+```
+
+```bash
+$ go run main.go
+Recovered: Woah
+```
+
+As we can see, our panic was recovered and now our program can continue execution.
+
+Lastly, I will mention that `panic` and `recover` can be considered similar to the `try/catch` idiom in other languages. One important factor is that we should avoid panic and recover and use errors when possible.
+
+If so then this brings us to the question, when should we use `panic`?
+
+There are two valid use cases for `panic`:
+
+- **An unrecoverable error**
+
+Which can be a situation where the program cannot simply continue its execution.
+
+For example, reading a configuration file which is important to start the program, as there is nothing else to do if the file read itself fails.
+
+- **Developer error**
+
+This is the most common situation.
+
+For example, dereferencing a pointer when the value is `nil` will cause a panic.
+
+I hope this tutorial helped you understand how to use `panic` and `recover` in Go. I'll see you in the next one.
