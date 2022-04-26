@@ -43,7 +43,9 @@ export default function App({ Component, pageProps }: AppProps) {
 }
 
 function GeistProviderWithTheme(props): React.ReactElement {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
-  return <GeistProvider themeType={theme}>{props.children}</GeistProvider>;
+  return (
+    <GeistProvider themeType={resolvedTheme}>{props.children}</GeistProvider>
+  );
 }
