@@ -29,7 +29,7 @@ Now let's give it some fields
 type Person struct {
 	FirstName string
 	LastName  string
-  Age       int
+	Age       int
 }
 ```
 
@@ -207,7 +207,7 @@ func main() {
 
 ## Accessing fields
 
-Let's cleanup our example our bit and see how we can access individual fields
+let's clean up our example a bit and see how we can access individual fields
 
 ```go
 func main() {
@@ -282,7 +282,7 @@ Now let's learn what is exported and unexported fields in a struct. Same as the 
 ```go
 type Person struct {
 	FirstName, LastName  string
-  Age                  int
+	Age                  int
 	zipCode              string
 }
 ```
@@ -292,7 +292,7 @@ So, the `zipCode` field won't be exported. Also, the same goes for the `Person` 
 ```go
 type person struct {
 	FirstName, LastName  string
-  Age                  int
+	Age                  int
 	zipCode              string
 }
 ```
@@ -304,11 +304,11 @@ As we discussed earlier, Go doesn't necessarily support inheritance, but we can 
 ```go
 type Person struct {
 	FirstName, LastName  string
-  Age                  int
+	Age                  int
 }
 
 type SuperHero struct {
-  Person
+	Person
 	Power   int
 }
 ```
@@ -338,11 +338,11 @@ However, this is usually not recommended and in most cases, composition is prefe
 ```go
 type Person struct {
 	FirstName, LastName  string
-  Age                  int
+	Age                  int
 }
 
 type SuperHero struct {
-  Person  Person
+	Person  Person
 	Alias   string
 }
 ```
@@ -374,7 +374,7 @@ Let's learn how we can define struct tags.
 ```go
 type Animal struct {
 	Name    string `key:"value1"`
-  Age     int    `key:"value2"`
+	Age     int    `key:"value2"`
 }
 ```
 
@@ -385,7 +385,7 @@ Here's a tags example for JSON encoder.
 ```go
 type Animal struct {
 	Name    string `json:"name"`
-  Age     int    `json:"age"`
+	Age     int    `json:"age"`
 }
 ```
 

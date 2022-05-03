@@ -34,7 +34,7 @@ x is gt 5
 
 ### Compact if
 
-we can also compact our if statements
+We can also compact our if statements
 
 ```go
 func main() {
@@ -44,7 +44,7 @@ func main() {
 }
 ```
 
-_Note: this pattern is quite common_
+_Note: This pattern is quite common_
 
 ## switch
 
@@ -101,7 +101,7 @@ We can also use the `fallthrough` keyword to transfer control to the next case e
 	}
 ```
 
-And if we run this, we'll see that after the first case match the switch statement continues to the next case because of the `fallthrough` keyword
+And if we run this, we'll see that after the first case matches the switch statement continues to the next case because of the `fallthrough` keyword
 
 ```bash
 $ go run main.go
@@ -170,13 +170,13 @@ func main() {
 
 So, the `continue` statement is used when we want to skip the remaining portion of the loop, and `break` statement is used when we want to break out of the loop.
 
-Also, Init and post statements are optional, hence we can make our `for` loop behave like a while loop as well.
+Also, Init and post statements are optional, hence we can make our `for` loop behaves like a while loop as well.
 
 ```go
 func main() {
 	i := 0
 
-	for ;i <	10; {
+	for ;i < 10; {
 		i += 1
 	}
 }
@@ -186,7 +186,7 @@ _Note: we can also remove the additional semi-colons to make it a little cleaner
 
 ### Forever loop
 
-Lastly, If we omit the loop condition it loops forever, so an infinite loop can be compactly expressed. This is also known as forever loop
+Lastly, If we omit the loop condition it loops forever, so an infinite loop can be compactly expressed. This is also known as the forever loop
 
 ```go
 func main() {

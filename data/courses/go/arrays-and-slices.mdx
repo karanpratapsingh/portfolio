@@ -174,7 +174,7 @@ Index: 0, Element: [1 2 3 4]
 Index: 1, Element: [5 6 7 8]
 ```
 
-We can also let compiler infer the length of the array by using `...` ellipses instead of the length
+we can also let the compiler infer the length of the array by using `...` ellipses instead of the length
 
 ```go
 func main() {
@@ -501,9 +501,9 @@ func add(values ...int) int {
 	sum := 0
 	for _, v := range values {
 		sum += v
-	*}
+	}
 
-	return sum*
+	return sum
 }
 ```
 

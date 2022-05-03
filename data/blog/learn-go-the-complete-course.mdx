@@ -312,9 +312,9 @@ Perfect! Now let's look at some basic data types available in Go. Starting with 
 
 ### String
 
-In Go, string is a sequence of bytes.
+In Go, a string is a sequence of bytes.
 
-They are declared either using double quotes or back ticks which can span multiple lines
+They are declared either using double quotes or backticks which can span multiple lines
 
 ```go
 var name string = "My name is Go"
@@ -347,7 +347,7 @@ Now let's talk about numeric types, starting with
 
 **Signed and Unsigned integers**
 
-Go has several built-in integer types of varying size for storing signed and unsigned integers
+Go has several built-in integer types of varying sizes for storing signed and unsigned integers
 
 The size of generic `int` and `uint` type is platform dependent. Which means it is 32 bits wide on a 32-bit system and 64-bits wide on a 64-bit system.
 
@@ -446,7 +446,7 @@ $ go run main.go
 
 So, as we can see `int` and `float` are assigned as 0, `bool` as false, and `string` as an empty string. This is quite different from how other languages do it. For example, most languages initialize unassigned variables as null or undefined
 
-This is great, but what are those percent symbols in our `Printf` function? As you've already guessed, they are used for formatting and we will learn about them in the next video.
+This is great, but what are those percent symbols in our `Printf` function? As you've already guessed, they are used for formatting and we will learn about them in the next tutorial.
 
 ### Type Conversion
 
@@ -515,7 +515,7 @@ It first defines a new named type with an underlying type. However, this defined
 
 Hence, it cannot be used interchangeably with the underlying type like alias types.
 
-It's bit confusing at first, hopefully, this example will make things clear.
+It's a bit confusing at first, hopefully, this example will make things clear.
 
 ```go
 package main
@@ -548,7 +548,7 @@ Well, this is pretty much it for variables and data types in Go. I'll see you in
 
 In this video, we will learn about string formatting or sometimes also known as templating.
 
-`fmt` package contains lots of functions. So to save time, we will discuss the most frequently used functions...Let's start with `fmt.Print` inside our main function.
+`fmt` package contains lots of functions. So to save time, we will discuss the most frequently used functions. Let's start with `fmt.Print` inside our main function.
 
 ```go
 ...
@@ -583,7 +583,7 @@ My name is golang
 
 That's much better!
 
-Next, we have `Printf` also known as *“Print Formatter”, w*hich allows us to format numbers, strings, booleans, and much more.
+Next, we have `Printf` also known as _“Print Formatter”_, which allows us to format numbers, strings, booleans, and much more.
 
 Let's look at an example
 
@@ -702,7 +702,7 @@ x is gt 5
 
 ### Compact if
 
-we can also compact our if statements
+We can also compact our if statements
 
 ```go
 func main() {
@@ -712,7 +712,7 @@ func main() {
 }
 ```
 
-_Note: this pattern is quite common_
+_Note: This pattern is quite common_
 
 ## switch
 
@@ -769,7 +769,7 @@ We can also use the `fallthrough` keyword to transfer control to the next case e
 	}
 ```
 
-And if we run this, we'll see that after the first case match the switch statement continues to the next case because of the `fallthrough` keyword
+And if we run this, we'll see that after the first case matches the switch statement continues to the next case because of the `fallthrough` keyword
 
 ```bash
 $ go run main.go
@@ -838,13 +838,13 @@ func main() {
 
 So, the `continue` statement is used when we want to skip the remaining portion of the loop, and `break` statement is used when we want to break out of the loop.
 
-Also, Init and post statements are optional, hence we can make our `for` loop behave like a while loop as well.
+Also, Init and post statements are optional, hence we can make our `for` loop behaves like a while loop as well.
 
 ```go
 func main() {
 	i := 0
 
-	for ;i <	10; {
+	for ;i < 10; {
 		i += 1
 	}
 }
@@ -854,7 +854,7 @@ _Note: we can also remove the additional semi-colons to make it a little cleaner
 
 ### Forever loop
 
-Lastly, If we omit the loop condition it loops forever, so an infinite loop can be compactly expressed. This is also known as forever loop
+Lastly, If we omit the loop condition it loops forever, so an infinite loop can be compactly expressed. This is also known as the forever loop
 
 ```go
 func main() {
@@ -959,7 +959,7 @@ I will say that, although this feature is interesting, please use it with care a
 
 ### Functions as values
 
-Next, let's talk about functions as values, in Go functions are first class and we can use them as values. so let's cleanup our function and try it out!
+Next, let's talk about functions as values, in Go functions are first class and we can use them as values. So let's clean up our function and try it out!
 
 ```go
 func myFunction() {
@@ -1016,7 +1016,7 @@ As we can see, we get a result of 15 as `sum` variable is _bound_ to the functio
 
 Now let's look at variadic functions, which are functions that can take zero or multiple arguments using the `...` ellipses operator.
 
-An example here would be of a function that can add a bunch of values
+An example here would be a function that can add a bunch of values
 
 ```go
 func main() {
@@ -1074,7 +1074,7 @@ So, Defer is incredibly useful and is commonly used for doing cleanup or error h
 
 Functions can also be used with generics but we will discuss them later in the course.
 
-So this is it for functions in go, see you in the next video.
+So this is it for functions in go, see you in the next tutorial.
 
 # Modules
 
@@ -1105,7 +1105,7 @@ $ go mod init example
 _The important thing to note here is that a Go module can correspond to a Github repository as well if you plan to publish this module. For example,_
 
 ```bash
-$ go mod init **[github.com/e](http://github.com/karanpratapsingh/go-course)xample/repo
+$ go mod init example
 ```
 
 Now, let's explore `go.mod` which is the file that defines the module's _module path_ and also the import path used for the root directory, and its _dependency requirements_
@@ -1445,9 +1445,9 @@ It should notify me of the errors
 $ go vet
 ```
 
-Next, we have `go env` which simply prints all the go environment information, we'll learn about some of these build-time variable in the next video.
+Next, we have `go env` which simply prints all the go environment information, we'll learn about some of these build-time variable in the next tutorial.
 
-Lastly, we have, `go doc` which shows documentation for package or symbol, here's an example for format package
+Lastly, we have, `go doc` which shows documentation for package or symbol, here's an example of the format package
 
 ```bash
 $ go doc -src fmt Printf
@@ -1471,7 +1471,7 @@ As we can see, we have
 
 Some other very important commands are `go build` and `go test` but we will learn about them in detail later in the course.
 
-This is pretty much it on go commands, feel free to experiment with them! And I'll see you in the next video.
+This is pretty much it on go commands, feel free to experiment with them! And I'll see you in the next tutorial.
 
 # Build
 
@@ -1545,7 +1545,7 @@ This helps us to produce [statically linked binary](https://en.wikipedia.org/wik
 
 This is quite helpful for let's say when we want to run our go binaries in a docker container with minimum external dependencies.
 
-Here's an example how to use it
+Here's an example of how to use it
 
 ```bash
 $ CGO_ENABLED=0 go build -o app
@@ -1796,7 +1796,7 @@ Now let's give it some fields
 type Person struct {
 	FirstName string
 	LastName  string
-  Age       int
+	Age       int
 }
 ```
 
@@ -1974,7 +1974,7 @@ func main() {
 
 ## Accessing fields
 
-Let's cleanup our example our bit and see how we can access individual fields
+let's clean up our example a bit and see how we can access individual fields
 
 ```go
 func main() {
@@ -2049,7 +2049,7 @@ Now let's learn what is exported and unexported fields in a struct. Same as the 
 ```go
 type Person struct {
 	FirstName, LastName  string
-  Age                  int
+	Age                  int
 	zipCode              string
 }
 ```
@@ -2059,7 +2059,7 @@ So, the `zipCode` field won't be exported. Also, the same goes for the `Person` 
 ```go
 type person struct {
 	FirstName, LastName  string
-  Age                  int
+	Age                  int
 	zipCode              string
 }
 ```
@@ -2071,11 +2071,11 @@ As we discussed earlier, Go doesn't necessarily support inheritance, but we can 
 ```go
 type Person struct {
 	FirstName, LastName  string
-  Age                  int
+	Age                  int
 }
 
 type SuperHero struct {
-  Person
+	Person
 	Power   int
 }
 ```
@@ -2105,11 +2105,11 @@ However, this is usually not recommended and in most cases, composition is prefe
 ```go
 type Person struct {
 	FirstName, LastName  string
-  Age                  int
+	Age                  int
 }
 
 type SuperHero struct {
-  Person  Person
+	Person  Person
 	Alias   string
 }
 ```
@@ -2141,7 +2141,7 @@ Let's learn how we can define struct tags.
 ```go
 type Animal struct {
 	Name    string `key:"value1"`
-  Age     int    `key:"value2"`
+	Age     int    `key:"value2"`
 }
 ```
 
@@ -2152,7 +2152,7 @@ Here's a tags example for JSON encoder.
 ```go
 type Animal struct {
 	Name    string `json:"name"`
-  Age     int    `json:"age"`
+	Age     int    `json:"age"`
 }
 ```
 
@@ -2340,7 +2340,7 @@ Since a method is tied to a particular type, we can have the same method names f
 
 But generally, It might just come down to preference? such as “method calls are much easier to read and understand than function calls” or the other way around.
 
-So this wraps up our discussion on methods, see you in the next video
+So this wraps up our discussion on methods, see you in the next tutorial
 
 # Arrays and Slices
 
@@ -2511,7 +2511,7 @@ Index: 0, Element: [1 2 3 4]
 Index: 1, Element: [5 6 7 8]
 ```
 
-We can also let compiler infer the length of the array by using `...` ellipses instead of the length
+we can also let the compiler infer the length of the array by using `...` ellipses instead of the length
 
 ```go
 func main() {
@@ -2838,9 +2838,9 @@ func add(values ...int) int {
 	sum := 0
 	for _, v := range values {
 		sum += v
-	*}
+	}
 
-	return sum*
+	return sum
 }
 ```
 
@@ -3134,7 +3134,7 @@ func main() {
 }
 ```
 
-Well, this wraps up our discussion on maps, see you in the next video!
+Well, this wraps up our discussion on maps, see you in the next tutorial!
 
 # Interfaces
 
@@ -3681,7 +3681,7 @@ For example, `ErrNotFound`
 
 So, this becomes useful when we need to execute a different branch of code if a certain kind of error is encountered.
 
-For example, now we can check explicitly which error occurred using the `[errors.Is](http://errors.Is)` function
+For example, now we can check explicitly which error occurred using the `errors.Is` function
 
 ```go
 package main
@@ -4359,7 +4359,7 @@ We can also use the `constraints` package which defines a set of useful constrai
 
 ![constraints-package](/static/courses/go/chapter-III/generics/constraints-package.png)
 
-For that we will need to install the `constraints` package
+For that, we will need to install the `constraints` package
 
 ```bash
 $ go get golang.org/x/exp/constraints
@@ -4417,7 +4417,7 @@ Lastly, I will add that while generics are a great addition to the language They
 
 And, it is advised to start simple and only write generic code once we have written very similar code at least 2 or 3 times.
 
-Perfect, this wraps us our discussion on generics. I'll see you in the next video!
+Perfect, this wraps us our discussion on generics. I'll see you in the next tutorial!
 
 # Concurrency
 
@@ -4429,7 +4429,7 @@ So let's start by asking What is _“concurrency”_?
 
 Concurrency, by definition, is the ability to break down a computer program or algorithm into individual parts, which can be executed independently.
 
-The final outcome of a concurrent program is same as that of a program that has been executed sequentially.
+The final outcome of a concurrent program is the same as that of a program that has been executed sequentially.
 
 Using concurrency, we are able to achieve the same results in lesser time, thus increasing the overall performance and efficiency of our programs.
 

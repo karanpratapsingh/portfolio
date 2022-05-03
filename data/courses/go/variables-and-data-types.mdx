@@ -64,9 +64,9 @@ Perfect! Now let's look at some basic data types available in Go. Starting with 
 
 ### String
 
-In Go, string is a sequence of bytes.
+In Go, a string is a sequence of bytes.
 
-They are declared either using double quotes or back ticks which can span multiple lines
+They are declared either using double quotes or backticks which can span multiple lines
 
 ```go
 var name string = "My name is Go"
@@ -99,7 +99,7 @@ Now let's talk about numeric types, starting with
 
 **Signed and Unsigned integers**
 
-Go has several built-in integer types of varying size for storing signed and unsigned integers
+Go has several built-in integer types of varying sizes for storing signed and unsigned integers
 
 The size of generic `int` and `uint` type is platform dependent. Which means it is 32 bits wide on a 32-bit system and 64-bits wide on a 64-bit system.
 
@@ -198,7 +198,7 @@ $ go run main.go
 
 So, as we can see `int` and `float` are assigned as 0, `bool` as false, and `string` as an empty string. This is quite different from how other languages do it. For example, most languages initialize unassigned variables as null or undefined
 
-This is great, but what are those percent symbols in our `Printf` function? As you've already guessed, they are used for formatting and we will learn about them in the next video.
+This is great, but what are those percent symbols in our `Printf` function? As you've already guessed, they are used for formatting and we will learn about them in the next tutorial.
 
 ### Type Conversion
 
@@ -267,7 +267,7 @@ It first defines a new named type with an underlying type. However, this defined
 
 Hence, it cannot be used interchangeably with the underlying type like alias types.
 
-It's bit confusing at first, hopefully, this example will make things clear.
+It's a bit confusing at first, hopefully, this example will make things clear.
 
 ```go
 package main
