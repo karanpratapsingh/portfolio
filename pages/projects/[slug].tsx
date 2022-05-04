@@ -96,7 +96,7 @@ export default function Project({
     <>
       <PageSEO
         title={title}
-        description={shortDescription ?? description}
+        description={shortDescription || description}
         imageUrl={banner}
       />
       <H1 className='lg:text-5x mb-4 text-3xl font-bold dark:text-white'>
