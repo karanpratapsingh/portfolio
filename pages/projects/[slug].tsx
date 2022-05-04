@@ -38,6 +38,7 @@ export default function Project({
   const {
     title,
     description,
+    shortDescription,
     banner,
     dimensions,
     stack,
@@ -93,7 +94,11 @@ export default function Project({
 
   return (
     <>
-      <PageSEO title={title} description={description} imageUrl={banner} />
+      <PageSEO
+        title={title}
+        description={shortDescription ?? description}
+        imageUrl={banner}
+      />
       <H1 className='lg:text-5x mb-4 text-3xl font-bold dark:text-white'>
         {title}
       </H1>

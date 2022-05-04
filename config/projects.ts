@@ -22,6 +22,7 @@ export interface Project {
   website: string;
   banner: string;
   description: string;
+  shortDescription?: string;
   repository: Maybe<string>;
   stack: Stack[];
   dimensions?: Tuple<number>; // Tuple of [height, width]
@@ -38,6 +39,8 @@ export const projects: Project[] = [
     website: 'https://github.com/karanpratapsingh/HyperTrade',
     description:
       'Ready to deploy, distributed cryptocurrency trading bot. The idea of this project originally came from a script I used to automate buying and selling of fiat assets. I was curious and wanted to scale it into a real system which can execute trades for me. I had a lot of fun building this. I got to play with lots of different technologies while growing my financial knowledge.',
+    shortDescription:
+      'Ready to deploy, distributed cryptocurrency trading bot.',
     repository: 'https://github.com/karanpratapsingh/HyperTrade',
     stack: [
       Stack.nats,
@@ -69,6 +72,8 @@ export const projects: Project[] = [
     banner: '/static/projects/peapods/banner.png',
     website: 'https://peapods.com',
     description: `Peapods is a new type of decentralized social network that values real human interaction. The platform helps you become closer with your friends and make new ones. We value kindness, friendship, user privacy, and genuine connection. Together we can cure boredom, conquer loneliness, and fulfill the original promise of the internet to connect us in ways that matter.`,
+    shortDescription:
+      'Peapods is a new type of decentralized social network that values real human interaction',
     repository: null,
     stack: [
       Stack.javascript,
