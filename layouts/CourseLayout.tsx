@@ -17,13 +17,6 @@ const discussUrl = slug =>
     `${siteMetadata.siteUrl}/blog/${slug}`,
   )}`;
 
-const postDateTemplate: Intl.DateTimeFormatOptions = {
-  weekday: 'long',
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-};
-
 interface Props {
   frontMatter: PostFrontMatter;
   authorDetails: AuthorFrontMatter[];

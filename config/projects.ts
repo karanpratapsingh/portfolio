@@ -73,7 +73,7 @@ export const projects: Project[] = [
     website: 'https://peapods.com',
     description: `Peapods is a new type of decentralized social network that values real human interaction. The platform helps you become closer with your friends and make new ones. We value kindness, friendship, user privacy, and genuine connection. Together we can cure boredom, conquer loneliness, and fulfill the original promise of the internet to connect us in ways that matter.`,
     shortDescription:
-      'Peapods is a new type of decentralized social network that values real human interaction',
+      'Peapods is a new type of decentralized social network that values real human interaction.',
     repository: null,
     stack: [
       Stack.javascript,
