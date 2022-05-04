@@ -67,11 +67,15 @@ const CommonSEO = ({
 interface PageSEOProps {
   title: string;
   description: string;
+  imageUrl?: string;
 }
 
-export const PageSEO = ({ title, description }: PageSEOProps) => {
-  const ogImageUrl = siteMetadata.siteUrl + siteMetadata.socialBanner;
-  const twImageUrl = siteMetadata.siteUrl + siteMetadata.socialBanner;
+export const PageSEO = ({ title, description, imageUrl }: PageSEOProps) => {
+  const ogImageUrl =
+    siteMetadata.siteUrl + (imageUrl ?? siteMetadata.socialBanner);
+  const twImageUrl =
+    siteMetadata.siteUrl + (imageUrl ?? siteMetadata.socialBanner);
+
   return (
     <CommonSEO
       title={title}

@@ -20,7 +20,11 @@ export default function Go(
 
   return (
     <>
-      <PageSEO title={title} description={description} />
+      <PageSEO
+        title={title}
+        description={description}
+        imageUrl={`/static/courses/${SLUG}/banner.png`}
+      />
       <div className='fade-in divide-y-2 divide-gray-100 dark:divide-gray-800'>
         <Header title={title} subtitle={description} />
         <CourseContent course={course} />

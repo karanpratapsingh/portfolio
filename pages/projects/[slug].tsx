@@ -2,6 +2,7 @@ import Conditional from '@/components/Conditional';
 import { H1, H2, H3 } from '@/components/Form';
 import DeploymentList from '@/components/list/DeploymentList';
 import StackList from '@/components/list/StackList';
+import { PageSEO } from '@/components/SEO';
 import config from 'config';
 import type { Project, SubProject } from 'config/projects';
 import { defaultDimensions } from 'config/projects';
@@ -37,6 +38,7 @@ export default function Project({
   const {
     title,
     description,
+    banner,
     dimensions,
     stack,
     deployment,
@@ -91,6 +93,7 @@ export default function Project({
 
   return (
     <>
+      <PageSEO title={title} description={description} imageUrl={banner} />
       <H1 className='lg:text-5x mb-4 text-3xl font-bold dark:text-white'>
         {title}
       </H1>
