@@ -59,7 +59,7 @@ func (socket) Plug(device mobile, power int) {
 }
 ```
 
-Let's try to _“connect”_ or _“plug in”_ the `mobile` type to our `socket` type in the `main` function
+Let's try to _"connect"_ or _"plug in"_ the `mobile` type to our `socket` type in the `main` function
 
 ```go
 package main
@@ -201,7 +201,7 @@ main.kettle -> quantity: Half Empty, power: 25
 
 Well, an interface can help us decouple our types. For example, because we have the interface, we don't need to update our `socket` implementation. We can just define a new device type with a `Draw` method.
 
-Unlike other languages, Go Interfaces are implemented **implicitly** so we don't need something like an `implements` keyword. This means, that a type satisfies an interface automatically when it has _"all the methods”_ of the interface.
+Unlike other languages, Go Interfaces are implemented **implicitly** so we don't need something like an `implements` keyword. This means, that a type satisfies an interface automatically when it has _"all the methods"_ of the interface.
 
 ### Empty Interface
 
@@ -406,4 +406,4 @@ func main() {
 
 With that, we covered interfaces in Go.
 
-It's a really powerful feature but remember _“Bigger the interface, the weaker the abstraction”_ - Rob Pike.
+It's a really powerful feature but remember _"Bigger the interface, the weaker the abstraction"_ - Rob Pike.

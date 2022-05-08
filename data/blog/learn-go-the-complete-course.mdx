@@ -583,7 +583,7 @@ My name is golang
 
 That's much better!
 
-Next, we have `Printf` also known as _“Print Formatter”_, which allows us to format numbers, strings, booleans, and much more.
+Next, we have `Printf` also known as _"Print Formatter"_, which allows us to format numbers, strings, booleans, and much more.
 
 Let's look at an example
 
@@ -1419,7 +1419,7 @@ func main() {
 
 _Also, make sure to checkout the go doc of packages you install, which is usually located in the project's readme file. go doc parses the source code and generates documentation in HTML format. Reference to It is usually located in readme files._
 
-Lastly, I will add that, Go doesn't have a particular _“folder structure”_ convention, always try to organize your packages in a simple and intuitive way.
+Lastly, I will add that, Go doesn't have a particular _"folder structure"_ convention, always try to organize your packages in a simple and intuitive way.
 
 So this is pretty much it for packages, see you in the next tutorial!
 
@@ -1826,9 +1826,9 @@ $ go run main.go
 Person 1: {  0}
 ```
 
-As we can see, all the struct fields are initialized with their zero values. So the `FirstName` and `LastName` are set to `“”` empty string and `Age` is set to 0.
+As we can see, all the struct fields are initialized with their zero values. So the `FirstName` and `LastName` are set to `""` empty string and `Age` is set to 0.
 
-We can simply initialize it as _“struct literal”_ also
+We can simply initialize it as _"struct literal"_ also
 
 ```go
 func main() {
@@ -2338,7 +2338,7 @@ One thing I can think of right now is that methods can help us avoid naming conf
 
 Since a method is tied to a particular type, we can have the same method names for multiple receivers.
 
-But generally, It might just come down to preference? such as “method calls are much easier to read and understand than function calls” or the other way around.
+But generally, It might just come down to preference? such as "method calls are much easier to read and understand than function calls" or the other way around.
 
 So this wraps up our discussion on methods, see you in the next tutorial
 
@@ -3190,7 +3190,7 @@ func (socket) Plug(device mobile, power int) {
 }
 ```
 
-Let's try to _“connect”_ or _“plug in”_ the `mobile` type to our `socket` type in the `main` function
+Let's try to _"connect"_ or _"plug in"_ the `mobile` type to our `socket` type in the `main` function
 
 ```go
 package main
@@ -3332,7 +3332,7 @@ main.kettle -> quantity: Half Empty, power: 25
 
 Well, an interface can help us decouple our types. For example, because we have the interface, we don't need to update our `socket` implementation. We can just define a new device type with a `Draw` method.
 
-Unlike other languages, Go Interfaces are implemented **implicitly** so we don't need something like an `implements` keyword. This means, that a type satisfies an interface automatically when it has _"all the methods”_ of the interface.
+Unlike other languages, Go Interfaces are implemented **implicitly** so we don't need something like an `implements` keyword. This means, that a type satisfies an interface automatically when it has _"all the methods"_ of the interface.
 
 ### Empty Interface
 
@@ -3537,7 +3537,7 @@ func main() {
 
 With that, we covered interfaces in Go.
 
-It's a really powerful feature but remember _“Bigger the interface, the weaker the abstraction”_ - Rob Pike.
+It's a really powerful feature but remember _"Bigger the interface, the weaker the abstraction"_ - Rob Pike.
 
 # Errors
 
@@ -4423,7 +4423,7 @@ Perfect, this wraps us our discussion on generics. I'll see you in the next tuto
 
 In this lesson, we will learn about concurrency which is one of the most powerful features of Go.
 
-So let's start by asking What is _“concurrency”_?
+So let's start by asking What is _"concurrency"_?
 
 ## What is Concurrency
 
@@ -4443,13 +4443,13 @@ Concurrency is the task of running and managing multiple computations at the sam
 
 A simple quote from Rob Pike pretty much sums it up.
 
-_“Concurrency is about dealing with lots of things at once. Parallelism is about doing lots of things at once”_
+_"Concurrency is about dealing with lots of things at once. Parallelism is about doing lots of things at once"_
 
 But concurrency in Go is more than just syntax. In order to harness the power of Go, we need to first understand how Go approaches concurrent execution of code. Go relies on a concurrency model called CSP (Communicating Sequential Processes).
 
 ## Communicating Sequential Processes (CSP)
 
-[Communicating Sequential Processes](https://dl.acm.org/doi/10.1145/359576.359585) (CSP) is a model put forth by Tony Hoare in 1978 which describes interactions between concurrent processes. It made a breakthrough in Computer Science, especially in the field of concurrency.
+[Communicating Sequential Processes](https://dl.acm.org/doi/10.1145/359576.359585) (CSP) is a model put forth by [Tony Hoare](https://en.wikipedia.org/wiki/Tony_Hoare) in 1978 which describes interactions between concurrent processes. It made a breakthrough in Computer Science, especially in the field of concurrency.
 
 Languages like Go and Erlang have been highly inspired by the concept of communicating sequential processes (CSP).
 
@@ -4527,7 +4527,7 @@ In this lesson, we will learn about Goroutines.
 
 But before we start our discussion, I wanted to share an important Go proverb.
 
-_“Don't communicate by sharing memory, share memory by communicating.”_ - Rob Pike
+_"Don't communicate by sharing memory, share memory by communicating."_ - Rob Pike
 
 ## What is a goroutine?
 
