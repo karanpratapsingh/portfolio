@@ -5,8 +5,8 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import dynamic from 'next/dynamic';
 import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
 
-// TODO: Video list?
 // TODO: Share functionality
+// TODO: Table of content list (on right)
 
 // @ts-ignore
 export const getStaticProps: GetStaticProps<{
