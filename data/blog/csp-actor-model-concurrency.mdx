@@ -1,0 +1,55 @@
+---
+title: 'CSP vs Actor model for concurrency'
+date: '2022-05-10'
+tags: ['distributedsystems']
+draft: false
+summary: 'Learn about CSP and Actor model for concurrency'
+images: ['/static/blogs/csp-actor-model-concurrency/banner.png']
+authors: ['default']
+---
+
+In this article, we will discuss how CSP and actor concurrency models work.
+
+## Communicating Sequential Processes (CSP)
+
+![csp](/static/blogs/csp-actor-model-concurrency/csp.png)
+
+[Communicating Sequential Processes](https://dl.acm.org/doi/10.1145/359576.359585) (CSP) is a model put forth by [Tony Hoare](https://en.wikipedia.org/wiki/Tony_Hoare) in 1978 which describes interactions between concurrent processes.
+It made a breakthrough in Computer Science, especially in the field of concurrency.
+
+In CSP we use _"channels"_ for communication and synchronization. Although there is decoupling between the processes, they are still coupled to the channel.
+
+It is fully synchronous, a channel writer must block until a channel reader reads. The advantage of that blocking based mechanism is that a channel only needs to ever hold one message. It's also in many ways easier to reason about.
+
+_CSP is implemented in languages like [Go](/courses/go) with [goroutines](/courses/go/goroutines) and [channels](/courses/go/channels)._
+
+## Actor model
+
+![actor](/static/blogs/csp-actor-model-concurrency/actor.png)
+
+[Actor model](https://arxiv.org/abs/1008.1459) was put forth by [Carl Hewitt](https://en.wikipedia.org/wiki/Carl_Hewitt) in 1973 and it adopts the philosophy that everything is an actor. This is similar to the everything is an object philosophy used by some object-oriented programming languages.
+
+It is inherently asynchronous, a message sender will not block whether the reader is ready to pull from the mailbox or not, instead the message goes into a queue usually called a _"mailbox"_. Which is convenient, but it's a bit harder to reason about and mailboxes potentially have to hold a lot of messages.
+
+Each process has a single mailbox, messages are put into the receiver's mailbox by the sender, and fetched by the receiver.
+
+_Actor model is implemented in languages such as [Erlang](https://www.erlang.org/) and [Scala](https://www.scala-lang.org/). In Java world, [Akka](https://akka.io) is commonly used for this._
+
+## Comparison
+
+Some differences between the actor model and communicating sequential processes:
+
+- Processes in CSP are anonymous, while actors have identities.
+- CSP uses _channels_ for message passing, whereas actors use _mailboxes_.
+- Actor must only communicate through message delivery, hence making them stateless.
+- CSP messages are delivered in the order they were sent.
+- The actor model was designed for distributed programs, so it can scale across several machines.
+- Actor model is more decoupled than CSP.
+
+## Conclusion
+
+I think both are fantastic concurrency models and are quite underrated. I'm not sure why everyone just went with the multi-threading hype and forgot about these models given they were here since the 1970s.
+
+It is great to see languages like Go, Rust, Scala, and Elixir bringing these powerful concepts back into the discussion. Personally I find these models much more natural than multi-threading, STM, Guilds, etc.
+
+Do you think one is better than the other? I'd love to hear your thoughts.
