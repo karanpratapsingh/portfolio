@@ -7,7 +7,7 @@ images: ['/static/courses/go/chapter-III/panic-and-recover/banner.png']
 authors: ['default']
 ---
 
-So earlier we learned that the idiomatic way of handling abnormal conditions in a Go program is using errors. While errors are sufficient for most cases, there are some situations where the program cannot continue.
+So earlier, we learned that the idiomatic way of handling abnormal conditions in a Go program is using errors. While errors are sufficient for most cases, there are some situations where the program cannot continue.
 
 In those cases, we can use the built-in `panic` function.
 
@@ -19,7 +19,7 @@ The panic is a built-in function that stops the normal execution of the current 
 
 _Note: We will discuss `goroutines` later in the course_
 
-So let's see how we can use the `panic` function
+So, let's see how we can use the `panic` function
 
 ```go
 package main
@@ -49,15 +49,15 @@ exit status 2
 
 As expected, our program printed the panic message, followed by the stack trace, and then it was terminated.
 
-So the question is, what to do when an unexpected panic happens?
+So, the question is, what to do when an unexpected panic happens?
 
-Well, It is possible to regain control of a panicking program using the built-in `recover` function along with the `defer` keyword.
+Well, it is possible to regain control of a panicking program using the built-in `recover` function, along with the `defer` keyword.
 
 ```go
 func recover() interface{}
 ```
 
-Let's try an example by creating a `handlePanic` function. And then we can all it using `defer`
+Let's try an example by creating a `handlePanic` function. And then, we can call it using `defer`
 
 ```go
 package main
@@ -89,7 +89,7 @@ As we can see, our panic was recovered and now our program can continue executio
 
 Lastly, I will mention that `panic` and `recover` can be considered similar to the `try/catch` idiom in other languages. One important factor is that we should avoid panic and recover and use errors when possible.
 
-If so then this brings us to the question, when should we use `panic`?
+If so, then this brings us to the question, when should we use `panic`?
 
 There are two valid use cases for `panic`:
 

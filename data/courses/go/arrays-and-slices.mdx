@@ -25,7 +25,7 @@ We can declare an array as follows
 var a [n]T
 ```
 
-Here `n` is the length and `T` can be any type like integer, string, or user-defined structs.
+Here, `n` is the length and `T` can be any type like integer, string, or user-defined structs.
 
 Now, let's declare an array of integers with length 4 and print it.
 
@@ -93,7 +93,7 @@ $ go run main.go
 
 Now, let's talk about iteration.
 
-So there are multiple ways to iterate over arrays.
+So, there are multiple ways to iterate over arrays.
 
 The first one is using the for loop with the `len` function which gives us the length of the array
 
@@ -135,7 +135,7 @@ Index: 2, Element: 3
 Index: 3, Element: 4
 ```
 
-As we can see our example works the same as before.
+As we can see, our example works the same as before.
 
 But the range keyword is quite versatile and can be used in multiple ways.
 
@@ -153,7 +153,7 @@ for range arr {} // Simply loop over the array
 
 All the arrays that we created so far are one dimensional. We can also create multi-dimensional arrays in Go.
 
-Let's take an example
+Let's take a look at an example
 
 ```go
 func main() {
@@ -174,7 +174,7 @@ Index: 0, Element: [1 2 3 4]
 Index: 1, Element: [5 6 7 8]
 ```
 
-we can also let the compiler infer the length of the array by using `...` ellipses instead of the length
+We can also let the compiler infer the length of the array by using `...` ellipses instead of the length
 
 ```go
 func main() {
@@ -373,7 +373,7 @@ Slice 3: [Java TypeScript]
 
 _Missing low index implies 0 and missing high index implies `len(a)`_
 
-Thing to note here is we can create slice from other slices too and not just arrays
+The thing to note here is we can create a slice from other slices too and not just arrays
 
 ```go
 	var a = []string{
@@ -390,7 +390,7 @@ We can iterate over a slice in the same way you iterate over an array, by using 
 
 ### functions
 
-So now let's talk about built-in slice functions provided in Go.
+So now, let's talk about built-in slice functions provided in Go.
 
 - **copy**
 
@@ -426,7 +426,7 @@ As expected, our 4 elements from the source slice were copied to the destination
 
 - **append**
 
-Now let's look at how we can append data to our slice using the built-in `append` function which appends new elements at the end of a given slice.
+Now, let's look at how we can append data to our slice using the built-in `append` function which appends new elements at the end of a given slice.
 
 It takes a slice and a variable number of arguments. It then returns a new slice containing all the elements.
 
@@ -455,7 +455,7 @@ a2: [a b c d e f]
 
 As we can see, the new elements were appended and a new slice was returned.
 
-But If the given slice doesn't have sufficient capacity for the new elements then a new underlying array is allocated with a bigger capacity.
+But if the given slice doesn't have sufficient capacity for the new elements then a new underlying array is allocated with a bigger capacity.
 
 All the elements from the underlying array of the existing slice are copied to this new array, and then the new elements are appended.
 

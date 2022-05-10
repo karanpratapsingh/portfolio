@@ -9,7 +9,7 @@ authors: ['default']
 
 In this lesson, we will learn about concurrency which is one of the most powerful features of Go.
 
-So let's start by asking What is _"concurrency"_?
+So, let's start by asking What is _"concurrency"_?
 
 ## What is Concurrency
 
@@ -17,15 +17,15 @@ Concurrency, by definition, is the ability to break down a computer program or a
 
 The final outcome of a concurrent program is the same as that of a program that has been executed sequentially.
 
-Using concurrency, we are able to achieve the same results in lesser time, thus increasing the overall performance and efficiency of our programs.
+Using concurrency, we can achieve the same results in lesser time, thus increasing the overall performance and efficiency of our programs.
 
 ## Concurrency vs Parallelism
 
 ![concurrency-vs-parallelism](/static/courses/go/chapter-IV/concurrency/concurrency-vs-parallelism.png)
 
-A lot of people confuse concurrency with parallelism because they both somewhat imply executing code simultaneously but they are two completely different concepts.
+A lot of people confuse concurrency with parallelism because they both somewhat imply executing code simultaneously, but they are two completely different concepts.
 
-Concurrency is the task of running and managing multiple computations at the same time. While parallelism is the task of running multiple computations simultaneously.
+Concurrency is the task of running and managing multiple computations at the same time, while parallelism is the task of running multiple computations simultaneously.
 
 A simple quote from Rob Pike pretty much sums it up.
 
@@ -39,7 +39,7 @@ But concurrency in Go is more than just syntax. In order to harness the power of
 
 Languages like Go and Erlang have been highly inspired by the concept of communicating sequential processes (CSP).
 
-Concurrency is hard but CSP allows us to give a better structure to our concurrent code and provides a model for thinking about concurrency in a way that makes it a little easier. Here, processes are independent and they communicate by sharing channels between them.
+Concurrency is hard, but CSP allows us to give a better structure to our concurrent code and provides a model for thinking about concurrency in a way that makes it a little easier. Here, processes are independent and they communicate by sharing channels between them.
 
 ![csp](/static/courses/go/chapter-IV/concurrency/csp.png)
 
@@ -47,11 +47,11 @@ _We'll learn how Golang implements it using goroutines and channels later in the
 
 ## Basic Concepts
 
-Now let's get familiar with some basic concurrency concepts
+Now, let's get familiar with some basic concurrency concepts
 
 ### Data Race
 
-A data race occurs when processes have to access the same variable concur­rently.
+A data race occurs when processes have to access the same variable concurrently.
 
 _For example, one process reads while another simultaneously writes to the exact same variable._
 

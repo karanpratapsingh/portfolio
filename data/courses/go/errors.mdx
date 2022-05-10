@@ -21,7 +21,7 @@ type error interface {
 
 We will circle back to this shortly. First, let's try to understand the basics.
 
-So, Let's declare a simple `Divide` function which as the name suggests, will divide integer `a` by `b`
+So, let's declare a simple `Divide` function which, as the name suggests,, will divide integer `a` by `b`
 
 ```go
 func Divide(a, b int) int {
@@ -29,11 +29,11 @@ func Divide(a, b int) int {
 }
 ```
 
-Great. Now, we want to return an error, let's say to prevent the division by zero. This brings us to error construction.
+Great. Now, we want to return an error, let's say, to prevent the division by zero. This brings us to error construction.
 
 ## Constructing Errors
 
-There are multiple ways to do this but we will look at the two most common one.
+There are multiple ways to do this, but we will look at the two most common one.
 
 ### `errors` package
 
@@ -57,7 +57,7 @@ func Divide(a, b int) (int, error) {
 
 Notice, how we return error with the result. And if there is no error we simply return `nil` as it is the zero value of an error because after all, it's an interface.
 
-But how do we handle it? So, for that let's call the `Divide` function in our `main` function.
+But how do we handle it? So, for that, let's call the `Divide` function in our `main` function.
 
 ```go
 package main
@@ -92,7 +92,7 @@ As you can see, we simply check if the error is `nil` and build our logic accord
 
 Another way to construct our errors is by using the `fmt.Errorf` function.
 
-This function is similar to `fmt.Sprintf` and lets us format our error but instead of returning a string, it returns an error.
+This function is similar to `fmt.Sprintf` and it lets us format our error. But instead of returning a string, it returns an error.
 
 It is often used to add some context or detail to our errors.
 
@@ -188,9 +188,9 @@ cannot divide by zero
 
 This strategy covers most of the error handling use cases. But sometimes we need additional functionalities such as dynamic values inside of our errors.
 
-Earlier we saw that `error` is just an interface. So basically, anything can be an `error` as long as it implements the `Error()` method which returns an error message as a string.
+Earlier, we saw that `error` is just an interface. So basically, anything can be an `error` as long as it implements the `Error()` method which returns an error message as a string.
 
-So let's define our custom `DivisionError` struct which will contain an error code and a message.
+So, let's define our custom `DivisionError` struct which will contain an error code and a message.
 
 ```go
 package main
@@ -223,7 +223,7 @@ func Divide(a, b int) (int, error) {
 }
 ```
 
-Here, we will use `errors.As` instead of `errors.Is` function, to convert the error to the correct type.
+Here, we will use `errors.As` instead of `errors.Is` function to convert the error to the correct type.
 
 ```go
 func main() {
@@ -259,7 +259,7 @@ code 2000: cannot divide by zero
 
 The difference is that this function checks whether the error has a specific type, unlike the [`Is()`](https://pkg.go.dev/errors#Is), which examines if it is a particular error object.
 
-We can also use type assertions, but it's not preferred
+We can also use type assertions but it's not preferred
 
 ```go
 func main() {

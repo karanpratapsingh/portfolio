@@ -7,11 +7,11 @@ images: ['/static/courses/go/chapter-IV/waitgroups/banner.png']
 authors: ['default']
 ---
 
-As we learned earlier goroutines run in the same address space, so access to shared memory must be synchronized.
+As we learned earlier, goroutines run in the same address space, so access to shared memory must be synchronized.
 
 The [`sync`](https://go.dev/pkg/sync/) package provides useful primitives.
 
-So In this tutorial, we will learn about waitgroups
+So in this tutorial, we will learn about waitgroups
 
 Basically, **WaitGroup** helps us wait for multiple goroutines to finish.
 
@@ -21,7 +21,7 @@ We can use the WaitGroup using the following functions:
 - `Done()` function is called within the goroutine to signal that the goroutine has successfully executed.
 - `Wait()` function blocks the program until all the goroutines specified by `Add()` have invoked `Done()` from within.
 
-Let's take an example
+Let's take a look at an example
 
 ```go
 package main

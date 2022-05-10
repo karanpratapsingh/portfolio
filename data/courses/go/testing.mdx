@@ -9,7 +9,7 @@ authors: ['default']
 
 In this tutorial, we will talk about testing in Go. So, let's start using a simple example.
 
-We have created a `math` package that contains an `Add` function which as the name suggests adds two integers.
+We have created a `math` package that contains an `Add` function Which as the name suggests, adds two integers.
 
 ```go
 package math
@@ -56,13 +56,13 @@ Our project structure should look like this.
     └── add_test.go
 ```
 
-We will start by using a `math_test` package, and import the `testing` package from the standard library. That's right! testing is built into Go, unlike many other languages.
+We will start by using a `math_test` package, and importing the `testing` package from the standard library. That's right! Testing is built into Go, unlike many other languages.
 
 But wait...why do we need to use `math_test` as our package, can't we just use the same `math` package?
 
-Well yes, we can write our test in the same package if we wanted but I personally think doing this in a separate package helps us write tests in a more decoupled way.
+Well yes, we can write our test in the same package if we wanted, but I personally think doing this in a separate package helps us write tests in a more decoupled way.
 
-Now we can create our `TestAdd` function. It will take an argument of type `testing.T` which will provide us with helpful methods.
+Now, we can create our `TestAdd` function. It will take an argument of type `testing.T` which will provide us with helpful methods.
 
 ```go
 package math_test
@@ -72,14 +72,14 @@ import "testing"
 func TestAdd(t *testing.T) {}
 ```
 
-Before we add any testing logic, let's try to run it. But this time we cannot use `go run` command, instead, we will use the `go test` command.
+Before we add any testing logic, let's try to run it. But this time, we cannot use `go run` command, instead, we will use the `go test` command.
 
 ```bash
 $ go test ./math
 ok      example/math 0.429s
 ```
 
-Here, we will our package name which is `math` but we can also use the relative path `./...` to test all packages.
+Here, we will have our package name which is `math`, but we can also use the relative path `./...` to test all packages.
 
 ```bash
 $ go test ./...
@@ -87,7 +87,7 @@ $ go test ./...
 ok      example/math 0.348s
 ```
 
-And if Go doesn't find any test in a package it will let us know.
+And if Go doesn't find any test in a package, it will let us know.
 
 Perfect, let's write some test code. To do this, we will check our result with an expected value and if they do not match, we can use the `t.Fail` method to fail the test.
 
@@ -106,7 +106,7 @@ func TestAdd(t *testing.T) {
 }
 ```
 
-Great! our test seems to have passed.
+Great! Our test seems to have passed.
 
 ```bash
 $ go test math
@@ -146,13 +146,13 @@ FAIL    example/math    0.354s
 FAIL
 ```
 
-So this is what a test failure will look like.
+So, this is what a test failure will look like.
 
 ### Table driven tests
 
 This brings us to table-driven tests. But what exactly are they?
 
-So earlier we had function arguments and expected variables which we compared to determine if our tests passed or fail. But what if we defined all that in a slice and iterate over that? This will make our tests a little bit more flexible and help us run multiple cases easily.
+So earlier, we had function arguments and expected variables which we compared to determine if our tests passed or fail. But what if we defined all that in a slice and iterate over that? This will make our tests a little bit more flexible and help us run multiple cases easily.
 
 Don't worry, we will learn this by example. So we will start by defining our `addTestCase` struct.
 
@@ -237,7 +237,7 @@ $ go tool cover -html=coverage.out
 
 ![coverage](/static/courses/go/chapter-III/testing/coverage.png)
 
-As we can see this is a much more readable format. And best of all, it is built right into standard tooling.
+As we can see, this is a much more readable format. And best of all, it is built right into standard tooling.
 
 ### Fuzz testing
 

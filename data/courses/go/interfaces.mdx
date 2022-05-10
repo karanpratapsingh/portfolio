@@ -15,7 +15,7 @@ So, an interface in Go is an **abstract type** that is defined using a set of me
 
 _Here, **behavior** is a key term that we will discuss shortly._
 
-Let's take an example to understand this better.
+Let's take a look at an example to understand this better.
 
 One of the best real-world examples of interfaces is the power socket. Imagine that we need to connect different devices to the power socket.
 
@@ -43,7 +43,7 @@ type kettle struct {
 type socket struct{}
 ```
 
-Now let's define a `Draw` method on a type, let's say `mobile`. Here we will simply print the properties of the type.
+Now, let's define a `Draw` method on a type, let's say `mobile`. Here we will simply print the properties of the type.
 
 ```go
 func (m mobile) Draw(power int) {
@@ -81,7 +81,7 @@ $ go run main.go
 main.mobile -> brand: Apple, power: 10
 ```
 
-This is interesting but let's say now we want to connect our `laptop` type.
+This is interesting, but let's say now we want to connect our `laptop` type.
 
 ```go
 package main
@@ -99,17 +99,17 @@ func main() {
 }
 ```
 
-As we can see this will throw an error.
+As we can see, this will throw an error.
 
 **What should we do now? Define another method? Such as `PlugLaptop`?**
 
 Sure, but then every time we add a new device type we will need to add a new method to the socket type as well and that's not ideal.
 
-This is where the `interface` comes in. Essentially we want to define a **contract** which in the future must be implemented.
+This is where the `interface` comes in. Essentially, we want to define a **contract** that, in the future, must be implemented.
 
 We can simply define an interface such as `PowerDrawer` and use it in our `Plug` function to allow any device that satisfies the criteria, which is that the type must have a `Draw` method matching the signature that the interface requires.
 
-And anyways the socket doesn't need to know anything about our device and can simply call the `Draw` method.
+And anyways, the socket doesn't need to know anything about our device and can simply call the `Draw` method.
 
 ![interface](/static/courses/go/chapter-III/interfaces/interface.png)
 
@@ -125,7 +125,7 @@ type PowerDrawer interface {
 }
 ```
 
-Now we need to update our `Plug` method to accept a device that implements the `PowerDrawer` interface as an argument.
+Now, we need to update our `Plug` method to accept a device that implements the `PowerDrawer` interface as an argument.
 
 ```go
 func (socket) Plug(device PowerDrawer, power int) {
@@ -169,7 +169,7 @@ func (k kettle) Draw(power int) {
 }
 ```
 
-Now we can connect all our devices to the socket with the help of our interface!
+Now, we can connect all our devices to the socket with the help of our interface!
 
 ```go
 func main() {
@@ -201,7 +201,7 @@ main.kettle -> quantity: Half Empty, power: 25
 
 Well, an interface can help us decouple our types. For example, because we have the interface, we don't need to update our `socket` implementation. We can just define a new device type with a `Draw` method.
 
-Unlike other languages, Go Interfaces are implemented **implicitly** so we don't need something like an `implements` keyword. This means, that a type satisfies an interface automatically when it has _"all the methods"_ of the interface.
+Unlike other languages, Go Interfaces are implemented **implicitly**, so we don't need something like an `implements` keyword. This means that a type satisfies an interface automatically when it has _"all the methods"_ of the interface.
 
 ### Empty Interface
 
@@ -215,7 +215,7 @@ var x interface{}
 
 **But why do we need it?**
 
-Empty interfaces can be used to handle values of unknown type.
+Empty interfaces can be used to handle values of unknown types.
 
 Some examples are:
 
@@ -264,7 +264,7 @@ f, ok := i.(float64)
 fmt.Println(f, ok)
 ```
 
-But If the interface does not hold the type, the statement will trigger a panic.
+But if the interface does not hold the type, the statement will trigger a panic.
 
 ```go
 f = i.(float64)
@@ -299,7 +299,7 @@ default:
 }
 ```
 
-And if run this, we can verify that we have a `string` type
+And if we run this, we can verify that we have a `string` type
 
 ```bash
 $ go run main.go
@@ -406,4 +406,4 @@ func main() {
 
 With that, we covered interfaces in Go.
 
-It's a really powerful feature but remember _"Bigger the interface, the weaker the abstraction"_ - Rob Pike.
+It's a really powerful feature, but remember, _"Bigger the interface, the weaker the abstraction"_ - Rob Pike.

@@ -7,7 +7,7 @@ images: ['/static/courses/go/chapter-II/methods/banner.png']
 authors: ['default']
 ---
 
-Let's talk about methods or sometimes also known as function receivers.
+Let's talk about methods, or sometimes also known as function receivers.
 
 Technically, Go is not an object-oriented programming language. It doesn't have classes, objects, and inheritance.
 
@@ -30,7 +30,7 @@ type Car struct {
 }
 ```
 
-Now let us define a method like `IsLatest` which will tell us if a car was manufactured within the last 5 years
+Now, let us define a method like `IsLatest` which will tell us if a car was manufactured within the last 5 years
 
 ```go
 func (c Car) IsLatest() bool {
@@ -64,7 +64,7 @@ func (c Car) UpdateName(name string) {
 }
 ```
 
-Now let's run this
+Now, let's run this
 
 ```go
 func main() {
@@ -99,7 +99,7 @@ As expected, methods with pointer receivers can modify the value to which the re
 
 Let's also see some properties of the methods!
 
-- Go is smart enough to interpret our function call correctly and hence, pointer receiver method calls are just syntactic sugar provided by Go for convenience.
+- Go is smart enough to interpret our function call correctly, and hence, pointer receiver method calls are just syntactic sugar provided by Go for convenience.
 
 ```go
 (&c).UpdateName(...)
@@ -135,12 +135,12 @@ func main() {
 
 So the question is, why methods instead of functions?
 
-As always, there's no particular answer for this and in no way one is better than the other. Instead, they should be used appropriately when the situation arrives.
+As always, there's no particular answer for this, and in no way one is better than the other. Instead, they should be used appropriately when the situation arrives.
 
 One thing I can think of right now is that methods can help us avoid naming conflicts.
 
 Since a method is tied to a particular type, we can have the same method names for multiple receivers.
 
-But generally, It might just come down to preference? such as "method calls are much easier to read and understand than function calls" or the other way around.
+But generally, it might just come down to preference? Such as "method calls are much easier to read and understand than function calls" or the other way around.
 
-So this wraps up our discussion on methods, see you in the next tutorial
+So, this wraps up our discussion on methods, see you in the next tutorial

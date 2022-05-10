@@ -51,7 +51,7 @@ ecapskroW olleH
 
 This is great, but what if we want to modify the `stringutil` module that our code depends on?
 
-Until now we had to do it using the `replace` directive in the `go.mod` file, but now let's see how we can use workspaces here.
+Until now, we had to do it using the `replace` directive in the `go.mod` file, but now let's see how we can use workspaces here.
 
 So let's create our workspace in the `workspace` directory
 
@@ -80,7 +80,7 @@ go 1.18
 use ./hello
 ```
 
-Now let's download and modify the `stringutil` package and update the `Reverse` function implementation
+Now, let's download and modify the `stringutil` package and update the `Reverse` function implementation
 
 ```bash
 $ git clone https://go.googlesource.com/example
@@ -120,4 +120,4 @@ I can do whatever!! Hello Workspace
 
 _This is a very underrated feature from Go 1.18 but it is quite useful in certain circumstances._
 
-So this is pretty much it for workspaces in Go, I'll see you in the next tutorial.
+So, this is pretty much it for workspaces in Go, I'll see you in the next tutorial.

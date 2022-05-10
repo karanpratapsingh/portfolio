@@ -71,11 +71,11 @@ $ GOOS=windows GOARCH=amd64 go build -o app.exe
 
 - `CGO_ENABLED`
 
-This variable allows us to configure [CGO](https://go.dev/blog/cgo) which is a way in Go to call C code.
+This variable allows us to configure [CGO](https://go.dev/blog/cgo), which is a way in Go to call C code.
 
-This helps us to produce [statically linked binary](https://en.wikipedia.org/wiki/Static_build) that works without any external dependencies.
+This helps us to produce a [statically linked binary](https://en.wikipedia.org/wiki/Static_build) that works without any external dependencies.
 
-This is quite helpful for let's say when we want to run our go binaries in a docker container with minimum external dependencies.
+This is quite helpful for, let's say when we want to run our go binaries in a docker container with minimum external dependencies.
 
 Here's an example of how to use it
 

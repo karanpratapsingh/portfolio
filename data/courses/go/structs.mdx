@@ -9,7 +9,7 @@ authors: ['default']
 
 In this tutorial, we will learn about structs.
 
-So, A `struct` is a user-defined type that contains a collection of named fields. Basically, It is used to group related data together to form a single unit.
+So, a `struct` is a user-defined type that contains a collection of named fields. Basically, it is used to group related data together to form a single unit.
 
 If you're coming from an objected-oriented background, think of structs as lightweight classes which that support composition but not inheritance.
 
@@ -23,7 +23,7 @@ type Person struct {}
 
 We use the `type` keyword to introduce a new type, followed by the name and then the `struct` keyword to indicate that we're defining a struct
 
-Now let's give it some fields
+Now, let's give it some fields
 
 ```go
 type Person struct {
@@ -33,7 +33,7 @@ type Person struct {
 }
 ```
 
-And, If the fields have the same type, we can collapse them as well
+And, if the fields have the same type, we can collapse them as well
 
 ```go
 type Person struct {
@@ -207,7 +207,7 @@ func main() {
 
 ## Accessing fields
 
-let's clean up our example a bit and see how we can access individual fields
+Let's clean up our example a bit and see how we can access individual fields
 
 ```go
 func main() {
@@ -221,7 +221,7 @@ func main() {
 }
 ```
 
-We can also create pointer to structs as well
+We can also create a pointer to structs as well
 
 ```go
 func main() {
@@ -287,7 +287,7 @@ type Person struct {
 }
 ```
 
-So, the `zipCode` field won't be exported. Also, the same goes for the `Person` struct if we rename it as `person` it won't be exported as well.
+So, the `zipCode` field won't be exported. Also, the same goes for the `Person` struct, if we rename it as `person`, it won't be exported as well.
 
 ```go
 type person struct {
@@ -313,7 +313,7 @@ type SuperHero struct {
 }
 ```
 
-So our new struct will have all the properties of the original struct. And this should behave same as our normal struct.
+So, our new struct will have all the properties of the original struct. And it should behave the same as our normal struct.
 
 ```go
 func main() {
@@ -363,7 +363,7 @@ $ go run main.go
 {{Bruce Wayne 40} batman}
 ```
 
-Again there is no right or wrong here, but nonetheless, embedding comes in handy sometimes.
+Again, there is no right or wrong here, but nonetheless, embedding comes in handy sometimes.
 
 ## Struct tags
 
@@ -380,7 +380,7 @@ type Animal struct {
 
 You will often find tags in encoding packages, such as XML, JSON, YAML, ORMs, and Configuration management.
 
-Here's a tags example for JSON encoder.
+Here's a tags example for the JSON encoder.
 
 ```go
 type Animal struct {

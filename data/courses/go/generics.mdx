@@ -13,7 +13,7 @@ In this section, we will learn about Generics which is a much awaited feature th
 
 Generics means parameterized types. Put simply, generics allow programmers to write code where the type can be specified later because the type isn't immediately relevant
 
-Let's take an example to understand this better.
+Let's take a look at an example to understand this better.
 
 For our example, we have simple sum functions for different types such as `int`, `float64`, and `string`. Since method overriding is not allowed in Go we usually have to create new functions.
 
@@ -53,9 +53,9 @@ func fnName[T constraint]() {
 
 Here, `T` is our type parameter and **`constraint` will be the interface that allows any type **implementing the interface\*\*.
 
-I know I know, this is confusing. So let's start building our generic `sum` function.
+I know, I know, this is confusing. So, let's start building our generic `sum` function.
 
-Here we will use `T` as our type parameter with an empty `interface{}` as our constraint.
+Here, we will use `T` as our type parameter with an empty `interface{}` as our constraint.
 
 ```go
 func sum[T interface{}](a, b T) T {
@@ -63,7 +63,7 @@ func sum[T interface{}](a, b T) T {
 }
 ```
 
-Also, starting with Go 1.18 we can use `any` which is pretty much equivalent to the empty interface.
+Also, starting with Go 1.18 we can use `any`, which is pretty much equivalent to the empty interface.
 
 ```go
 func sum[T any](a, b T) T {
@@ -71,7 +71,7 @@ func sum[T any](a, b T) T {
 }
 ```
 
-With type parameters comes the need to pass type arguments, which can make our code verbose.
+With type parameters, comes the need to pass type arguments, which can make our code verbose.
 
 ```go
 sum[int](1, 2) // explicit type argument
@@ -79,7 +79,7 @@ sum[float64](4.0, 2.0)
 sum[string]("a", "b")
 ```
 
-Luckily Go 1.18 comes with **type inference** which helps us to write code that calls generic functions without explicit types.
+Luckily, Go 1.18 comes with **type inference** which helps us to write code that calls generic functions without explicit types.
 
 ```go
 sum(1, 2)
@@ -96,7 +96,7 @@ $ go run main.go
 a b
 ```
 
-Now let's update the `sum` function to add our variables.
+Now, let's update the `sum` function to add our variables.
 
 ```go
 func sum[T any](a, b T) T {
@@ -208,7 +208,7 @@ So, when to use generics? We can take the following use cases as an example
 - General purpose data structures like stack or linked list
 - To reduce code duplication
 
-Lastly, I will add that while generics are a great addition to the language They should be used sparingly.
+Lastly, I will add that while generics are a great addition to the language, they should be used sparingly.
 
 And, it is advised to start simple and only write generic code once we have written very similar code at least 2 or 3 times.
 

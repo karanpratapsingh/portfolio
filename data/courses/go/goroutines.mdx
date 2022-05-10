@@ -35,7 +35,7 @@ Go uses the idea of the fork-join model of concurrency behind goroutines. The fo
 
 ![fork-join](/static/courses/go/chapter-IV/goroutines/fork-join.png)
 
-Now let's write some code and create our own goroutine
+Now, let's write some code and create our own goroutine
 
 ```go
 package main
@@ -71,7 +71,7 @@ func main() {
 }
 ```
 
-And now if we run this
+And now, if we run this
 
 ```bash
 $ go run main.go
@@ -80,7 +80,7 @@ Hello World
 
 There we go, we can see our complete output now.
 
-**Okay so this works but it's not ideal. So how do we improve this?**
+**Okay, so this works but it's not ideal. So how do we improve this?**
 
 Well, the most tricky part about using goroutines is knowing when they will stop. It is important to know that goroutines run in the same address space, so access to shared memory must be synchronized.
 

@@ -27,7 +27,7 @@ Now that we understand what channels are, let's see how we can declare them
 var ch chan T
 ```
 
-Here, We prefix our type `T` which is the data type of the value we want to send and receive with the keyword `chan` which stands for a channel.
+Here, we prefix our type `T` which is the data type of the value we want to send and receive with the keyword `chan` which stands for a channel.
 
 Let's try printing the value of our channel `c` of type `string`.
 
@@ -46,7 +46,7 @@ $ go run main.go
 
 As we can see, the zero value of a channel is `nil` and if we try to send data over the channel our program will panic.
 
-So similar to slices we can initialize our channel using the built-in `make` function.
+So, similar to slices we can initialize our channel using the built-in `make` function.
 
 ```go
 func main() {
@@ -56,7 +56,7 @@ func main() {
 }
 ```
 
-And if we run this we can see our channel was initialized.
+And if we run this, we can see our channel was initialized.
 
 ```bash
 $ go run main.go
@@ -122,7 +122,7 @@ func main() {
 
 Because this channel is buffered, we can send these values into the channel without a corresponding concurrent receive.
 
-By default a channel is unbuffered and has a capacity of 0, hence we omit the second argument to the `make` function.
+By default, a channel is unbuffered and has a capacity of 0, hence, we omit the second argument to the `make` function.
 
 Next, we have directional channels.
 
@@ -144,7 +144,7 @@ Here, `chan<-` can only be used for sending values and will panic if we try to r
 
 ### Closing channels
 
-Also, just like any other resource, once we're done with our channel we need to close it. This can be achieved using the built-in `close` function.
+Also, just like any other resource, once we're done with our channel, we need to close it. This can be achieved using the built-in `close` function.
 
 Here, we can just pass our channel to the `close` function.
 

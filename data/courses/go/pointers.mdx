@@ -44,7 +44,7 @@ Hmm, this prints `nil`, but what is `nil`?
 
 So nil is a predeclared identifier in Go that represents zero value for pointers, interfaces, channels, maps, and slices.
 
-This is just like what we learned in the variables and datatypes section where we saw that uninitialized `int` has a zero value of 0, a `bool` has false, and so on.
+This is just like what we learned in the variables and datatypes section, where we saw that uninitialized `int` has a zero value of 0, a `bool` has false, and so on.
 
 Okay, now let's assign a value to the pointer
 
@@ -205,7 +205,7 @@ Also, it is important to know that pointers in Go do not support pointer arithme
 	p1 := p * 2 // Compiler Error: invalid operation
 ```
 
-However, we can compare two pointers of the same type for equality using `==` operator
+However, we can compare two pointers of the same type for equality using a `==` operator
 
 ```go
 p := &a
@@ -222,6 +222,6 @@ Well, there's no definite answer for that, and pointers are just another useful 
 
 And can be applied to tons of use cases.
 
-Lastly, I will add that If you are coming from a language with no notion of pointers, don't panic and try to form a mental model of how pointers work.
+Lastly, I will add that if you are coming from a language with no notion of pointers, don't panic and try to form a mental model of how pointers work.
 
-Perfect! we learned about pointers and their use cases, now let's move on to the next topic.
+Perfect! We learned about pointers and their use cases, now let's move on to the next topic.

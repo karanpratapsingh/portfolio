@@ -15,7 +15,7 @@ Mutex prevents other processes from entering a critical section of data while a 
 
 ### What's a critical section?
 
-So a critical section can be a piece of code that must not be run by multiple threads at once because the code contains shared resources.
+So, a critical section can be a piece of code that must not be run by multiple threads at once because the code contains shared resources.
 
 We can use Mutex using the following functions:
 
@@ -23,7 +23,7 @@ We can use Mutex using the following functions:
 - `Unlock()` function releases the lock.
 - `TryLock()` function tries to lock and reports whether it succeeded.
 
-Let's take an example, we will create a `Counter` struct and add an `Update` method which will update the internal value.
+Let's take a look at an example, we will create a `Counter` struct and add an `Update` method which will update the internal value.
 
 ```go
 package main
@@ -73,7 +73,7 @@ Result is 49
 
 That doesn't look accurate, seems like our value is always zero but we somehow got the correct answer.
 
-Well, this is because in our example multiple goroutines are updating the `value` variable. And as you must have guessed, this is not ideal.
+Well, this is because in our example, multiple goroutines are updating the `value` variable. And as you must have guessed, this is not ideal.
 
 This is the perfect use case for Mutex. So, let's start by using `sync.Mutex` and wrap our critical section in between `Lock()` and `Unlock()` functions.
 
@@ -127,7 +127,7 @@ Looks like we solved our issue and the output looks correct as well.
 
 ### The `sync` package
 
-So far we've discussed `sync.WaitGroup` and `sync.Mutex` but there are lots of other features available in the `sync` package that can come in handy while writing concurrent code.
+So far, we've discussed `sync.WaitGroup` and `sync.Mutex` but there are lots of other features available in the `sync` package that can come in handy while writing concurrent code.
 
 - `RWMutex` stands for Reader/Writer mutual exclusion and is essentially the same as `Mutex`, but it gives the lock to more than one reading process or just a writing process. It also provides us with more control over memory.
 - `Pool` is a collection of temporary objects which can be accessed and saved by many goroutines simultaneously.

@@ -9,7 +9,7 @@ authors: ['default']
 
 In this tutorial, we will learn about the `select` statement in Go
 
-The `select` statement blocks the code and waits for multiple channel opera­tions simul­taneously.
+The `select` statement blocks the code and waits for multiple channel operations simultaneously.
 
 A `select` blocks until one of its cases can run, then it executes that case. It chooses one at random if multiple are ready.
 
@@ -47,7 +47,7 @@ func main() {
 }
 ```
 
-Similar to `switch` , `select` also has a default case which runs if no other case is ready. This will help us send or receive without blocking.
+Similar to `switch` , `select` also has a default case that runs if no other case is ready. This will help us send or receive without blocking.
 
 ```go
 func main() {
