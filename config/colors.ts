@@ -16,6 +16,7 @@ export const Colors: Record<string, string> = {
   django: '#092E20',
 
   // Tools, Libs
+  webpack: '#8DD6F9',
   babel: '#F5DB53',
   redux: '#764ABC',
 
@@ -25,10 +26,10 @@ export const Colors: Record<string, string> = {
   ios: '#0C76E2',
 
   // Databases
+  arangodb: '#68A063',
   postgres: '#336791',
   mongo: '#4DB33D',
   redis: '#D82C20',
-  webpack: '#8DD6F9',
 
   // Cloud
   aws: '#FF9900',

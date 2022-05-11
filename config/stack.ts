@@ -26,6 +26,7 @@ export enum Stack {
   nats,
 
   // Databases
+  arangodb,
   redis,
   postgres,
   mongo,
@@ -35,15 +36,16 @@ export const WorkStack = [
   Stack.go,
   Stack.typescript,
   Stack.react,
-  Stack.reactnative,
-  Stack.graphql,
   Stack.kubernetes,
   Stack.docker,
   Stack.nats,
   Stack.aws,
   Stack.gcp,
   Stack.redis,
+  Stack.arangodb,
   Stack.postgres,
+  Stack.graphql,
+  Stack.reactnative,
 ];
 
 type StackInfoMap = {
@@ -107,6 +109,10 @@ export const StackInfo: Record<Stack, StackInfoMap> = {
   [Stack.nats]: {
     value: 'NATS',
     color: Colors.nats,
+  },
+  [Stack.arangodb]: {
+    value: 'ArangoDB',
+    color: Colors.arangodb,
   },
   [Stack.postgres]: {
     value: 'Postgres',

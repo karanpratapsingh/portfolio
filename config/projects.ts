@@ -81,6 +81,7 @@ export const projects: Project[] = [
       Stack.node,
       Stack.graphql,
       Stack.aws,
+      Stack.arangodb,
     ],
     screenshots: [],
     deployment: {
