@@ -51,9 +51,9 @@ Now, let's get familiar with some basic concurrency concepts
 
 ### Data Race
 
-A data race occurs when processes have to access the same variable concurrently.
+A data race occurs when processes have to access the same resource concurrently.
 
-_For example, one process reads while another simultaneously writes to the exact same variable._
+_For example, one process reads while another simultaneously writes to the exact same resource._
 
 ### Race Conditions
 
@@ -98,6 +98,10 @@ A process is waiting for the resource held by the second process, which is waiti
 _In the diagram below, Process 1 is allocated Resource2 and it is requesting Resource 1. Similarly, Process 2 is allocated Resource 1 and it is requesting Resource 2. This forms a circular wait loop._
 
 ![circular-wait](/static/courses/go/chapter-IV/concurrency/circular-wait.png)
+
+### Livelocks
+
+Livelocks are processes that are actively performing concurrent operations, but these operations do nothing to move the state of the program forward.
 
 ### Starvation
 
