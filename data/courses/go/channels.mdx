@@ -120,7 +120,7 @@ func main() {
 }
 ```
 
-Because this channel is buffered, we can send these values into the channel without a corresponding concurrent receive.
+Because this channel is buffered, we can send these values into the channel without a corresponding concurrent receive. This means _sends_ to a buffered channel block only when the buffer is full and _receives_ block when the buffer is empty.
 
 By default, a channel is unbuffered and has a capacity of 0, hence, we omit the second argument to the `make` function.
 

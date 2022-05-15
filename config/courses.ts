@@ -87,13 +87,20 @@ export const courses: Course[] = [
           { name: 'Goroutines', slug: 'goroutines' },
           { name: 'Channels', slug: 'channels' },
           { name: 'Select', slug: 'select' },
-          { name: 'WaitGroups', slug: 'waitgroups' },
-          { name: 'Mutexes', slug: 'mutexes' },
+          { name: 'Sync Package', slug: 'sync-package' },
+          {
+            name: 'Advanced Concurrency Patterns',
+            slug: 'advanced-concurrency-patterns',
+          },
+          { name: 'Context', slug: 'context' },
         ],
       },
       {
         name: 'Appendix',
-        content: [{ name: 'Next Steps', slug: 'next-steps' }],
+        content: [
+          { name: 'Next Steps', slug: 'next-steps' },
+          { name: 'References', slug: 'references' },
+        ],
       },
     ],
   },
