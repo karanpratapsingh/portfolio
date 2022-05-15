@@ -88,7 +88,10 @@ export const courses: Course[] = [
           { name: 'Channels', slug: 'channels' },
           { name: 'Select', slug: 'select' },
           { name: 'Sync Package', slug: 'sync-package' },
-          { name: 'Concurrency Patterns', slug: 'concurrency-patterns' },
+          {
+            name: 'Advanced Concurrency Patterns',
+            slug: 'advanced-concurrency-patterns',
+          },
           { name: 'Context', slug: 'context' },
         ],
       },
