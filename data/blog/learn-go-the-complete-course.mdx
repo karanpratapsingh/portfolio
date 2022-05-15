@@ -306,6 +306,16 @@ We can also declare constants with the `const` keyword. Which as the name sugges
 const constant = "This is a constant"
 ```
 
+It is also important to note that, only constants can be assigned to other constants.
+
+```go
+const a = 10
+const b = a // ✅ Works
+
+var a = 10
+const b = a // ❌ a (variable of type int) is not constant (InvalidConstInit)
+```
+
 ## Data Types
 
 Perfect! Now let's look at some basic data types available in Go. Starting with string.
