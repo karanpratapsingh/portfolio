@@ -22,7 +22,9 @@ export default function CourseContent(
     const { name, description, content } = item;
 
     // As title does not support React.ReactNode
-    const title: any = <span className='font-bold'>{name}</span>;
+    const title: any = (
+      <span className='font-bold dark:text-white'>{name}</span>
+    );
 
     return (
       <Collapse
