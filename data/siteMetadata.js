@@ -1,15 +1,16 @@
 const siteMetadata = {
   title: 'Karan Pratap Singh',
   author: 'Karan Pratap Singh',
-  headerTitle: 'Portfolio',
-  description: 'Personal portfolio site of Karan Pratap Singh',
+  headerTitle: 'Karan Pratap Singh',
+  description:
+    'Software engineer who values learning and growing with people, teams, and technologies.',
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: 'https://karanpratapsingh.com',
   siteRepo: 'https://github.com/karanpratapsingh/portfolio',
   siteLogo: '/static/images/logo.png',
   image: '/static/avatar.jpg',
-  socialBanner: '/static/images/twitter-card.png',
+  socialBanner: '/static/banner.png',
   email: 'contact@karanpratapsingh.com',
   github: 'https://github.com/karanpratapsingh',
   twitter: 'https://twitter.com/karan_6864',
