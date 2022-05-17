@@ -5,8 +5,8 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import dynamic from 'next/dynamic';
 import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
 
-// TODO: Share functionality
-// TODO: Table of content list (on right)
+// TODO: Direct share functionality.
+// TODO: Switch geist-ui with something simple.
 
 // @ts-ignore
 export const getStaticProps: GetStaticProps<{

@@ -5,11 +5,13 @@ import ScrollTopAndComment from '@/components/ScrollTopAndComment';
 import SectionContainer from '@/components/SectionContainer';
 import { BlogSEO } from '@/components/SEO';
 import Tag from '@/components/Tag';
+import TOCInline from '@/components/TOCInline';
 import siteMetadata from '@/data/siteMetadata';
 import Image from 'next/image';
 import { ReactNode } from 'react';
 import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
 import { PostFrontMatter } from 'types/PostFrontMatter';
+import { Toc } from 'types/Toc';
 
 const editUrl = fileName =>
   `${siteMetadata.siteRepo}/blob/master/data/blog/${fileName}`;
@@ -30,6 +32,7 @@ interface Props {
   authorDetails: AuthorFrontMatter[];
   next?: { slug: string; title: string };
   prev?: { slug: string; title: string };
+  toc?: Toc;
   children: ReactNode;
 }
 
@@ -38,6 +41,7 @@ export default function PostLayout({
   authorDetails,
   next,
   prev,
+  toc,
   children,
 }: Props) {
   const { slug, fileName, date, title, tags, readingTime, images } =
@@ -134,6 +138,7 @@ export default function PostLayout({
                 />
               )}
               <div className='prose max-w-none !border-t-0 pt-6 pb-8 dark:prose-dark'>
+                <TOCInline toc={toc} asDisclosure />
                 {children}
               </div>
               <div className='pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300'>

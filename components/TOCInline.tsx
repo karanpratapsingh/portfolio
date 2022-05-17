@@ -1,3 +1,4 @@
+import { Collapse } from '@geist-ui/core';
 import { Toc } from 'types/Toc';
 
 interface TOCInlineProps {
@@ -50,21 +51,24 @@ const TOCInline = ({
           key={heading.value}
           className={`${heading.depth >= indentDepth && 'ml-6'}`}
         >
-          <a href={heading.url}>{heading.value}</a>
+          <a className='!no-underline' href={heading.url}>
+            {heading.value}
+          </a>
         </li>
       ))}
     </ul>
   );
 
+  const title: any = (
+    <span className='font-bold dark:text-white'>Table of Contents</span>
+  );
+
   return (
     <>
       {asDisclosure ? (
-        <details open>
-          <summary className='ml-6 pt-2 pb-2 text-xl font-bold'>
-            Table of Contents
-          </summary>
-          <div className='ml-6'>{tocList}</div>
-        </details>
+        <Collapse className='!border-0 !pt-0' title={title}>
+          <div className='ml-4 !-mt-4'>{tocList}</div>
+        </Collapse>
       ) : (
         tocList
       )}

@@ -22,7 +22,9 @@ export default function CourseContent(
     const { name, description, content } = item;
 
     // As title does not support React.ReactNode
-    const title: any = <span className='font-bold'>{name}</span>;
+    const title: any = (
+      <span className='font-bold dark:text-white'>{name}</span>
+    );
 
     return (
       <Collapse
@@ -34,7 +36,7 @@ export default function CourseContent(
         <Conditional condition={!!content}>
           {content?.map(({ name, slug }) => (
             <Link key={name} href={getSlug(course.slug, slug)}>
-              <h3 className='my-1 text-lg text-gray-500 dark:text-gray-400'>
+              <h3 className='my-1 text-lg text-gray-400 dark:text-gray-400'>
                 {name}
               </h3>
             </Link>
