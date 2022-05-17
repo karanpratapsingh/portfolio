@@ -3,7 +3,7 @@ const siteMetadata = {
   author: 'Karan Pratap Singh',
   headerTitle: 'Karan Pratap Singh',
   description:
-    'Software engineer who values learning and growing with people, teams, and technologies.',
+    'A software engineer who values learning and growing with people, teams, and technologies.',
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: 'https://karanpratapsingh.com',
