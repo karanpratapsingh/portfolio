@@ -28,3 +28,7 @@
 .content {
   @apply !pb-0;
 }
+
+.collapse .view .title {
+  @apply dark:text-white;
+}
