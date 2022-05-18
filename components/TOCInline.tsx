@@ -63,17 +63,12 @@ const TOCInline = ({
     <span className='font-bold dark:text-white'>Table of Contents</span>
   );
 
-  const visible = toc.length <= 12;
   const renderTOC = toc.length >= 1;
 
   return (
     <>
       {asDisclosure && renderTOC ? (
-        <Collapse
-          initialVisible={visible}
-          className='!border-0 !pt-0'
-          title={title}
-        >
+        <Collapse className='!border-0 !pt-0' title={title}>
           <div className='ml-4 !-mt-4'>{tocList}</div>
         </Collapse>
       ) : (
