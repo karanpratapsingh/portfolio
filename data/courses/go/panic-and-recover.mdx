@@ -11,6 +11,8 @@ So earlier, we learned that the idiomatic way of handling abnormal conditions in
 
 In those cases, we can use the built-in `panic` function.
 
+## Panic
+
 ```go
 func panic(interface{})
 ```
@@ -51,6 +53,8 @@ As expected, our program printed the panic message, followed by the stack trace,
 
 So, the question is, what to do when an unexpected panic happens?
 
+## Recover
+
 Well, it is possible to regain control of a panicking program using the built-in `recover` function, along with the `defer` keyword.
 
 ```go
@@ -87,9 +91,11 @@ Recovered: Woah
 
 As we can see, our panic was recovered and now our program can continue execution.
 
-Lastly, I will mention that `panic` and `recover` can be considered similar to the `try/catch` idiom in other languages. One important factor is that we should avoid panic and recover and use errors when possible.
+Lastly, I will mention that `panic` and `recover` can be considered similar to the `try/catch` idiom in other languages. But one important factor is that we should avoid panic and recover and use [errors](/courses/go/error-handling) when possible.
 
 If so, then this brings us to the question, when should we use `panic`?
+
+## Use Cases
 
 There are two valid use cases for `panic`:
 

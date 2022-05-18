@@ -7,9 +7,9 @@ images: ['/static/courses/go/chapter-I/functions/banner.png']
 authors: ['default']
 ---
 
-In this tutorial, we will discuss how we work with functions in Go. So, let's start with a simple function declaration
+In this tutorial, we will discuss how we work with functions in Go. So, let's start with a simple function declaration.
 
-### Simple declaration
+## Simple declaration
 
 ```go
 func myFunction() {}
@@ -47,7 +47,7 @@ We can also do a short hand declaration if the consecutive parameters have the s
 func myNextFunction(p1, p2 string) {}
 ```
 
-### Returning the value
+## Returning the value
 
 Now let's also return a value
 
@@ -96,7 +96,7 @@ Notice how we added a `return` statement without any arguments, this is also kno
 
 I will say that, although this feature is interesting, please use it with care as this might reduce readability for larger functions
 
-### Functions as values
+## Functions as values
 
 Next, let's talk about functions as values, in Go functions are first class and we can use them as values. So, let's clean up our function and try it out!
 
@@ -122,7 +122,7 @@ func myFunction() {
 
 *Notice how we execute it using the parenth*es*is at the end*
 
-### Closures
+## Closures
 
 Why stop there? let's also return a function and hence create something called a closure. A simple definition can be that a closure is a function value that references variables from outside its body.
 
@@ -151,7 +151,7 @@ fmt.Println(add(10))
 
 As we can see, we get a result of 15 as `sum` variable is _bound_ to the function. This is a very powerful concept and definitely a must know.
 
-### Variadic Functions
+## Variadic Functions
 
 Now let's look at variadic functions, which are functions that can take zero or multiple arguments using the `...` ellipses operator.
 
@@ -178,7 +178,68 @@ Pretty cool huh? Also, don't worry about the `range` keyword, we will discuss it
 
 _**Fun fact**: `fmt.Println` is a variadic function, that's how we were able to pass multiple values to it._
 
-### defer
+## Init
+
+In Go, `init` is a special lifecycle function which is executed prior to the `main` function.
+
+Similar to `main`, the `init` function does not take any arguments nor returns any value. Let's see how it works with an example.
+
+```go
+package main
+
+import "fmt"
+
+func init() {
+	fmt.Println("Before main!")
+}
+
+func main() {
+	fmt.Println("Running main")
+}
+```
+
+As expected, the `init` function was executed before the `main` function.
+
+```bash
+$ go run main.go
+Before main!
+Running main
+```
+
+Unlike `main`, there can be more than one `init` function in a single or multiple files.
+
+For multiple `init` in a single file, their processing is done in the order of their declaration, while `init` declared in multiple files are processed according to the lexicographic filename order.
+
+```go
+package main
+
+import "fmt"
+
+func init() {
+	fmt.Println("Before main!")
+}
+
+func init() {
+	fmt.Println("Hello again?")
+}
+
+func main() {
+	fmt.Println("Running main")
+}
+```
+
+And if we run this, we'll see the `init` functions were executed in order they were declared.
+
+```bash
+$ go run main.go
+Before main!
+Hello again?
+Running main
+```
+
+The `init` function is optional and is particularly used for any global setup which might be essential for our program, such as establishing a database connection, fetching configuration files, setting up environment variables, etc.
+
+## Defer
 
 Lastly, let's discuss the `defer` keyword, which lets us postpones the execution of a function until the surrounding function returns.
 

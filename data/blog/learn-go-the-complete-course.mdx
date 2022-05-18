@@ -167,7 +167,9 @@ func main() {
 }
 ```
 
-If you're wondering, `fmt` is part of the Go standard library which is a set of core packages provided by the language
+_If you're wondering, `fmt` is part of the Go standard library which is a set of core packages provided by the language._
+
+## Structure of a Go program
 
 Now, let's quickly breakdown what we did here, or rather the structure of a Go program
 
@@ -829,9 +831,9 @@ Well, this is pretty much it on flow control, I'll see you in the next one!
 
 # Functions
 
-In this tutorial, we will discuss how we work with functions in Go. So, let's start with a simple function declaration
+In this tutorial, we will discuss how we work with functions in Go. So, let's start with a simple function declaration.
 
-### Simple declaration
+## Simple declaration
 
 ```go
 func myFunction() {}
@@ -869,7 +871,7 @@ We can also do a short hand declaration if the consecutive parameters have the s
 func myNextFunction(p1, p2 string) {}
 ```
 
-### Returning the value
+## Returning the value
 
 Now let's also return a value
 
@@ -918,7 +920,7 @@ Notice how we added a `return` statement without any arguments, this is also kno
 
 I will say that, although this feature is interesting, please use it with care as this might reduce readability for larger functions
 
-### Functions as values
+## Functions as values
 
 Next, let's talk about functions as values, in Go functions are first class and we can use them as values. So, let's clean up our function and try it out!
 
@@ -944,7 +946,7 @@ func myFunction() {
 
 *Notice how we execute it using the parenth*es*is at the end*
 
-### Closures
+## Closures
 
 Why stop there? let's also return a function and hence create something called a closure. A simple definition can be that a closure is a function value that references variables from outside its body.
 
@@ -973,7 +975,7 @@ fmt.Println(add(10))
 
 As we can see, we get a result of 15 as `sum` variable is _bound_ to the function. This is a very powerful concept and definitely a must know.
 
-### Variadic Functions
+## Variadic Functions
 
 Now let's look at variadic functions, which are functions that can take zero or multiple arguments using the `...` ellipses operator.
 
@@ -1000,7 +1002,68 @@ Pretty cool huh? Also, don't worry about the `range` keyword, we will discuss it
 
 _**Fun fact**: `fmt.Println` is a variadic function, that's how we were able to pass multiple values to it._
 
-### defer
+## Init
+
+In Go, `init` is a special lifecycle function which is executed prior to the `main` function.
+
+Similar to `main`, the `init` function does not take any arguments nor returns any value. Let's see how it works with an example.
+
+```go
+package main
+
+import "fmt"
+
+func init() {
+	fmt.Println("Before main!")
+}
+
+func main() {
+	fmt.Println("Running main")
+}
+```
+
+As expected, the `init` function was executed before the `main` function.
+
+```bash
+$ go run main.go
+Before main!
+Running main
+```
+
+Unlike `main`, there can be more than one `init` function in a single or multiple files.
+
+For multiple `init` in a single file, their processing is done in the order of their declaration, while `init` declared in multiple files are processed according to the lexicographic filename order.
+
+```go
+package main
+
+import "fmt"
+
+func init() {
+	fmt.Println("Before main!")
+}
+
+func init() {
+	fmt.Println("Hello again?")
+}
+
+func main() {
+	fmt.Println("Running main")
+}
+```
+
+And if we run this, we'll see the `init` functions were executed in order they were declared.
+
+```bash
+$ go run main.go
+Before main!
+Hello again?
+Running main
+```
+
+The `init` function is optional and is particularly used for any global setup which might be essential for our program, such as establishing a database connection, fetching configuration files, setting up environment variables, etc.
+
+## Defer
 
 Lastly, let's discuss the `defer` keyword, which lets us postpones the execution of a function until the surrounding function returns.
 
@@ -1035,7 +1098,7 @@ So, Defer is incredibly useful and is commonly used for doing cleanup or error h
 
 Functions can also be used with generics but we will discuss them later in the course.
 
-So this is it for functions in Go!
+So this is it for functions in Go.
 
 # Modules
 
@@ -2686,7 +2749,7 @@ The thing to note here is we can create a slice from other slices too and not ju
 
 We can iterate over a slice in the same way you iterate over an array, by using the for loop with either `len` function or `range` keyword.
 
-### functions
+### Functions
 
 So now, let's talk about built-in slice functions provided in Go.
 
@@ -3779,6 +3842,8 @@ So earlier, we learned that the idiomatic way of handling abnormal conditions in
 
 In those cases, we can use the built-in `panic` function.
 
+## Panic
+
 ```go
 func panic(interface{})
 ```
@@ -3819,6 +3884,8 @@ As expected, our program printed the panic message, followed by the stack trace,
 
 So, the question is, what to do when an unexpected panic happens?
 
+## Recover
+
 Well, it is possible to regain control of a panicking program using the built-in `recover` function, along with the `defer` keyword.
 
 ```go
@@ -3855,9 +3922,11 @@ Recovered: Woah
 
 As we can see, our panic was recovered and now our program can continue execution.
 
-Lastly, I will mention that `panic` and `recover` can be considered similar to the `try/catch` idiom in other languages. One important factor is that we should avoid panic and recover and use errors when possible.
+Lastly, I will mention that `panic` and `recover` can be considered similar to the `try/catch` idiom in other languages. But one important factor is that we should avoid panic and recover and use [errors](/courses/go/error-handling) when possible.
 
 If so, then this brings us to the question, when should we use `panic`?
+
+## Use Cases
 
 There are two valid use cases for `panic`:
 
@@ -3873,7 +3942,7 @@ This is the most common situation.
 
 For example, dereferencing a pointer when the value is `nil` will cause a panic.
 
-I hope this tutorial helped you understand how to use `panic` and `recover` in Go. I'll see you in the next one.
+I hope this tutorial helped you understand how to use `panic` and `recover` in Go.
 
 # Testing
 
