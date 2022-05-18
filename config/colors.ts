@@ -1,4 +1,4 @@
-export const Colors: Record<string, string> = {
+export const Colors = {
   // Languages
   go: '#00ADD8',
   python: '#4B8BBE',
@@ -47,6 +47,8 @@ export const Colors: Record<string, string> = {
   youtube: '#FF0000',
   email: '#D44638',
   buymeacoffee: '#FFDD00',
+  reddit: '#ff4500',
+  facebook: '#1877f2',
 
   // Misc.
   git: '#F1502F',
