@@ -4,6 +4,7 @@ import PageTitle from '@/components/PageTitle';
 import ScrollTopAndComment from '@/components/ScrollTopAndComment';
 import SectionContainer from '@/components/SectionContainer';
 import { BlogSEO } from '@/components/SEO';
+import Share from '@/components/Share';
 import TOCInline from '@/components/TOCInline';
 import siteMetadata from '@/data/siteMetadata';
 import Image from 'next/image';
@@ -40,13 +41,11 @@ export default function CourseLayout({
 
   const banner = images?.[0];
 
+  const url = `${siteMetadata.siteUrl}/courses/${slug}`;
+
   return (
     <SectionContainer>
-      <BlogSEO
-        url={`${siteMetadata.siteUrl}/courses/${slug}`}
-        authorDetails={authorDetails}
-        {...frontMatter}
-      />
+      <BlogSEO url={url} authorDetails={authorDetails} {...frontMatter} />
       <ScrollTopAndComment />
       <article className='fade-in'>
         <div className='xl:divide-y xl:divide-gray-100 xl:dark:divide-gray-800'>
@@ -58,6 +57,7 @@ export default function CourseLayout({
               <p className='text-base leading-6 text-gray-500 dark:text-gray-400'>
                 {readingTime?.text}
               </p>
+              <Share title={title} url={url} />
             </div>
           </header>
           <div

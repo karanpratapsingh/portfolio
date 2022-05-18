@@ -37,6 +37,7 @@
     "react-icons": "^4.3.1",
     "react-indiana-drag-scroll": "^2.1.0",
     "react-rough-notation": "^1.0.2",
+    "react-share": "4.4.0",
     "reading-time": "1.3.0",
     "rehype-autolink-headings": "^6.1.0",
     "rehype-citation": "^0.2.0",
