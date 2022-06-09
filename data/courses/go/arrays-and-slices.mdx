@@ -405,7 +405,7 @@ Let's see how we can use it
 ```go
 func main() {
 	s1 := []string{"a", "b", "c", "d"}
-	s2 := make([]string, 0)
+	s2 := make([]string, len(s1))
 
 	e := copy(s2, s1)
 
