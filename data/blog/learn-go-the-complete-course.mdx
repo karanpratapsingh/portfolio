@@ -20,7 +20,7 @@ In a way, they wanted to combine the best parts of Python and C++ so that they c
 
 # Why learn Go?
 
-Before we start this course, let us talk about why we should learn Go
+Before we start this course, let us talk about why we should learn Go.
 
 ### 1. Easy to learn
 
@@ -52,9 +52,9 @@ Go is growing fast and is being adopted by companies of any size. and with that,
 
 I hope this made you excited about Go. Let's start this course.
 
-In this tutorial, we will install Go and setup our code editor
-
 # Installation and Setup
+
+In this tutorial, we will install Go and setup our code editor.
 
 ## Download
 
@@ -147,7 +147,7 @@ This is it for the installation and setup of Go, let's start the course and writ
 
 # Hello World
 
-Let's write our first hello world program, we can start by initializing a module. For that, we can use the `go mod` command
+Let's write our first hello world program, we can start by initializing a module. For that, we can use the `go mod` command.
 
 ```bash
 $ go mod init example
@@ -171,15 +171,15 @@ _If you're wondering, `fmt` is part of the Go standard library which is a set of
 
 ## Structure of a Go program
 
-Now, let's quickly breakdown what we did here, or rather the structure of a Go program
+Now, let's quickly breakdown what we did here, or rather the structure of a Go program.
 
-First, we defined a package such as `main`
+First, we defined a package such as `main`.
 
 ```go
 package main
 ```
 
-Then, we have some imports
+Then, we have some imports.
 
 ```go
 import "fmt"
@@ -195,7 +195,7 @@ func main() {
 
 Remember, the goal here is to keep a mental note, and later in the course, we'll learn about `functions`, `imports`, and other things in detail!
 
-Finally, to run our code, we can simply use `go run` command
+Finally, to run our code, we can simply use `go run` command.
 
 ```bash
 $ go run main.go
@@ -204,9 +204,7 @@ Hello World!
 
 Congratulations, you just wrote your first Go program!
 
-With that let's move on to the next topic
-
-# Variables and Data types
+# Variables and Data Types
 
 In this tutorial, we will learn about variables. We will also learn about the different data types that Go provides us.
 
@@ -214,19 +212,19 @@ In this tutorial, we will learn about variables. We will also learn about the di
 
 Let's start with declaring a variable.
 
-This is also known as declaration without initialization
+This is also known as declaration without initialization:
 
 ```go
 var foo string
 ```
 
-Declaration with initialization
+Declaration with initialization:
 
 ```go
 var foo string = "Go is awesome"
 ```
 
-Multiple declarations
+Multiple declarations:
 
 ```go
 var foo, bar string = "Hello", "World"
@@ -237,13 +235,13 @@ var (
 )
 ```
 
-Type is omitted but will be inferred
+Type is omitted but will be inferred:
 
 ```go
 var foo = "What's my type?"
 ```
 
-Shorthand, here we omit `var` keyword and type is always implicit. This is how we will see variables being declared most of the time. We also use the `:=` for declaration plus assignment
+Shorthand declaration, here we omit `var` keyword and type is always implicit. This is how we will see variables being declared most of the time. We also use the `:=` for declaration plus assignment.
 
 ```go
 foo := "Shorthand!"
@@ -389,9 +387,10 @@ var c1 complex128 = complex(10, 1)
 var c2 complex64 = 12 + 4i
 ```
 
-### Zero Values
+## Zero Values
 
-Now let's discuss zero values. So in Go any variable declared without an explicit initial value are given their _zero value_. For example, let's declare some variables and see
+Now let's discuss zero values. So in Go any variable declared without an explicit initial value are given their _zero value_.
+For example, let's declare some variables and see:
 
 ```go
 var i int
@@ -407,11 +406,11 @@ $ go run main.go
 0 0 false ""
 ```
 
-So, as we can see `int` and `float` are assigned as 0, `bool` as false, and `string` as an empty string. This is quite different from how other languages do it. For example, most languages initialize unassigned variables as null or undefined
+So, as we can see `int` and `float` are assigned as 0, `bool` as false, and `string` as an empty string. This is quite different from how other languages do it. For example, most languages initialize unassigned variables as null or undefined.
 
-This is great, but what are those percent symbols in our `Printf` function? As you've already guessed, they are used for formatting and we will learn about them in the next tutorial.
+This is great, but what are those percent symbols in our `Printf` function? As you've already guessed, they are used for formatting and we will learn about them later.
 
-### Type Conversion
+## Type Conversion
 
 Moving on, now that we have seen how data types work, let's see how to do type conversion.
 
@@ -432,11 +431,9 @@ And as we can see, it prints the type as `float64` and `uint`.
 
 _Note that this is different from parsing_
 
-### Alias types
+## Alias types
 
-Alias types were introduced in Go 1.9
-
-They allow developers to provide an alternate name for an existing type and use it interchangeably with the underlying type.
+Alias types were introduced in Go 1.9. They allow developers to provide an alternate name for an existing type and use it interchangeably with the underlying type.
 
 ```go
 package main
@@ -452,7 +449,7 @@ func main() {
 }
 ```
 
-### Defined types
+## Defined types
 
 Lastly, we have defined types that unlike alias types do not use an equals sign.
 
@@ -503,9 +500,7 @@ func main() {
 }
 ```
 
-As we can see, we cannot use the defined type interchangeably with the underlying type, unlike _alias types._
-
-Well, this is pretty much it for variables and data types in Go. I'll see you in the next one.
+As we can see, we cannot use the defined type interchangeably with the underlying type, unlike _alias types_.
 
 # String Formatting
 
@@ -526,9 +521,9 @@ $ go run main.go
 Whatisyourname?Mynameisgolang
 ```
 
-As we can see, `Print` does not format anything, it simply takes a string and prints it
+As we can see, `Print` does not format anything, it simply takes a string and prints it.
 
-Next, we have `Println` which is the same as `Print` but it adds a new line at the end and also inserts space between the arguments
+Next, we have `Println` which is the same as `Print` but it adds a new line at the end and also inserts space between the arguments.
 
 ```go
 ...
@@ -548,7 +543,7 @@ That's much better!
 
 Next, we have `Printf` also known as _"Print Formatter"_, which allows us to format numbers, strings, booleans, and much more.
 
-Let's look at an example
+Let's look at an example.
 
 ```go
 ...
@@ -569,9 +564,9 @@ As we can see that `%s` was substituted with our `name` variable.
 
 But the question is what is `%s` and what does it mean?
 
-So, these are called _annotation verbs_ and they tell the function how to format the arguments. We can control things like width, types, and precision with these and there are lots of them. Here's a [cheatsheet](https://pkg.go.dev/fmt)
+So, these are called _annotation verbs_ and they tell the function how to format the arguments. We can control things like width, types, and precision with these and there are lots of them. Here's a [cheatsheet](https://pkg.go.dev/fmt).
 
-Now, let's quickly look at some more examples. Here we will try to calculate a percentage and print it to the console
+Now, let's quickly look at some more examples. Here we will try to calculate a percentage and print it to the console.
 
 ```go
 ...
@@ -587,7 +582,7 @@ $ go run main.go
 
 Let's say we want just `58.18` which is 2 points precision, we can do that as well by using `.2f`
 
-Also, to add an actual percent sign, we will need to _escape it._
+Also, to add an actual percent sign, we will need to _escape it_.
 
 ```go
 ...
@@ -603,7 +598,7 @@ $ go run main.go
 
 This brings us to `Sprint`, `Sprintln`, and `Sprintf`. These are basically the same as the print functions, the only difference being they return the string instead of printing it.
 
-Let's take a look at an example
+Let's take a look at an example.
 
 ```go
 ...
@@ -619,7 +614,7 @@ hex:a bin:1010
 
 So, as we can see `Sprintf` formats our integer as hex or binary and returns it as a string.
 
-Lastly, we have multiline string literals, which can be used like this
+Lastly, we have multiline string literals, which can be used like this.
 
 ```go
 ...
@@ -634,15 +629,15 @@ fmt.Println(msg)
 
 Great! But this is just the tip of the iceberg...so make sure to checkout the go doc for `fmt` package.
 
-For those who are coming from C/C++ background, this should feel natural; but if you're coming from, let's say Python or JavaScript, this might be a little strange at first. But it is very powerful and you'll see this functionality used quite extensively.
+For those who are coming from C/C++ background, this should feel natural, but if you're coming from, let's say Python or JavaScript, this might be a little strange at first. But it is very powerful and you'll see this functionality used quite extensively.
 
 # Flow Control
 
-Let's talk about flow control, starting with if/else.
+et's talk about flow control, starting with if/else.
 
-## if/else
+## If/Else
 
-This works pretty much the same as you expect but the expression doesn't need to be surrounded by parentheses `()`
+This works pretty much the same as you expect but the expression doesn't need to be surrounded by parentheses `()`.
 
 ```go
 func main() {
@@ -665,7 +660,7 @@ x is gt 5
 
 ### Compact if
 
-We can also compact our if statements
+We can also compact our if statements.
 
 ```go
 func main() {
@@ -677,13 +672,14 @@ func main() {
 
 _Note: This pattern is quite common_
 
-## switch
+## Switch
 
 Next, we have `switch` statement, which is often a shorter way to write conditional logic.
 
 In Go, the switch case only runs the first case whose value is equal to the condition expression and not all the cases that follow. Hence, unlike other languages, `break` statement is automatically added at the end of each case.
 
-This means that it evaluates cases from top to bottom, stopping when a case succeeds. Let's take a look at an example
+This means that it evaluates cases from top to bottom, stopping when a case succeeds.
+Let's take a look at an example:
 
 ```go
 func main() {
@@ -705,7 +701,7 @@ $ go run main.go
 time to work!
 ```
 
-Switch also supports shorthand declaration like this
+Switch also supports shorthand declaration like this.
 
 ```go
 	switch day := "monday"; day {
@@ -732,7 +728,7 @@ We can also use the `fallthrough` keyword to transfer control to the next case e
 	}
 ```
 
-And if we run this, we'll see that after the first case matches the switch statement continues to the next case because of the `fallthrough` keyword
+And if we run this, we'll see that after the first case matches the switch statement continues to the next case because of the `fallthrough` keyword.
 
 ```bash
 $ go run main.go
@@ -740,7 +736,7 @@ time to work!
 let's party
 ```
 
-We can also use it without any condition, which is the same as `switch true`
+We can also use it without any condition, which is the same as `switch true`.
 
 ```go
 x := 10
@@ -761,7 +757,9 @@ So in Go, we only have one type of loop which is the `for` loop.
 
 But it's incredibly versatile. Same as if statement, for loop, doesn't need any parenthesis `()` unlike other languages.
 
-Let's start with the basic for loop.
+### For loop
+
+Let's start with the basic `for` loop.
 
 ```go
 func main() {
@@ -773,13 +771,13 @@ func main() {
 
 The basic `for` loop has three components separated by semicolons:
 
-- **_init statement_**: which is executed before the first iteration
-- **_condition expression_**: which is evaluated before every iteration
-- **_post statement_**: which is executed at the end of every iteration
+- **_init statement_**: which is executed before the first iteration.
+- **_condition expression_**: which is evaluated before every iteration.
+- **_post statement_**: which is executed at the end of every iteration.
 
 **Break and continue**
 
-As expected, Go also supports both `break` and `continue` statements for loop control. Let's try a quick example
+As expected, Go also supports both `break` and `continue` statements for loop control. Let's try a quick example:
 
 ```go
 func main() {
@@ -817,7 +815,7 @@ _Note: we can also remove the additional semi-colons to make it a little cleaner
 
 ### Forever loop
 
-Lastly, If we omit the loop condition, it loops forever, so an infinite loop can be compactly expressed. This is also known as the forever loop
+Lastly, If we omit the loop condition, it loops forever, so an infinite loop can be compactly expressed. This is also known as the forever loop.
 
 ```go
 func main() {
@@ -826,8 +824,6 @@ func main() {
 	}
 }
 ```
-
-Well, this is pretty much it on flow control, I'll see you in the next one!
 
 # Functions
 
@@ -839,7 +835,7 @@ In this tutorial, we will discuss how we work with functions in Go. So, let's st
 func myFunction() {}
 ```
 
-And we can _call or execute_ it as follows
+And we can _call or execute_ it as follows.
 
 ```go
 ...
@@ -847,7 +843,7 @@ myFunction()
 ...
 ```
 
-Let's pass some parameters to it
+Let's pass some parameters to it.
 
 ```go
 func main() {
@@ -863,9 +859,7 @@ func myFunction(p1 string) {
 $ go run main.go
 ```
 
-As we can see it prints our message
-
-We can also do a short hand declaration if the consecutive parameters have the same type. For example,
+As we can see it prints our message. We can also do a short hand declaration if the consecutive parameters have the same type. For example:
 
 ```go
 func myNextFunction(p1, p2 string) {}
@@ -873,7 +867,7 @@ func myNextFunction(p1, p2 string) {}
 
 ## Returning the value
 
-Now let's also return a value
+Now let's also return a value.
 
 ```go
 func main() {
@@ -905,7 +899,7 @@ func myFunction(p1 string) (string, int) {
 
 ### Named returns
 
-Another cool feature is [named returns](https://go.dev/tour/basics/7), where return values can be named and treated as their own variables
+Another cool feature is [named returns](https://go.dev/tour/basics/7), where return values can be named and treated as their own variables.
 
 ```go
 func myFunction(p1 string) (s string, i int) {
@@ -916,9 +910,9 @@ func myFunction(p1 string) (s string, i int) {
 }
 ```
 
-Notice how we added a `return` statement without any arguments, this is also known as _naked return_
+Notice how we added a `return` statement without any arguments, this is also known as _naked return_.
 
-I will say that, although this feature is interesting, please use it with care as this might reduce readability for larger functions
+I will say that, although this feature is interesting, please use it with care as this might reduce readability for larger functions.
 
 ## Functions as values
 
@@ -934,7 +928,7 @@ func myFunction() {
 }
 ```
 
-We can also simplify this by making `fn` an _anonymous function_
+We can also simplify this by making `fn` an _anonymous function_.
 
 ```go
 func myFunction() {
@@ -979,7 +973,7 @@ As we can see, we get a result of 15 as `sum` variable is _bound_ to the functio
 
 Now let's look at variadic functions, which are functions that can take zero or multiple arguments using the `...` ellipses operator.
 
-An example here would be a function that can add a bunch of values
+An example here would be a function that can add a bunch of values.
 
 ```go
 func main() {
@@ -1098,41 +1092,39 @@ So, Defer is incredibly useful and is commonly used for doing cleanup or error h
 
 Functions can also be used with generics but we will discuss them later in the course.
 
-So this is it for functions in Go.
-
 # Modules
 
-Now, we will learn about modules.
+In this tutorial, we will learn about modules.
 
-### So what are modules?
+## What are modules?
 
-Simply defined, A module is a collection of [Go packages](https://go.dev/ref/spec#Packages) stored in a file tree with a `go.mod` file at its root, provided the directory is _outside_ `$GOPATH/src`
+Simply defined, A module is a collection of [Go packages](https://go.dev/ref/spec#Packages) stored in a file tree with a `go.mod` file at its root, provided the directory is _outside_ `$GOPATH/src`.
 
-Go modules were introduced in Go 1.11, which brings native support for versions and modules. Earlier, we needed the `GO111MODULE=on` flag to turn on the modules functionality when it was experimental. But now after Go 1.13 modules mode is the default for all development
+Go modules were introduced in Go 1.11, which brings native support for versions and modules. Earlier, we needed the `GO111MODULE=on` flag to turn on the modules functionality when it was experimental. But now after Go 1.13 modules mode is the default for all development.
 
 But wait what is `GOPATH`?
 
 Well, `GOPATH` is a variable that defines the root of your workspace and it contains the following folders:
 
-- **src**: contains Go source code organized in a hierarchy
-- **pkg**: contains compiled package code
+- **src**: contains Go source code organized in a hierarchy.
+- **pkg**: contains compiled package code.
 - **bin**: contains compiled binaries and executables.
 
 ![gopath](/static/courses/go/chapter-I/modules/gopath.png)
 
-Like earlier, let's create a new module using `go mod init` command which creates a new module and initializes the `go.mod` file that describes it
+Like earlier, let's create a new module using `go mod init` command which creates a new module and initializes the `go.mod` file that describes it.
 
 ```bash
 $ go mod init example
 ```
 
-_The important thing to note here is that a Go module can correspond to a Github repository as well if you plan to publish this module. For example,_
+_The important thing to note here is that a Go module can correspond to a Github repository as well if you plan to publish this module. For example:_
 
 ```bash
 $ go mod init example
 ```
 
-Now, let's explore `go.mod` which is the file that defines the module's _module path_ and also the import path used for the root directory, and its _dependency requirements_
+Now, let's explore `go.mod` which is the file that defines the module's _module path_ and also the import path used for the root directory, and its _dependency requirements_.
 
 ```go
 module <name>
@@ -1144,7 +1136,7 @@ require (
 )
 ```
 
-And if we want to add a new dependency, we will use `go install` command
+And if we want to add a new dependency, we will use `go install` command:
 
 ```bash
 $ go install github.com/rs/zerolog
@@ -1152,13 +1144,13 @@ $ go install github.com/rs/zerolog
 
 As we can see a `go.sum` file was also created. This file contains the expected [hashes](https://go.dev/cmd/go/#hdr-Module_downloading_and_verification) of the content of the new modules.
 
-We can list all the dependencies using `go list` command as follows
+We can list all the dependencies using `go list` command as follows:
 
 ```bash
 $ go list -m all
 ```
 
-If the dependency is not used, we can simply remove it using `go mod tidy` command.
+If the dependency is not used, we can simply remove it using `go mod tidy` command:
 
 ```bash
 $ go mod tidy
@@ -1168,9 +1160,9 @@ Finishing up our discussion on modules, let's also discuss vendoring.
 
 Vendoring is the act of making your own copy of the 3rd party packages your project is using. Those copies are traditionally placed inside each project and then saved in the project repository.
 
-This can be done through `go mod vendor` command
+This can be done through `go mod vendor` command.
 
-So let's reinstall the removed module using `go mod tidy`
+So let's reinstall the removed module using `go mod tidy`.
 
 ```go
 package main
@@ -1205,15 +1197,13 @@ $ go mod vendor
     └── modules.txt
 ```
 
-So this is pretty much it for modules, I'll see you in the next tutorial.
-
 # Workspaces
 
-Next, we will learn about multi-module workspaces that were introduced in Go 1.18
+In this tutorial, we will learn about multi-module workspaces that were introduced in Go 1.18.
 
 Workspaces allow us to work with multiple modules simultaneously without having to edit `go.mod` files for each module. Each module within a workspace is treated as a root module when resolving dependencies.
 
-To understand this better, let's start by creating a `hello` module
+To understand this better, let's start by creating a `hello` module.
 
 ```bash
 $ mkdir workspaces && cd workspaces
@@ -1255,13 +1245,13 @@ This is great, but what if we want to modify the `stringutil` module that our co
 
 Until now, we had to do it using the `replace` directive in the `go.mod` file, but now let's see how we can use workspaces here.
 
-So let's create our workspace in the `workspace` directory
+So let's create our workspace in the `workspace` directory.
 
 ```bash
 $ go work init
 ```
 
-This will create a `[go.work](http://go.work)` file
+This will create a `go.work` file.
 
 ```bash
 $ cat go.work
@@ -1274,7 +1264,7 @@ We will also add our `hello` module to the workspace.
 $ go work use ./hello
 ```
 
-This should update the `[go.work](http://go.work)` file with a reference to our `hello` module
+This should update the `[go.work](http://go.work)` file with a reference to our `hello` module.
 
 ```go
 go 1.18
@@ -1282,7 +1272,7 @@ go 1.18
 use ./hello
 ```
 
-Now, let's download and modify the `stringutil` package and update the `Reverse` function implementation
+Now, let's download and modify the `stringutil` package and update the `Reverse` function implementation.
 
 ```bash
 $ git clone https://go.googlesource.com/example
@@ -1300,7 +1290,7 @@ func Reverse(s string) string {
 }
 ```
 
-Finally, let's add `example` package to our workspace
+Finally, let's add `example` package to our workspace.
 
 ```bash
 $ go work use ./example
@@ -1322,8 +1312,6 @@ I can do whatever!! Hello Workspace
 
 _This is a very underrated feature from Go 1.18 but it is quite useful in certain circumstances._
 
-So, this is pretty much it for workspaces in Go.
-
 # Packages
 
 In this tutorial, we will talk about packages.
@@ -1332,17 +1320,17 @@ In this tutorial, we will talk about packages.
 
 A package is nothing but a directory containing one or more Go source files, or other Go packages.
 
-This means every Go source file must belong to a package and package declaration is done at top of every source file as follows
+This means every Go source file must belong to a package and package declaration is done at top of every source file as follows.
 
 ```go
 package <package_name>
 ```
 
-So far, we've done everything inside of `package main`. By convention, executable programs (by that I mean the ones with the `main` package) are called *Commands, o*thers are simply called _Packages_
+So far, we've done everything inside of `package main`. By convention, executable programs (by that I mean the ones with the `main` package) are called _Commands_, others are simply called _Packages_.
 
 The `main` package should also contain a `main()` function which is a special function that acts as the entry point of an executable program.
 
-Let's take a look at an example by creating our own package `custom` and adding some source files to it such as `code.go`
+Let's take a look at an example by creating our own package `custom` and adding some source files to it such as `code.go`.
 
 ```go
 package custom
@@ -1352,7 +1340,7 @@ Before we proceed any further, we should talk about imports and exports. Just li
 
 Basically, any value (like a variable or function) can be exported and visible from other packages if they have been defined with an upper case identifier.
 
-Let's try an example in our `custom` package
+Let's try an example in our `custom` package.
 
 ```go
 package custom
@@ -1365,7 +1353,7 @@ As we can see lower case identifiers will not be exported and will be private to
 
 That's great but how do we import or access it? Well, same as we've been doing so far unknowingly. Let's go to our `main.go` file and import our `custom` package.
 
-Here we can refer to it using the `module` we had initialized in our `go.mod` file earlier
+Here we can refer to it using the `module` we had initialized in our `go.mod` file earlier.
 
 ```go
 ---go.mod---
@@ -1401,7 +1389,7 @@ func main() {
 }
 ```
 
-We can also alias our imports to avoid collisions like this
+We can also alias our imports to avoid collisions like this.
 
 ```go
 package main
@@ -1421,7 +1409,7 @@ func main() {
 
 In Go, we are not only limited to working with local packages, we can also install external packages using `go install` command as we saw earlier.
 
-So let's download a simple logging package `github.com/rs/zerolog/log`
+So let's download a simple logging package `github.com/rs/zerolog/log`.
 
 ```bash
 $ go install github.com/rs/zerolog
@@ -1445,11 +1433,9 @@ _Also, make sure to checkout the go doc of packages you install, which is usuall
 
 Lastly, I will add that, Go doesn't have a particular _"folder structure"_ convention, always try to organize your packages in a simple and intuitive way.
 
-So this is pretty much it for packages, see you in the next tutorial!
-
 # Useful Commands
 
-During our module discussion, we discussed some go commands related to go modules, let's now discuss some other important commands
+During our module discussion, we discussed some go commands related to go modules, let's now discuss some other important commands.
 
 Starting with `go fmt`, which formats the source code and it's enforced by that language so that we can focus on how our code should work rather than how our code should look.
 
@@ -1461,17 +1447,17 @@ This might seem a little weird at first especially if you're coming from a javas
 
 Next, we have `go vet` which reports likely mistakes in our packages.
 
-So, if I go ahead and make a mistake in the syntax, and then run `go vet`
+So, if I go ahead and make a mistake in the syntax, and then run `go vet`.
 
-It should notify me of the errors
+It should notify me of the errors.
 
 ```bash
 $ go vet
 ```
 
-Next, we have `go env` which simply prints all the go environment information, we'll learn about some of these build-time variable in the next tutorial.
+Next, we have `go env` which simply prints all the go environment information, we'll learn about some of these build-time variable later.
 
-Lastly, we have, `go doc` which shows documentation for package or symbol, here's an example of the format package
+Lastly, we have, `go doc` which shows documentation for package or symbol, here's an example of the format package.
 
 ```bash
 $ go doc -src fmt Printf
@@ -1483,25 +1469,23 @@ Let's use `go help` command to see what other commands are available.
 $ go help
 ```
 
-As we can see, we have
+As we can see, we have:
 
-`go fix` finds Go programs that use old APIs and rewrites them to use newer ones
+`go fix` finds Go programs that use old APIs and rewrites them to use newer ones.
 
-`go generate` is usually used for code generation
+`go generate` is usually used for code generation.
 
-`go install` compiles and install packages and dependencies
+`go install` compiles and install packages and dependencies.
 
-`go clean` is used for cleaning files that are generated by compilers
+`go clean` is used for cleaning files that are generated by compilers.
 
 Some other very important commands are `go build` and `go test` but we will learn about them in detail later in the course.
 
-This is pretty much it on go commands, feel free to experiment with them! And I'll see you in the next tutorial.
-
 # Build
 
-Building static binaries is one of the best features of Go which enables us to ship our code efficiently
+Building static binaries is one of the best features of Go which enables us to ship our code efficiently.
 
-We can do this very easily using the `go build` command
+We can do this very easily using the `go build` command.
 
 ```go
 package main
@@ -1517,15 +1501,15 @@ func main() {
 $ go build
 ```
 
-This should produce a binary with the name of our module. For example, here we have `example`
+This should produce a binary with the name of our module. For example, here we have `example`.
 
-We can also specify the output
+We can also specify the output.
 
 ```bash
 $ go build -o app
 ```
 
-Now to run this, we simply need to execute it
+Now to run this, we simply need to execute it.
 
 ```bash
 $ ./app
@@ -1534,14 +1518,14 @@ I am a binary!
 
 _Yes, it's as simple as that!_
 
-Now, let's talk about some important build time variables, starting with
+Now, let's talk about some important build time variables, starting with:
 
 - `GOOS` and `GOARCH`
 
 these environment variables help use build go programs for different [operating systems](https://en.wikipedia.org/wiki/Operating_system)
-and underlying processor [architectures](https://en.wikipedia.org/wiki/Microarchitecture)
+and underlying processor [architectures](https://en.wikipedia.org/wiki/Microarchitecture).
 
-We can list all the supported architecture using `go tool` command
+We can list all the supported architecture using `go tool` command.
 
 ```bash
 $ go tool dist list
@@ -1569,7 +1553,7 @@ This helps us to produce a [statically linked binary](https://en.wikipedia.org/w
 
 This is quite helpful for, let's say when we want to run our go binaries in a docker container with minimum external dependencies.
 
-Here's an example of how to use it
+Here's an example of how to use it:
 
 ```bash
 $ CGO_ENABLED=0 go build -o app
@@ -1583,15 +1567,15 @@ Simply defined, a Pointer is a variable that is used to store the memory address
 
 ![pointers](/static/courses/go/chapter-II/pointers/pointers.png)
 
-It can be used like this
+It can be used like this:
 
 ```go
 var x *T
 ```
 
-Where T is the type such as `int`, `string`, `float`, and so on
+Where T is the type such as `int`, `string`, `float`, and so on.
 
-Let's try a simple example and see it in action
+Let's try a simple example and see it in action.
 
 ```go
 package main
@@ -1616,7 +1600,7 @@ So nil is a predeclared identifier in Go that represents zero value for pointers
 
 This is just like what we learned in the variables and datatypes section, where we saw that uninitialized `int` has a zero value of 0, a `bool` has false, and so on.
 
-Okay, now let's assign a value to the pointer
+Okay, now let's assign a value to the pointer.
 
 ```go
 package main
@@ -1639,11 +1623,11 @@ $ go run main.go
 0xc0000b8000
 ```
 
-This must be the value of the memory address of the variable `a`
+This must be the value of the memory address of the variable `a`.
 
 ## Dereferencing
 
-We can also use the `*` asterisk operator to value stored in the variable that the pointer points to. This is called **dereferencing**
+We can also use the `*` asterisk operator to value stored in the variable that the pointer points to. This is called **dereferencing**.
 
 For example, we can access the value of the variable `a` through the pointer `p` using that `*` asterisk operator.
 
@@ -1668,7 +1652,7 @@ address: 0xc000018030
 value: 10
 ```
 
-We can not only access it but change it as well through the pointer
+We can not only access it but change it as well through the pointer.
 
 ```go
 package main
@@ -1701,7 +1685,7 @@ I think this is pretty neat!
 
 Pointers can also be used as arguments for a function when we need to pass some data by reference.
 
-Here's an example
+Here's an example:
 
 ```go
 myFunction(&a)
@@ -1712,9 +1696,9 @@ func myFunction(ptr *int) {}
 
 ## New function
 
-There's also another way to initialize a pointer. We can use the `new` function which takes a type as an argument, allocates enough memory to accommodate a value of that type, and returns a pointer to it
+There's also another way to initialize a pointer. We can use the `new` function which takes a type as an argument, allocates enough memory to accommodate a value of that type, and returns a pointer to it.
 
-Here's an example
+Here's an example:
 
 ```go
 package main
@@ -1738,9 +1722,7 @@ address 0xc000018030
 
 ## Pointer to a Pointer
 
-Here's an interesting idea...can we create a pointer to a pointer. And the answer is yes!
-
-Yes, we can.
+Here's an interesting idea...can we create a pointer to a pointer. And the answer is yes! Yes, we can.
 
 ```go
 package main
@@ -1767,7 +1749,7 @@ P1 value 0xc0000be000  address 0xc0000be000
 Dereferenced value 100
 ```
 
-_Notice how the value of `p1` matches the address of `p`_
+_Notice how the value of `p1` matches the address of `p`._
 
 Also, it is important to know that pointers in Go do not support pointer arithmetic like in C or C++.
 
@@ -1775,7 +1757,7 @@ Also, it is important to know that pointers in Go do not support pointer arithme
 	p1 := p * 2 // Compiler Error: invalid operation
 ```
 
-However, we can compare two pointers of the same type for equality using a `==` operator
+However, we can compare two pointers of the same type for equality using a `==` operator.
 
 ```go
 p := &a
@@ -1794,8 +1776,6 @@ And can be applied to tons of use cases.
 
 Lastly, I will add that if you are coming from a language with no notion of pointers, don't panic and try to form a mental model of how pointers work.
 
-Perfect! We learned about pointers and their use cases, now let's move on to the next topic.
-
 # Structs
 
 In this tutorial, we will learn about structs.
@@ -1806,15 +1786,15 @@ If you're coming from an objected-oriented background, think of structs as light
 
 ## Defining
 
-We can define a `struct` like this
+We can define a `struct` like this:
 
 ```go
 type Person struct {}
 ```
 
-We use the `type` keyword to introduce a new type, followed by the name and then the `struct` keyword to indicate that we're defining a struct
+We use the `type` keyword to introduce a new type, followed by the name and then the `struct` keyword to indicate that we're defining a struct.
 
-Now, let's give it some fields
+Now, let's give it some fields:
 
 ```go
 type Person struct {
@@ -1824,7 +1804,7 @@ type Person struct {
 }
 ```
 
-And, if the fields have the same type, we can collapse them as well
+And, if the fields have the same type, we can collapse them as well.
 
 ```go
 type Person struct {
@@ -1835,7 +1815,7 @@ type Person struct {
 
 ## Declaring and initializing
 
-Now that we have our struct, we can declare it the same as other datatypes
+Now that we have our struct, we can declare it the same as other datatypes.
 
 ```go
 func main() {
@@ -1852,7 +1832,7 @@ Person 1: {  0}
 
 As we can see, all the struct fields are initialized with their zero values. So the `FirstName` and `LastName` are set to `""` empty string and `Age` is set to 0.
 
-We can simply initialize it as _"struct literal"_ also
+We can also initialize it as _"struct literal"_.
 
 ```go
 func main() {
@@ -1866,7 +1846,7 @@ func main() {
 }
 ```
 
-For readability, we can separate by new line but this will also require a trialing comma
+For readability, we can separate by new line but this will also require a trialing comma.
 
 ```go
 	var p2 = Person{
@@ -1882,7 +1862,7 @@ Person 1: {  0}
 Person 2: {Karan Pratap Singh 22}
 ```
 
-We can also initialize only a subset of fields
+We can also initialize only a subset of fields.
 
 ```go
 func main() {
@@ -1918,7 +1898,7 @@ As we can see, the age field of person 3 has defaulted to the zero value.
 
 ## Without field name
 
-Go structs also supports initialization without field names
+Go structs also supports initialization without field names.
 
 ```go
 func main() {
@@ -1947,7 +1927,7 @@ func main() {
 }
 ```
 
-But here's the catch, we will need to provide all the values during the initialization or it will fail
+But here's the catch, we will need to provide all the values during the initialization or it will fail.
 
 ```bash
 $ go run main.go
@@ -1961,7 +1941,7 @@ $ go run main.go
 	fmt.Println("Person 4:", p4)
 ```
 
-We can also declare an anonymous struct
+We can also declare an anonymous struct.
 
 ```go
 func main() {
@@ -1998,7 +1978,7 @@ func main() {
 
 ## Accessing fields
 
-Let's clean up our example a bit and see how we can access individual fields
+Let's clean up our example a bit and see how we can access individual fields.
 
 ```go
 func main() {
@@ -2012,7 +1992,7 @@ func main() {
 }
 ```
 
-We can also create a pointer to structs as well
+We can also create a pointer to structs as well.
 
 ```go
 func main() {
@@ -2029,9 +2009,7 @@ func main() {
 }
 ```
 
-Both statements are equal as in Go we don't need to explicitly dereference the pointer
-
-We can also use the built-in `new` function
+Both statements are equal as in Go we don't need to explicitly dereference the pointer. We can also use the built-in `new` function.
 
 ```go
 func main() {
@@ -2050,7 +2028,7 @@ $ go run main.go
 Person &{Karan Pratap Singh 22}
 ```
 
-As a side note, two structs are equal if all their corresponding fields are equal as well
+As a side note, two structs are equal if all their corresponding fields are equal as well.
 
 ```go
 func main() {
@@ -2138,7 +2116,7 @@ type SuperHero struct {
 }
 ```
 
-Hence, we can re-write our example with composition as well
+Hence, we can re-write our example with composition as well.
 
 ```go
 func main() {
@@ -2208,7 +2186,7 @@ func main() {
 }
 ```
 
-Empty struct occupies zero bytes of storage
+Empty struct occupies zero bytes of storage.
 
 ```go
 package main
@@ -2224,8 +2202,6 @@ func main() {
 }
 ```
 
-Well, this wraps up our discussion on `structs`. Next, we will learn how to extend our structs with methods.
-
 # Methods
 
 Let's talk about methods, or sometimes also known as function receivers.
@@ -2234,15 +2210,15 @@ Technically, Go is not an object-oriented programming language. It doesn't have 
 
 However, Go has types. And, you can define **methods** on types.
 
-A method is nothing but a function with a special _receiver_ argument. Let's see how we can declare methods
+A method is nothing but a function with a special _receiver_ argument. Let's see how we can declare methods.
 
 ```go
 func (variable T) Name(params) (returnTypes) {}
 ```
 
-The _receiver_ argument has a name and a type. It appears between the `func` keyword and the method name
+The _receiver_ argument has a name and a type. It appears between the `func` keyword and the method name.
 
-For example, let's define a `Car` struct
+For example, let's define a `Car` struct.
 
 ```go
 type Car struct {
@@ -2251,7 +2227,7 @@ type Car struct {
 }
 ```
 
-Now, let us define a method like `IsLatest` which will tell us if a car was manufactured within the last 5 years
+Now, let us define a method like `IsLatest` which will tell us if a car was manufactured within the last 5 years.
 
 ```go
 func (c Car) IsLatest() bool {
@@ -2261,7 +2237,7 @@ func (c Car) IsLatest() bool {
 
 As you can see, we can access the instance of `Car` using the receiver variable `c`. I like to think of it as `this` keyword from the object-oriented world.
 
-Now we should be able to call this method after we initialize our struct, just like we do with classes in other languages
+Now we should be able to call this method after we initialize our struct, just like we do with classes in other languages.
 
 ```go
 func main() {
@@ -2277,7 +2253,7 @@ All the examples that we saw previously had a value receiver.
 
 With a value receiver, the method operates on a copy of the value passed to it. Therefore, any modifications done to the receiver inside the methods are not visible to the caller.
 
-For example, let's make another method called `UpdateName` which will update the name of the `Car`
+For example, let's make another method called `UpdateName` which will update the name of the `Car`.
 
 ```go
 func (c Car) UpdateName(name string) {
@@ -2285,7 +2261,7 @@ func (c Car) UpdateName(name string) {
 }
 ```
 
-Now, let's run this
+Now, let's run this.
 
 ```go
 func main() {
@@ -2301,7 +2277,7 @@ $ go run main.go
 Car: {Tesla 2021}
 ```
 
-seems like the name wasn't updated, so now let's switch our receiver to pointer type and try again
+Seems like the name wasn't updated, so now let's switch our receiver to pointer type and try again.
 
 ```go
 func (c *Car) UpdateName(name string) {
@@ -2326,13 +2302,13 @@ Let's also see some properties of the methods!
 (&c).UpdateName(...)
 ```
 
-- We can omit the variable part of the receiver as well if we're not using it
+- We can omit the variable part of the receiver as well if we're not using it.
 
 ```go
 func (Car) UpdateName(...) {}
 ```
 
-- Methods are not limited to structs but can also be used with non-struct types as well
+- Methods are not limited to structs but can also be used with non-struct types as well.
 
 ```go
 package main
@@ -2364,8 +2340,6 @@ Since a method is tied to a particular type, we can have the same method names f
 
 But generally, it might just come down to preference? Such as "method calls are much easier to read and understand than function calls" or the other way around.
 
-So, this wraps up our discussion on methods, see you in the next tutorial
-
 # Arrays and Slices
 
 In this tutorial, we will learn about arrays and slices in Go.
@@ -2374,13 +2348,13 @@ In this tutorial, we will learn about arrays and slices in Go.
 
 ### So what's an array?
 
-An array is a fixed-size collection of elements of the same type. The elements of the array are stored sequentially and can be accessed using their `index`
+An array is a fixed-size collection of elements of the same type. The elements of the array are stored sequentially and can be accessed using their `index`.
 
 ![array](/static/courses/go/chapter-II/arrays-and-slices/array.png)
 
 ### Declaration
 
-We can declare an array as follows
+We can declare an array as follows:
 
 ```go
 var a [n]T
@@ -2407,7 +2381,7 @@ By default, all the array elements are initialized with the zero value of the co
 
 ### Initialization
 
-We can also initialize an array using an array literal
+We can also initialize an array using an array literal.
 
 ```go
 var a [n]T = [n]T{V1, V2, ... Vn}
@@ -2426,7 +2400,7 @@ $ go run main.go
 [1 2 3 4]
 ```
 
-We can even do a shorthand declaration
+We can even do a shorthand declaration.
 
 ```go
 ...
@@ -2435,7 +2409,7 @@ arr := [4]int{1, 2, 3, 4}
 
 ### Access
 
-And similar to other languages, we can access the elements using the `index` as they're stored sequentially
+And similar to other languages, we can access the elements using the `index` as they're stored sequentially.
 
 ```go
 func main() {
@@ -2456,7 +2430,7 @@ Now, let's talk about iteration.
 
 So, there are multiple ways to iterate over arrays.
 
-The first one is using the for loop with the `len` function which gives us the length of the array
+The first one is using the for loop with the `len` function which gives us the length of the array.
 
 ```go
 func main() {
@@ -2476,7 +2450,7 @@ Index: 2, Element: 3
 Index: 3, Element: 4
 ```
 
-Another way is to use the `range` keyword with the for loop
+Another way is to use the `range` keyword with the for loop.
 
 ```go
 func main() {
@@ -2514,7 +2488,7 @@ for range arr {} // Simply loop over the array
 
 All the arrays that we created so far are one dimensional. We can also create multi-dimensional arrays in Go.
 
-Let's take a look at an example
+Let's take a look at an example:
 
 ```go
 func main() {
@@ -2535,7 +2509,7 @@ Index: 0, Element: [1 2 3 4]
 Index: 1, Element: [5 6 7 8]
 ```
 
-We can also let the compiler infer the length of the array by using `...` ellipses instead of the length
+We can also let the compiler infer the length of the array by using `...` ellipses instead of the length.
 
 ```go
 func main() {
@@ -2611,7 +2585,7 @@ A slice consists of three things:
 - The length of the segment of the array that the slice contains.
 - And, the capacity, which is the maximum size up to which the segment can grow.
 
-Just like `len` function, we can determine the capacity of a slice using the built-in `cap` function. Here's an example,
+Just like `len` function, we can determine the capacity of a slice using the built-in `cap` function. Here's an example:
 
 ```go
 package main
@@ -2635,15 +2609,13 @@ Don't worry, we are going to discuss everything shown here in detail.
 
 ### Declaration
 
-Let's see how we can declare a slice
+Let's see how we can declare a slice.
 
 ```go
 var s []T
 ```
 
-As we can see, we don't need to specify any length
-
-Let's declare a slice of integers and see how it works
+As we can see, we don't need to specify any length. Let's declare a slice of integers and see how it works.
 
 ```go
 func main() {
@@ -2660,11 +2632,11 @@ $ go run main.go
 true
 ```
 
-So, unlike arrays, the zero value of a slice is `nil`
+So, unlike arrays, the zero value of a slice is `nil`.
 
 ### Initialization
 
-There are multiple ways to initialize our slice. One way is to use the built-in `make` function
+There are multiple ways to initialize our slice. One way is to use the built-in `make` function.
 
 ```go
 make([]T, len, cap) []T
@@ -2683,7 +2655,7 @@ $ go run main.go
 []
 ```
 
-Similar to arrays, we can use the slice literal to initialize our slice
+Similar to arrays, we can use the slice literal to initialize our slice.
 
 ```go
 func main() {
@@ -2698,7 +2670,7 @@ $ go run main.go
 [Go TypeScript]
 ```
 
-Another way is to create a slice from an array. Since a slice is a segment of an array, we can create a slice from index `low` to `high` as follows
+Another way is to create a slice from an array. Since a slice is a segment of an array, we can create a slice from index `low` to `high` as follows.
 
 ```go
 a[low:high]
@@ -2732,9 +2704,9 @@ Slice 2: [C++ Go Java]
 Slice 3: [Java TypeScript]
 ```
 
-_Missing low index implies 0 and missing high index implies `len(a)`_
+_Missing low index implies 0 and missing high index implies `len(a)`._
 
-The thing to note here is we can create a slice from other slices too and not just arrays
+The thing to note here is we can create a slice from other slices too and not just arrays.
 
 ```go
 	var a = []string{
@@ -2761,7 +2733,7 @@ The `copy()` function copies elements from one slice to another. It takes 2 slic
 func copy(dst, src []T) int
 ```
 
-Let's see how we can use it
+Let's see how we can use it.
 
 ```go
 func main() {
@@ -2783,7 +2755,7 @@ Dst: [a b c d]
 Elements: 4
 ```
 
-As expected, our 4 elements from the source slice were copied to the destination slice
+As expected, our 4 elements from the source slice were copied to the destination slice.
 
 - **append**
 
@@ -2795,7 +2767,7 @@ It takes a slice and a variable number of arguments. It then returns a new slice
 append(slice []T, elems ...T) []T
 ```
 
-Let's try it in an example by appending elements to our slice
+Let's try it in an example by appending elements to our slice.
 
 ```go
 func main() {
@@ -2868,8 +2840,6 @@ func add(values ...int) int {
 }
 ```
 
-Well, this is pretty much it for arrays and slices in Go, see you in the next one!
-
 # Maps
 
 So, Go provides a built-in map type, and we'll learn how to use it.
@@ -2884,17 +2854,17 @@ It is used for fast lookups, retrieval, and deletion of data based on keys. It i
 
 ### Declaration
 
-Let's start with the declaration
+Let's start with the declaration.
 
-A map is declared using the following syntax
+A map is declared using the following syntax:
 
 ```go
 var m map[K]V
 ```
 
-Where `K` is the key type and `V` is the value type
+Where `K` is the key type and `V` is the value type.
 
-For example, here's how we can declare a map of `string` keys to `int` values
+For example, here's how we can declare a map of `string` keys to `int` values.
 
 ```go
 func main() {
@@ -2956,7 +2926,7 @@ $ go run main.go
 map[a:0 b:1]
 ```
 
-As always, we can use our custom types as well
+As always, we can use our custom types as well.
 
 ```go
 type User struct {
@@ -3011,7 +2981,7 @@ map[a:{Peter} b:{Seth} c:{Steve}]
 
 ### Retrieve
 
-We can also retrieve our values from the map using the key
+We can also retrieve our values from the map using the key.
 
 ```go
 ...
@@ -3044,7 +3014,7 @@ Key d: {}
 
 When you retrieve the value assigned to a given key, it returns an additional boolean value as well. The boolean variable will be `true` if the key exists, and `false` otherwise.
 
-Let's try this in an example
+Let's try this in an example:
 
 ```go
 ...
@@ -3063,7 +3033,7 @@ Key d: {} Present: false
 
 ### Updating
 
-We can also update the value for a key by simply re-assigning a key
+We can also update the value for a key by simply re-assigning a key.
 
 ```go
 ...
@@ -3079,7 +3049,7 @@ map[a:{Roger} b:{Seth} c:{Steve}]
 
 Or, we can delete the key using the built-in `delete` function.
 
-Here's how the syntax looks
+Here's how the syntax looks:
 
 ```go
 ...
@@ -3097,7 +3067,7 @@ map[a:{Roger} c:{Steve}]
 
 ### Iteration
 
-Similar to arrays or slices, we can iterate over maps with the `range` keyword
+Similar to arrays or slices, we can iterate over maps with the `range` keyword.
 
 ```go
 package main
@@ -3158,8 +3128,6 @@ func main() {
 }
 ```
 
-Well, this wraps up our discussion on maps, see you in the next tutorial!
-
 # Interfaces
 
 In this section, let's talk about the interfaces.
@@ -3214,7 +3182,7 @@ func (socket) Plug(device mobile, power int) {
 }
 ```
 
-Let's try to _"connect"_ or _"plug in"_ the `mobile` type to our `socket` type in the `main` function
+Let's try to _"connect"_ or _"plug in"_ the `mobile` type to our `socket` type in the `main` function.
 
 ```go
 package main
@@ -3229,7 +3197,7 @@ func main() {
 }
 ```
 
-And if we run this we'll see the following
+And if we run this we'll see the following.
 
 ```bash
 $ go run main.go
@@ -3374,8 +3342,8 @@ Empty interfaces can be used to handle values of unknown types.
 
 Some examples are:
 
-- Reading heterogeneous data from an API
-- Variables of an unknown type, like in the `fmt.Prinln` function
+- Reading heterogeneous data from an API.
+- Variables of an unknown type, like in the `fmt.Prinln` function.
 
 To use a value of type empty `interface{}`, we can use _type assertion_ or a _type switch_ to determine the type of the value.
 
@@ -3383,7 +3351,7 @@ To use a value of type empty `interface{}`, we can use _type assertion_ or a _ty
 
 A _type assertion_ provides access to an interface value's underlying concrete value.
 
-_For example_
+For example:
 
 ```go
 func main() {
@@ -3400,7 +3368,7 @@ We can also test whether an interface value holds a specific type.
 
 A type assertion can return two values:
 
-- The first one is the underlying value
+- The first one is the underlying value.
 - The second is a boolean value that reports whether the assertion succeeded.
 
 ```go
@@ -3454,7 +3422,7 @@ default:
 }
 ```
 
-And if we run this, we can verify that we have a `string` type
+And if we run this, we can verify that we have a `string` type.
 
 ```bash
 $ go run main.go
@@ -3467,7 +3435,7 @@ Let's discuss some properties of interfaces.
 
 **Zero value**
 
-The zero value of an interface is `nil`
+The zero value of an interface is `nil`.
 
 ```go
 package main
@@ -3508,7 +3476,7 @@ type interface3 interface {
 
 **Values**
 
-Interface values are comparable
+Interface values are comparable.
 
 ```go
 package main
@@ -3579,7 +3547,7 @@ type error interface {
 
 We will circle back to this shortly. First, let's try to understand the basics.
 
-So, let's declare a simple `Divide` function which, as the name suggests,, will divide integer `a` by `b`
+So, let's declare a simple `Divide` function which, as the name suggests,, will divide integer `a` by `b`.
 
 ```go
 func Divide(a, b int) int {
@@ -3665,7 +3633,7 @@ func Divide(a, b int) (int, error) {
 }
 ```
 
-And it should work similarly
+And it should work similarly.
 
 ```bash
 $ go run main.go
@@ -3697,15 +3665,13 @@ func Divide(a, b int) (int, error) {
 }
 ```
 
-In Go, it is considered conventional to prefix the variable with `Err`.
-
-For example, `ErrNotFound`
+In Go, it is considered conventional to prefix the variable with `Err`. For example, `ErrNotFound`.
 
 **But what's the point?**
 
 So, this becomes useful when we need to execute a different branch of code if a certain kind of error is encountered.
 
-For example, now we can check explicitly which error occurred using the `errors.Is` function
+For example, now we can check explicitly which error occurred using the `errors.Is` function.
 
 ```go
 package main
@@ -3746,9 +3712,9 @@ cannot divide by zero
 
 This strategy covers most of the error handling use cases. But sometimes we need additional functionalities such as dynamic values inside of our errors.
 
-This strategy covers most of the error handling use cases. But sometimes we need additional functionalities such as dynamic values inside of our errors.
-
 Earlier, we saw that `error` is just an interface. So basically, anything can be an `error` as long as it implements the `Error()` method which returns an error message as a string.
+
+So, let's define our custom `DivisionError` struct which will contain an error code and a message.
 
 ```go
 package main
@@ -3817,7 +3783,7 @@ code 2000: cannot divide by zero
 
 The difference is that this function checks whether the error has a specific type, unlike the [`Is()`](https://pkg.go.dev/errors#Is), which examines if it is a particular error object.
 
-We can also use type assertions but it's not preferred
+We can also use type assertions but it's not preferred.
 
 ```go
 func main() {
@@ -3834,8 +3800,6 @@ func main() {
 
 Lastly, I will say that error handling in Go is quite different compared to the traditional `try/catch` idiom in other languages. But it is very powerful as it encourages the developer to actually handle the error in an explicit way, which improves readability as well.
 
-I hope this tutorial helped you learn about errors in Go and how to handle them. I'll see you in the next one!
-
 # Panic and Recover
 
 So earlier, we learned that the idiomatic way of handling abnormal conditions in a Go program is using errors. While errors are sufficient for most cases, there are some situations where the program cannot continue.
@@ -3850,9 +3814,9 @@ func panic(interface{})
 
 The panic is a built-in function that stops the normal execution of the current `goroutine`. When a function calls `panic`, the normal execution of the function stops immediately and the control is returned back to the caller. This is repeated until the program exits with the panic message and stack trace.
 
-_Note: We will discuss `goroutines` later in the course_
+_Note: We will discuss `goroutines` later in the course._
 
-So, let's see how we can use the `panic` function
+So, let's see how we can use the `panic` function.
 
 ```go
 package main
@@ -3866,7 +3830,7 @@ func WillPanic() {
 }
 ```
 
-And if we run this, we can see `panic` in action
+And if we run this, we can see `panic` in action.
 
 ```bash
 $ go run main.go
@@ -3892,7 +3856,7 @@ Well, it is possible to regain control of a panicking program using the built-in
 func recover() interface{}
 ```
 
-Let's try an example by creating a `handlePanic` function. And then, we can call it using `defer`
+Let's try an example by creating a `handlePanic` function. And then, we can call it using `defer`.
 
 ```go
 package main
@@ -3938,11 +3902,7 @@ For example, reading a configuration file which is important to start the progra
 
 - **Developer error**
 
-This is the most common situation.
-
-For example, dereferencing a pointer when the value is `nil` will cause a panic.
-
-I hope this tutorial helped you understand how to use `panic` and `recover` in Go.
+This is the most common situation. For example, dereferencing a pointer when the value is `nil` will cause a panic.
 
 # Testing
 
@@ -3958,7 +3918,7 @@ func Add(a, b int) int {
 }
 ```
 
-It's being used in our `main` package like this
+It's being used in our `main` package like this.
 
 ```go
 package main
@@ -3975,16 +3935,14 @@ func main() {
 
 ```
 
-And, if we run this, we should see the result
+And, if we run this, we should see the result.
 
 ```bash
 $ go run main.go
 4
 ```
 
-Now, we want to test our `Add` function. So, in Go, we declare tests files with `_test` suffix in the file name. So for our `add.go`, we will create a test as `add_test.go`
-
-Our project structure should look like this.
+Now, we want to test our `Add` function. So, in Go, we declare tests files with `_test` suffix in the file name. So for our `add.go`, we will create a test as `add_test.go`. Our project structure should look like this.
 
 ```bash
 .
@@ -4052,7 +4010,7 @@ $ go test math
 ok      example/math    0.412s
 ```
 
-Let's also see what happens if we fail the test, so for that, we can change our expected result
+Let's also see what happens if we fail the test, so for that, we can change our expected result.
 
 ```go
 package math_test
@@ -4126,9 +4084,7 @@ func TestAdd(t *testing.T) {
 }
 ```
 
-Notice, how we declared `addTestCase` with a lower case. That's right we don't want to export it as it's not useful outside our testing logic.
-
-Let's run our test
+Notice, how we declared `addTestCase` with a lower case. That's right we don't want to export it as it's not useful outside our testing logic. Let's run our test.
 
 ```bash
 $ go run main.go
@@ -4188,7 +4144,7 @@ Go fuzzing uses coverage guidance to intelligently walk through the code being f
 
 Since it can reach edge cases that humans often miss, fuzz testing can be particularly valuable for finding bugs and security exploits.
 
-Let's try an example,
+Let's try an example:
 
 ```go
 func FuzzTestAdd(f *testing.F) {
@@ -4238,15 +4194,13 @@ fuzz: elapsed: 0s, execs: 1 (25/sec), new interesting: 0 (total: 0)
 
 I think this is a really cool feature of Go 1.18. You can learn more about fuzz testing from the [official Go blog](https://go.dev/doc/fuzz/).
 
-Perfect, so this is pretty much it for this tutorial. I'll see you in the next one!
-
 # Generics
 
-In this section, we will learn about Generics which is a much awaited feature that was released with Go version 1.18
+In this section, we will learn about Generics which is a much awaited feature that was released with Go version 1.18.
 
 ### What are Generics?
 
-Generics means parameterized types. Put simply, generics allow programmers to write code where the type can be specified later because the type isn't immediately relevant
+Generics means parameterized types. Put simply, generics allow programmers to write code where the type can be specified later because the type isn't immediately relevant.
 
 Let's take a look at an example to understand this better.
 
@@ -4286,7 +4240,7 @@ func fnName[T constraint]() {
 }
 ```
 
-Here, `T` is our type parameter and **`constraint` will be the interface that allows any type **implementing the interface\*\*.
+Here, `T` is our type parameter and `constraint` will be the interface that allows any type implementing the interface.
 
 I know, I know, this is confusing. So, let's start building our generic `sum` function.
 
@@ -4322,7 +4276,7 @@ sum(4.0, 2.0)
 sum("a", "b")
 ```
 
-Let's run this and see if it works
+Let's run this and see if it works.
 
 ```bash
 $ go run main.go
@@ -4358,7 +4312,7 @@ So let's define our own custom constraint using an interface. Our interface shou
 
 ![typeset](/static/courses/go/chapter-III/generics/typeset.png)
 
-Here's how our `SumConstraint` interface looks
+Here's how our `SumConstraint` interface looks.
 
 ```go
 type SumConstraint interface {
@@ -4389,7 +4343,7 @@ We can also use the `constraints` package which defines a set of useful constrai
 
 ![constraints-package](/static/courses/go/chapter-III/generics/constraints-package.png)
 
-For that, we will need to install the `constraints` package
+For that, we will need to install the `constraints` package.
 
 ```bash
 $ go get golang.org/x/exp/constraints
@@ -4422,9 +4376,9 @@ type Ordered interface {
 }
 ```
 
-`~` is a new token added to Go and the expression `~string` means the set of all types whose underlying type is `string`
+`~` is a new token added to Go and the expression `~string` means the set of all types whose underlying type is `string`.
 
-And it still works as expected
+And it still works as expected.
 
 ```bash
 $ go run main.go
@@ -4437,17 +4391,15 @@ Generics is an amazing feature because it permits writing abstract functions tha
 
 ### When to use generics
 
-So, when to use generics? We can take the following use cases as an example
+So, when to use generics? We can take the following use cases as an example:
 
-- Functions that operate on arrays, slices, maps, and channels
-- General purpose data structures like stack or linked list
-- To reduce code duplication
+- Functions that operate on arrays, slices, maps, and channels.
+- General purpose data structures like stack or linked list.
+- To reduce code duplication.
 
 Lastly, I will add that while generics are a great addition to the language, they should be used sparingly.
 
 And, it is advised to start simple and only write generic code once we have written very similar code at least 2 or 3 times.
-
-Perfect, this wraps us our discussion on generics. I'll see you in the next tutorial!
 
 # Concurrency
 
@@ -4553,8 +4505,6 @@ Starvation happens when a process is deprived of necessary resources and is unab
 
 Starvation can happen because of deadlocks or inefficient scheduling algorithms for processes. In order to solve starvation, we need to employ better resource-allotment algorithms that make sure that every process gets its fair share of resources.
 
-This wraps up our discussion on the basics of concurrency in Go. I'll see you in the next lesson where we will learn about channels and goroutines.
-
 # Goroutines
 
 In this lesson, we will learn about Goroutines.
@@ -4571,7 +4521,7 @@ It is important to know that they are not actual OS threads and the main functio
 
 A single thread may run thousands of goroutines in them by using the Go runtime scheduler which uses cooperative scheduling. This implies that if the current goroutine is blocked or has been completed, the scheduler will move the other goroutines to another OS thread. Hence, we achieve efficiency in scheduling where no routine is blocked forever.
 
-We can turn any function into a goroutine by simply using the **go** keyword
+We can turn any function into a goroutine by simply using the `go` keyword.
 
 ```go
 go fn(x, y, z)
@@ -4585,7 +4535,7 @@ Go uses the idea of the fork-join model of concurrency behind goroutines. The fo
 
 ![fork-join](/static/courses/go/chapter-IV/goroutines/fork-join.png)
 
-Now, let's write some code and create our own goroutine
+Now, let's write some code and create our own goroutine.
 
 ```go
 package main
@@ -4603,7 +4553,7 @@ func main() {
 
 Here the `speak` function call is prefixed with the `go` keyword. This will allow it to run as a separate goroutine. And that's it, we just created our first goroutine. It's that simple!
 
-Great, let's run this
+Great, let's run this:
 
 ```bash
 $ go run main.go
@@ -4621,7 +4571,7 @@ func main() {
 }
 ```
 
-And now, if we run this
+And now, if we run this.
 
 ```bash
 $ go run main.go
@@ -4634,17 +4584,13 @@ There we go, we can see our complete output now.
 
 Well, the most tricky part about using goroutines is knowing when they will stop. It is important to know that goroutines run in the same address space, so access to shared memory must be synchronized.
 
-This brings us to channels, which we will discuss in the next.
-
 # Channels
 
 In this lesson, we will learn about Channels.
 
 ### So what are channels?
 
-Well, simply defined.
-
-A channel is a communications pipe between goroutines. Things go in one end and come out another in the same order until the channel is closed.
+Well, simply defined a channel is a communications pipe between goroutines. Things go in one end and come out another in the same order until the channel is closed.
 
 ![channel](/static/courses/go/chapter-IV/channels/channel.png)
 
@@ -4652,7 +4598,7 @@ As we learned earlier, channels in Go are based on Communicating Sequential Proc
 
 ### Creating a channel
 
-Now that we understand what channels are, let's see how we can declare them
+Now that we understand what channels are, let's see how we can declare them.
 
 ```go
 var ch chan T
@@ -4821,23 +4767,23 @@ _In a way_, _this is similar to how we check if a key exists or not in a map._
 
 ### Properties
 
-Lastly, let's discuss some properties of channels
+Lastly, let's discuss some properties of channels:
 
-- A send to a nil channel blocks forever
+- A send to a nil channel blocks forever.
 
 ```go
 var c chan string
 c <- "Hello, World!" // Panic: all goroutines are asleep - deadlock!
 ```
 
-- A receive from a nil channel blocks forever
+- A receive from a nil channel blocks forever.
 
 ```go
 var c chan string
 fmt.Println(<-c) // Panic: all goroutines are asleep - deadlock!
 ```
 
-- A send to a closed channel panics
+- A send to a closed channel panics.
 
 ```go
 var c = make(chan string, 1)
@@ -4846,7 +4792,7 @@ close(c)
 c <- "Hello, Panic!" // Panic: send on closed channel
 ```
 
-- A receive from a closed channel returns the zero value immediately
+- A receive from a closed channel returns the zero value immediately.
 
 ```go
 var c = make(chan int, 2)
@@ -4858,9 +4804,9 @@ for i := 0; i < 4; i++ {
 }
 ```
 
-- Range over channels
+- Range over channels.
 
-We can also use `for` and `range` to iterate over values received from a channel
+We can also use `for` and `range` to iterate over values received from a channel.
 
 ```go
 package main
@@ -4881,11 +4827,9 @@ func main() {
 }
 ```
 
-And with that, we learned how goroutines and channels work in Go. I hope this was helpful. I'll see you in the next tutorial.
-
 # Select
 
-In this tutorial, we will learn about the `select` statement in Go
+In this tutorial, we will learn about the `select` statement in Go.
 
 The `select` statement blocks the code and waits for multiple channel operations simultaneously.
 
@@ -4973,8 +4917,6 @@ func main() {
 }
 ```
 
-That's pretty much it for `select` statement in Go. I'll see you in the next one.
-
 # Sync Package
 
 As we learned earlier, goroutines run in the same address space, so access to shared memory must be synchronized. The [`sync`](https://go.dev/pkg/sync/) package provides useful primitives.
@@ -4993,7 +4935,7 @@ We can use the `sync.WaitGroup` using the following methods:
 
 ### Example
 
-Let's take a look at an example
+Let's take a look at an example.
 
 ```go
 package main
@@ -5020,7 +4962,7 @@ func main() {
 }
 ```
 
-If we run this, we can see our program runs as expected
+If we run this, we can see our program runs as expected.
 
 ```bash
 $ go run main.go
@@ -5218,7 +5160,7 @@ _Notice how RWMutex has additional `RLock` and `RUnlock`_ methods _compared to M
 
 ### Example
 
-Let's add a `GetValue` method which will read the counter value. We will also change `sync.Mutex` to `sync.RWMutex`
+Let's add a `GetValue` method which will read the counter value. We will also change `sync.Mutex` to `sync.RWMutex`.
 
 Now, we can simply use the `RLock` and `RUnlock` methods so that readers don't have to wait for each other.
 
@@ -5310,7 +5252,7 @@ If we simply use a [channel](https://karanpratapsingh.com/courses/go/channels) o
 
 ### Example
 
-Here is an example that demonstrates the interaction of different goroutines using the `Cond`
+Here is an example that demonstrates the interaction of different goroutines using the `Cond`.
 
 ```go
 package main
@@ -5376,11 +5318,11 @@ Once ensures that only one execution will be carried out even among several goro
 
 Unlike other primitives, `sync.Once` only has a single method:
 
-- `Do(f func())` calls the function `f` **only once**. If `Do` is called multiple times, only the first call will invoke the function `f`
+- `Do(f func())` calls the function `f` **only once**. If `Do` is called multiple times, only the first call will invoke the function `f`.
 
 ### Example
 
-This seems pretty straightforward, let's take an example
+This seems pretty straightforward, let's take an example:
 
 ```go
 package main
@@ -5440,7 +5382,7 @@ _It is important to note that Pool also has its performance cost. It is much slo
 `sync.Pool` gives us the following methods:
 
 - `Get()` selects an arbitrary item from the Pool, removes it from the Pool, and returns it to the caller.
-- `Put(x any)` adds the item to the pool
+- `Put(x any)` adds the item to the pool.
 
 ### Example
 
@@ -5495,7 +5437,7 @@ Creating a new person...
 There is no object in the pool now (new one will be created): &{}
 ```
 
-_Notice how we did [type assertion](https://karanpratapsingh.com/courses/go/interfaces#type-assertion) when we call `Get`_
+_Notice how we did [type assertion](https://karanpratapsingh.com/courses/go/interfaces#type-assertion) when we call `Get`._
 
 It can be seen that the `sync.Pool` is strictly a temporary object pool, which is suitable for storing some temporary objects that will be shared among goroutines.
 
@@ -5635,8 +5577,6 @@ Here, `atomic.AddInt32` guarantees that the result of `n` will be 1000 as the in
 go run main.go
 Result: 1000
 ```
-
-Well, this covers our discussion about the `sync` package in Go. I'll see you in the next tutorial!
 
 # Advanced Concurrency Patterns
 
@@ -6139,8 +6079,6 @@ There are some additional patterns that might be useful to know:
 - Ring buffer channel
 - Bounded parallelism
 
-This is pretty much it for this tutorial, I hope this was helpful. I'll see you in the next one!
-
 # Context
 
 In concurrent programs, it's often necessary to preempt operations because of timeouts, cancellation, or failure of another portion of the system.
@@ -6285,7 +6223,7 @@ func WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc) {
 
 Let's look at an example to solidify our understanding of the context.
 
-In the example below, we have a simple HTTP server that handles a request
+In the example below, we have a simple HTTP server that handles a request.
 
 ```go
 package main
@@ -6376,3 +6314,13 @@ Now that you know the fundamentals of Go, here are some additional things for yo
 I hope this course was a great learning experience. I would love to hear feedback from you.
 
 Wishing you all the best for further learning!
+
+# References
+
+Here are the resources that were referenced while creating this course.
+
+- [`The Go Programming Language`](https://www.gopl.io)
+- [`Official Go documentation`](https://go.dev/doc)
+- [`Official Go blog`](https://go.dev/blog)
+- [`A Tour of Go`](https://go.dev/tour)
+- [`Learn Go with Tests`](https://quii.gitbook.io/learn-go-with-tests)
