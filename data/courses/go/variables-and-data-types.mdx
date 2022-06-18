@@ -13,19 +13,19 @@ In this tutorial, we will learn about variables. We will also learn about the di
 
 Let's start with declaring a variable.
 
-This is also known as declaration without initialization
+This is also known as declaration without initialization:
 
 ```go
 var foo string
 ```
 
-Declaration with initialization
+Declaration with initialization:
 
 ```go
 var foo string = "Go is awesome"
 ```
 
-Multiple declarations
+Multiple declarations:
 
 ```go
 var foo, bar string = "Hello", "World"
@@ -36,13 +36,13 @@ var (
 )
 ```
 
-Type is omitted but will be inferred
+Type is omitted but will be inferred:
 
 ```go
 var foo = "What's my type?"
 ```
 
-Shorthand, here we omit `var` keyword and type is always implicit. This is how we will see variables being declared most of the time. We also use the `:=` for declaration plus assignment
+Shorthand declaration, here we omit `var` keyword and type is always implicit. This is how we will see variables being declared most of the time. We also use the `:=` for declaration plus assignment.
 
 ```go
 foo := "Shorthand!"
@@ -188,9 +188,10 @@ var c1 complex128 = complex(10, 1)
 var c2 complex64 = 12 + 4i
 ```
 
-### Zero Values
+## Zero Values
 
-Now let's discuss zero values. So in Go any variable declared without an explicit initial value are given their _zero value_. For example, let's declare some variables and see
+Now let's discuss zero values. So in Go any variable declared without an explicit initial value are given their _zero value_.
+For example, let's declare some variables and see:
 
 ```go
 var i int
@@ -206,11 +207,11 @@ $ go run main.go
 0 0 false ""
 ```
 
-So, as we can see `int` and `float` are assigned as 0, `bool` as false, and `string` as an empty string. This is quite different from how other languages do it. For example, most languages initialize unassigned variables as null or undefined
+So, as we can see `int` and `float` are assigned as 0, `bool` as false, and `string` as an empty string. This is quite different from how other languages do it. For example, most languages initialize unassigned variables as null or undefined.
 
-This is great, but what are those percent symbols in our `Printf` function? As you've already guessed, they are used for formatting and we will learn about them in the next tutorial.
+This is great, but what are those percent symbols in our `Printf` function? As you've already guessed, they are used for formatting and we will learn about them later.
 
-### Type Conversion
+## Type Conversion
 
 Moving on, now that we have seen how data types work, let's see how to do type conversion.
 
@@ -231,11 +232,9 @@ And as we can see, it prints the type as `float64` and `uint`.
 
 _Note that this is different from parsing_
 
-### Alias types
+## Alias types
 
-Alias types were introduced in Go 1.9
-
-They allow developers to provide an alternate name for an existing type and use it interchangeably with the underlying type.
+Alias types were introduced in Go 1.9. They allow developers to provide an alternate name for an existing type and use it interchangeably with the underlying type.
 
 ```go
 package main
@@ -251,7 +250,7 @@ func main() {
 }
 ```
 
-### Defined types
+## Defined types
 
 Lastly, we have defined types that unlike alias types do not use an equals sign.
 
@@ -302,6 +301,4 @@ func main() {
 }
 ```
 
-As we can see, we cannot use the defined type interchangeably with the underlying type, unlike _alias types._
-
-Well, this is pretty much it for variables and data types in Go. I'll see you in the next one.
+As we can see, we cannot use the defined type interchangeably with the underlying type, unlike _alias types_.

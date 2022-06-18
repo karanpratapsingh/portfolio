@@ -21,7 +21,7 @@ type error interface {
 
 We will circle back to this shortly. First, let's try to understand the basics.
 
-So, let's declare a simple `Divide` function which, as the name suggests,, will divide integer `a` by `b`
+So, let's declare a simple `Divide` function which, as the name suggests,, will divide integer `a` by `b`.
 
 ```go
 func Divide(a, b int) int {
@@ -107,7 +107,7 @@ func Divide(a, b int) (int, error) {
 }
 ```
 
-And it should work similarly
+And it should work similarly.
 
 ```bash
 $ go run main.go
@@ -139,15 +139,13 @@ func Divide(a, b int) (int, error) {
 }
 ```
 
-In Go, it is considered conventional to prefix the variable with `Err`.
-
-For example, `ErrNotFound`
+In Go, it is considered conventional to prefix the variable with `Err`. For example, `ErrNotFound`.
 
 **But what's the point?**
 
 So, this becomes useful when we need to execute a different branch of code if a certain kind of error is encountered.
 
-For example, now we can check explicitly which error occurred using the `errors.Is` function
+For example, now we can check explicitly which error occurred using the `errors.Is` function.
 
 ```go
 package main
@@ -259,7 +257,7 @@ code 2000: cannot divide by zero
 
 The difference is that this function checks whether the error has a specific type, unlike the [`Is()`](https://pkg.go.dev/errors#Is), which examines if it is a particular error object.
 
-We can also use type assertions but it's not preferred
+We can also use type assertions but it's not preferred.
 
 ```go
 func main() {
@@ -275,5 +273,3 @@ func main() {
 ```
 
 Lastly, I will say that error handling in Go is quite different compared to the traditional `try/catch` idiom in other languages. But it is very powerful as it encourages the developer to actually handle the error in an explicit way, which improves readability as well.
-
-I hope this tutorial helped you learn about errors in Go and how to handle them. I'll see you in the next one!

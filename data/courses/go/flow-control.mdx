@@ -9,9 +9,9 @@ authors: ['default']
 
 Let's talk about flow control, starting with if/else.
 
-## if/else
+## If/Else
 
-This works pretty much the same as you expect but the expression doesn't need to be surrounded by parentheses `()`
+This works pretty much the same as you expect but the expression doesn't need to be surrounded by parentheses `()`.
 
 ```go
 func main() {
@@ -34,7 +34,7 @@ x is gt 5
 
 ### Compact if
 
-We can also compact our if statements
+We can also compact our if statements.
 
 ```go
 func main() {
@@ -46,13 +46,14 @@ func main() {
 
 _Note: This pattern is quite common_
 
-## switch
+## Switch
 
 Next, we have `switch` statement, which is often a shorter way to write conditional logic.
 
 In Go, the switch case only runs the first case whose value is equal to the condition expression and not all the cases that follow. Hence, unlike other languages, `break` statement is automatically added at the end of each case.
 
-This means that it evaluates cases from top to bottom, stopping when a case succeeds. Let's take a look at an example
+This means that it evaluates cases from top to bottom, stopping when a case succeeds.
+Let's take a look at an example:
 
 ```go
 func main() {
@@ -74,7 +75,7 @@ $ go run main.go
 time to work!
 ```
 
-Switch also supports shorthand declaration like this
+Switch also supports shorthand declaration like this.
 
 ```go
 	switch day := "monday"; day {
@@ -101,7 +102,7 @@ We can also use the `fallthrough` keyword to transfer control to the next case e
 	}
 ```
 
-And if we run this, we'll see that after the first case matches the switch statement continues to the next case because of the `fallthrough` keyword
+And if we run this, we'll see that after the first case matches the switch statement continues to the next case because of the `fallthrough` keyword.
 
 ```bash
 $ go run main.go
@@ -109,7 +110,7 @@ time to work!
 let's party
 ```
 
-We can also use it without any condition, which is the same as `switch true`
+We can also use it without any condition, which is the same as `switch true`.
 
 ```go
 x := 10
@@ -130,7 +131,9 @@ So in Go, we only have one type of loop which is the `for` loop.
 
 But it's incredibly versatile. Same as if statement, for loop, doesn't need any parenthesis `()` unlike other languages.
 
-Let's start with the basic for loop.
+### For loop
+
+Let's start with the basic `for` loop.
 
 ```go
 func main() {
@@ -142,13 +145,13 @@ func main() {
 
 The basic `for` loop has three components separated by semicolons:
 
-- **_init statement_**: which is executed before the first iteration
-- **_condition expression_**: which is evaluated before every iteration
-- **_post statement_**: which is executed at the end of every iteration
+- **_init statement_**: which is executed before the first iteration.
+- **_condition expression_**: which is evaluated before every iteration.
+- **_post statement_**: which is executed at the end of every iteration.
 
 **Break and continue**
 
-As expected, Go also supports both `break` and `continue` statements for loop control. Let's try a quick example
+As expected, Go also supports both `break` and `continue` statements for loop control. Let's try a quick example:
 
 ```go
 func main() {
@@ -186,7 +189,7 @@ _Note: we can also remove the additional semi-colons to make it a little cleaner
 
 ### Forever loop
 
-Lastly, If we omit the loop condition, it loops forever, so an infinite loop can be compactly expressed. This is also known as the forever loop
+Lastly, If we omit the loop condition, it loops forever, so an infinite loop can be compactly expressed. This is also known as the forever loop.
 
 ```go
 func main() {
@@ -195,5 +198,3 @@ func main() {
 	}
 }
 ```
-
-Well, this is pretty much it on flow control, I'll see you in the next one!

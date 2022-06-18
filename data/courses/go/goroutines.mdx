@@ -21,7 +21,7 @@ It is important to know that they are not actual OS threads and the main functio
 
 A single thread may run thousands of goroutines in them by using the Go runtime scheduler which uses cooperative scheduling. This implies that if the current goroutine is blocked or has been completed, the scheduler will move the other goroutines to another OS thread. Hence, we achieve efficiency in scheduling where no routine is blocked forever.
 
-We can turn any function into a goroutine by simply using the **go** keyword
+We can turn any function into a goroutine by simply using the `go` keyword.
 
 ```go
 go fn(x, y, z)
@@ -35,7 +35,7 @@ Go uses the idea of the fork-join model of concurrency behind goroutines. The fo
 
 ![fork-join](/static/courses/go/chapter-IV/goroutines/fork-join.png)
 
-Now, let's write some code and create our own goroutine
+Now, let's write some code and create our own goroutine.
 
 ```go
 package main
@@ -53,7 +53,7 @@ func main() {
 
 Here the `speak` function call is prefixed with the `go` keyword. This will allow it to run as a separate goroutine. And that's it, we just created our first goroutine. It's that simple!
 
-Great, let's run this
+Great, let's run this:
 
 ```bash
 $ go run main.go
@@ -71,7 +71,7 @@ func main() {
 }
 ```
 
-And now, if we run this
+And now, if we run this.
 
 ```bash
 $ go run main.go
@@ -83,5 +83,3 @@ There we go, we can see our complete output now.
 **Okay, so this works but it's not ideal. So how do we improve this?**
 
 Well, the most tricky part about using goroutines is knowing when they will stop. It is important to know that goroutines run in the same address space, so access to shared memory must be synchronized.
-
-This brings us to channels, which we will discuss in the next.

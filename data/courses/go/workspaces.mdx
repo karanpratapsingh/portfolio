@@ -7,11 +7,11 @@ images: ['/static/courses/go/chapter-I/workspaces/banner.png']
 authors: ['default']
 ---
 
-In this tutorial, we will learn about multi-module workspaces that were introduced in Go 1.18
+In this tutorial, we will learn about multi-module workspaces that were introduced in Go 1.18.
 
 Workspaces allow us to work with multiple modules simultaneously without having to edit `go.mod` files for each module. Each module within a workspace is treated as a root module when resolving dependencies.
 
-To understand this better, let's start by creating a `hello` module
+To understand this better, let's start by creating a `hello` module.
 
 ```bash
 $ mkdir workspaces && cd workspaces
@@ -53,13 +53,13 @@ This is great, but what if we want to modify the `stringutil` module that our co
 
 Until now, we had to do it using the `replace` directive in the `go.mod` file, but now let's see how we can use workspaces here.
 
-So let's create our workspace in the `workspace` directory
+So let's create our workspace in the `workspace` directory.
 
 ```bash
 $ go work init
 ```
 
-This will create a `[go.work](http://go.work)` file
+This will create a `go.work` file.
 
 ```bash
 $ cat go.work
@@ -72,7 +72,7 @@ We will also add our `hello` module to the workspace.
 $ go work use ./hello
 ```
 
-This should update the `[go.work](http://go.work)` file with a reference to our `hello` module
+This should update the `[go.work](http://go.work)` file with a reference to our `hello` module.
 
 ```go
 go 1.18
@@ -80,7 +80,7 @@ go 1.18
 use ./hello
 ```
 
-Now, let's download and modify the `stringutil` package and update the `Reverse` function implementation
+Now, let's download and modify the `stringutil` package and update the `Reverse` function implementation.
 
 ```bash
 $ git clone https://go.googlesource.com/example
@@ -98,7 +98,7 @@ func Reverse(s string) string {
 }
 ```
 
-Finally, let's add `example` package to our workspace
+Finally, let's add `example` package to our workspace.
 
 ```bash
 $ go work use ./example
@@ -119,5 +119,3 @@ I can do whatever!! Hello Workspace
 ```
 
 _This is a very underrated feature from Go 1.18 but it is quite useful in certain circumstances._
-
-So, this is pretty much it for workspaces in Go, I'll see you in the next tutorial.

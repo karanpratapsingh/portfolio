@@ -13,15 +13,15 @@ Simply defined, a Pointer is a variable that is used to store the memory address
 
 ![pointers](/static/courses/go/chapter-II/pointers/pointers.png)
 
-It can be used like this
+It can be used like this:
 
 ```go
 var x *T
 ```
 
-Where T is the type such as `int`, `string`, `float`, and so on
+Where T is the type such as `int`, `string`, `float`, and so on.
 
-Let's try a simple example and see it in action
+Let's try a simple example and see it in action.
 
 ```go
 package main
@@ -46,7 +46,7 @@ So nil is a predeclared identifier in Go that represents zero value for pointers
 
 This is just like what we learned in the variables and datatypes section, where we saw that uninitialized `int` has a zero value of 0, a `bool` has false, and so on.
 
-Okay, now let's assign a value to the pointer
+Okay, now let's assign a value to the pointer.
 
 ```go
 package main
@@ -69,11 +69,11 @@ $ go run main.go
 0xc0000b8000
 ```
 
-This must be the value of the memory address of the variable `a`
+This must be the value of the memory address of the variable `a`.
 
 ## Dereferencing
 
-We can also use the `*` asterisk operator to value stored in the variable that the pointer points to. This is called **dereferencing**
+We can also use the `*` asterisk operator to value stored in the variable that the pointer points to. This is called **dereferencing**.
 
 For example, we can access the value of the variable `a` through the pointer `p` using that `*` asterisk operator.
 
@@ -98,7 +98,7 @@ address: 0xc000018030
 value: 10
 ```
 
-We can not only access it but change it as well through the pointer
+We can not only access it but change it as well through the pointer.
 
 ```go
 package main
@@ -131,7 +131,7 @@ I think this is pretty neat!
 
 Pointers can also be used as arguments for a function when we need to pass some data by reference.
 
-Here's an example
+Here's an example:
 
 ```go
 myFunction(&a)
@@ -142,9 +142,9 @@ func myFunction(ptr *int) {}
 
 ## New function
 
-There's also another way to initialize a pointer. We can use the `new` function which takes a type as an argument, allocates enough memory to accommodate a value of that type, and returns a pointer to it
+There's also another way to initialize a pointer. We can use the `new` function which takes a type as an argument, allocates enough memory to accommodate a value of that type, and returns a pointer to it.
 
-Here's an example
+Here's an example:
 
 ```go
 package main
@@ -168,9 +168,7 @@ address 0xc000018030
 
 ## Pointer to a Pointer
 
-Here's an interesting idea...can we create a pointer to a pointer. And the answer is yes!
-
-Yes, we can.
+Here's an interesting idea...can we create a pointer to a pointer. And the answer is yes! Yes, we can.
 
 ```go
 package main
@@ -197,7 +195,7 @@ P1 value 0xc0000be000  address 0xc0000be000
 Dereferenced value 100
 ```
 
-_Notice how the value of `p1` matches the address of `p`_
+_Notice how the value of `p1` matches the address of `p`._
 
 Also, it is important to know that pointers in Go do not support pointer arithmetic like in C or C++.
 
@@ -205,7 +203,7 @@ Also, it is important to know that pointers in Go do not support pointer arithme
 	p1 := p * 2 // Compiler Error: invalid operation
 ```
 
-However, we can compare two pointers of the same type for equality using a `==` operator
+However, we can compare two pointers of the same type for equality using a `==` operator.
 
 ```go
 p := &a
@@ -223,5 +221,3 @@ Well, there's no definite answer for that, and pointers are just another useful 
 And can be applied to tons of use cases.
 
 Lastly, I will add that if you are coming from a language with no notion of pointers, don't panic and try to form a mental model of how pointers work.
-
-Perfect! We learned about pointers and their use cases, now let's move on to the next topic.

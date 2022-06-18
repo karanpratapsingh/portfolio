@@ -19,17 +19,17 @@ It is used for fast lookups, retrieval, and deletion of data based on keys. It i
 
 ### Declaration
 
-Let's start with the declaration
+Let's start with the declaration.
 
-A map is declared using the following syntax
+A map is declared using the following syntax:
 
 ```go
 var m map[K]V
 ```
 
-Where `K` is the key type and `V` is the value type
+Where `K` is the key type and `V` is the value type.
 
-For example, here's how we can declare a map of `string` keys to `int` values
+For example, here's how we can declare a map of `string` keys to `int` values.
 
 ```go
 func main() {
@@ -91,7 +91,7 @@ $ go run main.go
 map[a:0 b:1]
 ```
 
-As always, we can use our custom types as well
+As always, we can use our custom types as well.
 
 ```go
 type User struct {
@@ -146,7 +146,7 @@ map[a:{Peter} b:{Seth} c:{Steve}]
 
 ### Retrieve
 
-We can also retrieve our values from the map using the key
+We can also retrieve our values from the map using the key.
 
 ```go
 ...
@@ -179,7 +179,7 @@ Key d: {}
 
 When you retrieve the value assigned to a given key, it returns an additional boolean value as well. The boolean variable will be `true` if the key exists, and `false` otherwise.
 
-Let's try this in an example
+Let's try this in an example:
 
 ```go
 ...
@@ -198,7 +198,7 @@ Key d: {} Present: false
 
 ### Updating
 
-We can also update the value for a key by simply re-assigning a key
+We can also update the value for a key by simply re-assigning a key.
 
 ```go
 ...
@@ -214,7 +214,7 @@ map[a:{Roger} b:{Seth} c:{Steve}]
 
 Or, we can delete the key using the built-in `delete` function.
 
-Here's how the syntax looks
+Here's how the syntax looks:
 
 ```go
 ...
@@ -232,7 +232,7 @@ map[a:{Roger} c:{Steve}]
 
 ### Iteration
 
-Similar to arrays or slices, we can iterate over maps with the `range` keyword
+Similar to arrays or slices, we can iterate over maps with the `range` keyword.
 
 ```go
 package main
@@ -292,5 +292,3 @@ func main() {
 	fmt.Println(m2) // Output: map[a:{Peter} b:{Seth} c:{Steve}]
 }
 ```
-
-Well, this wraps up our discussion on maps, see you in the next tutorial!

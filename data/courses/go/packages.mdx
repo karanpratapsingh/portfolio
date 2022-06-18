@@ -13,17 +13,17 @@ In this tutorial, we will talk about packages.
 
 A package is nothing but a directory containing one or more Go source files, or other Go packages.
 
-This means every Go source file must belong to a package and package declaration is done at top of every source file as follows
+This means every Go source file must belong to a package and package declaration is done at top of every source file as follows.
 
 ```go
 package <package_name>
 ```
 
-So far, we've done everything inside of `package main`. By convention, executable programs (by that I mean the ones with the `main` package) are called *Commands, o*thers are simply called _Packages_
+So far, we've done everything inside of `package main`. By convention, executable programs (by that I mean the ones with the `main` package) are called _Commands_, others are simply called _Packages_.
 
 The `main` package should also contain a `main()` function which is a special function that acts as the entry point of an executable program.
 
-Let's take a look at an example by creating our own package `custom` and adding some source files to it such as `code.go`
+Let's take a look at an example by creating our own package `custom` and adding some source files to it such as `code.go`.
 
 ```go
 package custom
@@ -33,7 +33,7 @@ Before we proceed any further, we should talk about imports and exports. Just li
 
 Basically, any value (like a variable or function) can be exported and visible from other packages if they have been defined with an upper case identifier.
 
-Let's try an example in our `custom` package
+Let's try an example in our `custom` package.
 
 ```go
 package custom
@@ -46,7 +46,7 @@ As we can see lower case identifiers will not be exported and will be private to
 
 That's great but how do we import or access it? Well, same as we've been doing so far unknowingly. Let's go to our `main.go` file and import our `custom` package.
 
-Here we can refer to it using the `module` we had initialized in our `go.mod` file earlier
+Here we can refer to it using the `module` we had initialized in our `go.mod` file earlier.
 
 ```go
 ---go.mod---
@@ -82,7 +82,7 @@ func main() {
 }
 ```
 
-We can also alias our imports to avoid collisions like this
+We can also alias our imports to avoid collisions like this.
 
 ```go
 package main
@@ -102,7 +102,7 @@ func main() {
 
 In Go, we are not only limited to working with local packages, we can also install external packages using `go install` command as we saw earlier.
 
-So let's download a simple logging package `github.com/rs/zerolog/log`
+So let's download a simple logging package `github.com/rs/zerolog/log`.
 
 ```bash
 $ go install github.com/rs/zerolog
@@ -125,5 +125,3 @@ func main() {
 _Also, make sure to checkout the go doc of packages you install, which is usually located in the project's readme file. go doc parses the source code and generates documentation in HTML format. Reference to It is usually located in readme files._
 
 Lastly, I will add that, Go doesn't have a particular _"folder structure"_ convention, always try to organize your packages in a simple and intuitive way.
-
-So this is pretty much it for packages, see you in the next tutorial!

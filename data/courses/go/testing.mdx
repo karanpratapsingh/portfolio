@@ -19,7 +19,7 @@ func Add(a, b int) int {
 }
 ```
 
-It's being used in our `main` package like this
+It's being used in our `main` package like this.
 
 ```go
 package main
@@ -36,16 +36,14 @@ func main() {
 
 ```
 
-And, if we run this, we should see the result
+And, if we run this, we should see the result.
 
 ```bash
 $ go run main.go
 4
 ```
 
-Now, we want to test our `Add` function. So, in Go, we declare tests files with `_test` suffix in the file name. So for our `add.go`, we will create a test as `add_test.go`
-
-Our project structure should look like this.
+Now, we want to test our `Add` function. So, in Go, we declare tests files with `_test` suffix in the file name. So for our `add.go`, we will create a test as `add_test.go`. Our project structure should look like this.
 
 ```bash
 .
@@ -113,7 +111,7 @@ $ go test math
 ok      example/math    0.412s
 ```
 
-Let's also see what happens if we fail the test, so for that, we can change our expected result
+Let's also see what happens if we fail the test, so for that, we can change our expected result.
 
 ```go
 package math_test
@@ -187,9 +185,7 @@ func TestAdd(t *testing.T) {
 }
 ```
 
-Notice, how we declared `addTestCase` with a lower case. That's right we don't want to export it as it's not useful outside our testing logic.
-
-Let's run our test
+Notice, how we declared `addTestCase` with a lower case. That's right we don't want to export it as it's not useful outside our testing logic. Let's run our test.
 
 ```bash
 $ go run main.go
@@ -249,7 +245,7 @@ Go fuzzing uses coverage guidance to intelligently walk through the code being f
 
 Since it can reach edge cases that humans often miss, fuzz testing can be particularly valuable for finding bugs and security exploits.
 
-Let's try an example,
+Let's try an example:
 
 ```go
 func FuzzTestAdd(f *testing.F) {
@@ -298,5 +294,3 @@ fuzz: elapsed: 0s, execs: 1 (25/sec), new interesting: 0 (total: 0)
 ```
 
 I think this is a really cool feature of Go 1.18. You can learn more about fuzz testing from the [official Go blog](https://go.dev/doc/fuzz/).
-
-Perfect, so this is pretty much it for this tutorial. I'll see you in the next one!
