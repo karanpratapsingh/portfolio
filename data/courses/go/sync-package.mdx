@@ -23,7 +23,7 @@ We can use the `sync.WaitGroup` using the following methods:
 
 ### Example
 
-Let's take a look at an example
+Let's take a look at an example.
 
 ```go
 package main
@@ -50,7 +50,7 @@ func main() {
 }
 ```
 
-If we run this, we can see our program runs as expected
+If we run this, we can see our program runs as expected.
 
 ```bash
 $ go run main.go
@@ -248,7 +248,7 @@ _Notice how RWMutex has additional `RLock` and `RUnlock`_ methods _compared to M
 
 ### Example
 
-Let's add a `GetValue` method which will read the counter value. We will also change `sync.Mutex` to `sync.RWMutex`
+Let's add a `GetValue` method which will read the counter value. We will also change `sync.Mutex` to `sync.RWMutex`.
 
 Now, we can simply use the `RLock` and `RUnlock` methods so that readers don't have to wait for each other.
 
@@ -340,7 +340,7 @@ If we simply use a [channel](https://karanpratapsingh.com/courses/go/channels) o
 
 ### Example
 
-Here is an example that demonstrates the interaction of different goroutines using the `Cond`
+Here is an example that demonstrates the interaction of different goroutines using the `Cond`.
 
 ```go
 package main
@@ -406,11 +406,11 @@ Once ensures that only one execution will be carried out even among several goro
 
 Unlike other primitives, `sync.Once` only has a single method:
 
-- `Do(f func())` calls the function `f` **only once**. If `Do` is called multiple times, only the first call will invoke the function `f`
+- `Do(f func())` calls the function `f` **only once**. If `Do` is called multiple times, only the first call will invoke the function `f`.
 
 ### Example
 
-This seems pretty straightforward, let's take an example
+This seems pretty straightforward, let's take an example:
 
 ```go
 package main
@@ -470,7 +470,7 @@ _It is important to note that Pool also has its performance cost. It is much slo
 `sync.Pool` gives us the following methods:
 
 - `Get()` selects an arbitrary item from the Pool, removes it from the Pool, and returns it to the caller.
-- `Put(x any)` adds the item to the pool
+- `Put(x any)` adds the item to the pool.
 
 ### Example
 
@@ -525,7 +525,7 @@ Creating a new person...
 There is no object in the pool now (new one will be created): &{}
 ```
 
-_Notice how we did [type assertion](https://karanpratapsingh.com/courses/go/interfaces#type-assertion) when we call `Get`_
+_Notice how we did [type assertion](https://karanpratapsingh.com/courses/go/interfaces#type-assertion) when we call `Get`._
 
 It can be seen that the `sync.Pool` is strictly a temporary object pool, which is suitable for storing some temporary objects that will be shared among goroutines.
 
@@ -665,5 +665,3 @@ Here, `atomic.AddInt32` guarantees that the result of `n` will be 1000 as the in
 go run main.go
 Result: 1000
 ```
-
-Well, this covers our discussion about the `sync` package in Go. I'll see you in the next tutorial!

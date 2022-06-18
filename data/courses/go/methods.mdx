@@ -13,15 +13,15 @@ Technically, Go is not an object-oriented programming language. It doesn't have 
 
 However, Go has types. And, you can define **methods** on types.
 
-A method is nothing but a function with a special _receiver_ argument. Let's see how we can declare methods
+A method is nothing but a function with a special _receiver_ argument. Let's see how we can declare methods.
 
 ```go
 func (variable T) Name(params) (returnTypes) {}
 ```
 
-The _receiver_ argument has a name and a type. It appears between the `func` keyword and the method name
+The _receiver_ argument has a name and a type. It appears between the `func` keyword and the method name.
 
-For example, let's define a `Car` struct
+For example, let's define a `Car` struct.
 
 ```go
 type Car struct {
@@ -30,7 +30,7 @@ type Car struct {
 }
 ```
 
-Now, let us define a method like `IsLatest` which will tell us if a car was manufactured within the last 5 years
+Now, let us define a method like `IsLatest` which will tell us if a car was manufactured within the last 5 years.
 
 ```go
 func (c Car) IsLatest() bool {
@@ -40,7 +40,7 @@ func (c Car) IsLatest() bool {
 
 As you can see, we can access the instance of `Car` using the receiver variable `c`. I like to think of it as `this` keyword from the object-oriented world.
 
-Now we should be able to call this method after we initialize our struct, just like we do with classes in other languages
+Now we should be able to call this method after we initialize our struct, just like we do with classes in other languages.
 
 ```go
 func main() {
@@ -56,7 +56,7 @@ All the examples that we saw previously had a value receiver.
 
 With a value receiver, the method operates on a copy of the value passed to it. Therefore, any modifications done to the receiver inside the methods are not visible to the caller.
 
-For example, let's make another method called `UpdateName` which will update the name of the `Car`
+For example, let's make another method called `UpdateName` which will update the name of the `Car`.
 
 ```go
 func (c Car) UpdateName(name string) {
@@ -64,7 +64,7 @@ func (c Car) UpdateName(name string) {
 }
 ```
 
-Now, let's run this
+Now, let's run this.
 
 ```go
 func main() {
@@ -80,7 +80,7 @@ $ go run main.go
 Car: {Tesla 2021}
 ```
 
-seems like the name wasn't updated, so now let's switch our receiver to pointer type and try again
+Seems like the name wasn't updated, so now let's switch our receiver to pointer type and try again.
 
 ```go
 func (c *Car) UpdateName(name string) {
@@ -105,13 +105,13 @@ Let's also see some properties of the methods!
 (&c).UpdateName(...)
 ```
 
-- We can omit the variable part of the receiver as well if we're not using it
+- We can omit the variable part of the receiver as well if we're not using it.
 
 ```go
 func (Car) UpdateName(...) {}
 ```
 
-- Methods are not limited to structs but can also be used with non-struct types as well
+- Methods are not limited to structs but can also be used with non-struct types as well.
 
 ```go
 package main
@@ -142,5 +142,3 @@ One thing I can think of right now is that methods can help us avoid naming conf
 Since a method is tied to a particular type, we can have the same method names for multiple receivers.
 
 But generally, it might just come down to preference? Such as "method calls are much easier to read and understand than function calls" or the other way around.
-
-So, this wraps up our discussion on methods, see you in the next tutorial

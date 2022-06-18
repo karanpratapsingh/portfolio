@@ -11,9 +11,7 @@ In this lesson, we will learn about Channels.
 
 ### So what are channels?
 
-Well, simply defined.
-
-A channel is a communications pipe between goroutines. Things go in one end and come out another in the same order until the channel is closed.
+Well, simply defined a channel is a communications pipe between goroutines. Things go in one end and come out another in the same order until the channel is closed.
 
 ![channel](/static/courses/go/chapter-IV/channels/channel.png)
 
@@ -21,7 +19,7 @@ As we learned earlier, channels in Go are based on Communicating Sequential Proc
 
 ### Creating a channel
 
-Now that we understand what channels are, let's see how we can declare them
+Now that we understand what channels are, let's see how we can declare them.
 
 ```go
 var ch chan T
@@ -190,23 +188,23 @@ _In a way_, _this is similar to how we check if a key exists or not in a map._
 
 ### Properties
 
-Lastly, let's discuss some properties of channels
+Lastly, let's discuss some properties of channels:
 
-- A send to a nil channel blocks forever
+- A send to a nil channel blocks forever.
 
 ```go
 var c chan string
 c <- "Hello, World!" // Panic: all goroutines are asleep - deadlock!
 ```
 
-- A receive from a nil channel blocks forever
+- A receive from a nil channel blocks forever.
 
 ```go
 var c chan string
 fmt.Println(<-c) // Panic: all goroutines are asleep - deadlock!
 ```
 
-- A send to a closed channel panics
+- A send to a closed channel panics.
 
 ```go
 var c = make(chan string, 1)
@@ -215,7 +213,7 @@ close(c)
 c <- "Hello, Panic!" // Panic: send on closed channel
 ```
 
-- A receive from a closed channel returns the zero value immediately
+- A receive from a closed channel returns the zero value immediately.
 
 ```go
 var c = make(chan int, 2)
@@ -227,9 +225,9 @@ for i := 0; i < 4; i++ {
 }
 ```
 
-- Range over channels
+- Range over channels.
 
-We can also use `for` and `range` to iterate over values received from a channel
+We can also use `for` and `range` to iterate over values received from a channel.
 
 ```go
 package main
@@ -249,5 +247,3 @@ func main() {
 	}
 }
 ```
-
-And with that, we learned how goroutines and channels work in Go. I hope this was helpful. I'll see you in the next tutorial.

@@ -59,7 +59,7 @@ func (socket) Plug(device mobile, power int) {
 }
 ```
 
-Let's try to _"connect"_ or _"plug in"_ the `mobile` type to our `socket` type in the `main` function
+Let's try to _"connect"_ or _"plug in"_ the `mobile` type to our `socket` type in the `main` function.
 
 ```go
 package main
@@ -74,7 +74,7 @@ func main() {
 }
 ```
 
-And if we run this we'll see the following
+And if we run this we'll see the following.
 
 ```bash
 $ go run main.go
@@ -219,8 +219,8 @@ Empty interfaces can be used to handle values of unknown types.
 
 Some examples are:
 
-- Reading heterogeneous data from an API
-- Variables of an unknown type, like in the `fmt.Prinln` function
+- Reading heterogeneous data from an API.
+- Variables of an unknown type, like in the `fmt.Prinln` function.
 
 To use a value of type empty `interface{}`, we can use _type assertion_ or a _type switch_ to determine the type of the value.
 
@@ -228,7 +228,7 @@ To use a value of type empty `interface{}`, we can use _type assertion_ or a _ty
 
 A _type assertion_ provides access to an interface value's underlying concrete value.
 
-_For example_
+For example:
 
 ```go
 func main() {
@@ -245,7 +245,7 @@ We can also test whether an interface value holds a specific type.
 
 A type assertion can return two values:
 
-- The first one is the underlying value
+- The first one is the underlying value.
 - The second is a boolean value that reports whether the assertion succeeded.
 
 ```go
@@ -299,7 +299,7 @@ default:
 }
 ```
 
-And if we run this, we can verify that we have a `string` type
+And if we run this, we can verify that we have a `string` type.
 
 ```bash
 $ go run main.go
@@ -312,7 +312,7 @@ Let's discuss some properties of interfaces.
 
 **Zero value**
 
-The zero value of an interface is `nil`
+The zero value of an interface is `nil`.
 
 ```go
 package main
@@ -353,7 +353,7 @@ type interface3 interface {
 
 **Values**
 
-Interface values are comparable
+Interface values are comparable.
 
 ```go
 package main

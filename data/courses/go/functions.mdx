@@ -15,7 +15,7 @@ In this tutorial, we will discuss how we work with functions in Go. So, let's st
 func myFunction() {}
 ```
 
-And we can _call or execute_ it as follows
+And we can _call or execute_ it as follows.
 
 ```go
 ...
@@ -23,7 +23,7 @@ myFunction()
 ...
 ```
 
-Let's pass some parameters to it
+Let's pass some parameters to it.
 
 ```go
 func main() {
@@ -39,9 +39,7 @@ func myFunction(p1 string) {
 $ go run main.go
 ```
 
-As we can see it prints our message
-
-We can also do a short hand declaration if the consecutive parameters have the same type. For example,
+As we can see it prints our message. We can also do a short hand declaration if the consecutive parameters have the same type. For example:
 
 ```go
 func myNextFunction(p1, p2 string) {}
@@ -49,7 +47,7 @@ func myNextFunction(p1, p2 string) {}
 
 ## Returning the value
 
-Now let's also return a value
+Now let's also return a value.
 
 ```go
 func main() {
@@ -81,7 +79,7 @@ func myFunction(p1 string) (string, int) {
 
 ### Named returns
 
-Another cool feature is [named returns](https://go.dev/tour/basics/7), where return values can be named and treated as their own variables
+Another cool feature is [named returns](https://go.dev/tour/basics/7), where return values can be named and treated as their own variables.
 
 ```go
 func myFunction(p1 string) (s string, i int) {
@@ -92,9 +90,9 @@ func myFunction(p1 string) (s string, i int) {
 }
 ```
 
-Notice how we added a `return` statement without any arguments, this is also known as _naked return_
+Notice how we added a `return` statement without any arguments, this is also known as _naked return_.
 
-I will say that, although this feature is interesting, please use it with care as this might reduce readability for larger functions
+I will say that, although this feature is interesting, please use it with care as this might reduce readability for larger functions.
 
 ## Functions as values
 
@@ -110,7 +108,7 @@ func myFunction() {
 }
 ```
 
-We can also simplify this by making `fn` an _anonymous function_
+We can also simplify this by making `fn` an _anonymous function_.
 
 ```go
 func myFunction() {
@@ -155,7 +153,7 @@ As we can see, we get a result of 15 as `sum` variable is _bound_ to the functio
 
 Now let's look at variadic functions, which are functions that can take zero or multiple arguments using the `...` ellipses operator.
 
-An example here would be a function that can add a bunch of values
+An example here would be a function that can add a bunch of values.
 
 ```go
 func main() {
@@ -273,5 +271,3 @@ As we can see, defer statements are stacked and executed in a _last in first out
 So, Defer is incredibly useful and is commonly used for doing cleanup or error handling.
 
 Functions can also be used with generics but we will discuss them later in the course.
-
-So this is it for functions in Go, see you in the next tutorial.

@@ -19,9 +19,9 @@ func panic(interface{})
 
 The panic is a built-in function that stops the normal execution of the current `goroutine`. When a function calls `panic`, the normal execution of the function stops immediately and the control is returned back to the caller. This is repeated until the program exits with the panic message and stack trace.
 
-_Note: We will discuss `goroutines` later in the course_
+_Note: We will discuss `goroutines` later in the course._
 
-So, let's see how we can use the `panic` function
+So, let's see how we can use the `panic` function.
 
 ```go
 package main
@@ -35,7 +35,7 @@ func WillPanic() {
 }
 ```
 
-And if we run this, we can see `panic` in action
+And if we run this, we can see `panic` in action.
 
 ```bash
 $ go run main.go
@@ -61,7 +61,7 @@ Well, it is possible to regain control of a panicking program using the built-in
 func recover() interface{}
 ```
 
-Let's try an example by creating a `handlePanic` function. And then, we can call it using `defer`
+Let's try an example by creating a `handlePanic` function. And then, we can call it using `defer`.
 
 ```go
 package main
@@ -107,8 +107,4 @@ For example, reading a configuration file which is important to start the progra
 
 - **Developer error**
 
-This is the most common situation.
-
-For example, dereferencing a pointer when the value is `nil` will cause a panic.
-
-I hope this tutorial helped you understand how to use `panic` and `recover` in Go. I'll see you in the next one.
+This is the most common situation. For example, dereferencing a pointer when the value is `nil` will cause a panic.

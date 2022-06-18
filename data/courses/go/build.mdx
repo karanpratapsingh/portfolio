@@ -7,9 +7,9 @@ images: ['/static/courses/go/chapter-I/build/banner.png']
 authors: ['default']
 ---
 
-Building static binaries is one of the best features of Go which enables us to ship our code efficiently
+Building static binaries is one of the best features of Go which enables us to ship our code efficiently.
 
-We can do this very easily using the `go build` command
+We can do this very easily using the `go build` command.
 
 ```go
 package main
@@ -25,15 +25,15 @@ func main() {
 $ go build
 ```
 
-This should produce a binary with the name of our module. For example, here we have `example`
+This should produce a binary with the name of our module. For example, here we have `example`.
 
-We can also specify the output
+We can also specify the output.
 
 ```bash
 $ go build -o app
 ```
 
-Now to run this, we simply need to execute it
+Now to run this, we simply need to execute it.
 
 ```bash
 $ ./app
@@ -42,14 +42,14 @@ I am a binary!
 
 _Yes, it's as simple as that!_
 
-Now, let's talk about some important build time variables, starting with
+Now, let's talk about some important build time variables, starting with:
 
 - `GOOS` and `GOARCH`
 
 these environment variables help use build go programs for different [operating systems](https://en.wikipedia.org/wiki/Operating_system)
-and underlying processor [architectures](https://en.wikipedia.org/wiki/Microarchitecture)
+and underlying processor [architectures](https://en.wikipedia.org/wiki/Microarchitecture).
 
-We can list all the supported architecture using `go tool` command
+We can list all the supported architecture using `go tool` command.
 
 ```bash
 $ go tool dist list
@@ -77,7 +77,7 @@ This helps us to produce a [statically linked binary](https://en.wikipedia.org/w
 
 This is quite helpful for, let's say when we want to run our go binaries in a docker container with minimum external dependencies.
 
-Here's an example of how to use it
+Here's an example of how to use it:
 
 ```bash
 $ CGO_ENABLED=0 go build -o app

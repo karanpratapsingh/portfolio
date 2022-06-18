@@ -15,15 +15,15 @@ If you're coming from an objected-oriented background, think of structs as light
 
 ## Defining
 
-We can define a `struct` like this
+We can define a `struct` like this:
 
 ```go
 type Person struct {}
 ```
 
-We use the `type` keyword to introduce a new type, followed by the name and then the `struct` keyword to indicate that we're defining a struct
+We use the `type` keyword to introduce a new type, followed by the name and then the `struct` keyword to indicate that we're defining a struct.
 
-Now, let's give it some fields
+Now, let's give it some fields:
 
 ```go
 type Person struct {
@@ -33,7 +33,7 @@ type Person struct {
 }
 ```
 
-And, if the fields have the same type, we can collapse them as well
+And, if the fields have the same type, we can collapse them as well.
 
 ```go
 type Person struct {
@@ -44,7 +44,7 @@ type Person struct {
 
 ## Declaring and initializing
 
-Now that we have our struct, we can declare it the same as other datatypes
+Now that we have our struct, we can declare it the same as other datatypes.
 
 ```go
 func main() {
@@ -61,7 +61,7 @@ Person 1: {  0}
 
 As we can see, all the struct fields are initialized with their zero values. So the `FirstName` and `LastName` are set to `""` empty string and `Age` is set to 0.
 
-We can simply initialize it as _"struct literal"_ also
+We can also initialize it as _"struct literal"_.
 
 ```go
 func main() {
@@ -75,7 +75,7 @@ func main() {
 }
 ```
 
-For readability, we can separate by new line but this will also require a trialing comma
+For readability, we can separate by new line but this will also require a trialing comma.
 
 ```go
 	var p2 = Person{
@@ -91,7 +91,7 @@ Person 1: {  0}
 Person 2: {Karan Pratap Singh 22}
 ```
 
-We can also initialize only a subset of fields
+We can also initialize only a subset of fields.
 
 ```go
 func main() {
@@ -127,7 +127,7 @@ As we can see, the age field of person 3 has defaulted to the zero value.
 
 ## Without field name
 
-Go structs also supports initialization without field names
+Go structs also supports initialization without field names.
 
 ```go
 func main() {
@@ -156,7 +156,7 @@ func main() {
 }
 ```
 
-But here's the catch, we will need to provide all the values during the initialization or it will fail
+But here's the catch, we will need to provide all the values during the initialization or it will fail.
 
 ```bash
 $ go run main.go
@@ -170,7 +170,7 @@ $ go run main.go
 	fmt.Println("Person 4:", p4)
 ```
 
-We can also declare an anonymous struct
+We can also declare an anonymous struct.
 
 ```go
 func main() {
@@ -207,7 +207,7 @@ func main() {
 
 ## Accessing fields
 
-Let's clean up our example a bit and see how we can access individual fields
+Let's clean up our example a bit and see how we can access individual fields.
 
 ```go
 func main() {
@@ -221,7 +221,7 @@ func main() {
 }
 ```
 
-We can also create a pointer to structs as well
+We can also create a pointer to structs as well.
 
 ```go
 func main() {
@@ -238,9 +238,7 @@ func main() {
 }
 ```
 
-Both statements are equal as in Go we don't need to explicitly dereference the pointer
-
-We can also use the built-in `new` function
+Both statements are equal as in Go we don't need to explicitly dereference the pointer. We can also use the built-in `new` function.
 
 ```go
 func main() {
@@ -259,7 +257,7 @@ $ go run main.go
 Person &{Karan Pratap Singh 22}
 ```
 
-As a side note, two structs are equal if all their corresponding fields are equal as well
+As a side note, two structs are equal if all their corresponding fields are equal as well.
 
 ```go
 func main() {
@@ -347,7 +345,7 @@ type SuperHero struct {
 }
 ```
 
-Hence, we can re-write our example with composition as well
+Hence, we can re-write our example with composition as well.
 
 ```go
 func main() {
@@ -417,7 +415,7 @@ func main() {
 }
 ```
 
-Empty struct occupies zero bytes of storage
+Empty struct occupies zero bytes of storage.
 
 ```go
 package main
@@ -432,5 +430,3 @@ func main() {
 	fmt.Println(unsafe.Sizeof(s)) // Output: 0
 }
 ```
-
-Well, this wraps up our discussion on `structs`. Next, we will learn how to extend our structs with methods.
