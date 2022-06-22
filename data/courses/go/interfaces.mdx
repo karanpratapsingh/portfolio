@@ -9,7 +9,7 @@ authors: ['default']
 
 In this section, let's talk about the interfaces.
 
-### What is an interface?
+## What is an interface?
 
 So, an interface in Go is an **abstract type** that is defined using a set of method signatures. The interface defines the **behavior** for similar types of objects.
 
@@ -203,7 +203,7 @@ Well, an interface can help us decouple our types. For example, because we have 
 
 Unlike other languages, Go Interfaces are implemented **implicitly**, so we don't need something like an `implements` keyword. This means that a type satisfies an interface automatically when it has _"all the methods"_ of the interface.
 
-### Empty Interface
+## Empty Interface
 
 Next, let's talk about the empty interface. An empty interface can take on a value of any type.
 
@@ -224,7 +224,7 @@ Some examples are:
 
 To use a value of type empty `interface{}`, we can use _type assertion_ or a _type switch_ to determine the type of the value.
 
-### Type Assertion
+## Type Assertion
 
 A _type assertion_ provides access to an interface value's underlying concrete value.
 
