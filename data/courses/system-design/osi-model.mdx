@@ -1,0 +1,63 @@
+---
+title: 'OSI Model'
+date: '2022-10-01'
+draft: false
+summary: 'In this tutorial we will discuss OSI Model'
+images: ['/static/courses/system-design/chapter-I/osi-model/banner.png']
+authors: ['default']
+---
+
+The OSI Model is a logical and conceptual model that defines network communication used by systems open to interconnection and communication with other systems. The Open System Interconnection (OSI Model) also defines a logical network and effectively describes computer packet transfer by using various layers of protocols.
+
+The OSI Model can be seen as a universal language for computer networking. It’s based on the concept of splitting up a communication system into seven abstract layers, each one stacked upon the last.
+
+![osi-model](/static/courses/system-design/chapter-I/osi-model/osi-model.png)
+
+## Why does OSI model matter?
+
+The Open System Interconnection (OSI) model has defined the common terminology used in networking discussions and documentation. This allows us to take a very complex communications process apart and evaluate its components.
+
+While this model is not directly implemented in the TCP/IP networks that are most common today, it can still help us do so much more. For example:
+
+- Make troubleshooting easier and helps identify threats across the entire stack.
+- Encourage hardware manufacturers to create networking products that can communicate with each other over the network.
+- Essential for developing a security-first mindset.
+- Separate a complex function into simpler components.
+
+## Layers
+
+The seven abstraction layers of the OSI model can be defined as follows, from top to bottom:
+
+### Application
+
+This is the only layer that directly interacts with data from the user. Software applications like web browsers and email clients rely on the application layer to initiate communications. But it should be made clear that client software applications are not part of the application layer, rather the application layer is responsible for the protocols and data manipulation that the software relies on to present meaningful data to the user.
+
+_Application layer protocols include HTTP as well as SMTP._
+
+### Presentation
+
+The presentation layer is also called the Translation layer. The data from the application layer is extracted here and manipulated as per the required format to transmit over the network.
+
+The functions of the presentation layer are translation, encryption/decryption, and compression.
+
+### Session
+
+This is the layer responsible for opening and closing communication between the two devices. The time between when the communication is opened and closed is known as the session. The session layer ensures that the session stays open long enough to transfer all the data being exchanged, and then promptly closes the session in order to avoid wasting resources. The session layer also synchronizes data transfer with checkpoints.
+
+### Transport
+
+Layer 4 is responsible for end-to-end communication between the two devices. This includes taking data from the session layer and breaking it up into chunks called segments before sending it to layer 3. The transport layer on the receiving device is responsible for reassembling the segments into data the session layer can consume.
+
+### Network
+
+The network layer is responsible for facilitating data transfer between two different networks. The network layer breaks up segments from the transport layer into smaller units, called packets, on the sender’s device, and reassembles these packets on the receiving device. The network layer also finds the best physical path for the data to reach its destination this is known as routing.
+
+_If the two devices communicating are on the same network, then the network layer is unnecessary._
+
+### Data Link
+
+The data link layer is very similar to the network layer, except the data link layer facilitates data transfer between two devices on the _same_ network. The data link layer takes packets from the network layer and breaks them into smaller pieces called frames.
+
+### Physical
+
+This layer includes the physical equipment involved in the data transfer, such as the cables and switches. This is also the layer where the data gets converted into a _bit stream_, which is a string of 1s and 0s. The physical layer of both devices must also agree on a signal convention so that the 1s can be distinguished from the 0s on both devices.

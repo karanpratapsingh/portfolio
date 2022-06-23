@@ -1,0 +1,73 @@
+---
+title: 'Clustering'
+date: '2022-10-01'
+draft: false
+summary: 'In this tutorial we will discuss Clustering'
+images: ['/static/courses/system-design/chapter-I/clustering/banner.png']
+authors: ['default']
+---
+
+At a high level, a computer cluster is a group of two or more computers, or nodes, that run in parallel to achieve a common goal. This allows workloads consisting of a high number of individual, parallelizable tasks to be distributed among the nodes in the cluster. As a result, these tasks can leverage the combined memory and processing power of each computer to increase overall performance.
+
+To build a computer cluster, the individual nodes should be connected in a network to enable internode communication. Software can then be used to join the nodes together and form a cluster. It may have a shared storage device and/or local storage on each node.
+
+![cluster](/static/courses/system-design/chapter-I/clustering/cluster.png)
+
+Typically, at least one node is designated as the leader node and acts as the entry point to the cluster. The leader node may be responsible for delegating incoming work to the other nodes and, if necessary, aggregating the results and returning a response to the user.
+
+Ideally, a cluster functions as if it were a single system. A user accessing the cluster should not need to know whether the system is a cluster or an individual machine. Furthermore, a cluster should be designed to minimize latency and prevent bottlenecks in node-to-node communication.
+
+## Types
+
+Computer clusters can generally be categorized into three types:
+
+- Highly available or fail-over
+- Load balancing
+- High-performance computing
+
+## Configurations
+
+The two most commonly used high availability (HA) clustering configurations are active-active and active-passive.
+
+### Active-Active
+
+![active-active](/static/courses/system-design/chapter-I/clustering/active-active.png)
+
+An active-active cluster is typically made up of at least two nodes, both actively running the same kind of service simultaneously. The main purpose of an active-active cluster is to achieve load balancing. Load balancing distributes workloads across all nodes in order to prevent any single node from getting overloaded. Because there are more nodes available to serve, there will also be a marked improvement in throughput and response times.
+
+### Active-Passive
+
+![active-passive](/static/courses/system-design/chapter-I/clustering/active-passive.png)
+
+Like the active-active cluster configuration, an active-passive cluster also consists of at least two nodes. However, as the name _active-passive_ implies, not all nodes are going to be active. For example, in the case of two nodes, if the first node is already active, then the second node must be passive or on standby.
+
+## Advantages
+
+Four key advantages of cluster computing are as follows:
+
+- High availability
+- Scalability
+- Performance
+- Cost-effective
+
+## Load balancing vs clustering
+
+Load balancing shares some common traits with clustering, but they are different processes. Clustering provides redundancy and boosts capacity and availability. Servers in a cluster are aware of each other and work together toward a common purpose. But with load balancing, servers are not aware of each other. Instead, they react to the commands they receive from the balancer.
+
+We can employ load balancing in conjunction with clustering but load balancing also is applicable in cases involving independent servers that share a common purpose such as to run a website, business application, web service, or some other IT resource.
+
+## Challenges
+
+The most obvious challenge clustering presents is the increased complexity of installation and maintenance. An operating system, the application, and its dependencies must each be installed and updated on every node.
+
+This becomes even more complicated if the nodes in the cluster are not homogeneous. Resource utilization for each node must also be closely monitored, and logs should be aggregated to ensure the software is behaving correctly.
+
+Additionally, storage becomes more difficult to manage; a shared storage device must prevent nodes from overwriting one another and distributed data stores have to be kept in sync.
+
+## Examples
+
+Clustering is commonly used in the industry, and often many technologies offer some sort of _clustering mode_, for example:
+
+- Containers (eg. [Kubernetes](https://kubernetes.io/), [Amazon ECS](https://aws.amazon.com/ecs/))
+- Databases (eg. [Cassandra](https://cassandra.apache.org/_/index.html), [MongoDB](https://www.mongodb.com/))
+- Cache (eg. [Redis](https://redis.io/docs/manual/scaling))
