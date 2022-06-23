@@ -86,13 +86,13 @@ REST APIs are pretty much the default standard for designing APIs. Overall REST 
 
 Here's an example usage of a REST API that operates on a _users_ resource.
 
-| URI         | HTTP verb | Description         |
-| ----------- | --------- | ------------------- |
-| /users      | GET       | Get all users       |
-| /users/{id} | GET       | Get user by id      |
-| /users      | POST      | Add a new user      |
-| /users/{id} | PATCH     | Update a user by id |
-| /users/{id} | DELETE    | Delete a user by id |
+| URI           | HTTP verb | Description         |
+| ------------- | --------- | ------------------- |
+| /users        | GET       | Get all users       |
+| /users/\{id\} | GET       | Get user by id      |
+| /users        | POST      | Add a new user      |
+| /users/\{id\} | PATCH     | Update a user by id |
+| /users/\{id\} | DELETE    | Delete a user by id |
 
 _There is so much more to learn when it comes to REST APIs, I will highly recommend looking into [HATEOAS](https://en.wikipedia.org/wiki/HATEOAS)._
 
@@ -173,12 +173,12 @@ Using the above schema, the client can request the required fields easily withou
 
 This will give the following response to the client.
 
-```graphql
+```json
 {
   "getUser": {
-		"id": 123,
+    "id": 123,
     "name": "Karan",
-		"city": "San Francisco"
+    "city": "San Francisco"
   }
 }
 ```
