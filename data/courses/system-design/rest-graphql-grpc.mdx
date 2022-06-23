@@ -10,11 +10,11 @@ authors: ['default']
 
 A good API design is always a crucial part of a system. But it is also important to pick the right API technology. So, in this tutorial, we will briefly discuss different API technologies such as REST, GraphQL, and gRPC.
 
-## What’s an API?
+## What's an API?
 
-Before we even get into API technologies, let’s first understand what is an API?
+Before we even get into API technologies, let's first understand what is an API?
 
-An API is a set of definitions and protocols for building and integrating application software. It’s sometimes referred to as a contract between an information provider and an information user establishing the content required from the consumer and the content required by the producer.
+An API is a set of definitions and protocols for building and integrating application software. It's sometimes referred to as a contract between an information provider and an information user establishing the content required from the consumer and the content required by the producer.
 
 In other words, if you want to interact with a computer or system to retrieve information or perform a function, an API helps you communicate what you want to that system so it can understand and complete the request.
 
@@ -26,7 +26,7 @@ _In REST API, the fundamental unit is a resource._
 
 ### Concepts
 
-Let’s discuss some concepts of a RESTful API.
+Let's discuss some concepts of a RESTful API.
 
 **Constraints**
 
@@ -84,7 +84,7 @@ REST APIs are pretty much the default standard for designing APIs. Overall REST 
 
 ### Example
 
-Here’s an example usage of a REST API that operates on a _users_ resource.
+Here's an example usage of a REST API that operates on a _users_ resource.
 
 | URI         | HTTP verb | Description         |
 | ----------- | --------- | ------------------- |
@@ -106,7 +106,7 @@ _In GraphQL, the fundamental unit is a query._
 
 ### Concepts
 
-Let’s briefly discuss some key concepts in GraphQL:
+Let's briefly discuss some key concepts in GraphQL:
 
 **Schema**
 
@@ -144,7 +144,7 @@ GraphQL proves to be essential in the following scenarios:
 
 ### Example
 
-Here’s a GraphQL schema that defines a `User` type and a `Query` type.
+Here's a GraphQL schema that defines a `User` type and a `Query` type.
 
 ```graphql
 type Query {
@@ -191,11 +191,11 @@ _Learn more about GraphQL at [graphql.org](https://graphql.org/)_
 
 ### Concepts
 
-Let’s discuss some key concepts for gRPC.
+Let's discuss some key concepts for gRPC.
 
 **Protocol buffers**
 
-Protocol buffers provide a language-neutral, platform-neutral, extensible mechanism for serializing structured data in a forward-compatible and backward-compatible way. It’s like JSON, except it's smaller and faster, and it generates native language bindings.
+Protocol buffers provide a language-neutral, platform-neutral, extensible mechanism for serializing structured data in a forward-compatible and backward-compatible way. It's like JSON, except it's smaller and faster, and it generates native language bindings.
 
 **Service definition**
 
@@ -228,7 +228,7 @@ Below are some good use cases for gRPC:
 
 ### Example
 
-Here’s a basic example of a gRPC service definition in a `*.proto` file.
+Here's a basic example of a gRPC service definition in a `*.proto` file.
 
 ```protobuf
 service HelloService {
@@ -248,15 +248,15 @@ Using this definition, we can easily code generate a lot of code for us in our l
 
 ## REST vs GraphQL vs gRPC
 
-Now that we know how these API designing techniques work, let’s compare them based on the following parameters:
+Now that we know how these API designing techniques work, let's compare them based on the following parameters:
 
 - Will it cause tight coupling?
 - How _chatty_ (distinct API calls to get needed information) are the APIs?
-- What’s the performance like?
+- What's the performance like?
 - How complex is it to integrate?
 - How well does caching work?
 - Built-in tooling and code generation?
-- What’s API discoverability like?
+- What's API discoverability like?
 - How easy is it to version APIs?
 
 |         | Coupling | Chattiness | Performance | Complexity | Caching | Codegen | Discoverability | Versioning |

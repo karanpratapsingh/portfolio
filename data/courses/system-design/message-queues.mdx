@@ -15,14 +15,14 @@ Queues are used to effectively manage requests in a large-scale distributed syst
 
 ## Working
 
-Messages are stored in the queue until they are processed and deleted. Each message is processed only once by a single consumer. Here’s how it works:
+Messages are stored in the queue until they are processed and deleted. Each message is processed only once by a single consumer. Here's how it works:
 
 - A producer publishes a job to the queue, then notifies the user of the job status.
 - A consumer picks up the job from the queue, processes it, then signals the job is complete.
 
 ## Advantages
 
-Let’s discuss some advantages of using a message queue:
+Let's discuss some advantages of using a message queue:
 
 - **Scalability:** Message queues make it possible to scale precisely where you need to. When workloads peak, multiple instances of your application can all add requests to the queue without the risk of collision
 - **Decoupling:** Message queues remove dependencies between components and significantly simplify the coding of decoupled applications.
@@ -31,15 +31,15 @@ Let’s discuss some advantages of using a message queue:
 
 ## Features
 
-Now, let’s discuss some desired features of message queues:
+Now, let's discuss some desired features of message queues:
 
 ### Push or Pull Delivery
 
-Most message queues provide both push and pull options for retrieving messages. Pull means continuously querying the queue for new messages. Push means that a consumer is notified when a message is available (this is also called Pub/Sub messaging). You can also use long-polling to allow pulls to wait a specified amount of time for new messages to arrive before completing.
+Most message queues provide both push and pull options for retrieving messages. Pull means continuously querying the queue for new messages. Push means that a consumer is notified when a message is available (this is also called Pub/Sub messaging). You can also use long-polling to allow pulls to wait a specified amount of time for new messages to arrive before completing.
 
 ### Schedule or Delay Delivery
 
-Many message queues support setting a specific delivery time for a message. If you need to have a common delay for all messages, you can set up a delay queue.
+Many message queues support setting a specific delivery time for a message. If you need to have a common delay for all messages, you can set up a delay queue.
 
 ### At-Least-Once Delivery
 
@@ -47,11 +47,11 @@ Message queues may store multiple copies of messages for redundancy and high ava
 
 ### Exactly-Once Delivery
 
-When duplicates can't be tolerated, FIFO (first-in-first-out) message queues will make sure that each message is delivered exactly once (and only once) by filtering out duplicates automatically.
+When duplicates can't be tolerated, FIFO (first-in-first-out) message queues will make sure that each message is delivered exactly once (and only once) by filtering out duplicates automatically.
 
 ### FIFO (First-In-First-Out) Queues
 
-In these queues, the oldest (or first) entry, sometimes called the _“head”_ of the queue, is processed first.
+In these queues, the oldest (or first) entry, sometimes called the _"head"_ of the queue, is processed first.
 
 ### Dead-letter Queues
 
@@ -59,7 +59,7 @@ A dead-letter queue is a queue to which other queues can send messages that can'
 
 ### Ordering
 
-Most message queues provide best-effort ordering which ensures that messages are generally delivered in the same order as they're sent and that a message is delivered at least once.
+Most message queues provide best-effort ordering which ensures that messages are generally delivered in the same order as they're sent and that a message is delivered at least once.
 
 ### Poison-pill Messages
 
@@ -67,7 +67,7 @@ Poison pills are special messages that can be received, but not processed. They 
 
 ### Security
 
-Message queues will authenticate applications that try to access the queue, and allow you to use encryption to encrypt messages over the network as well as in the queue itself.
+Message queues will authenticate applications that try to access the queue, and allow you to use encryption to encrypt messages over the network as well as in the queue itself.
 
 ## Task queues
 

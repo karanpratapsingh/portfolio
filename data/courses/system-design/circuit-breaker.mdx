@@ -11,7 +11,7 @@ The circuit breaker is a design pattern used to detect failures and encapsulates
 
 ![circuit-breaker](/static/courses/system-design/chapter-IV/circuit-breaker/circuit-breaker.png)
 
-The basic idea behind the circuit breaker is very simple. We wrap a protected function call in a circuit breaker object, which monitors for failures. Once the failures reach a certain threshold, the circuit breaker trips, and all further calls to the circuit breaker return with an error, without the protected call being made at all. Usually, we’ll also want some kind of monitor alert if the circuit breaker trips.
+The basic idea behind the circuit breaker is very simple. We wrap a protected function call in a circuit breaker object, which monitors for failures. Once the failures reach a certain threshold, the circuit breaker trips, and all further calls to the circuit breaker return with an error, without the protected call being made at all. Usually, we'll also want some kind of monitor alert if the circuit breaker trips.
 
 ## Why do we need circuit breaking?
 
@@ -19,7 +19,7 @@ It's common for software systems to make remote calls to software running in dif
 
 ## States
 
-Let’s discuss circuit breaker states:
+Let's discuss circuit breaker states:
 
 ### Closed
 

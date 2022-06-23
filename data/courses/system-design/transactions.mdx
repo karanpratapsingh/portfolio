@@ -9,7 +9,7 @@ authors: ['default']
 
 A transaction is a series of database operations that are considered to be a _"single unit of work"_. The operations in a transaction either all succeed, or they all fail. In this way, the notion of a transaction supports data integrity when part of a system fails. Not all databases choose to support ACID transactions, usually because they are prioritizing other optimizations that are hard or theoretically impossible to implement together.
 
-_Usually, relational databases support ACID transactions, and non-relational databases don’t (there are exceptions)._
+_Usually, relational databases support ACID transactions, and non-relational databases don't (there are exceptions)._
 
 ## States
 
@@ -44,4 +44,4 @@ The database recovery module can select one of the two operations after a transa
 
 ### Terminated
 
-If there isn’t any roll-back or the transaction comes from the _committed state_, then the system is consistent and ready for a new transaction and the old transaction is terminated.
+If there isn't any roll-back or the transaction comes from the _committed state_, then the system is consistent and ready for a new transaction and the old transaction is terminated.

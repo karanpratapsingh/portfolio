@@ -10,9 +10,9 @@ images:
 authors: ['default']
 ---
 
-Command Query Responsibility Segregation (CQRS) is an architectural pattern that divides a system’s actions into commands and queries. It was first described by [Greg Young](https://twitter.com/gregyoung).
+Command Query Responsibility Segregation (CQRS) is an architectural pattern that divides a system's actions into commands and queries. It was first described by [Greg Young](https://twitter.com/gregyoung).
 
-In CQRS, a _command_ \**\*\*is an instruction, a directive to perform a specific task. It is an intention to change something and doesn't return a value, only an indication of success or failure. And, a *query\* is a request for information that doesn't change the system’s state or cause any side effects that change the state.
+In CQRS, a _command_ is an instruction, a directive to perform a specific task. It is an intention to change something and doesn't return a value, only an indication of success or failure. And, a \*query\* is a request for information that doesn't change the system's state or cause any side effects that change the state.
 
 ![command-and-query-responsibility-segregation](/static/courses/system-design/chapter-III/command-and-query-responsibility-segregation/command-and-query-responsibility-segregation.png)
 
@@ -26,7 +26,7 @@ When used with the Event Sourcing pattern, the store of events is the write mode
 
 ## Advantages
 
-Let’s discuss some advantages of CQRS:
+Let's discuss some advantages of CQRS:
 
 - Allows independent scaling of read and write workloads.
 - Easier scaling, optimizations, and architectural changes.

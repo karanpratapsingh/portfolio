@@ -36,7 +36,7 @@ Some common disadvantages of monoliths are:
 
 ## Modular monoliths
 
-A Modular Monolith is an approach where we build and deploy a single application (that’s the _Monolith_ part), but we build it in a way that breaks up the code into independent modules for each of the features needed in our application.
+A Modular Monolith is an approach where we build and deploy a single application (that's the _Monolith_ part), but we build it in a way that breaks up the code into independent modules for each of the features needed in our application.
 
 This approach reduces the dependencies of a module in such as way that we can enhance/change a module without it effecting other modules. When done right, this can be really beneficial in the long term as it will reduces complexity that comes with maintaining a monolith as the system grows.
 
@@ -54,11 +54,11 @@ Services are responsible for persisting their own data or external state (databa
 
 Microservices architecture style has the following characteristics:
 
-- **Loosely coupled:** Services should be loosely coupled so that they can be independently deployed and scaled. This will lead to the decentralization of development teams and will lead them to develop and deploy faster with minimal constraints and operational dependencies.
-- **Small but focused:** It's about scope and responsibilities and not size, a service should be focused on a specific problem. Basically, *It does one thing and does it well*. Ideally, they can be independent of the underlying architecture.
-- **Built for businesses:** The microservices architecture is usually organized around business capabilities and priorities.
-- **Resilience & Fault tolerance:** Services should be designed in such a way that they still function in case of failure or errors as in environments with independently deployable services failure tolerance is of the highest importance.
-- **Highly maintainable:** Service should be easy to maintainable and test because services that cannot be maintained will be re-written.
+- **Loosely coupled:** Services should be loosely coupled so that they can be independently deployed and scaled. This will lead to the decentralization of development teams and will lead them to develop and deploy faster with minimal constraints and operational dependencies.
+- **Small but focused:** It's about scope and responsibilities and not size, a service should be focused on a specific problem. Basically, _It does one thing and does it well_. Ideally, they can be independent of the underlying architecture.
+- **Built for businesses:** The microservices architecture is usually organized around business capabilities and priorities.
+- **Resilience & Fault tolerance:** Services should be designed in such a way that they still function in case of failure or errors as in environments with independently deployable services failure tolerance is of the highest importance.
+- **Highly maintainable:** Service should be easy to maintainable and test because services that cannot be maintained will be re-written.
 
 ### Advantages
 
@@ -84,7 +84,7 @@ Microservices architecture brings its own sets of challenges:
 
 ### Best practices
 
-Let’s discuss some microservices best practices:
+Let's discuss some microservices best practices:
 
 - Model services around the business domain.
 - Services should have loose coupling and high functional cohesion.
@@ -106,7 +106,7 @@ Below are some common pitfalls of microservices architecture:
 - Lack of Business Alignment.
 - Forgetting lack of clear ownership
 - Lack of idempotency.
-- Trying to do everything [ACID instead of BASE](https://karanpratapsingh.com/courses/system-design/acid-and-base-consistency-models).
+- Trying to do everything [ACID instead of BASE](https://karanpratapsingh.com/courses/system-design/acid-and-base-consistency-models).
 - Lack of design for fault tolerance may result in cascading failures.
 
 ## Beware of the distributed monolith
@@ -116,7 +116,7 @@ Distributed Monolith is a system that resembles the microservices architecture b
 Our microservice is just a distributed monolith if any of these apply to it:
 
 - Requires low latency communication.
-- Services don’t scale easily.
+- Services don't scale easily.
 - Dependency between services.
 - Sharing same resources such as databases.
 - Tightly coupled systems.
@@ -149,4 +149,4 @@ If your application does not require to be broken down into microservices, you d
 
 We frequently draw inspiration from companies such as Netflix and their use of microservices, but we overlook the fact that we are not Netflix. They went through a lot of iterations and models before they had a market-ready solution, and this architecture became acceptable for them when they identified and solved the problem they were trying to tackle.
 
-That’s why it’s essential to understand in-depth if your business *actually* needs microservices. What I'm trying to say is microservices are solutions to complex concerns and if your business doesn’t have complex issues, you don't need them.
+That's why it's essential to understand in-depth if your business _actually_ needs microservices. What I'm trying to say is microservices are solutions to complex concerns and if your business doesn't have complex issues, you don't need them.

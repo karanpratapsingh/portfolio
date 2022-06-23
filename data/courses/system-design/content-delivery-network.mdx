@@ -26,7 +26,7 @@ CDN increases content availability and redundancy while reducing bandwidth costs
 
 In a CDN, the origin server contains the original versions of the content while the edge servers are numerous and distributed across various locations around the world.
 
-To minimize the distance between the visitors and the website’s server, a CDN stores a cached version of its content in multiple geographical locations known as edge locations. Each edge location contains a number of caching servers responsible for content delivery to visitors within its proximity.
+To minimize the distance between the visitors and the website's server, a CDN stores a cached version of its content in multiple geographical locations known as edge locations. Each edge location contains a number of caching servers responsible for content delivery to visitors within its proximity.
 
 Once the static assets are cached on all the CDN servers for a particular location, all subsequent website visitor requests for static assets will be delivered from these edge servers instead of the origin, thus reducing origin load and improving scalability.
 
@@ -44,13 +44,13 @@ Sites with a small amount of traffic or sites with content that isn't often upda
 
 ### Pull CDNs
 
-In a Pull CDN situation, the cache is updated based on request. When the client sends a request that requires static assets to be fetched from the CDN if the CDN doesn’t have it, then it will fetch the newly updated assets from the origin server and populate its cache with this new asset, and then send this new cached asset to the user.
+In a Pull CDN situation, the cache is updated based on request. When the client sends a request that requires static assets to be fetched from the CDN if the CDN doesn't have it, then it will fetch the newly updated assets from the origin server and populate its cache with this new asset, and then send this new cached asset to the user.
 
 Contrary to the Push CDN, this requires less maintenance because cache updates on CDN nodes are performed based on requests from the client to the origin server. Sites with heavy traffic work well with pull CDNs, as traffic is spread out more evenly with only recently-requested content remaining on the CDN.
 
 ## Disadvantages
 
-As we all know good things come with extra costs, so let’s discuss some disadvantages of CDNs:
+As we all know good things come with extra costs, so let's discuss some disadvantages of CDNs:
 
 - Extra charges: It can be expensive to use a CDN, especially for high-traffic services.
 - **Restrictions:** Some organizations and countries have blocked the domains or IP addresses of popular CDNs.

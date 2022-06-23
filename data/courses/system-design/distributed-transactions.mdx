@@ -18,7 +18,7 @@ Unlike an ACID transaction on a single database, a distributed transaction invol
 
 In other words, all the nodes must commit, or all must abort and the entire transaction rolls back. This is why we need distributed transactions.
 
-Now, let’s look at some popular solutions for distributed transactions:
+Now, let's look at some popular solutions for distributed transactions:
 
 ## Two-Phase commit
 
@@ -36,7 +36,7 @@ Two-phase commit consists of the following phases:
 
 **Prepare phase**
 
-The prepare phase involves the coordinator node collecting consensus from each of the participant nodes. The transaction will be aborted unless each of the nodes responds that they’re _prepared_.
+The prepare phase involves the coordinator node collecting consensus from each of the participant nodes. The transaction will be aborted unless each of the nodes responds that they're _prepared_.
 
 **Commit phase**
 

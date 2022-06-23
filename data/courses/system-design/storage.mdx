@@ -7,13 +7,13 @@ images: ['/static/courses/system-design/chapter-I/storage/banner.png']
 authors: ['default']
 ---
 
-Storage is a mechanism that enables a system to retain data, either temporarily or permanently. This topic is mostly skipped over in context of system design, however, it is important to have a basic understanding of some common types of storage techniques that can help us fine-tune our storage components during system design. Let’s discuss some important storage concepts:
+Storage is a mechanism that enables a system to retain data, either temporarily or permanently. This topic is mostly skipped over in context of system design, however, it is important to have a basic understanding of some common types of storage techniques that can help us fine-tune our storage components during system design. Let's discuss some important storage concepts:
 
 ## RAID
 
 RAID (redundant array of independent disks) is a way of storing the same data on multiple hard disks or solid-state drives (SSDs) to protect data in the case of a drive failure.
 
-There are different RAID levels, however, and not all have the goal of providing redundancy. Let’s discuss some commonly used RAID levels:
+There are different RAID levels, however, and not all have the goal of providing redundancy. Let's discuss some commonly used RAID levels:
 
 - **RAID 0:** Also known as striping, data is split evenly across all the drives in the array.
 - **RAID 1:** Also known as mirroring, at least two drives contains the exact copy of a set of data. If a drive fails, others will still work.
@@ -23,7 +23,7 @@ There are different RAID levels, however, and not all have the goal of providing
 
 ### Comparison
 
-Let’s compare all the features of different RAID levels:
+Let's compare all the features of different RAID levels:
 
 | Features             | RAID 0   | RAID 1               | RAID 5               | RAID 6                      | RAID 10                                 |
 | -------------------- | -------- | -------------------- | -------------------- | --------------------------- | --------------------------------------- |
@@ -61,7 +61,7 @@ Object storage, which is also known as object-based storage, breaks data files u
 
 ## NAS
 
-A NAS (Network Attached Storage) is a storage device connected to a network that allows storage and retrieval of data from a central location for authorized network users and varied clients. NAS devices are flexible and scale-out, meaning that as you need additional storage, we can add to what you have. It’s faster, less expensive, and provides all the benefits of a public cloud on-site, giving us complete control.
+A NAS (Network Attached Storage) is a storage device connected to a network that allows storage and retrieval of data from a central location for authorized network users and varied clients. NAS devices are flexible and scale-out, meaning that as you need additional storage, we can add to what you have. It's faster, less expensive, and provides all the benefits of a public cloud on-site, giving us complete control.
 
 ## HDFS
 

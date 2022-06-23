@@ -13,11 +13,11 @@ Indexes are well known when it comes to databases, they are used to improve the 
 
 An index is a data structure that can be perceived as a table of contents that points us to the location where actual data lives. So when we create an index on a column of a table, we store that column and a pointer to the whole row in the index. Indexes are also used to create different views of the same data. For large data sets, this is an excellent way to specify different filters or sorting schemes without resorting to creating multiple additional copies of the data.
 
-One quality that database indexes can have is that they can be *dense* or *sparse*. Each of these index qualities comes with their own trade-offs. Let's look at how each index type would work:
+One quality that database indexes can have is that they can be _dense_ or _sparse_. Each of these index qualities comes with their own trade-offs. Let's look at how each index type would work:
 
 ## Dense Index
 
-In a dense index, an index record is created for every row of the table. Records can be located directly as each record of the index holds the search key value and the pointer to the actual record.
+In a dense index, an index record is created for every row of the table. Records can be located directly as each record of the index holds the search key value and the pointer to the actual record.
 
 ![dense-index](/static/courses/system-design/chapter-II/indexes/dense-index.png)
 

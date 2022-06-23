@@ -8,7 +8,7 @@ images:
 authors: ['default']
 ---
 
-In the last tutorial, we learned about IP addresses that enable every machine to connect with other machines. But as we know humans are more comfortable with names than numbers. It’s easier to remember a name like `google.com` than something like `122.250.192.232`.
+In the last tutorial, we learned about IP addresses that enable every machine to connect with other machines. But as we know humans are more comfortable with names than numbers. It's easier to remember a name like `google.com` than something like `122.250.192.232`.
 
 This brings us to Domain Name System (DNS) which is a hierarchical and decentralized naming system used for translating human-readable domain names to IP addresses.
 
@@ -22,8 +22,8 @@ DNS lookup involves the following eight steps:
 2. The resolver then recursively queries a DNS root nameserver.
 3. The root server then responds to the resolver with the address of a Top Level Domain (TLD) DNS server (such as `.com` or `.net`), which stores the information for its domains. When searching for [example.com](http://example.com), our request is pointed toward the `.com` TLD.
 4. The resolver then makes a request to the `.com` TLD.
-5. The TLD server then responds with the IP address of the domain’s nameserver, [example.com](http://example.com).
-6. Lastly, the recursive resolver sends a query to the domain’s nameserver.
+5. The TLD server then responds with the IP address of the domain's nameserver, [example.com](http://example.com).
+6. Lastly, the recursive resolver sends a query to the domain's nameserver.
 7. The IP address for [example.com](http://example.com) is then returned to the resolver from the nameserver.
 8. The DNS resolver then responds to the web browser with the IP address of the domain requested initially.
 
@@ -31,7 +31,7 @@ Once the IP address has been resolved, the client should be able to request cont
 
 ## Server types
 
-Now, let’s look at the four key groups of servers that make up the DNS infrastructure.
+Now, let's look at the four key groups of servers that make up the DNS infrastructure.
 
 ### DNS Resolver
 
@@ -39,11 +39,11 @@ A DNS resolver (also known as a DNS recursive resolver) is the first stop in a D
 
 ### DNS root server
 
-A root server accepts a recursive resolver’s query which includes a domain name, and the root nameserver responds by directing the recursive resolver to a TLD nameserver, based on the extension of that domain (`.com`, `.net`, `.org`, etc.).
+A root server accepts a recursive resolver's query which includes a domain name, and the root nameserver responds by directing the recursive resolver to a TLD nameserver, based on the extension of that domain (`.com`, `.net`, `.org`, etc.).
 
 The root nameservers are overseen by a nonprofit called the [Internet Corporation for Assigned Names and Numbers (ICANN)](https://www.icann.org/).
 
-There are 13 DNS root nameservers known to every recursive resolver. Note that while there are 13 root nameservers, that doesn’t mean that there are only 13 machines in the root nameserver system. There are 13 types of root nameservers, but there are multiple copies of each one all over the world, which use [Anycast routing](https://en.wikipedia.org/wiki/Anycast) to provide speedy responses.
+There are 13 DNS root nameservers known to every recursive resolver. Note that while there are 13 root nameservers, that doesn't mean that there are only 13 machines in the root nameserver system. There are 13 types of root nameservers, but there are multiple copies of each one all over the world, which use [Anycast routing](https://en.wikipedia.org/wiki/Anycast) to provide speedy responses.
 
 ### TLD nameserver
 
@@ -56,7 +56,7 @@ Management of TLD nameservers is handled by the [Internet Assigned Numbers Autho
 
 **Authoritative DNS server**
 
-The authoritative nameserver is usually the resolver’s last step in the journey for an IP address. The authoritative nameserver contains information specific to the domain name it serves (e.g. [google.com](http://google.com/)) and it can provide a recursive resolver with the IP address of that server found in the DNS A record, or if the domain has a CNAME record (alias) it will provide the recursive resolver with an alias domain, at which point the recursive resolver will have to perform a whole new DNS lookup to procure a record from an authoritative nameserver (often an A record containing an IP address). If it cannot find the domain, returns the message _NXDOMAIN._
+The authoritative nameserver is usually the resolver's last step in the journey for an IP address. The authoritative nameserver contains information specific to the domain name it serves (e.g. [google.com](http://google.com/)) and it can provide a recursive resolver with the IP address of that server found in the DNS A record, or if the domain has a CNAME record (alias) it will provide the recursive resolver with an alias domain, at which point the recursive resolver will have to perform a whole new DNS lookup to procure a record from an authoritative nameserver (often an A record containing an IP address). If it cannot find the domain, returns the message _NXDOMAIN._
 
 ## Query Types
 
@@ -78,9 +78,9 @@ A non-recursive query is a query in which the DNS Resolver already knows the ans
 
 DNS records (aka zone files) are instructions that live in authoritative DNS servers and provide information about a domain including what IP address is associated with that domain and how to handle requests for that domain.
 
-These records consist of a series of text files written in what is known as _DNS syntax_. DNS syntax is just a string of characters used as commands that tell the DNS server what to do. All DNS records also have a _“TTL”_, which stands for time-to-live, and indicates how often a DNS server will refresh that record.
+These records consist of a series of text files written in what is known as _DNS syntax_. DNS syntax is just a string of characters used as commands that tell the DNS server what to do. All DNS records also have a _"TTL"_, which stands for time-to-live, and indicates how often a DNS server will refresh that record.
 
-There are more record types but for now, let’s look at some of the most commonly used ones:
+There are more record types but for now, let's look at some of the most commonly used ones:
 
 - **A (Address Mapping record):** The is the record that holds the IP address of a domain.
 - **AAAA (IP Version 6 Address record):** The record that contains the IPv6 address for a domain (as opposed to A records, which list the IPv4 address).
@@ -105,7 +105,7 @@ A DNS zone is a distinct part of the domain namespace which is delegated to a le
 
 ## DNS Caching
 
-A DNS cache (sometimes called a DNS *resolver* cache) is a temporary database, maintained by a computer's operating system, that contains records of all the recent visits and attempted visits to websites and other internet domains. In other words, a DNS cache is just a memory of recent DNS lookups that your computer can quickly refer to when it's trying to figure out how to load a website.
+A DNS cache (sometimes called a DNS _resolver_ cache) is a temporary database, maintained by a computer's operating system, that contains records of all the recent visits and attempted visits to websites and other internet domains. In other words, a DNS cache is just a memory of recent DNS lookups that your computer can quickly refer to when it's trying to figure out how to load a website.
 
 The Domain Name System implements a time-to-live (TTL) on every DNS record. TTL specifies the number of seconds the record can be cached by a DNS client or server. When the record is stored in a cache, whatever TTL value came with it gets stored as well. The server continues to update the TTL of the record stored in the cache, counting down every second. When it hits zero, the record is deleted or purged from the cache. At that point, if a query for that record is received, the DNS server has to start the resolution process.
 

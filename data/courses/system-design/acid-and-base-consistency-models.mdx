@@ -10,7 +10,7 @@ images:
 authors: ['default']
 ---
 
-Let’s discuss the ACID and BASE database, consistency models.
+Let's discuss the ACID and BASE database, consistency models.
 
 ## ACID
 
@@ -42,7 +42,7 @@ With the increasing amount of data and high availability requirements, the appro
 
 In the NoSQL database world, ACID transactions are less common as some databases have loosened the requirements for immediate consistency, data freshness, and accuracy in order to gain other benefits, like scale and resilience.
 
-_BASE properties are much looser than ACID guarantees, but there isn’t a direct one-for-one mapping between the two consistency models._
+_BASE properties are much looser than ACID guarantees, but there isn't a direct one-for-one mapping between the two consistency models._
 
 Let us understand the different terms:
 
@@ -52,7 +52,7 @@ The database appears to work most of the time.
 
 ### Soft-state
 
-Stores don’t have to be write-consistent, nor do different replicas have to be mutually consistent all the time.
+Stores don't have to be write-consistent, nor do different replicas have to be mutually consistent all the time.
 
 ### Eventual consistency
 
@@ -60,8 +60,8 @@ The data might not be consistent immediately but eventually, it becomes consiste
 
 ## ACID vs BASE Trade-offs
 
-There’s no right answer to whether your application needs an ACID versus a BASE consistency model. Both the models have been designed to satisfy different requirements. While choosing a database we need to decide to keep in mind the properties of both the models and the requirements of our application.
+There's no right answer to whether your application needs an ACID versus a BASE consistency model. Both the models have been designed to satisfy different requirements. While choosing a database we need to decide to keep in mind the properties of both the models and the requirements of our application.
 
-Given BASE’s loose consistency, developers need to be more knowledgeable and rigorous about consistent data if they choose a BASE store for their application. It’s essential to be familiar with the BASE behavior of your chosen aggregate store and work within those constraints.
+Given BASE's loose consistency, developers need to be more knowledgeable and rigorous about consistent data if they choose a BASE store for their application. It's essential to be familiar with the BASE behavior of your chosen aggregate store and work within those constraints.
 
 On the other hand, planning around BASE limitations can sometimes be a major disadvantage when compared to the simplicity of ACID transactions. A fully ACID database is the perfect fit for use cases where data reliability and consistency are essential.

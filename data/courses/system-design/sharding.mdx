@@ -7,7 +7,7 @@ images: ['/static/courses/system-design/chapter-II/sharding/banner.png']
 authors: ['default']
 ---
 
-Before we discuss sharding, let’s talk about data partitioning:
+Before we discuss sharding, let's talk about data partitioning:
 
 ## Data Partitioning
 
@@ -29,7 +29,7 @@ In this tutorial, we will specifically focus on sharding.
 
 ## What is sharding
 
-Sharding is a database architecture pattern related to *horizontal partitioning* the practice of separating one table’s rows into multiple different tables, known as _partitions_ or _shards_. Each partition has the same schema and columns, but also a subset of the shared data. Likewise, the data held in each is unique and independent of the data held in other partitions.
+Sharding is a database architecture pattern related to _horizontal partitioning_ the practice of separating one table's rows into multiple different tables, known as _partitions_ or _shards_. Each partition has the same schema and columns, but also a subset of the shared data. Likewise, the data held in each is unique and independent of the data held in other partitions.
 
 ![sharding](/static/courses/system-design/chapter-II/sharding/sharding.png)
 
@@ -67,7 +67,7 @@ But why do we need sharding? Here are some advantages:
 
 - **Availability:** Provides logical independence to the partitioned database, ensuring the high availability of our application. Here individual partition can be managed independently.
 - **Scalability:** Proves to increase scalability by distributing the data across multiple partitions.
-- **Security:** Helps improve the system’s security by storing sensitive and non-sensitive data in different partitions. This could provide better manageability and desirable security to sensitive data.
+- **Security:** Helps improve the system's security by storing sensitive and non-sensitive data in different partitions. This could provide better manageability and desirable security to sensitive data.
 - **Query Performance:** Improves the performance of the system. Instead of querying the whole database, now the system has to query only a smaller component, which can increase service performance.
 - **Data Manageability:** Divides tables and indexes into smaller and more manageable units.
 

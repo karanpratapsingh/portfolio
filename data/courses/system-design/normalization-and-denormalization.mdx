@@ -12,7 +12,7 @@ authors: ['default']
 
 ## Terms
 
-Before we go any further, let’s look at some commonly used terms in normalization and denormalization.
+Before we go any further, let's look at some commonly used terms in normalization and denormalization.
 
 ### Keys
 
@@ -52,7 +52,7 @@ There are three types of database anomalies:
 
 **Example**
 
-Let’s consider the following table which is not normalized:
+Let's consider the following table which is not normalized:
 
 | ID  | Name   | Role              | Team |
 | --- | ------ | ----------------- | ---- |
@@ -62,9 +62,9 @@ Let’s consider the following table which is not normalized:
 | 4   | Hailey | Product Manager   | C    |
 | 5   | Steve  | Frontend Engineer | D    |
 
-Let’s imagine, we hired a new person “John” but they might not be assigned a team immediately. This will cause an _insertion anomaly_ as the team attribute is not yet present.
+Let's imagine, we hired a new person "John" but they might not be assigned a team immediately. This will cause an _insertion anomaly_ as the team attribute is not yet present.
 
-Next, let’s say Hailey from Team C got promoted, to reflect that change in the database, we will need to update 2 rows to maintain consistency which can cause an _update anomaly_.
+Next, let's say Hailey from Team C got promoted, to reflect that change in the database, we will need to update 2 rows to maintain consistency which can cause an _update anomaly_.
 
 Finally, we would like to remove Team B but to do that we will also need to remove additional information such as name and role, this is an example of _deletion anomaly_.
 
@@ -78,7 +78,7 @@ The goal of normalization is to eliminate redundant data and ensure data is cons
 
 ### Normal forms
 
-Normal forms are a series of guidelines to ensure that the databases are normalized. Let’s discuss some essential normal forms:
+Normal forms are a series of guidelines to ensure that the databases are normalized. Let's discuss some essential normal forms:
 
 **1NF**
 
@@ -112,7 +112,7 @@ For a table to be in the Boyce-Codd normal form (BCNF), it should follow the fol
 - Satisfied the third normal form (3NF).
 - For every functional dependency X → Y, X should be the super key.
 
-_There are more normal forms such as 4NF, 5NF, and 6NF but we won’t discuss them here. Check out this [amazing video](https://www.youtube.com/watch?v=GFQaEYEc8_8) that goes into complete detail._
+_There are more normal forms such as 4NF, 5NF, and 6NF but we won't discuss them here. Check out this [amazing video](https://www.youtube.com/watch?v=GFQaEYEc8_8) that goes into complete detail._
 
 A relational database relation is often described as _"normalized"_ if it meets the third normal form. Most 3NF relations are free of insertion, update, and deletion anomalies.
 
@@ -129,7 +129,7 @@ Here are some advantages of normalization:
 
 ### Disadvantages
 
-Let’s look at some disadvantages of normalization:
+Let's look at some disadvantages of normalization:
 
 - Data design is complex.
 - Slower performance.
@@ -148,7 +148,7 @@ _Note: Denormalization does not mean reversing normalization._
 
 ### Advantages
 
-Let’s look at some advantages of denomalization:
+Let's look at some advantages of denomalization:
 
 - Retrieving data is faster.
 - Writing queries is easier.

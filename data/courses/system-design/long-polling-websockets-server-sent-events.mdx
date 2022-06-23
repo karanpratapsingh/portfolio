@@ -12,7 +12,7 @@ authors: ['default']
 
 Web applications were initially developed around a client/server model, where the Web client is always the initiator of transactions, requesting data from the server. Thus, there was no mechanism for the server to independently send, or push, data to the client without the client first making a request.
 
-Let’s look at some approaches to overcome this problem.
+Let's look at some approaches to overcome this problem.
 
 ## Long polling
 
@@ -26,7 +26,7 @@ Once the client receives a response, it immediately sends a new request to the s
 
 **Working**
 
-Let’s understand how long polling works:
+Let's understand how long polling works:
 
 1. The client makes an initial request and waits for a response.
 2. The server receives the request and delays sending anything until an update is available.
@@ -60,7 +60,7 @@ This is made possible by providing a standardized way for the server to send con
 
 **Working**
 
-Let’s understand how WebSockets work:
+Let's understand how WebSockets work:
 
 1. The client initiates a WebSocket handshake process by sending a request.
 2. The request also contains an _Upgrade_ header to switch to the WebSocket protocol (`ws://`).
@@ -79,9 +79,9 @@ Below are some advantages of WebSockets:
 
 **Disadvantages**
 
-Let’s discuss some disadvantages of WebSockets:
+Let's discuss some disadvantages of WebSockets:
 
-- Terminated connections aren’t automatically recovered.
+- Terminated connections aren't automatically recovered.
 - Older browsers don't support WebSockets (becoming less relevant).
 
 ## Server-Sent Events (SSE)
@@ -94,7 +94,7 @@ It is unidirectional, meaning once the client sends the request it can only rece
 
 **Working**
 
-Let’s understand how server-sent events work:
+Let's understand how server-sent events work:
 
 1. The client makes a request to the server.
 2. The connection between client and server is established and it remains open.
