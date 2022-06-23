@@ -1,0 +1,73 @@
+---
+title: 'API Gateway'
+date: '2022-10-01'
+draft: false
+summary: 'In this tutorial we will discuss API Gateway'
+images: ['/static/courses/system-design/chapter-III/api-gateway/banner.png']
+authors: ['default']
+---
+
+The API Gateway is an API management tool that sits between a client and a collection of backend services. It is a single entry point into a system. API Gateway encapsulates the internal system architecture. It provides an API that is tailored to each client. It also has other responsibilities such as authentication, monitoring, load balancing, caching, throttling, and logging, etc.
+
+![api-gateway](/static/courses/system-design/chapter-III/api-gateway/api-gateway.png)
+
+## Why do we need an API Gateway?
+
+The granularity of APIs provided by microservices is often different than what a client needs. Microservices typically provide fine-grained APIs, which means that clients need to interact with multiple services. Hence, an API gateway can provide a single entry point for all clients with some additional features and better management.
+
+## Features
+
+Below are some desired features of an API Gateway:
+
+- Authentication and authorization
+- Service discovery
+- Reverse Proxy
+- Caching
+- Security
+- Retry and Circuit breaking
+- Load balancing
+- Logging, tracing
+- API composition
+- Rate limiting and throttling
+- Versioning
+- Routing
+- IP whitelisting
+
+## Advantages
+
+Let’s look at some advantages of using an API Gateway:
+
+- Encapsulates the internal structure of an API.
+- Provides a centralized view of API.
+- Simplifies the client code.
+- Monitoring, analytics, and tracing.
+
+## Disadvantages
+
+Here are some possible disadvantages of an API Gateway:
+
+- Possible single point of failure.
+- Might impact performance.
+- Can become a bottleneck if not scaled properly.
+- Configuration can be challenging.
+
+## Backend For Frontend (BFF) pattern
+
+In the Backend For Frontend (BFF) pattern, the backend service from the microservices architecture pattern serves as the endpoint for requesting frontend.
+
+![backend-for-frontend](/static/courses/system-design/chapter-III/api-gateway/backend-for-frontend.png)
+
+Also, sometimes the output of data returned by the microservices to the front end is not in the exact format or the filter needed by the front end. To solve this issue, the frontend should have some logic to reformat the data, and therefore, we can use BFF to shift some of this logic to the intermediate layer.
+
+The primary function of the backend for the frontend pattern is to get the required data from the appropriate service, format the data, and sent it to the frontend.
+
+**Example:** GraphQL performs well as a backend for frontend (BFF).
+
+## Examples
+
+Following are some widely used gateways:
+
+- [Amazon API Gateway](https://aws.amazon.com/api-gateway/)
+- [Apigee API Gateway](https://cloud.google.com/apigee)
+- [Azure API Gateway](https://azure.microsoft.com/en-in/services/api-management/)
+- [Kong API Gateway](https://konghq.com/kong)

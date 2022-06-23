@@ -1,0 +1,69 @@
+---
+title: 'Event-Driven Architecture (EDA)'
+date: '2022-10-01'
+draft: false
+summary: 'In this tutorial we will discuss Event-Driven Architecture (EDA)'
+images:
+  [
+    '/static/courses/system-design/chapter-III/event-driven-architecture/banner.png',
+  ]
+authors: ['default']
+---
+
+An event-driven architecture (EDA) uses events to trigger and communicate between decoupled services. Events are data points that represent state changes in a system. When a user makes an action, they trigger an event, which doesn’t specify what should happen and how the change should modify the system. It only notifies the system of a particular state change.
+
+Event-driven architectures have three key components:
+
+- **Event producers**: Publishes an event to the router.
+- **Event routers**: Filters and pushes the events to consumers.
+- **Event consumers**: Uses events to reflect changes in the system.
+
+![event-driven-architecture](/static/courses/system-design/chapter-III/event-driven-architecture/event-driven-architecture.png)
+
+_Note: Dots in the diagram represents different events._
+
+## Patterns
+
+There are several ways to implement the event-driven architecture, and which method we use depends on the use case but here are some common examples:
+
+_Note: Each of these methods is discussed separately._
+
+- [Sagas](https://karanpratapsingh.com/courses/system-design/distributed-transactions#sagas)
+- [Command and Query Responsibility Segregation (CQRS)](https://karanpratapsingh.com/courses/system-design/command-query-responsibility-segregation)
+- [Event Sourcing](https://karanpratapsingh.com/courses/system-design/event-sourcing)
+- [Publish-Subscribe](https://karanpratapsingh.com/courses/system-design/publish-subscribe)
+
+## Advantages
+
+Let’s discuss some advantages:
+
+- Decoupled producers and consumers.
+- Highly scalable and distributed.
+- Easy to add new consumers.
+- Improves agility.
+
+## Challenges
+
+Here are some challenges:
+
+- Guaranteed delivery.
+- Exactly once, in-order processing of events.
+
+## Use cases
+
+Below are some common use cases where event-driven architectures are beneficial:
+
+- Metadata and metrics.
+- Server and security logs.
+- Integrating heterogeneous systems.
+- Fanout and parallel processing.
+
+## Examples
+
+Here are some widely used technologies for implementing event-driven architectures:
+
+- [NATS](https://nats.io/)
+- [Apache Kafka](https://kafka.apache.org/)
+- [Amazon EventBridge](https://aws.amazon.com/eventbridge/)
+- [Amazon SNS](https://aws.amazon.com/sns/)
+- [Google PubSub](https://cloud.google.com/pubsub)
