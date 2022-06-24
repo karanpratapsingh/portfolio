@@ -39,6 +39,7 @@ export default function CourseLayout({
 }: Props) {
   const { slug, fileName, title, readingTime, images } = frontMatter;
 
+  const [courseSlug] = slug.split('/');
   const banner = images?.[0];
 
   const url = `${siteMetadata.siteUrl}/courses/${slug}`;
@@ -161,7 +162,7 @@ export default function CourseLayout({
               </div>
               <div className='pt-4 xl:pt-8'>
                 <Link
-                  href='/courses'
+                  href={`/courses/${courseSlug}`}
                   className='text-primary-500 hover:text-primary-600 dark:hover:text-primary-400'
                 >
                   &larr; Back to the course

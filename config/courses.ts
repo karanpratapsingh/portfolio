@@ -108,7 +108,8 @@ export const courses: Course[] = [
     title: 'System Design',
     slug: 'system-design',
     banner: '/static/courses/system-design/banner.png',
-    description: 'TODO',
+    description:
+      'Learn how to design systems at scale and prepare for system design interviews',
     content: [
       {
         name: 'Getting Started',

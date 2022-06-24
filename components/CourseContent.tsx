@@ -3,6 +3,7 @@ import Link from '@/components/Link';
 import { Collapse } from '@geist-ui/core';
 import type { Course, CourseContent } from 'config/courses';
 import React from 'react';
+import { BsDot as DotIcon } from 'react-icons/bs';
 
 interface CourseContentProps {
   course: Course;
@@ -36,8 +37,8 @@ export default function CourseContent(
         <Conditional condition={!!content}>
           {content?.map(({ name, slug }) => (
             <Link key={name} href={getSlug(course.slug, slug)}>
-              <h3 className='my-2 text-lg text-gray-400 dark:text-gray-400'>
-                {name}
+              <h3 className='my-1 ml-2 flex items-center text-lg text-gray-500 dark:text-gray-400'>
+                <DotIcon className='text-4xl' /> {name}
               </h3>
             </Link>
           ))}
