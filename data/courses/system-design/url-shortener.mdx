@@ -7,6 +7,8 @@ images: ['/static/courses/system-design/chapter-V/url-shortener/banner.png']
 authors: ['default']
 ---
 
+Let's design a URL shortener service, similar to services like `bit.ly`, `goo.gl`, `tinyURL`.
+
 ## What is a URL Shortener?
 
 A URL shortener service creates an alias or a short url for a long url. Users are redirected to the original URL when they visit these short links.
@@ -200,6 +202,8 @@ Initially, we can get started with two tables:
 - **users**: Stores user's details such as name, email, created at, etc.
 - **urls**: Contains the new short URL's properties such as expiration, hash, original URL, and the user who created the short URL.
 
+We can also use the `hash` column as an [index](/courses/system-design/indexes) to improve query performance.
+
 ### What kind of database should we use?
 
 Since the data is not strongly relational, NoSQL databases such as [Amazon DynamoDB](https://aws.amazon.com/dynamodb/), [Apache Cassandra](https://cassandra.apache.org/_/index.html), or [MongoDB](https://www.mongodb.com/) will be a better choice here, if we do decide to use an SQL database then we can use something like [Azure SQL Database](https://azure.microsoft.com/en-in/products/azure-sql/database/) or [Amazon RDS](https://aws.amazon.com/rds/).
@@ -391,7 +395,7 @@ Let us identify and resolve bottlenecks such as single points of failure in our 
 To make our system more resilient we can do the following:
 
 - Running multiple instances of our Servers and Key Generation Service.
-- Introduce [load-balancers](/courses/system-design/load-balancing) between clients, servers, databases, and cache servers.
+- Introduce [load-balancers](/courses/system-design/load-balancer) between clients, servers, databases, and cache servers.
 - Using multiple read replicas for our database as it's a read-heavy system.
 - Standby replica for our key database in case it fails.
 - Multiple instances and replicas for our cache.
