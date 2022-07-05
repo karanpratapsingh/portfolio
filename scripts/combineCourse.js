@@ -16,6 +16,8 @@ const fs = require('fs');
   const slug = verifyArgs();
   const topics = await getCourseTopics(slug);
 
+  printTOC(slug, topics);
+
   combine(slug, topics);
 })();
 
@@ -48,6 +50,20 @@ async function getCourseTopics(slug) {
   topics.sort((a, b) => new Date(a.date) - new Date(b.date));
 
   return topics;
+}
+
+function createSlug(text) {
+  return text
+    .toLowerCase()
+    .replace(/ /g, '-')
+    .replace(/[^\w-]+/g, '');
+}
+
+function printTOC(slug, topics) {
+  console.log('Table of contents:\n');
+  for (const topic of topics) {
+    console.log(`- [${topic.title}](${createSlug(topic.title)})`);
+  }
 }
 
 function combine(slug, topics) {
