@@ -7,7 +7,7 @@ images: ['/static/courses/system-design/chapter-V/url-shortener/banner.png']
 authors: ['default']
 ---
 
-Let's design a URL shortener service, similar to services like `bit.ly`, `goo.gl`, `tinyURL`.
+Let's design a URL shortener, similar to services like [bit.ly](https://bitly.com/), [tinyURL](https://tinyurl.com/app).
 
 ## What is a URL Shortener?
 
@@ -25,7 +25,7 @@ URL shortener saves space in general when we are sharing URLs. Users are also le
 
 ## Requirements
 
-A URL shortening system should meet the following requirements:
+Our URL shortening system should meet the following requirements:
 
 ### Functional requirements
 
@@ -45,9 +45,9 @@ A URL shortening system should meet the following requirements:
 
 ## Estimation and Constrains
 
-Let's start with the estimation and constraints part.
+Let's start with the estimation and constraints.
 
-_Note: Make sure to double-check with your interviewer regarding any assumptions, here we are using numbers like 100 million just to simplify the math._
+_Note: Make sure to check any scale or traffic related assumptions with your interviewer._
 
 ### Traffic
 
@@ -58,19 +58,19 @@ This will be a very read-heavy system, so let's assume a `100:1` read/write rati
 For reads per month:
 
 $$
-100 \times 100 \space Million = 10 \space Billion/month
+100 \times 100 \space million = 10 \space billion/month
 $$
 
 Similarly for writes:
 
 $$
-1 \times 100 \space Million = 1 \space Million/month
+1 \times 100 \space million = 1 \space million/month
 $$
 
 **What would be Requests Per Second (RPS) for our system?**
 
 $$
-\frac{100 \space Million}{(30 \space days \times 24 \space hrs \times 3600 \space seconds)} = \sim 40 \space URLs/second
+\frac{100 \space million}{(30 \space days \times 24 \space hrs \times 3600 \space seconds)} = \sim 40 \space URLs/second
 $$
 
 **Redirections**
@@ -78,7 +78,7 @@ $$
 With a `100:1` read/write ratio, the number of redirections will be:
 
 $$
-100 \times 40 \space URLs/second = 4000 \space URLs/second
+100 \times 40 \space URLs/second = 4000 \space requests/second
 $$
 
 ### Bandwidth
@@ -100,13 +100,13 @@ $$
 For storage, we will assume we store each link or record in our database for 10 years. Since we expect around 100M new requests every month, the total number of records we will need to store would be:
 
 $$
-100M \times 10\space Years \times 12 \space Months = 12 \space Billion
+100M \times 10\space Years \times 12 \space Months = 12 \space billion
 $$
 
 Like earlier, if we assume each stored recorded will be approximately 500 bytes. We will need around 6TB of storage:
 
 $$
-12 \space Billion \times 500 \space bytes = 6 \space TB
+12 \space billion \times 500 \space bytes = 6 \space TB
 $$
 
 ### Cache
@@ -116,68 +116,27 @@ For caching, we will follow the classic [Pareto principle](https://en.wikipedia.
 Since we get around 4K read or redirection requests each second. This translates into 350M requests per day.
 
 $$
-4000 \space URLs/second \times 24 \space hours \times 3600 \space seconds = \sim 350 \space Million \space requests/day
+4000 \space URLs/second \times 24 \space hours \times 3600 \space seconds = \sim 350 \space million \space requests/day
 $$
 
 Hence, we will need around 35GB of memory per day.
 
 $$
-20\% \times 350 \space Million \times 500 \space bytes = 35 \space GB/day
+20\% \times 350 \space million \times 500 \space bytes = 35 \space GB/day
 $$
 
-## Estimates
+## High-level estimate
 
-Here are our high-level estimates:
+Here is our high-level estimate:
 
-| Writes (New URLs)    | 40/s      |
-| -------------------- | --------- |
-| Reads (Redirection)  | 4K/s      |
-| Bandwidth (Incoming) | 20KB/s    |
-| Bandwidth (Outgoing) | 2MB/s     |
-| Storage (10 years)   | 6TB       |
-| Memory (Caching)     | ~35GB/day |
-
-## API design
-
-Let us do a basic API design for our services:
-
-### Create URL
-
-```tsx
-createURL(apiKey: string, originalURL: string, expiration?: Date): string
-```
-
-**Parameters**
-
-API Key (`string`): API key provided to the user.
-
-Original Url (`string`): Original URL to be shortened.
-
-Expiration (`Date`): Expiration date of the new URL _(optional)_.
-
-**Returns**
-
-Short URL (`string`): New shortened URL.
-
-### Delete URL
-
-```tsx
-deleteURL(apiKey: string, shortURL: string): boolean
-```
-
-**Parameters**
-
-API Key (`string`): API key provided to the user.
-
-Short Url (`string`): Short URL to be retrieved.
-
-**Returns**
-
-Result (`boolean`): Represents successful deletion of the URL.
-
-### Why do we need an API key?
-
-As you must've noticed, we're using an API key to prevent abuse of our services. Using this API key we can limit the users to a certain number of requests per minute or hour. This is quite a standard practice for developer APIs and should cover our extended requirement.
+|                      |            |
+| -------------------- | ---------- |
+| Writes (New URLs)    | 40/s       |
+| Reads (Redirection)  | 4K/s       |
+| Bandwidth (Incoming) | 20 KB/s    |
+| Bandwidth (Outgoing) | 2 MB/s     |
+| Storage (10 years)   | 6 TB       |
+| Memory (Caching)     | ~35 GB/day |
 
 ## Data model design
 
@@ -199,8 +158,11 @@ Next, we will focus on the data model design. Here is our database schema:
 
 Initially, we can get started with two tables:
 
-- **users**: Stores user's details such as name, email, created at, etc.
-- **urls**: Contains the new short URL's properties such as expiration, hash, original URL, and the user who created the short URL.
+**users**
+Stores user's details such as `name`, `email`, `createdAt`, etc.
+
+**urls**
+Contains the new short URL's properties such as `expiration`, `hash`, `originalURL`, and `userID` of the user who created the short URL.
 
 We can also use the `hash` column as an [index](/courses/system-design/indexes) to improve query performance.
 
@@ -209,6 +171,52 @@ We can also use the `hash` column as an [index](/courses/system-design/indexes) 
 Since the data is not strongly relational, NoSQL databases such as [Amazon DynamoDB](https://aws.amazon.com/dynamodb/), [Apache Cassandra](https://cassandra.apache.org/_/index.html), or [MongoDB](https://www.mongodb.com/) will be a better choice here, if we do decide to use an SQL database then we can use something like [Azure SQL Database](https://azure.microsoft.com/en-in/products/azure-sql/database/) or [Amazon RDS](https://aws.amazon.com/rds/).
 
 _For more details, refer to [SQL vs NoSQL](/courses/system-design/sql-vs-nosql-databases)._
+
+## API design
+
+Let us do a basic API design for our services:
+
+### Create URL
+
+`createURL` API should create a new short URL in our system given an orignal URL.
+
+```tsx
+createURL(apiKey: string, originalURL: string, expiration?: Date): string
+```
+
+**Parameters**
+
+API Key (`string`): API key provided to the user.
+
+Original Url (`string`): Original URL to be shortened.
+
+Expiration (`Date`): Expiration date of the new URL _(optional)_.
+
+**Returns**
+
+Short URL (`string`): New shortened URL.
+
+### Delete URL
+
+`deleteURL` API should delete a given shortURL from our system.
+
+```tsx
+deleteURL(apiKey: string, shortURL: string): boolean
+```
+
+**Parameters**
+
+API Key (`string`): API key provided to the user.
+
+Short Url (`string`): Short URL to be retrieved.
+
+**Returns**
+
+Result (`boolean`): Represents whether the operation was successful or not..
+
+### Why do we need an API key?
+
+As you must've noticed, we're using an API key to prevent abuse of our services. Using this API key we can limit the users to a certain number of requests per minute or hour. This is quite a standard practice for developer APIs and should cover our extended requirement.
 
 ## High-level design
 
@@ -230,15 +238,15 @@ Where,
 
 `N`: Number of characters in the generated url.
 
-So, if we want to generate a url that is 7 characters long, we will generate ~3.5 Trillion different URLs.
+So, if we want to generate a url that is 7 characters long, we will generate ~3.5 trillion different URLs.
 
 $$
 \begin{gather*}
-62^5 = \sim 916 \space Million \space URLs \\
+62^5 = \sim 916 \space million \space URLs \\
 
-62^6 = \sim 56.8 \space Billion \space URLs \\
+62^6 = \sim 56.8 \space billion \space URLs \\
 
-62^7 = \sim 3.5 \space Trillion \space URLs
+62^7 = \sim 3.5 \space trillion \space URLs
 \end{gather*}
 $$
 
@@ -259,7 +267,7 @@ However, this creates a new issue for us, which is duplication and collision. We
 In this approach, we will start with a single server which will maintain the count of the keys generated. Once our service receives a request, it can reach out to the counter which returns a unique number and increments the counter. When the next request comes the counter again returns the unique number and this goes on.
 
 $$
-Counter(0-3.5 \space Trillion) \rightarrow base62encode \rightarrow hash
+Counter(0-3.5 \space trillion) \rightarrow base62encode \rightarrow hash
 $$
 
 The problem with this approach is that it can quickly become a single point for failure. And if we run multiple instances of the counter we can have collision as it's essentially a distributed system.
@@ -292,10 +300,10 @@ The easiest way to solve this would be to store keys in two tables. As soon as a
 
 **KGS database estimations**
 
-As per our discussion, we can generate up to ~56.8 Billion unique 6 character long keys which will result in us having to store 300 GB of keys.
+As per our discussion, we can generate up to ~56.8 billion unique 6 character long keys which will result in us having to store 300 GB of keys.
 
 $$
-6 \space characters \times 56.8 \space Billion = \sim 390 \space GB
+6 \space characters \times 56.8 \space billion = \sim 390 \space GB
 $$
 
 While 390 GB seems like a lot for this simple use case, it is important to remember this is for the entirety of our service lifetime and the size of the keys database would not increase like our main database.
@@ -329,14 +337,14 @@ Here's how it works:
 
 ## Detailed design
 
-It's time to discuss our design decisions in detail.
+It's time to discuss the finer details of our design.
 
 ### Data Partitioning
 
 To scale out our databases we will need to partition our data. Horizontal partitioning (aka [Sharding](/courses/system-design/sharding)) can be a good first step. We can use partitions schemes such as:
 
 - Hash-Based Partitioning
-- List Based Partitioning
+- List-Based Partitioning
 - Range Based Partitioning
 - Composite Partitioning
 
@@ -386,7 +394,7 @@ We can also use an [API Gateway](/courses/system-design/api-gateway) as they can
 
 Let us identify and resolve bottlenecks such as single points of failure in our design:
 
-- "What if the API service of Key Generation Service crashes?"
+- "What if the API service or Key Generation Service crashes?"
 - "How will we distribute our traffic between our components?"
 - "How can we reduce the load on our database?"
 - "What if the key database used by KGS fails?"
@@ -398,4 +406,4 @@ To make our system more resilient we can do the following:
 - Introduce [load-balancers](/courses/system-design/load-balancer) between clients, servers, databases, and cache servers.
 - Using multiple read replicas for our database as it's a read-heavy system.
 - Standby replica for our key database in case it fails.
-- Multiple instances and replicas for our cache.
+- Multiple instances and replicas for our distributed cache.
