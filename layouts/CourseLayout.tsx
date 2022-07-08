@@ -7,6 +7,7 @@ import { BlogSEO } from '@/components/SEO';
 import Share from '@/components/Share';
 import TOCInline from '@/components/TOCInline';
 import siteMetadata from '@/data/siteMetadata';
+import { courseSlugMap } from 'config/courses';
 import Image from 'next/image';
 import { ReactNode } from 'react';
 import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
@@ -46,7 +47,12 @@ export default function CourseLayout({
 
   return (
     <SectionContainer>
-      <BlogSEO url={url} authorDetails={authorDetails} {...frontMatter} />
+      <BlogSEO
+        url={url}
+        authorDetails={authorDetails}
+        {...frontMatter}
+        title={`${courseSlugMap[courseSlug]}: ${title}`}
+      />
       <ScrollTopAndComment />
       <article className='fade-in'>
         <div className='xl:divide-y xl:divide-gray-100 xl:dark:divide-gray-800'>
