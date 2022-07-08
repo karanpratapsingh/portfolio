@@ -11,6 +11,7 @@ const usage = `Usage:
 const matter = require('gray-matter');
 const globby = require('globby');
 const fs = require('fs');
+const readingTime = require('reading-time');
 
 (async function main() {
   const slug = verifyArgs();
@@ -40,10 +41,12 @@ async function getCourseTopics(slug) {
   for (const path of paths) {
     const content = fs.readFileSync(path);
     const frontmatter = matter(content.toString());
+
     topics.push({
       title: frontmatter.data.title,
       date: frontmatter.data.date,
       content: frontmatter.content,
+      metadata: readingTime(frontmatter.content),
     });
   }
 
@@ -60,10 +63,21 @@ function createSlug(text) {
 }
 
 function printTOC(slug, topics) {
+  let readingTime = 0;
+  let words = 0;
+
   console.log('Table of contents:\n');
   for (const topic of topics) {
-    console.log(`- [${topic.title}](${createSlug(topic.title)})`);
+    console.log(`- [${topic.title}](#${createSlug(topic.title)})`);
+    readingTime += topic.metadata.minutes;
+    words += topic.metadata.words;
   }
+
+  console.log(
+    `\n[info]: reading time: ${readingTime.toFixed(
+      2,
+    )} minutes | Words: ${words}`,
+  );
 }
 
 function combine(slug, topics) {
