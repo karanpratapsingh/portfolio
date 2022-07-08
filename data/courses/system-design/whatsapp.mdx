@@ -324,16 +324,16 @@ It's time to discuss our design decisions in detail.
 
 ### Data Partitioning
 
-To scale out our databases we will need to partition our data. Horizontal partitioning (aka [Sharding](https://www.notion.so/courses/system-design/sharding)) can be a good first step. We can use partitions schemes such as:
+To scale out our databases we will need to partition our data. Horizontal partitioning (aka [Sharding](/courses/system-design/sharding)) can be a good first step. We can use partitions schemes such as:
 
 - Hash-Based Partitioning
 - List-Based Partitioning
 - Range Based Partitioning
 - Composite Partitioning
 
-The above approaches can still cause uneven data and load distribution, we can solve this using [Consistent hashing](https://www.notion.so/courses/system-design/consistent-hashing).
+The above approaches can still cause uneven data and load distribution, we can solve this using [Consistent hashing](/courses/system-design/consistent-hashing).
 
-_For more details, refer to [Sharding](https://www.notion.so/courses/system-design/sharding) and [Consistent Hashing](https://www.notion.so/courses/system-design/consistent-hashing)._
+_For more details, refer to [Sharding](/courses/system-design/sharding) and [Consistent Hashing](/courses/system-design/consistent-hashing)._
 
 ### Caching
 
@@ -383,7 +383,7 @@ Let us identify and resolve bottlenecks such as single points of failure in our 
 To make our system more resilient we can do the following:
 
 - Running multiple instances of each of our services.
-- Introduce [load-balancers](https://www.notion.so/courses/system-design/load-balancer) between clients, servers, databases, and cache servers.
+- Introduce [load-balancers](/courses/system-design/load-balancer) between clients, servers, databases, and cache servers.
 - Using multiple read replicas for our databases.
 - Multiple instances and replicas for our distributed cache.
 - We can have a standby replica of our API Gateway.
