@@ -95,7 +95,7 @@ Let's discuss some microservices best practices:
 - Data storage should be private to the service that owns the data
 - Avoid coupling between services. Causes of coupling include shared database schemas and rigid communication protocols.
 - Decentralize everything. Individual teams are responsible for designing and building services. Avoid sharing code or data schemas.
-- Fail fast by using a [circuit breaker](https://karanpratapsingh.com/courses/system-design/circuit-breaker) to achieve fault tolerance.
+- Fail fast by using a [circuit breaker](/courses/system-design/circuit-breaker) to achieve fault tolerance.
 - Ensure your API changes are backwards compatible.
 
 ### Pitfalls
@@ -108,7 +108,7 @@ Below are some common pitfalls of microservices architecture:
 - Lack of Business Alignment.
 - Forgetting lack of clear ownership
 - Lack of idempotency.
-- Trying to do everything [ACID instead of BASE](https://karanpratapsingh.com/courses/system-design/acid-and-base-consistency-models).
+- Trying to do everything [ACID instead of BASE](/courses/system-design/acid-and-base-consistency-models).
 - Lack of design for fault tolerance may result in cascading failures.
 
 ## Beware of the distributed monolith

@@ -13,6 +13,11 @@ export interface Course {
   content: CourseContent[];
 }
 
+export const courseSlugMap = {
+  go: 'Learn Go',
+  'system-design': 'System Design',
+};
+
 export const courses: Course[] = [
   {
     title: 'System Design',

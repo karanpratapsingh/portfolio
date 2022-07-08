@@ -5239,7 +5239,7 @@ Each Cond has an associated lock (often a `*Mutex` or `*RWMutex`), which must be
 
 One scenario can be when one process is receiving data, and other processes must wait for this process to receive data before they can read the correct data.
 
-If we simply use a [channel](https://karanpratapsingh.com/courses/go/channels) or mutex, only one process can wait and read the data. There is no way to notify other processes to read the data. Thus, we can `sync.Cond` to coordinate shared resources.
+If we simply use a [channel](/courses/go/channels) or mutex, only one process can wait and read the data. There is no way to notify other processes to read the data. Thus, we can `sync.Cond` to coordinate shared resources.
 
 ### Usage
 
@@ -5437,7 +5437,7 @@ Creating a new person...
 There is no object in the pool now (new one will be created): &{}
 ```
 
-_Notice how we did [type assertion](https://karanpratapsingh.com/courses/go/interfaces#type-assertion) when we call `Get`._
+_Notice how we did [type assertion](/courses/go/interfaces#type-assertion) when we call `Get`._
 
 It can be seen that the `sync.Pool` is strictly a temporary object pool, which is suitable for storing some temporary objects that will be shared among goroutines.
 
