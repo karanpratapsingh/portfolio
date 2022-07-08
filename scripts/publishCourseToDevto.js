@@ -1,5 +1,5 @@
 /**
- * Publish to Dev.to
+ * Publish course to Dev.to
  *
  * This script publishes articles to dev.to
  */
@@ -13,19 +13,30 @@ const fs = require('fs');
  */
 const articles = [];
 
-function getBanner(section, slug) {
-  return `https://raw.githubusercontent.com/karanpratapsingh/portfolio/master/public/static/courses/go/${section}/${slug}/banner.png`;
+function getBanner(section, course_slug, slug) {
+  return `https://raw.githubusercontent.com/karanpratapsingh/portfolio/master/public/static/courses/${course_slug}/${section}/${slug}/banner.png`;
 }
 
-function getBody(slug) {
-  const path = `data/courses/go/${slug}.mdx`;
+function getBody(course_slug, slug) {
+  const path = `data/courses/${course_slug}/${slug}.mdx`;
   const content = fs.readFileSync(path);
   const frontmatter = matter(content.toString());
 
-  return frontmatter.content.replace(
+  // Replace direct static images with github links
+  let body = frontmatter.content;
+
+  body = body.replace(
     /\]\(\/static\/courses/g,
     '](https://raw.githubusercontent.com/karanpratapsingh/portfolio/master/public/static/courses',
   );
+
+  // Replace static links
+  body = body.replace(
+    new RegExp(`]\\(/courses/${course_slug}`),
+    `](https://karanpratapsingh.com/courses/${course_slug}`,
+  );
+
+  return body;
 }
 
 function sleep(time) {
