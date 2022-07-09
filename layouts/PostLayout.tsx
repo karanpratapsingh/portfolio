@@ -129,7 +129,7 @@ export default function PostLayout({
                 </ul>
               </dd>
             </dl>
-            <div className='divide-y-2 divide-gray-100 dark:divide-gray-800 xl:col-span-3 xl:row-span-2 xl:pb-0'>
+            <div className='divide-y-2 divide-gray-100 border-none dark:divide-gray-800 xl:col-span-3 xl:row-span-2 xl:pb-0'>
               {banner && (
                 <img
                   src={banner}
