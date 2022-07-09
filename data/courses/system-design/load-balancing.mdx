@@ -1,19 +1,19 @@
 ---
-title: 'Load Balancer'
+title: 'Load Balancing'
 date: '2022-10-01'
 draft: false
-summary: 'In this tutorial we will discuss Load Balancer'
-images: ['/static/courses/system-design/chapter-I/load-balancer/banner.png']
+summary: 'In this tutorial we will discuss Load Balancing'
+images: ['/static/courses/system-design/chapter-I/load-balancing/banner.png']
 authors: ['default']
 ---
 
 Load balancing lets us distribute incoming network traffic across multiple resources ensuring high availability and reliability by sending requests only to resources that are online. This provides the flexibility to add or subtract resources as demand dictates.
 
-![load-balancer](/static/courses/system-design/chapter-I/load-balancer/load-balancer.png)
+![load-balancing](/static/courses/system-design/chapter-I/load-balancing/load-balancer.png)
 
 For additional scalability and redundancy, we can try to load balance at each layer of our system:
 
-![load-balancer-layers](/static/courses/system-design/chapter-I/load-balancer/load-balancer-layers.png)
+![load-balancing-layers](/static/courses/system-design/chapter-I/load-balancing/load-balancer-layers.png)
 
 ## But why?
 
@@ -89,7 +89,7 @@ As you must've already guessed, the load balancer itself can be a single point o
 
 And, if there's a failure detection and the _active_ load balancer fails, another _passive_ load balancer can take over which will make our system more fault-tolerant.
 
-![redundant-load-balancer](/static/courses/system-design/chapter-I/load-balancer/redundant-load-balancer.png)
+![redundant-load-balancing](/static/courses/system-design/chapter-I/load-balancing/redundant-load-balancer.png)
 
 ## Features
 
