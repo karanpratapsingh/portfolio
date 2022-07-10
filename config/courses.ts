@@ -43,16 +43,16 @@ export const courses: Course[] = [
         name: 'Chapter I',
         content: [
           {
-            name: 'TCP and UDP',
-            slug: 'tcp-and-udp',
+            name: 'IP',
+            slug: 'ip',
           },
           {
             name: 'OSI Model',
             slug: 'osi-model',
           },
           {
-            name: 'IP',
-            slug: 'ip',
+            name: 'TCP and UDP',
+            slug: 'tcp-and-udp',
           },
           {
             name: 'Domain Name System (DNS)',
@@ -112,7 +112,7 @@ export const courses: Course[] = [
             slug: 'sql-vs-nosql-databases',
           },
           {
-            name: 'Database replication',
+            name: 'Database Replication',
             slug: 'database-replication',
           },
           {
@@ -205,7 +205,7 @@ export const courses: Course[] = [
             slug: 'rest-graphql-grpc',
           },
           {
-            name: 'Long polling, WebSockets, Server-Sent Events',
+            name: 'Long polling, WebSockets, Server-Sent Events (SSE)',
             slug: 'long-polling-websockets-server-sent-events',
           },
         ],
