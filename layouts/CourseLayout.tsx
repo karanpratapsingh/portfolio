@@ -51,7 +51,7 @@ export default function CourseLayout({
         url={url}
         authorDetails={authorDetails}
         {...frontMatter}
-        title={`${courseSlugMap[courseSlug]}: ${title}`}
+        title={`${title} | ${courseSlugMap[courseSlug]}`}
       />
       <ScrollTopAndComment />
       <article className='fade-in'>
