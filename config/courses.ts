@@ -214,6 +214,18 @@ export const courses: Course[] = [
         name: 'Chapter IV',
         content: [
           {
+            name: 'Geohashing and Quadtrees',
+            slug: 'geohashing-and-quadtrees',
+          },
+          {
+            name: 'Circuit breaker ',
+            slug: 'circuit-breaker',
+          },
+          {
+            name: 'Rate Limiting',
+            slug: 'rate-limiting',
+          },
+          {
             name: 'SLA, SLO, SLI',
             slug: 'sla-slo-sli',
           },
@@ -224,14 +236,6 @@ export const courses: Course[] = [
           {
             name: 'Virtual Machines (VMs) and Containers',
             slug: 'virtual-machines-and-containers',
-          },
-          {
-            name: 'Circuit breaker ',
-            slug: 'circuit-breaker',
-          },
-          {
-            name: 'Rate Limiting',
-            slug: 'rate-limiting',
           },
           {
             name: 'OAuth 2.0 and OpenID Connect (OIDC)',
