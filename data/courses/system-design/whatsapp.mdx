@@ -34,7 +34,7 @@ Our system should meet the following requirements:
 - Show last seen time of users.
 - Push notifications.
 
-## Estimation and Constrains
+## Estimation and Constraints
 
 Let's start with the estimation and constraints.
 
@@ -42,13 +42,13 @@ _Note: Make sure to check any scale or traffic-related assumptions with your int
 
 ### Traffic
 
-Let us assume we have 50 Million daily active users (DAU) and on average each user sends at least 10 messages to 4 different people every day. This gives us 2 billion messages per day.
+Let us assume we have 50 million daily active users (DAU) and on average each user sends at least 10 messages to 4 different people every day. This gives us 2 billion messages per day.
 
 $$
 50 \space million \times 20 \space messages = 2 \space billion/day
 $$
 
-Messages can also contain media such as images, videos, or other files. We can assume that 5 percent of messages are media files shared by users, which gives us additional 200 million files we would need to store.
+Messages can also contain media such as images, videos, or other files. We can assume that 5 percent of messages are media files shared by the users, which gives us additional 200 million files we would need to store.
 
 $$
 5\% \times 2 \space billion = 200 \space million/day
@@ -68,10 +68,10 @@ $$
 2 \space billion \times 100 \space bytes = \sim 200 \space GB/day
 $$
 
-As per our requirements, we also know that around 5 percent of our daily messages (100 million) are media files. If we assume each file is 50 KB on average, we will require
+As per our requirements, we also know that around 5 percent of our daily messages (100 million) are media files. If we assume each file is 50 KB on average, we will require 10 TB of object storage every day.
 
 $$
-2 \space billion \times 100 \space million \times 100 \space kilobytes = 10 \space TB/day
+2 \space billion \times 100 \space million \times 100 \space KB = 10 \space TB/day
 $$
 
 And for 10 years, we will require about 38 PB of storage.
@@ -82,7 +82,7 @@ $$
 
 ### Bandwidth
 
-As our system is handling 10.2 TB of data every day, so we will a require minimum bandwidth of around 120 MB per second.
+As our system is handling 10.2 TB of ingress every day, so we will a require minimum bandwidth of around 120 MB per second.
 
 $$
 \frac{10200 \space GB}{(24 \space hrs \times 3600 \space seconds)} = \sim 120 \space MB/second
@@ -101,7 +101,7 @@ Here is our high-level estimate:
 
 ## Data model design
 
-This is our general data model which reflects our requirements.
+This is the general data model which reflects our requirements.
 
 <iframe
   width='100%'
