@@ -12,6 +12,7 @@ const fs = require('fs');
  * @type {Array<{ name: string, slug: string, section: string}>}
  */
 const articles = [];
+const course_slug = 'go';
 
 function getBanner(section, course_slug, slug) {
   return `https://raw.githubusercontent.com/karanpratapsingh/portfolio/master/public/static/courses/${course_slug}/${section}/${slug}/banner.png`;
@@ -70,11 +71,11 @@ function createDraft(apiKey, body) {
 
   for (const [, { name, section, slug }] of articles.entries()) {
     const title = `Go Course: ${name}`;
-    const main_image = getBanner(section, slug);
+    const main_image = getBanner(section, course_slug, slug);
     const tags = ['go', 'tutorial', 'beginners'];
-    const canonical_url = 'https://github.com/karanpratapsingh/go-course';
+    const canonical_url = `https://karanpratapsingh.com/courses/${course_slug}/${slug}`;
     const series = 'Go Course';
-    const body_markdown = getBody(slug);
+    const body_markdown = getBody(course_slug, slug);
 
     const body = {
       article: {
