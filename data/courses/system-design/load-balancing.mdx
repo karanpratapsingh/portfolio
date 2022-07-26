@@ -1,6 +1,6 @@
 ---
 title: 'Load Balancing'
-date: '2022-10-01'
+date: '2022-10-07'
 draft: false
 summary: 'In this tutorial we will discuss Load Balancing'
 images: ['/static/courses/system-design/chapter-I/load-balancing/banner.png']
@@ -25,9 +25,9 @@ A load balancer can sit in front of the servers and route client requests across
 
 This is the core functionality provided by a load balancer and has several common variations:
 
-- **Host-based:** Distributes requests based on the requested hostname.
-- **Path-based:** Using the entire URL to distribute requests as opposed to just the hostname.
-- **Content-based:** Inspects the message content of a request. This allows distribution based on content such as the value of a parameter.
+- **Host-based**: Distributes requests based on the requested hostname.
+- **Path-based**: Using the entire URL to distribute requests as opposed to just the hostname.
+- **Content-based**: Inspects the message content of a request. This allows distribution based on content such as the value of a parameter.
 
 ## Layers
 
@@ -67,12 +67,12 @@ Unfortunately, DNS load balancing has inherent problems limiting its reliability
 
 Now, let's discuss commonly used routing algorithms:
 
-- **Round Robin:** Requests are distributed to application servers in rotation
-- **Weighted Round Robin:** Builds on the simple Round-robin technique to account for differing server characteristics such as compute and traffic handling capacity using weights that can be assigned via DNS records by the administrator.
-- **Least Connections:** A new request is sent to the server with the fewest current connections to clients. The relative computing capacity of each server is factored into determining which one has the least connections.
-- **Least Response Time:** Sends requests to the server selected by a formula that combines the fastest response time and fewest active connections.
-- **Least Bandwidth:** This method measures traffic in megabits (Mbps) per second, sending client requests to the server with the least Mbps of traffic.
-- **Hashing:** Distributes requests based on a key we define, such as the client IP address or the request URL.
+- **Round Robin**: Requests are distributed to application servers in rotation
+- **Weighted Round Robin**: Builds on the simple Round-robin technique to account for differing server characteristics such as compute and traffic handling capacity using weights that can be assigned via DNS records by the administrator.
+- **Least Connections**: A new request is sent to the server with the fewest current connections to clients. The relative computing capacity of each server is factored into determining which one has the least connections.
+- **Least Response Time**: Sends requests to the server selected by a formula that combines the fastest response time and fewest active connections.
+- **Least Bandwidth**: This method measures traffic in megabits (Mbps) per second, sending client requests to the server with the least Mbps of traffic.
+- **Hashing**: Distributes requests based on a key we define, such as the client IP address or the request URL.
 
 ## Advantages
 
@@ -95,18 +95,18 @@ And, if there's a failure detection and the _active_ load balancer fails, anothe
 
 Here are some commonly desired features of load balancers:
 
-- **Autoscaling:** Starting up and shutting down resources in response to demand conditions.
-- **Sticky sessions:** The ability to assign the same user or device to the same resource in order to maintain the session state on the resource.
-- **Healthchecks:** The ability to determine if a resource is down or performing poorly in order to remove the resource from the load balancing pool.
-- **Persistence connections:** Allowing a server to open a persistent connection with a client such as a WebSocket.
-- **Encryption:** Handling encrypted connections such as TLS and SSL.
-- **Certificates:** Presenting certificates to a client and authentication of client certificates.
-- **Compression:** Compression of responses.
-- **Caching:** An application-layer load balancer may offer the ability to cache responses.
-- **Logging:** Logging of request and response metadata can serve as an important audit trail or source for analytics data.
-- **Request tracing:** Assigning each request a unique id for the purposes of logging, monitoring, and troubleshooting.
-- **Redirects:** The ability to redirect an incoming request based on factors such as the requested path.
-- **Fixed response:** Returning a static response for a request such as an error message.
+- **Autoscaling**: Starting up and shutting down resources in response to demand conditions.
+- **Sticky sessions**: The ability to assign the same user or device to the same resource in order to maintain the session state on the resource.
+- **Healthchecks**: The ability to determine if a resource is down or performing poorly in order to remove the resource from the load balancing pool.
+- **Persistence connections**: Allowing a server to open a persistent connection with a client such as a WebSocket.
+- **Encryption**: Handling encrypted connections such as TLS and SSL.
+- **Certificates**: Presenting certificates to a client and authentication of client certificates.
+- **Compression**: Compression of responses.
+- **Caching**: An application-layer load balancer may offer the ability to cache responses.
+- **Logging**: Logging of request and response metadata can serve as an important audit trail or source for analytics data.
+- **Request tracing**: Assigning each request a unique id for the purposes of logging, monitoring, and troubleshooting.
+- **Redirects**: The ability to redirect an incoming request based on factors such as the requested path.
+- **Fixed response**: Returning a static response for a request such as an error message.
 
 ## Examples
 

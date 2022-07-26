@@ -1,6 +1,6 @@
 ---
 title: 'Storage'
-date: '2022-10-01'
+date: '2022-10-14'
 draft: false
 summary: 'In this tutorial we will discuss Storage'
 images: ['/static/courses/system-design/chapter-I/storage/banner.png']
@@ -15,11 +15,11 @@ RAID (redundant array of independent disks) is a way of storing the same data on
 
 There are different RAID levels, however, and not all have the goal of providing redundancy. Let's discuss some commonly used RAID levels:
 
-- **RAID 0:** Also known as striping, data is split evenly across all the drives in the array.
-- **RAID 1:** Also known as mirroring, at least two drives contains the exact copy of a set of data. If a drive fails, others will still work.
-- **RAID 5:** Striping with parity. Requires the use of at least 3 drives, striping the data across multiple drives like RAID 0, but also has a parity distributed across the drives.
-- **RAID 6:** Striping with double parity. RAID 6 is like RAID 5, but the parity data are written to two drives.
-- **RAID 10:** Combines striping plus mirroring from RAID 0 and RAID 1. It provides security by mirroring all data on secondary drives while using striping across each set of drives to speed up data transfers.
+- **RAID 0**: Also known as striping, data is split evenly across all the drives in the array.
+- **RAID 1**: Also known as mirroring, at least two drives contains the exact copy of a set of data. If a drive fails, others will still work.
+- **RAID 5**: Striping with parity. Requires the use of at least 3 drives, striping the data across multiple drives like RAID 0, but also has a parity distributed across the drives.
+- **RAID 6**: Striping with double parity. RAID 6 is like RAID 5, but the parity data are written to two drives.
+- **RAID 10**: Combines striping plus mirroring from RAID 0 and RAID 1. It provides security by mirroring all data on secondary drives while using striping across each set of drives to speed up data transfers.
 
 ### Comparison
 
@@ -43,7 +43,7 @@ Volume is a fixed amount of storage on a disk or tape. The term volume is often 
 
 File storage is a solution to store data as files and present it to its final users as a hierarchical directories structure. The main advantage is to provide a user-friendly solution to store and retrieve files. To locate a file in file storage, the complete path of the file is required. It is economical and easily structured and is usually found on hard drives, which means that they appear exactly the same for the user and on the hard drive.
 
-**Example:** [Amazon EFS](https://aws.amazon.com/efs/), [Azure files](https://azure.microsoft.com/en-in/services/storage/files/), [Google Cloud Filestore](https://cloud.google.com/filestore), etc.
+**Example**: [Amazon EFS](https://aws.amazon.com/efs/), [Azure files](https://azure.microsoft.com/en-in/services/storage/files/), [Google Cloud Filestore](https://cloud.google.com/filestore), etc.
 
 ## Block storage
 
@@ -51,13 +51,13 @@ Block storage divides data into blocks (chunks) and stores them as separate piec
 
 Block storage also decouples data from user environments, allowing that data to be spread across multiple environments. This creates multiple paths to the data and allows the user to retrieve it quickly. When a user or application requests data from a block storage system, the underlying storage system reassembles the data blocks and presents the data to the user or application
 
-**Example:** [Amazon EBS](https://aws.amazon.com/ebs/).
+**Example**: [Amazon EBS](https://aws.amazon.com/ebs/).
 
 ## Object Storage
 
 Object storage, which is also known as object-based storage, breaks data files up into pieces called objects. It then stores those objects in a single repository, which can be spread out across multiple networked systems.
 
-**Example:** [Amazon S3](https://aws.amazon.com/s3/), [Azure Blob Storage](https://azure.microsoft.com/en-in/services/storage/blobs/), [Google Cloud Storage](https://cloud.google.com/storage), etc.
+**Example**: [Amazon S3](https://aws.amazon.com/s3/), [Azure Blob Storage](https://azure.microsoft.com/en-in/services/storage/blobs/), [Google Cloud Storage](https://cloud.google.com/storage), etc.
 
 ## NAS
 

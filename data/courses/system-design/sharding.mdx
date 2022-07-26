@@ -1,6 +1,6 @@
 ---
 title: 'Sharding'
-date: '2022-10-01'
+date: '2022-10-27'
 draft: false
 summary: 'In this tutorial we will discuss Sharding'
 images: ['/static/courses/system-design/chapter-II/sharding/banner.png']
@@ -65,17 +65,17 @@ As the name suggests, composite partitioning partitions the data based on two or
 
 But why do we need sharding? Here are some advantages:
 
-- **Availability:** Provides logical independence to the partitioned database, ensuring the high availability of our application. Here individual partition can be managed independently.
-- **Scalability:** Proves to increase scalability by distributing the data across multiple partitions.
-- **Security:** Helps improve the system's security by storing sensitive and non-sensitive data in different partitions. This could provide better manageability and desirable security to sensitive data.
-- **Query Performance:** Improves the performance of the system. Instead of querying the whole database, now the system has to query only a smaller component, which can increase service performance.
-- **Data Manageability:** Divides tables and indexes into smaller and more manageable units.
+- **Availability**: Provides logical independence to the partitioned database, ensuring the high availability of our application. Here individual partition can be managed independently.
+- **Scalability**: Proves to increase scalability by distributing the data across multiple partitions.
+- **Security**: Helps improve the system's security by storing sensitive and non-sensitive data in different partitions. This could provide better manageability and desirable security to sensitive data.
+- **Query Performance**: Improves the performance of the system. Instead of querying the whole database, now the system has to query only a smaller component, which can increase service performance.
+- **Data Manageability**: Divides tables and indexes into smaller and more manageable units.
 
 ## Disadvantages
 
-- **Complexity:** Sharding increases the complexity of the system in general.
-- **Joins across shards:** Once a database is partitioned and spread across multiple machines it is often not feasible to perform joins that span database shards. Such joins will not be performance efficient since data has to be compiled from multiple servers.
-- **Rebalancing:** Once data distribution is not uniform or there is a lot of load on a single shard, in such cases we have to rebalance our shards so that the requests are as equally distributed among the shards as possible.
+- **Complexity**: Sharding increases the complexity of the system in general.
+- **Joins across shards**: Once a database is partitioned and spread across multiple machines it is often not feasible to perform joins that span database shards. Such joins will not be performance efficient since data has to be compiled from multiple servers.
+- **Rebalancing**: Once data distribution is not uniform or there is a lot of load on a single shard, in such cases we have to rebalance our shards so that the requests are as equally distributed among the shards as possible.
 
 ## When to use sharding?
 

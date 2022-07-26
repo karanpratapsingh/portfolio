@@ -1,6 +1,6 @@
 ---
 title: 'Normalization and Denormalization'
-date: '2022-10-01'
+date: '2022-10-21'
 draft: false
 summary: 'In this tutorial we will discuss Normalization and Denormalization'
 images:
@@ -16,27 +16,27 @@ Before we go any further, let's look at some commonly used terms in normalizatio
 
 ### Keys
 
-**Primary Key:** Column or group of columns that can be used to uniquely identify every row of the table.
+**Primary Key**: Column or group of columns that can be used to uniquely identify every row of the table.
 
-**Composite key:** A primary key made up of multiple columns.
+**Composite key**: A primary key made up of multiple columns.
 
-**Super key:** Set of all keys that can uniquely identify all the rows present in a table.
+**Super key**: Set of all keys that can uniquely identify all the rows present in a table.
 
-**Candidate key:** Attributes that identify rows uniquely in a table.
+**Candidate key**: Attributes that identify rows uniquely in a table.
 
-**Foreign key:** It is a reference to a primary key of another table.
+**Foreign key**: It is a reference to a primary key of another table.
 
-**Alternate key:** Keys that are not primary keys are known as alternate keys.
+**Alternate key**: Keys that are not primary keys are known as alternate keys.
 
-**Surrogate key:** A system-generated value that uniquely identifies each entry in a table when no other column was able to hold properties of a primary key.
+**Surrogate key**: A system-generated value that uniquely identifies each entry in a table when no other column was able to hold properties of a primary key.
 
 ### Dependencies
 
-**Partial dependency:** Occurs when the primary key determines some other attributes.
+**Partial dependency**: Occurs when the primary key determines some other attributes.
 
-**Functional dependency:** It is a relationship that exists between two attributes, typically between the primary key and non-key attribute within a table.
+**Functional dependency**: It is a relationship that exists between two attributes, typically between the primary key and non-key attribute within a table.
 
-**Transitive functional dependency:** Occurs when some non-key attribute determines some other attribute.
+**Transitive functional dependency**: Occurs when some non-key attribute determines some other attribute.
 
 ### Anomalies
 
@@ -44,11 +44,11 @@ Database anomaly happens when there is a flow in the database due to incorrect p
 
 There are three types of database anomalies:
 
-**Insertion anomaly:** Occurs when we are not able to insert certain attributes in the database without the presence of other attributes.
+**Insertion anomaly**: Occurs when we are not able to insert certain attributes in the database without the presence of other attributes.
 
-**Update anomaly:** Occurs in case of data redundancy and partial up update. In other words, a correct update of the database needs other actions such as addition, deletion, or both.
+**Update anomaly**: Occurs in case of data redundancy and partial up update. In other words, a correct update of the database needs other actions such as addition, deletion, or both.
 
-**Deletion anomaly:** Occurs where deletion of some data requires deletion of other data.
+**Deletion anomaly**: Occurs where deletion of some data requires deletion of other data.
 
 **Example**
 

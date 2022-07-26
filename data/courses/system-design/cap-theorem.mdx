@@ -1,6 +1,6 @@
 ---
 title: 'CAP theorem'
-date: '2022-10-01'
+date: '2022-10-23'
 draft: false
 summary: 'In this tutorial we will discuss CAP theorem'
 images: ['/static/courses/system-design/chapter-II/cap-theorem/banner.png']
@@ -35,16 +35,16 @@ We live in a physical world and can't guarantee the stability of a network, so d
 
 A CA database delivers consistency and availability across all nodes. It can't do this if there is a partition between any two nodes in the system, however, and therefore can't deliver fault tolerance.
 
-**Example:** PostgreSQL, MariaDB
+**Example**: PostgreSQL, MariaDB
 
 ### CP database
 
 A CP database delivers consistency and partition tolerance at the expense of availability. When a partition occurs between any two nodes, the system has to shut down the non-consistent node until the partition is resolved.
 
-**Example:** MongoDB, HBase
+**Example**: MongoDB, HBase
 
 ### AP database
 
 An AP database delivers availability and partition tolerance at the expense of consistency. When a partition occurs, all nodes remain available but those at the wrong end of a partition might return an older version of data than others. When the partition is resolved, the AP databases typically re-sync the nodes to repair all inconsistencies in the system.
 
-**Example:** Cassandra, CouchDB
+**Example**: Cassandra, CouchDB

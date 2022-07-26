@@ -1,6 +1,6 @@
 ---
 title: 'Whatsapp'
-date: '2022-10-01'
+date: '2022-11-22'
 draft: false
 summary: 'In this tutorial we will learn how to design Whatsapp'
 images: ['/static/courses/system-design/chapter-V/whatsapp/banner.png']
@@ -121,11 +121,11 @@ We have the following tables:
 
 **users**
 
-This table will contain a user's information such as `name`, `phoneNumber`, or other details.
+This table will contain a user's information such as `name`, `phoneNumber`, and other details.
 
 **messages**
 
-As the name suggests, this table will store message `type` (text, image, video, etc.), `content`, and timestamps for message delivery. The message will also have a corresponding `conversationID`.
+As the name suggests, this table will store messages with properties such as `type` (text, image, video, etc.), `content`, and timestamps for message delivery. The message will also have a corresponding `conversationID`.
 
 **chats**
 
@@ -272,7 +272,7 @@ This service will handle the media (images, videos, files, etc.) uploads. It wil
 
 **What about inter-service communication and service discovery?**
 
-Since our architecture is micro-services based, services will be communicating with each other as well. Generally, REST or HTTP based perform well but we can further improve performance by using [gRPC](/courses/system-design/rest-graphql-grpc#grpc) which is more lightweight and efficient.
+Since our architecture is micro-services based, services will be communicating with each other as well. Generally, REST or HTTP performs well but we can further improve the performance using [gRPC](/courses/system-design/rest-graphql-grpc#grpc) which is more lightweight and efficient.
 
 Service discovery is another thing we will have to take into account. We can also use a service mesh layer which enables managed, observable, and secure communication between individual services.
 

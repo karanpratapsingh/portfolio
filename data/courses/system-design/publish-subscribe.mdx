@@ -1,6 +1,6 @@
 ---
 title: 'Publish-Subscribe'
-date: '2022-10-01'
+date: '2022-11-02'
 draft: false
 summary: 'In this tutorial we will discuss Publish-Subscribe'
 images:
@@ -26,10 +26,10 @@ Unlike message queues, which batch messages until they are retrieved, message to
 
 Let's discuss some advantages of using publish-subscribe:
 
-- **Eliminate Polling:** Message topics allow instantaneous, push-based delivery, eliminating the need for message consumers to periodically check or _"poll"_ for new information and updates. This promotes faster response time and reduces the delivery latency which can be particularly problematic in systems where delays cannot be tolerated.
-- **Dynamic Targeting:** Pub/Sub makes the discovery of services easier, more natural, and less error-prone. Instead of maintaining a roster of peers that an application can send messages, a publisher will simply post messages to a topic. Then, any interested party will subscribe its endpoint to the topic, and start receiving these messages. Subscribers can change, upgrade, multiply or disappear and the system dynamically adjusts.
-- **Decouple and Scale Independently:** Publishers and subscribers are decoupled and work independently from each other, which allows you to develop and scale them independently.
-- **Simplify Communication:** The Publish-Subscribe model reduces complexity by removing all the point-to-point connections with a single connection to a message topic, which will manage subscriptions to decide what messages should be delivered to which endpoints.
+- **Eliminate Polling**: Message topics allow instantaneous, push-based delivery, eliminating the need for message consumers to periodically check or _"poll"_ for new information and updates. This promotes faster response time and reduces the delivery latency which can be particularly problematic in systems where delays cannot be tolerated.
+- **Dynamic Targeting**: Pub/Sub makes the discovery of services easier, more natural, and less error-prone. Instead of maintaining a roster of peers that an application can send messages, a publisher will simply post messages to a topic. Then, any interested party will subscribe its endpoint to the topic, and start receiving these messages. Subscribers can change, upgrade, multiply or disappear and the system dynamically adjusts.
+- **Decouple and Scale Independently**: Publishers and subscribers are decoupled and work independently from each other, which allows you to develop and scale them independently.
+- **Simplify Communication**: The Publish-Subscribe model reduces complexity by removing all the point-to-point connections with a single connection to a message topic, which will manage subscriptions to decide what messages should be delivered to which endpoints.
 
 ## Features
 

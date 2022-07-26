@@ -1,6 +1,6 @@
 ---
 title: 'Caching'
-date: '2022-10-01'
+date: '2022-10-09'
 draft: false
 summary: 'In this tutorial we will discuss Caching'
 images: ['/static/courses/system-design/chapter-I/caching/banner.png']
@@ -61,9 +61,9 @@ There are three kinds of caching systems:
 
 Data is written into the cache and the corresponding database simultaneously.
 
-**Pro:** Fast retrieval, complete data consistency between cache and storage.
+**Pro**: Fast retrieval, complete data consistency between cache and storage.
 
-**Con:** Higher latency for write operations.
+**Con**: Higher latency for write operations.
 
 ### Write-around cache
 
@@ -71,9 +71,9 @@ Data is written into the cache and the corresponding database simultaneously.
 
 Where write directly goes to the database or permanent storage, bypassing the cache.
 
-**Pro:** This may reduce latency.
+**Pro**: This may reduce latency.
 
-**Con:** It increases cache misses because the cache system has to read the information from the database in case of a cache miss. As a result, this can lead to higher read latency in the case of applications that write and re-read the information quickly. Read happen from slower back-end storage and experiences higher latency.
+**Con**: It increases cache misses because the cache system has to read the information from the database in case of a cache miss. As a result, this can lead to higher read latency in the case of applications that write and re-read the information quickly. Read happen from slower back-end storage and experiences higher latency.
 
 ### Write-back cache
 
@@ -81,7 +81,7 @@ Where write directly goes to the database or permanent storage, bypassing the ca
 
 Where the write is only done to the caching layer and the write is confirmed as soon as the write to the cache completes. The cache then asynchronously syncs this write to the database.
 
-**Pro:** This would lead to a really quick write latency and high write throughput for write-intensive applications.
+**Pro**: This would lead to a really quick write latency and high write throughput for write-intensive applications.
 
 **Con: T**here is a risk of data loss in case the caching layer crashes. We can improve this by having more than one replica acknowledging the write in the cache.
 
@@ -89,12 +89,12 @@ Where the write is only done to the caching layer and the write is confirmed as 
 
 Following are some of the most common cache eviction policies:
 
-- **First In First Out (FIFO):** The cache evicts the first block accessed first without any regard to how often or how many times it was accessed before.
-- **Last In First Out (LIFO):** The cache evicts the block accessed most recently first without any regard to how often or how many times it was accessed before.
-- **Least Recently Used (LRU):** Discards the least recently used items first.
-- **Most Recently Used (MRU):** Discards, in contrast to LRU, the most recently used items first.
-- **Least Frequently Used (LFU):** Counts how often an item is needed. Those that are used least often are discarded first.
-- **Random Replacement (RR):** Randomly selects a candidate item and discards it to make space when necessary.
+- **First In First Out (FIFO)**: The cache evicts the first block accessed first without any regard to how often or how many times it was accessed before.
+- **Last In First Out (LIFO)**: The cache evicts the block accessed most recently first without any regard to how often or how many times it was accessed before.
+- **Least Recently Used (LRU)**: Discards the least recently used items first.
+- **Most Recently Used (MRU)**: Discards, in contrast to LRU, the most recently used items first.
+- **Least Frequently Used (LFU)**: Counts how often an item is needed. Those that are used least often are discarded first.
+- **Random Replacement (RR)**: Randomly selects a candidate item and discards it to make space when necessary.
 
 ## Distributed Cache
 
