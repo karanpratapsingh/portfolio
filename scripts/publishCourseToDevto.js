@@ -12,7 +12,7 @@ const fs = require('fs');
  * @type {Array<{ name: string, slug: string, section: string}>}
  */
 const articles = [];
-const course_slug = 'go';
+const course_slug = 'system-design';
 
 function getBanner(section, course_slug, slug) {
   return `https://raw.githubusercontent.com/karanpratapsingh/portfolio/master/public/static/courses/${course_slug}/${section}/${slug}/banner.png`;
@@ -36,6 +36,15 @@ function getBody(course_slug, slug) {
     new RegExp(`]\\(/courses/${course_slug}`),
     `](https://karanpratapsingh.com/courses/${course_slug}`,
   );
+
+  // Add footer
+  body = `${body}
+    
+    ---
+    
+    _This article is part of my open source [System Design Course](https://www.karanpratapsingh.com/courses/go) available on Github._
+
+{% github karanpratapsingh/system-design %}`;
 
   return body;
 }

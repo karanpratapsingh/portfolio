@@ -71,7 +71,7 @@ export const courses: Course[] = [
             slug: 'caching',
           },
           {
-            name: 'Content delivery network (CDN)',
+            name: 'Content Delivery Network (CDN)',
             slug: 'content-delivery-network',
           },
           {
@@ -265,6 +265,18 @@ export const courses: Course[] = [
           {
             name: 'Whatsapp',
             slug: 'whatsapp',
+          },
+          {
+            name: 'Twitter',
+            slug: 'twitter',
+          },
+          {
+            name: 'Netflix',
+            slug: 'netflix',
+          },
+          {
+            name: 'Uber',
+            slug: 'uber',
           },
         ],
       },
