@@ -163,7 +163,7 @@ getAll(userID: UUID): Chat[] | Group[]
 
 **Parameters**
 
-User ID (`UUID`): ID of the user.
+User ID (`UUID`): ID of the current user.
 
 **Returns**
 
@@ -179,7 +179,7 @@ getMessages(userID: UUID, channelID: UUID): Message[]
 
 **Parameters**
 
-User ID (`UUID`): ID of the user.
+User ID (`UUID`): ID of the current user.
 
 Channel ID (`UUID`): ID of the channel (chat or group) from which messages need to be retrieved.
 
@@ -197,7 +197,7 @@ sendMessage(userID: UUID, channelID: UUID, message: Message): boolean
 
 **Parameters**
 
-User ID (`UUID`): ID of the user.
+User ID (`UUID`): ID of the current user.
 
 Channel ID (`UUID`): ID of the channel (chat or group) user wants to send a message to.
 
@@ -218,9 +218,9 @@ leaveGroup(userID: UUID, channelID: UUID): boolean
 
 **Parameters**
 
-User ID (`UUID`): ID of the user.
+User ID (`UUID`): ID of the current user.
 
-Channel ID (`UUID`): ID of the channel (chat or group) the user wants to join.
+Channel ID (`UUID`): ID of the channel (chat or group) the user wants to join or leave.
 
 **Returns**
 
@@ -316,7 +316,7 @@ Handling read receipts can be tricky, for this use case we can wait for some sor
 
 Now that we have identified some core components, let's do the first draft of our system design.
 
-![whatsapp-basic](/static/courses/system-design/chapter-V/whatsapp/whatsapp-basic.png)
+![whatsapp-basic-design](/static/courses/system-design/chapter-V/whatsapp/whatsapp-basic-design.png)
 
 ## Detailed design
 
@@ -341,9 +341,21 @@ In a messaging application, we have to be careful about using cache as our users
 
 Some group chats can have thousands of messages and sending that over the network will be really inefficient, to improve efficiency we can add pagination to our system APIs. This decision will be helpful for users with limited network bandwidth as they won't have to retrieve old messages unless requested.
 
+**Which cache eviction policy to use?**
+
+We can use solutions like [Redis](https://redis.io/) or [Memcached](https://memcached.org/) and cache 20% of the daily traffic but what kind of cache eviction policy would best fit our needs?
+
+[Least Recently Used (LRU)](<https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_(LRU)>) can be a good policy for our system. In this policy, we discard the least recently used key first.
+
+**How to handle cache miss?**
+
+Whenever there is a cache miss, our servers can hit the database directly and update the cache with the new entries.
+
+_For more details, refer to [Caching](/courses/system-design/caching)._
+
 ### Media access and storage
 
-As we know, the majority of our storage space will be used for storing media files such as images, videos, or other files. Our media service will be handling both access and storage of the user media files.
+As we know, most of our storage space will be used for storing media files such as images, videos, or other files. Our media service will be handling both access and storage of the user media files.
 
 But where can we store files at scale? Well, [object storage](/courses/system-design/storage#object-storage) is what we're looking for. Object stores break data files up into pieces called objects. It then stores those objects in a single repository, which can be spread out across multiple networked systems.
 
@@ -367,7 +379,7 @@ We can use services like [Amazon API Gateway](https://aws.amazon.com/api-gateway
 
 ## Identify and resolve bottlenecks
 
-![whatsapp-advanced](/static/courses/system-design/chapter-V/whatsapp/whatsapp-advanced.png)
+![whatsapp-advanced-design](/static/courses/system-design/chapter-V/whatsapp/whatsapp-advanced-design.png)
 
 Let us identify and resolve bottlenecks such as single points of failure in our design:
 

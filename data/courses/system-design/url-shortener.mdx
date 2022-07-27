@@ -51,7 +51,7 @@ _Note: Make sure to check any scale or traffic related assumptions with your int
 
 ### Traffic
 
-This will be a very read-heavy system, so let's assume a `100:1` read/write ratio with 100 million links generated per month.
+This will be a read-heavy system, so let's assume a `100:1` read/write ratio with 100 million links generated per month.
 
 **Reads/Writes Per month**
 
@@ -318,7 +318,7 @@ _For more details, refer to [caching](/courses/system-design/caching)._
 
 Now that we have identified some core components, let's do the first draft of our system design.
 
-![url-shortener-basic](/static/courses/system-design/chapter-V/url-shortener/url-shortener-basic.png)
+![url-shortener-basic-design](/static/courses/system-design/chapter-V/url-shortener/url-shortener-basic-design.png)
 
 Here's how it works:
 
@@ -366,7 +366,7 @@ For passive cleanup, we can remove the entry when a user tries to access an expi
 
 ### Cache
 
-Now let us talk about caching.
+Now let us talk about [caching](/courses/system-design/caching).
 
 **Which cache eviction policy to use?**
 
@@ -390,7 +390,7 @@ We can also use an [API Gateway](/courses/system-design/api-gateway) as they can
 
 ## Identify and resolve bottlenecks
 
-![url-shortener-advanced](/static/courses/system-design/chapter-V/url-shortener/url-shortener-advanced.png)
+![url-shortener-advanced-design](/static/courses/system-design/chapter-V/url-shortener/url-shortener-advanced-design.png)
 
 Let us identify and resolve bottlenecks such as single points of failure in our design:
 
