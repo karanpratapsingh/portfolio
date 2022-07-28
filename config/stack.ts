@@ -19,32 +19,39 @@ export enum Stack {
   // Cloud
   aws,
   gcp,
-  docker,
-  kubernetes,
 
   // Messaging
   nats,
+  kafka,
 
   // Databases
   arangodb,
   redis,
   postgres,
   mongo,
+
+  // Tools
+  docker,
+  kubernetes,
+  terraform,
 }
 
 export const WorkStack = [
   Stack.go,
   Stack.typescript,
+  Stack.python,
   Stack.react,
-  Stack.kubernetes,
-  Stack.docker,
-  Stack.nats,
   Stack.aws,
   Stack.gcp,
+  Stack.kubernetes,
+  Stack.docker,
+  Stack.terraform,
+  Stack.nats,
+  Stack.kafka,
+  Stack.graphql,
+  Stack.postgres,
   Stack.redis,
   Stack.arangodb,
-  Stack.postgres,
-  Stack.graphql,
   Stack.reactnative,
 ];
 
@@ -82,14 +89,6 @@ export const StackInfo: Record<Stack, StackInfoMap> = {
     value: 'AWS',
     color: Colors.aws,
   },
-  [Stack.docker]: {
-    value: 'Docker',
-    color: Colors.docker,
-  },
-  [Stack.kubernetes]: {
-    value: 'Kubernetes',
-    color: Colors.kubernetes,
-  },
   [Stack.gcp]: {
     value: 'Google Cloud',
     color: Colors.gcp,
@@ -110,6 +109,10 @@ export const StackInfo: Record<Stack, StackInfoMap> = {
     value: 'NATS',
     color: Colors.nats,
   },
+  [Stack.kafka]: {
+    value: 'Kafka',
+    color: Colors.kafka,
+  },
   [Stack.arangodb]: {
     value: 'ArangoDB',
     color: Colors.arangodb,
@@ -125,5 +128,17 @@ export const StackInfo: Record<Stack, StackInfoMap> = {
   [Stack.mongo]: {
     value: 'MongoDB',
     color: Colors.mongo,
+  },
+  [Stack.docker]: {
+    value: 'Docker',
+    color: Colors.docker,
+  },
+  [Stack.kubernetes]: {
+    value: 'Kubernetes',
+    color: Colors.kubernetes,
+  },
+  [Stack.terraform]: {
+    value: 'Terraform',
+    color: Colors.terraform,
   },
 };
