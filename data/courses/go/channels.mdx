@@ -9,7 +9,7 @@ authors: ['default']
 
 In this lesson, we will learn about Channels.
 
-### So what are channels?
+## So what are channels?
 
 Well, simply defined a channel is a communications pipe between goroutines. Things go in one end and come out another in the same order until the channel is closed.
 
@@ -17,7 +17,7 @@ Well, simply defined a channel is a communications pipe between goroutines. Thin
 
 As we learned earlier, channels in Go are based on Communicating Sequential Processes (CSP).
 
-### Creating a channel
+## Creating a channel
 
 Now that we understand what channels are, let's see how we can declare them.
 
@@ -61,7 +61,7 @@ $ go run main.go
 0x1400010e060
 ```
 
-### Sending and Receiving data
+## Sending and Receiving data
 
 Now that we have a basic understanding of channels, let us implement our earlier example using channels to learn how we can use them to communicate between our goroutines.
 
@@ -95,7 +95,7 @@ Hello World
 
 Perfect, our program ran as we expected.
 
-### Buffered Channels
+## Buffered Channels
 
 We also have buffered channels that accept a limited number of values without a corresponding receiver for those values.
 
@@ -124,7 +124,7 @@ By default, a channel is unbuffered and has a capacity of 0, hence, we omit the 
 
 Next, we have directional channels.
 
-### Directional channels
+## Directional channels
 
 When using channels as function parameters, we can specify if a channel is meant to only send or receive values. This increases the type-safety of our program as by default a channel can both send and receive values.
 
@@ -140,7 +140,7 @@ func speak(arg string, ch chan<- string) {
 
 Here, `chan<-` can only be used for sending values and will panic if we try to receive values.
 
-### Closing channels
+## Closing channels
 
 Also, just like any other resource, once we're done with our channel, we need to close it. This can be achieved using the built-in `close` function.
 
@@ -186,7 +186,7 @@ if `ok` is `false` then there are no more values to receive and the channel is c
 
 _In a way_, _this is similar to how we check if a key exists or not in a map._
 
-### Properties
+## Properties
 
 Lastly, let's discuss some properties of channels:
 
