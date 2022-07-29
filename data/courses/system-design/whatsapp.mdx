@@ -56,6 +56,8 @@ $$
 
 **What would be Requests Per Second (RPS) for our system?**
 
+2 billion requests per day translate into 24K requests per second.
+
 $$
 \frac{2 \space billion}{(24 \space hrs \times 3600 \space seconds)} = \sim 24K \space requests/second
 $$
@@ -71,13 +73,13 @@ $$
 As per our requirements, we also know that around 5 percent of our daily messages (100 million) are media files. If we assume each file is 50 KB on average, we will require 10 TB of object storage every day.
 
 $$
-2 \space billion \times 100 \space million \times 100 \space KB = 10 \space TB/day
+100 \space million \times 100 \space KB = 10 \space TB/day
 $$
 
 And for 10 years, we will require about 38 PB of storage.
 
 $$
-(10 \space TB + 0.2 \space TB) \times 365 \space days \times 10 \space years = \sim 38 \space PB
+(10 \space TB + 0.2 \space TB) \times 10 \space years \times 365 \space days = \sim 38 \space PB
 $$
 
 ### Bandwidth
@@ -85,17 +87,18 @@ $$
 As our system is handling 10.2 TB of ingress every day, so we will a require minimum bandwidth of around 120 MB per second.
 
 $$
-\frac{10200 \space GB}{(24 \space hrs \times 3600 \space seconds)} = \sim 120 \space MB/second
+\frac{10.2 \space TB}{(24 \space hrs \times 3600 \space seconds)} = \sim 120 \space MB/second
 $$
 
 ### High-level estimate
 
 Here is our high-level estimate:
 
-|                          |            |
+| Type                     | Estimate   |
 | ------------------------ | ---------- |
 | Daily active users (DAU) | 50 million |
 | Requests per second      | 24K/s      |
+| Storage (per day)        | ~10.2 PB   |
 | Storage (10 years)       | ~38 PB     |
 | Bandwidth                | ~120 MB/s  |
 
@@ -205,7 +208,7 @@ Message (`Message`): The message (text, image, video, etc.) that the user wants 
 
 **Returns**
 
-Result (**`boolean`**): Represents whether the operation was successful or not.
+Result (`boolean`): Represents whether the operation was successful or not.
 
 ### Join or leave a group
 
@@ -224,7 +227,7 @@ Channel ID (`UUID`): ID of the channel (chat or group) the user wants to join or
 
 **Returns**
 
-Result (**`boolean`**): Represents whether the operation was successful or not.
+Result (`boolean`): Represents whether the operation was successful or not.
 
 ## High-level design
 
@@ -252,7 +255,7 @@ We will be using [microservices architecture](/courses/system-design/monoliths-m
 
 **User Service**
 
-This is an HTTP-based service that handles user-related concerns such as user information.
+This is an HTTP-based service that handles user-related concerns such as authentication and user information.
 
 **Chat Service**
 

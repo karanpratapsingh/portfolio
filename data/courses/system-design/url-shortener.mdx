@@ -69,6 +69,8 @@ $$
 
 **What would be Requests Per Second (RPS) for our system?**
 
+100 million requests per month translate into 40 requests per second.
+
 $$
 \frac{100 \space million}{(30 \space days \times 24 \space hrs \times 3600 \space seconds)} = \sim 40 \space URLs/second
 $$
@@ -100,7 +102,7 @@ $$
 For storage, we will assume we store each link or record in our database for 10 years. Since we expect around 100M new requests every month, the total number of records we will need to store would be:
 
 $$
-100M \times 10\space Years \times 12 \space Months = 12 \space billion
+100 million \times 10\space years \times 12 \space months = 12 \space billion
 $$
 
 Like earlier, if we assume each stored recorded will be approximately 500 bytes. We will need around 6TB of storage:
@@ -129,7 +131,7 @@ $$
 
 Here is our high-level estimate:
 
-|                      |            |
+| Type                 | Estimate   |
 | -------------------- | ---------- |
 | Writes (New URLs)    | 40/s       |
 | Reads (Redirection)  | 4K/s       |

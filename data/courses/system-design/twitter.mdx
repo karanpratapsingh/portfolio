@@ -57,6 +57,8 @@ $$
 
 **What would be Requests Per Second (RPS) for our system?**
 
+1 billion requests per day translate into 12K requests per second.
+
 $$
 \frac{1 \space billion}{(24 \space hrs \times 3600 \space seconds)} = \sim 12K \space requests/second
 $$
@@ -72,7 +74,7 @@ $$
 We also know that around 10 percent of our daily messages (100 million) are media files per our requirements. If we assume each file is 50 KB on average, we will require 5 TB of object storage every day.
 
 $$
-1 \space billion \times 100 \space million \times 100 \space KB = 5 \space TB/day
+100 \space million \times 100 \space KB = 5 \space TB/day
 $$
 
 And for 10 years, we will require about 19 PB of storage.
@@ -86,17 +88,18 @@ $$
 As our system is handling 5.1 TB of ingress every day, so we will a require minimum bandwidth of around 60 MB per second.
 
 $$
-\frac{5100 \space GB}{(24 \space hrs \times 3600 \space seconds)} = \sim 60 \space MB/second
+\frac{5.1 \space TB}{(24 \space hrs \times 3600 \space seconds)} = \sim 60 \space MB/second
 $$
 
 ### High-level estimate
 
 Here is our high-level estimate:
 
-|                          |             |
+| Type                     | Estimate    |
 | ------------------------ | ----------- |
 | Daily active users (DAU) | 100 million |
 | Requests per second      | 12K/s       |
+| Storage (per day)        | ~5.1 PB     |
 | Storage (10 years)       | ~19 PB      |
 | Bandwidth                | ~60 MB/s    |
 
@@ -170,7 +173,7 @@ Media URL (`string`): URL of the attached media _(optional)_.
 
 **Returns**
 
-Result (**`boolean`**): Represents whether the operation was successful or not.
+Result (`boolean`): Represents whether the operation was successful or not.
 
 ### Follow or Unfollow a user
 
@@ -189,7 +192,7 @@ Media URL (`string`): URL of the attached media _(optional)_.
 
 **Returns**
 
-Result (**`boolean`**): Represents whether the operation was successful or not.
+Result (`boolean`): Represents whether the operation was successful or not.
 
 ### Get newsfeed
 
@@ -215,7 +218,7 @@ We will be using [microservices architecture](/courses/system-design/monoliths-m
 
 **User Service**
 
-This service handles user-related concerns such as user information.
+This service handles user-related concerns such as authentication and user information.
 
 **Newsfeed Service**
 

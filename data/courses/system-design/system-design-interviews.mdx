@@ -18,18 +18,39 @@ Let's look at some common strategies for the system design interviews:
 
 ## Requirements clarifications
 
-System design interview questions, by nature, are vague or abstract. Asking questions about the exact scope of the problem, and clarifying functional requirements early in the interview is essential.
+System design interview questions, by nature, are vague or abstract. Asking questions about the exact scope of the problem, and clarifying functional requirements early in the interview is essential. Usually, requirements are divided into three parts:
+
+### Functional requirements
+
+These are the requirements that the end user specifically demands as basic functionalities that the system should offer. All these functionalities need to be necessarily incorporated into the system as a part of the contract.
+
+For example:
 
 - "What are the features that we need to design for this system?"
 - "What are the edge cases we need to consider, if any, in our design?"
-- "What kind of system architecture should we develop?"
-- "What is the desired scale that this system will need to handle?"
+
+### Non-functional requirements
+
+These are basically the quality constraints that the system must satisfy according to the project contract. The priority or extent to which these factors are implemented varies from one project to another. They are also called non-behavioral requirements. For example, portability, maintainability, reliability, scalability, security, etc.
+
+For example:
+
+- "Each request should be processed with the minimum latency".
+- "System should be highly available".
+
+### Extended requirements
+
+These can be "nice to have" requirements that might be out of the scope of the system.
+
+For example:
+
+- "Our system should record metrics and analytics".
 
 ## Estimation and Constraints
 
 Estimate the scale of the system we're going to design. It is important to ask questions such as:
 
-- "How much traffic is expected?"
+- "What is the desired scale that this system will need to handle?"
 - "What is the read/write ratio of our system?"
 - "How many requests per second?"
 - "How much storage will be needed?"
