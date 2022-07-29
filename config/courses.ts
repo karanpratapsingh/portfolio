@@ -117,7 +117,7 @@ export const courses: Course[] = [
           },
           {
             name: 'Indexes',
-            slug: 'Indexes',
+            slug: 'indexes',
           },
           {
             name: 'Normalization and Denormalization',
@@ -152,8 +152,8 @@ export const courses: Course[] = [
             slug: 'consistent-hashing',
           },
           {
-            name: 'Federated databases',
-            slug: 'federated-databases',
+            name: 'Database Federation',
+            slug: 'database-federation',
           },
         ],
       },
