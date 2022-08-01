@@ -150,7 +150,7 @@ This table maps users to groups as multiple users can have multiple conversation
 
 While our data model seems quite relational, we don't necessarily need to store everything in a single database, as this can limit our scalability and quickly become a bottleneck.
 
-We will split the data between different services each having ownership over a particular table. We can use a distributed database such as [Apache Cassandra](https://cassandra.apache.org/_/index.html) for our use case.
+We will split the data between different services each having ownership over a particular table. Then we can use a relational database such as [PostgreSQL](https://www.postgresql.org/) or a distributed NoSQL database such as [Apache Cassandra](https://cassandra.apache.org/_/index.html) for our use case.
 
 ## API design
 
@@ -233,25 +233,9 @@ Result (`boolean`): Represents whether the operation was successful or not.
 
 Now let us do a high-level design of our system.
 
-### Real-time messaging
-
-How do we efficiently send and receive messages? We have two different options:
-
-**Pull model**
-
-The client can periodically send an HTTP request to servers to check if there are any new messages. This can be achieved via something like [Long polling](/courses/system-design/long-polling-websockets-server-sent-events#long-polling).
-
-**Push model**
-
-The client opens a long-lived connection with the server and once new data is available it will be pushed to the client. We can use [WebSockets](/courses/system-design/long-polling-websockets-server-sent-events#websockets) or [Server-Sent Events](/courses/system-design/long-polling-websockets-server-sent-events#server-sent-events-sse) for this.
-
-The pull model approach is not scalable as it will create unnecessary request overhead to our servers and most of the time the response will be empty, thus wasting our resources. To minimize latency, using the push model with [WebSockets](/courses/system-design/long-polling-websockets-server-sent-events#websockets) is a better choice because then we can push data to the client once it's available without any delay given the connection is open with the client. Also, WebSockets provide full-duplex communication, unlike [Server-Sent Events](/courses/system-design/long-polling-websockets-server-sent-events#server-sent-events-sse) which are only unidirectional.
-
-_Note: Learn more about [Long polling, WebSockets, Server-Sent Events (SSE)](/courses/system-design/long-polling-websockets-server-sent-events)._
-
 ### Architecture
 
-We will be using [microservices architecture](/courses/system-design/monoliths-microservices#microservices) since it will make it easier to horizontally scale and decouple our services. Each service will have ownership of its own data model. Let's try to divide our system into some core services then later we will go into detail.
+We will be using [microservices architecture](/courses/system-design/monoliths-microservices#microservices) since it will make it easier to horizontally scale and decouple our services. Each service will have ownership of its own data model. Let's try to divide our system into some core services.
 
 **User Service**
 
@@ -277,9 +261,25 @@ This service will handle the media (images, videos, files, etc.) uploads. It wil
 
 Since our architecture is micro-services based, services will be communicating with each other as well. Generally, REST or HTTP performs well but we can further improve the performance using [gRPC](/courses/system-design/rest-graphql-grpc#grpc) which is more lightweight and efficient.
 
-Service discovery is another thing we will have to take into account. We can also use a service mesh layer which enables managed, observable, and secure communication between individual services.
+Service discovery is another thing we will have to take into account. We can also use a service mesh that enables managed, observable, and secure communication between individual services.
 
 _Note: Learn more about [REST, GraphQL, gRPC](/courses/system-design/rest-graphql-grpc) and how they compare with each other._
+
+### Real-time messaging
+
+How do we efficiently send and receive messages? We have two different options:
+
+**Pull model**
+
+The client can periodically send an HTTP request to servers to check if there are any new messages. This can be achieved via something like [Long polling](/courses/system-design/long-polling-websockets-server-sent-events#long-polling).
+
+**Push model**
+
+The client opens a long-lived connection with the server and once new data is available it will be pushed to the client. We can use [WebSockets](/courses/system-design/long-polling-websockets-server-sent-events#websockets) or [Server-Sent Events](/courses/system-design/long-polling-websockets-server-sent-events#server-sent-events-sse) for this.
+
+The pull model approach is not scalable as it will create unnecessary request overhead to our servers and most of the time the response will be empty, thus wasting our resources. To minimize latency, using the push model with [WebSockets](/courses/system-design/long-polling-websockets-server-sent-events#websockets) is a better choice because then we can push data to the client once it's available without any delay given the connection is open with the client. Also, WebSockets provide full-duplex communication, unlike [Server-Sent Events](/courses/system-design/long-polling-websockets-server-sent-events#server-sent-events-sse) which are only unidirectional.
+
+_Note: Learn more about [Long polling, WebSockets, Server-Sent Events (SSE)](/courses/system-design/long-polling-websockets-server-sent-events)._
 
 ### Last seen
 
@@ -360,7 +360,7 @@ _For more details, refer to [Caching](/courses/system-design/caching)._
 
 As we know, most of our storage space will be used for storing media files such as images, videos, or other files. Our media service will be handling both access and storage of the user media files.
 
-But where can we store files at scale? Well, [object storage](/courses/system-design/storage#object-storage) is what we're looking for. Object stores break data files up into pieces called objects. It then stores those objects in a single repository, which can be spread out across multiple networked systems.
+But where can we store files at scale? Well, [object storage](/courses/system-design/storage#object-storage) is what we're looking for. Object stores break data files up into pieces called objects. It then stores those objects in a single repository, which can be spread out across multiple networked systems. We can also use distributed file storage such as [HDFS](/courses/system-design/storage#hdfs) or [GlusterFS](https://www.gluster.org/).
 
 _Fun fact: Whatsapp deletes media on its servers once it's been downloaded by the user._
 
@@ -368,9 +368,7 @@ We can use object stores like [Amazon S3](https://aws.amazon.com/s3/), [Azure Bl
 
 ### Content Delivery Network (CDN)
 
-[Content Delivery Network (CDN)](/courses/system-design/content-delivery-network) increases content availability and redundancy while reducing bandwidth costs. Generally, static files such as images, and videos are served from CDN.
-
-We can use services like [Amazon CloudFront](https://aws.amazon.com/cloudfront/) or [Cloudflare CDN](https://www.cloudflare.com/cdn/) for this use case.
+[Content Delivery Network (CDN)](/courses/system-design/content-delivery-network) increases content availability and redundancy while reducing bandwidth costs. Generally, static files such as images, and videos are served from CDN. We can use services like [Amazon CloudFront](https://aws.amazon.com/cloudfront/) or [Cloudflare CDN](https://www.cloudflare.com/cdn/) for this use case.
 
 ### API gateway
 

@@ -129,7 +129,7 @@ This table will contain a user's information such as `name`, `email`, `dob`, and
 
 **tweets**
 
-As the name suggests, this table will store tweets with properties such as `type` (text, image, video, etc.), `content`, etc. The tweet will also have a corresponding `userID`.
+As the name suggests, this table will store tweets and their properties such as `type` (text, image, video, etc.), `content`, etc. We will also store the corresponding `userID`.
 
 **favorites**
 
@@ -151,7 +151,7 @@ This table maps tweets and feed (N:M relationship).
 
 While our data model seems quite relational, we don't necessarily need to store everything in a single database, as this can limit our scalability and quickly become a bottleneck.
 
-We will split the data between different services each having ownership over a particular table. We can use a distributed database such as [Apache Cassandra](https://cassandra.apache.org/_/index.html) for our use case.
+We will split the data between different services each having ownership over a particular table. Then we can use a relational database such as [PostgreSQL](https://www.postgresql.org/) or a distributed NoSQL database such as [Apache Cassandra](https://cassandra.apache.org/_/index.html) for our use case.
 
 ## API design
 
@@ -175,7 +175,7 @@ Media URL (`string`): URL of the attached media _(optional)_.
 
 Result (`boolean`): Represents whether the operation was successful or not.
 
-### Follow or Unfollow a user
+### Follow or unfollow a user
 
 ```tsx
 follow(followerID: UUID, followeeID: UUID): boolean
@@ -214,7 +214,7 @@ Now let us do a high-level design of our system.
 
 ### Architecture
 
-We will be using [microservices architecture](/courses/system-design/monoliths-microservices#microservices) since it will make it easier to horizontally scale and decouple our services. Each service will have ownership of its own data model. Let's try to divide our system into some core services then later we will go into detail.
+We will be using [microservices architecture](/courses/system-design/monoliths-microservices#microservices) since it will make it easier to horizontally scale and decouple our services. Each service will have ownership of its own data model. Let's try to divide our system into some core services.
 
 **User Service**
 
@@ -248,7 +248,7 @@ This service will be used for metrics and analytics use cases.
 
 Since our architecture is micro-services based, services will be communicating with each other as well. Generally, REST or HTTP performs well but we can further improve the performance using [gRPC](/courses/system-design/rest-graphql-grpc#grpc) which is more lightweight and efficient.
 
-Service discovery is another thing we will have to take into account. We can also use a service mesh layer which enables managed, observable, and secure communication between individual services.
+Service discovery is another thing we will have to take into account. We can also use a service mesh that enables managed, observable, and secure communication between individual services.
 
 _Note: Learn more about [REST, GraphQL, gRPC](/courses/system-design/rest-graphql-grpc) and how they compare with each other._
 
@@ -324,7 +324,7 @@ For example, the `type` enum property can be of type tweet, similar to text, vid
 | ad34-291a-45f6-b36c | 7a2c-62c4-4dc8-b1bb | text  | Hey, this is my first tweet… | 1658905644054 |
 | f064-49ad-9aa2-84a6 | 6aa2-2bc9-4331-879f | tweet | ad34-291a-45f6-b36c          | 1658906165427 |
 
-This is a very basic implementation, to improve this we can also create a separate table itself to store re-tweets.
+This is a very basic implementation, to improve this we can create a separate table itself to store re-tweets.
 
 ### Search
 
@@ -334,9 +334,7 @@ Sometimes traditional DBMS are not performant enough, we need something which al
 
 **How do we identify trending topics?**
 
-Trending functionality will be based on top of the search functionality.
-
-We can cache the most frequently searched search queries, hashtags, and topics in the last `N` seconds and update them every `M` seconds using some sort of batch job mechanism. Our ranking algorithm can also be applied to the trending topics to give them more weight and personalize them for the current user.
+Trending functionality will be based on top of the search functionality. We can cache the most frequently searched queries, hashtags, and topics in the last `N` seconds and update them every `M` seconds using some sort of batch job mechanism. Our ranking algorithm can also be applied to the trending topics to give them more weight and personalize them for the current user.
 
 ### Notifications
 
@@ -365,7 +363,7 @@ _For more details, refer to [Sharding](/courses/system-design/sharding) and [Con
 
 For suggestions, we can build a social graph for every user. Each node in the graph will represent a user and a directional edge will represent followers and followees. After that, we can traverse the followers of a user to find and suggest a mutual friend. This would require a graph database such as [Neo4j](https://neo4j.com/) and [ArangoDB](https://www.arangodb.com/).
 
-This is a pretty simple algorithm, To improve our suggestion functionality, we will need to incorporate a recommendation model which uses machine learning as part of our algorithm.
+This is a pretty simple algorithm, To improve our suggestion accuracy, we will need to incorporate a recommendation model which uses machine learning as part of our algorithm.
 
 ### Metrics and Analytics
 
@@ -373,7 +371,7 @@ Recording analytics and metrics is one of our extended requirements. As we will 
 
 ### Caching
 
-In a social media application, we have to be careful about using cache as our users expect the latest data So, to prevent usage spikes from our resources we can cache the top 20% of the tweets.
+In a social media application, we have to be careful about using cache as our users expect the latest data. So, to prevent usage spikes from our resources we can cache the top 20% of the tweets.
 
 To further improve efficiency we can add pagination to our system APIs. This decision will be helpful for users with limited network bandwidth as they won't have to retrieve old messages unless requested.
 
@@ -393,13 +391,11 @@ _For more details, refer to [Caching](/courses/system-design/caching)._
 
 As we know, most of our storage space will be used for storing media files such as images, videos, or other files. Our media service will be handling both access and storage of the user media files.
 
-But where can we store files at scale? Well, [object storage](/courses/system-design/storage#object-storage) is what we're looking for. Object stores break data files up into pieces called objects. It then stores those objects in a single repository, which can be spread out across multiple networked systems.
+But where can we store files at scale? Well, [object storage](/courses/system-design/storage#object-storage) is what we're looking for. Object stores break data files up into pieces called objects. It then stores those objects in a single repository, which can be spread out across multiple networked systems. We can also use distributed file storage such as [HDFS](/courses/system-design/storage#hdfs) or [GlusterFS](https://www.gluster.org/).
 
 ### Content Delivery Network (CDN)
 
-[Content Delivery Network (CDN)](/courses/system-design/content-delivery-network) increases content availability and redundancy while reducing bandwidth costs. Generally, static files such as images, and videos are served from CDN.
-
-We can use services like [Amazon CloudFront](https://aws.amazon.com/cloudfront/) or [Cloudflare CDN](https://www.cloudflare.com/cdn/) for this use case.
+[Content Delivery Network (CDN)](/courses/system-design/content-delivery-network) increases content availability and redundancy while reducing bandwidth costs. Generally, static files such as images, and videos are served from CDN. We can use services like [Amazon CloudFront](https://aws.amazon.com/cloudfront/) or [Cloudflare CDN](https://www.cloudflare.com/cdn/) for this use case.
 
 ## Identify and resolve bottlenecks
 
