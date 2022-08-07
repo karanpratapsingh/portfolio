@@ -2,16 +2,14 @@
 title: 'SQL databases'
 date: '2022-10-16'
 draft: false
-summary: 'In this tutorial we will discuss SQL databases'
+summary: 'In this tutorial, we will discuss SQL databases'
 images: ['/static/courses/system-design/chapter-II/sql-databases/banner.png']
 authors: ['default']
 ---
 
 A SQL (or relational) database is a collection of data items with pre-defined relationships between them. These items are organized as a set of tables with columns and rows. Tables are used to hold information about the objects to be represented in the database. Each column in a table holds a certain kind of data and a field stores the actual value of an attribute. The rows in the table represent a collection of related values of one object or entity.
 
-Each row in a table could be marked with a unique identifier called a primary key, and rows among multiple tables can be made related using foreign keys. This data can be accessed in many different ways without re-organizing the database tables themselves.
-
-_SQL databases usually follow the ACID consistency model._
+Each row in a table could be marked with a unique identifier called a primary key, and rows among multiple tables can be made related using foreign keys. This data can be accessed in many different ways without re-organizing the database tables themselves. SQL databases usually follow the [ACID consistency model](/courses/system-design/acid-and-base-consistency-models#acid).
 
 ## Materialized views
 
@@ -38,15 +36,16 @@ Let's look at some advantages of using relational databases:
 
 Below are the disadvantages of relational databases:
 
-- Expensive
-- Performance
-- Difficult to scale
+- Expensive to maintain
+- Difficult schema evolution
+- Performance hits (join, denormalization, etc.)
+- Difficult to scale due to poor horizontal scalability
 
 ## Examples
 
 Here are some commonly used relational databases:
 
-- PostgreSQL
-- MySQL
-- MariaDB
-- Amazon Aurora
+- [PostgreSQL](https://www.postgresql.org)
+- [MySQL](https://www.mysql.com)
+- [MariaDB](https://mariadb.org)
+- [Amazon Aurora](https://aws.amazon.com/rds/aurora)

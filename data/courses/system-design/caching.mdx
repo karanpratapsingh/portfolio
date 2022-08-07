@@ -2,7 +2,7 @@
 title: 'Caching'
 date: '2022-10-09'
 draft: false
-summary: 'In this tutorial we will discuss Caching'
+summary: 'In this tutorial, we will discuss Caching'
 images: ['/static/courses/system-design/chapter-I/caching/banner.png']
 authors: ['default']
 ---
@@ -17,23 +17,17 @@ Caches take advantage of the locality of reference principle _"recently requeste
 
 ## Caching and Memory
 
-Similar to a computer's memory, a cache is a compact, fast-performing memory. It stores data in a hierarchy of levels, starting at level one, and progressing from there sequentially. They are labeled as L1, L2, L3, and so on.
+Similar to a computer's memory, a cache is a compact, fast-performing memory that stores data in a hierarchy of levels, starting at level one, and progressing from there sequentially. They are labeled as L1, L2, L3, and so on. A cache also gets written if requested, such as when there has been an update and new content needs to be saved to the cache, replacing the older content that was saved.
 
-A cache also gets written if requested, such as when there has been an update and new content needs to be saved to the cache, replacing the older content that was saved.
+No matter whether the cache is read or written, it's done one block at a time. Each block also has a tag that includes the location where the data was stored in the cache. When data is requested from the cache, a search occurs through the tags to find the specific content that's needed in level one (L1) of the memory. If the correct data isn't found, more searches are conducted in L2.
 
-No matter whether the cache is read or written, it's done one block at a time. Each block also has a tag that includes the location where the data was stored in the cache.
-
-When data is requested from the cache, a search occurs through the tags to find the specific content that's needed in level one (L1) of the memory. If the correct data isn't found, more searches are conducted in L2.
-
-If the data isn't found there, searches are continued in L3, then L4, and so on until it has been found. Then, it's read and loaded. If the data isn't found in the cache at all, then it's written into it for quick retrieval for the next time.
+If the data isn't found there, searches are continued in L3, then L4, and so on until it has been found, then, it's read and loaded. If the data isn't found in the cache at all, then it's written into it for quick retrieval the next time.
 
 ## Cache hit and Cache miss
 
 ### Cache hit
 
-A cache hit describes the situation where content is successfully served from the cache.
-
-The tags are searched in the memory rapidly, and when the data is found and read, it's considered a cache hit.
+A cache hit describes the situation where content is successfully served from the cache. The tags are searched in the memory rapidly, and when the data is found and read, it's considered a cache hit.
 
 **Cold, Warm, and Hot Caches**
 
@@ -51,9 +45,7 @@ A cache miss refers to the instance when the memory is searched and the data isn
 
 ## Cache Invalidation
 
-Cache invalidation is a process where the computer system declares the cache entries as invalid and removes or replaces them. If the data is modified, it should be invalidated in the cache, if not, this can cause inconsistent application behavior.
-
-There are three kinds of caching systems:
+Cache invalidation is a process where the computer system declares the cache entries as invalid and removes or replaces them. If the data is modified, it should be invalidated in the cache, if not, this can cause inconsistent application behavior. There are three kinds of caching systems:
 
 ### Write-through cache
 
@@ -81,9 +73,9 @@ Where write directly goes to the database or permanent storage, bypassing the ca
 
 Where the write is only done to the caching layer and the write is confirmed as soon as the write to the cache completes. The cache then asynchronously syncs this write to the database.
 
-**Pro**: This would lead to a really quick write latency and high write throughput for write-intensive applications.
+**Pro**: This would lead to reduced latency and high throughput for write-intensive applications.
 
-**Con: T**here is a risk of data loss in case the caching layer crashes. We can improve this by having more than one replica acknowledging the write in the cache.
+**Con**: There is a risk of data loss in case the caching layer crashes. We can improve this by having more than one replica acknowledging the write in the cache.
 
 ## Eviction policies
 
@@ -106,7 +98,7 @@ A distributed cache is a system that pools together the random-access memory (RA
 
 ![global-cache](/static/courses/system-design/chapter-I/caching/global-cache.png)
 
-As the name suggests, we will have a single shared cache and all the application nodes will use this shared cache. When a cache request is not found in the global cache, it's the responsibility of the cache to find out the missing piece of data from anywhere underlying the store.
+As the name suggests, we will have a single shared cache that all the application nodes will use. When the requested data is not found in the global cache, it's the responsibility of the cache to find out the missing piece of data from the underlying data store.
 
 ## Use cases
 
@@ -121,11 +113,11 @@ Caching can have many real-world use cases such as:
 
 Let's also look at some scenarios where we should not use cache:
 
-- Caching isn't helpful when it takes just as long to access the cache as it does to access the primary data.
+- Caching isn't helpful when it takes just as long to access the cache as it does to access the primary data store.
 - Caching doesn't work as well when requests have low repetition (higher randomness), because caching performance comes from repeated memory access patterns.
 - Caching isn't helpful when the data changes frequently, as the cached version gets out of sync, and the primary data store must be accessed every time.
 
-_It's important to note that caches should not be used as permanent data storage. They are almost always implemented in volatile memory because it is faster, and should thus be considered transient._
+_It's important to note that a cache should not be used as permanent data storage. They are almost always implemented in volatile memory because it is faster, and thus should be considered transient._
 
 ## Advantages
 
@@ -139,9 +131,9 @@ Below are some advantages of caching:
 
 ## Examples
 
-Here are some technologies used for caching:
+Here are some commonly used technologies for caching:
 
-- [Redis](https://redis.io/)
-- [Memcached](https://memcached.org/)
-- [Amazon Elasticache](https://aws.amazon.com/elasticache/)
-- [Aerospike](https://aerospike.com/)
+- [Redis](https://redis.io)
+- [Memcached](https://memcached.org)
+- [Amazon Elasticache](https://aws.amazon.com/elasticache)
+- [Aerospike](https://aerospike.com)

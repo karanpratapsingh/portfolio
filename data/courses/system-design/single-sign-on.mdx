@@ -2,12 +2,12 @@
 title: 'Single Sign-On (SSO)'
 date: '2022-11-18'
 draft: false
-summary: 'In this tutorial we will discuss Single Sign-On (SSO)'
+summary: 'In this tutorial, we will discuss Single Sign-On (SSO)'
 images: ['/static/courses/system-design/chapter-IV/single-sign-on/banner.png']
 authors: ['default']
 ---
 
-Single Sign-On (SSO) is an authentication process in which a user is provided access to multiple applications and/or websites by using only a single set of login credentials. This prevents the need for the user to log separately into the different applications.
+Single Sign-On (SSO) is an authentication process in which a user is provided access to multiple applications or websites by using only a single set of login credentials. This prevents the need for the user to log separately into the different applications.
 
 The user credentials and other identifying information are stored and managed by a centralized system called Identity Provider (IdP). The Identity Provider is a trusted system that provides access to other websites and applications.
 
@@ -15,7 +15,7 @@ Single Sign-On (SSO) based authentication systems are commonly used in enterpris
 
 ## Components
 
-Let's discuss some key components of Single Sign-On (SSO)
+Let's discuss some key components of Single Sign-On (SSO).
 
 ### Identity Provider (IdP)
 
@@ -29,7 +29,7 @@ A service provider provides services to the end-user. They rely on identity prov
 
 ### Identity Broker
 
-An identity broker acts as an intermediary that connects multiple service providers with various different identity providers. Using Identity Broker, we can perform single sign-on over any applications without the hassle about the protocol it follows.
+An identity broker acts as an intermediary that connects multiple service providers with various different identity providers. Using Identity Broker, we can perform single sign-on over any application without the hassle of the protocol it follows.
 
 ## SAML
 
@@ -51,13 +51,13 @@ Now, let's discuss how Single Sign-On works:
 
 ## SAML vs OAuth 2.0 and OpenID Connect (OIDC)
 
-There are many differences between SAML and OAuth and OIDC. SAML uses XML to pass messages, and OAuth and OIDC uses JSON. OAuth provides a simpler mobile experience, while SAML is geared towards enterprise security.
+There are many differences between SAML, OAuth, and OIDC. SAML uses XML to pass messages, while OAuth and OIDC use JSON. OAuth provides a simpler experience, while SAML is geared towards enterprise security.
 
-OAuth and OIDC uses RESTful communication extensively, which is why mobile applications, modern web applications devices find OAuth and OIDC a better experience for the user. SAML, on the other hand, drops a session cookie in a browser that allows a user to access certain web pages great for short-lived workloads.
+OAuth and OIDC use RESTful communication extensively, which is why mobile, and modern web applications find OAuth and OIDC a better experience for the user. SAML, on the other hand, drops a session cookie in a browser that allows a user to access certain web pages. This is great for short-lived workloads.
 
 OIDC is developer-friendly and simpler to implement, which broadens the use cases for which it might be implemented. It can be implemented from scratch pretty fast, via freely available libraries in all common programming languages. SAML can be complex to install and maintain, which only enterprise-size companies can handle well.
 
-OpenID Connect is essentially a layer put on an OAuth framework. Therefore, it can offer a built-in layer of permission that asks a user to agree to what the service provider might access. Although SAML is also capable of allowing consent flow, it achieves this by hard-coding carried out by a developer, not as part of its protocol.
+OpenID Connect is essentially a layer on top of the OAuth framework. Therefore, it can offer a built-in layer of permission that asks a user to agree to what the service provider might access. Although SAML is also capable of allowing consent flow, it achieves this by hard-coding carried out by a developer and not as part of its protocol.
 
 _Both of these authentication protocols are good at what they do. As always, a lot depends on our specific use cases and target audience._
 
@@ -66,22 +66,22 @@ _Both of these authentication protocols are good at what they do. As always, a l
 Following are the benefits of using Single Sign-On:
 
 - Ease of use as users only need to remember one set of credentials.
-- Ease of access without having to go through lengthy authorization process.
-- Enforced security and compliance to protect the sensitive data.
+- Ease of access without having to go through a lengthy authorization process.
+- Enforced security and compliance to protect sensitive data.
 - Simplifying the management with reduced IT support cost and admin time.
 
 ## Disadvantages
 
 Here are some disadvantages of Single Sign-On:
 
-- Single Password Vulnerability, If the main SSO password get's compromised, all the supported applications get compromised.
+- Single Password Vulnerability, if the main SSO password gets compromised, all the supported applications get compromised.
 - The authentication process using Single Sign-On is slower than traditional authentication as every application has to request the SSO provider for verification.
 
 ## Examples
 
 These are some commonly used Identity Providers (IdP):
 
-- [Okta](https://www.okta.com/)
+- [Okta](https://www.okta.com)
 - [Google](https://cloud.google.com/architecture/identity/single-sign-on)
-- [Auth0](https://auth0.com/)
-- [OneLogin](https://www.onelogin.com/)
+- [Auth0](https://auth0.com)
+- [OneLogin](https://www.onelogin.com)

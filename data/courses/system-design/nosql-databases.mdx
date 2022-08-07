@@ -2,22 +2,18 @@
 title: 'NoSQL databases'
 date: '2022-10-17'
 draft: false
-summary: 'In this tutorial we will discuss NoSQL databases'
+summary: 'In this tutorial, we will discuss NoSQL databases'
 images: ['/static/courses/system-design/chapter-II/nosql-databases/banner.png']
 authors: ['default']
 ---
 
-NoSQL is a broad category that includes any database that doesn't use SQL as its primary data access language. These types of databases are also sometimes referred to as non-relational databases. Unlike in relational databases, data in a NoSQL database doesn't have to conform to a pre-defined schema.
-
-_NoSQL databases follow eventual consistency (BASE consistency model)._
+NoSQL is a broad category that includes any database that doesn't use SQL as its primary data access language. These types of databases are also sometimes referred to as non-relational databases. Unlike in relational databases, data in a NoSQL database doesn't have to conform to a pre-defined schema. NoSQL databases follow [BASE consistency model](/courses/system-design/acid-and-base-consistency-models#base).
 
 Below are different types of NoSQL databases:
 
 ### Document
 
-A document database (also known as a document-oriented database or a document store) is a database that stores information in documents.
-
-_Document databases are general-purpose databases that serve a variety of use cases for both transactional and analytical applications_
+A document database (also known as a document-oriented database or a document store) is a database that stores information in documents. They are general-purpose databases that serve a variety of use cases for both transactional and analytical applications.
 
 **Advantages**
 
@@ -32,9 +28,9 @@ _Document databases are general-purpose databases that serve a variety of use ca
 
 **Examples**
 
-- MongoDB
-- Amazon DocumentDB
-- CouchDB
+- [MongoDB](https://www.mongodb.com)
+- [Amazon DocumentDB](https://aws.amazon.com/documentdb)
+- [CouchDB](https://couchdb.apache.org)
 
 ### Key-value
 
@@ -56,10 +52,10 @@ One of the simplest types of NoSQL databases, key-value databases save data as a
 
 **Examples**
 
-- Amazon DynamoDB
-- Redis
-- Memcached
-- Aerospike
+- [Redis](https://redis.io)
+- [Memcached](https://memcached.org)
+- [Amazon DynamoDB](https://aws.amazon.com/dynamodb)
+- [Aerospike](https://aerospike.com)
 
 ### Graph
 
@@ -87,10 +83,10 @@ The graph relates the data items in the store to a collection of nodes and edges
 
 **Examples**
 
-- Neo4j
-- ArangoDB
-- Amazon Neptune
-- JanusGraph
+- [Neo4j](https://neo4j.com)
+- [ArangoDB](https://www.arangodb.com)
+- [Amazon Neptune](https://aws.amazon.com/neptune)
+- [JanusGraph](https://janusgraph.org)
 
 ### Time series
 
@@ -110,8 +106,8 @@ A time-series database is a database optimized for time-stamped, or time series,
 
 **Examples**
 
-- Apache Druid
-- InfluxDB
+- [InfluxDB](https://www.influxdata.com)
+- [Apache Druid](https://druid.apache.org)
 
 ### Wide column
 
@@ -134,13 +130,13 @@ Wide column databases, also known as wide column stores, are schema-agnostic. Da
 
 **Examples**
 
-- BigTable
-- Apache Cassandra
-- Scylla
+- [BigTable](https://cloud.google.com/bigtable)
+- [Apache Cassandra](https://cassandra.apache.org)
+- [ScyllaDB](https://www.scylladb.com)
 
 ### Multi-model
 
-Multi-model databases combine different database models (i.e relational, graph, key-value, document, etc.) into a single, integrated back end. This means they can accommodate various data types, and store, index, and query data in more than one model.
+Multi-model databases combine different database models (i.e. relational, graph, key-value, document, etc.) into a single, integrated backend. This means they can accommodate various data types, indexes, queries, and store data in more than one model.
 
 **Advantages**
 
@@ -155,6 +151,6 @@ Multi-model databases combine different database models (i.e relational, graph, 
 
 **Examples**
 
-- ArangoDB
-- Azure Cosmos DB
-- Couchbase
+- [ArangoDB](https://www.arangodb.com)
+- [Azure Cosmos DB](https://azure.microsoft.com/en-in/services/cosmos-db)
+- [Couchbase](https://www.couchbase.com)

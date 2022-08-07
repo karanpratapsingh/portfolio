@@ -2,13 +2,13 @@
 title: 'N-tier architecture'
 date: '2022-10-30'
 draft: false
-summary: 'In this tutorial we will discuss N-tier architecture'
+summary: 'In this tutorial, we will discuss N-tier architecture'
 images:
   ['/static/courses/system-design/chapter-III/n-tier-architecture/banner.png']
 authors: ['default']
 ---
 
-An N-tier architecture divides an application into logical layers and physical tiers. Layers are a way to separate responsibilities and manage dependencies. Each layer has a specific responsibility. A higher layer can use services in a lower layer, but not the other way around.
+N-tier architecture divides an application into logical layers and physical tiers. Layers are a way to separate responsibilities and manage dependencies. Each layer has a specific responsibility. A higher layer can use services in a lower layer, but not the other way around.
 
 ![n-tier-architecture](/static/courses/system-design/chapter-III/n-tier-architecture/n-tier-architecture.png)
 
@@ -29,13 +29,13 @@ Let's look at some examples of N-Tier architecture:
 
 3-Tier is widely used and consists of the following different layers:
 
-- Presentation layer: Handles user interactions with the application.
+- **Presentation layer**: Handles user interactions with the application.
 - **Business Logic layer**: Accepts the data from the application layer, validates it as per business logic and passes it to the data layer.
 - **Data Access layer**: Receives the data from the business layer and performs the necessary operation on the database.
 
 ### 2-Tier architecture
 
-In this architecture, the presentation layer runs on the client and communicates with a datastore. There is no business logic layer or immediate layer between client and server.
+In this architecture, the presentation layer runs on the client and communicates with a data store. There is no business logic layer or immediate layer between client and server.
 
 ### Single Tier or 1-Tier architecture
 
@@ -56,5 +56,5 @@ Below are some disadvantages of N-tier architecture:
 
 - Increased complexity of the system as a whole.
 - Increased network latency as the number of tiers increases.
-- Expensive as every tier can have its own hardware cost.
+- Expensive as every tier will have its own hardware cost.
 - Difficult to manage network security.

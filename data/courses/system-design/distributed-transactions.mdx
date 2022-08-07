@@ -2,7 +2,7 @@
 title: 'Distributed Transactions'
 date: '2022-10-26'
 draft: false
-summary: 'In this tutorial we will discuss Distributed Transactions'
+summary: 'In this tutorial, we will discuss Distributed Transactions'
 images:
   [
     '/static/courses/system-design/chapter-II/distributed-transactions/banner.png',
@@ -24,7 +24,7 @@ Now, let's look at some popular solutions for distributed transactions:
 
 ![two-phase-commit](/static/courses/system-design/chapter-II/distributed-transactions/two-phase-commit.png)
 
-The two-phase commit protocol (2PC) is a distributed algorithm that coordinates all the processes that participate in a distributed transaction on whether to commit or abort (roll back) the transaction.
+The two-phase commit (2PC) protocol is a distributed algorithm that coordinates all the processes that participate in a distributed transaction on whether to commit or abort (roll back) the transaction.
 
 This protocol achieves its goal even in many cases of temporary system failure and is thus widely used. However, it is not resilient to all possible failure configurations, and in rare cases, manual intervention is needed to remedy an outcome.
 
@@ -66,15 +66,15 @@ This phase is the same as the two-phase commit.
 
 **Pre-commit phase**
 
-Coordinator issues the pre-commit message and all the participating nodes must acknowledge it. If a participant fails to receive this message in time, then it aborts.
+Coordinator issues the pre-commit message and all the participating nodes must acknowledge it. If a participant fails to receive this message in time, then the transaction is aborted.
 
 **Commit phase**
 
 This step is also similar to the two-phase commit protocol.
 
-### Why is pre-commit phase helpful?
+### Why is the Pre-commit phase helpful?
 
-The pre-commit phase which is the second phase accomplishes
+The pre-commit phase accomplishes the following:
 
 - If the participant nodes are found in this phase, that means that _every_ participant has completed the first phase. The completion of prepare phase is guaranteed.
 - Every phase can now time out and avoid indefinite waits.
@@ -87,5 +87,7 @@ A saga is a sequence of local transactions. Each local transaction updates the d
 
 ### Coordination
 
-- **Choreography**: each local transaction publishes domain events that trigger local transactions in other services.
-- **Orchestration**: an orchestrator tells the participants what local transactions to execute.
+There are two common implementation approaches:
+
+- **Choreography**: Each local transaction publishes domain events that trigger local transactions in other services.
+- **Orchestration**: An orchestrator tells the participants what local transactions to execute.

@@ -2,7 +2,7 @@
 title: 'TCP and UDP'
 date: '2022-10-05'
 draft: false
-summary: 'In this tutorial we will discuss TCP and UDP'
+summary: 'In this tutorial, we will discuss TCP and UDP'
 images: ['/static/courses/system-design/chapter-I/tcp-and-udp/banner.png']
 authors: ['default']
 ---
@@ -13,15 +13,15 @@ Transmission Control Protocol (TCP) is connection-oriented, meaning once a conne
 
 ![tcp](/static/courses/system-design/chapter-I/tcp-and-udp/tcp.png)
 
-But while TCP is instinctively reliable, its feedback mechanisms also result in a larger overhead, translating to greater use of the available bandwidth on the network. We should use TCP over UDP when we need all of the data to arrive intact.
+But while TCP is instinctively reliable, its feedback mechanisms also result in a larger overhead, translating to greater use of the available bandwidth on the network.
 
 ## UDP
 
-User Datagram Protocol (UDP) is a simpler, connectionless Internet protocol wherein error-checking and recovery services are not required. With UDP, there is no overhead for opening a connection, maintaining a connection, or terminating a connection. Data is continuously sent to the recipient, whether or not they receive it.
+User Datagram Protocol (UDP) is a simpler, connectionless internet protocol in which error-checking and recovery services are not required. With UDP, there is no overhead for opening a connection, maintaining a connection, or terminating a connection. Data is continuously sent to the recipient, whether or not they receive it.
 
 ![udp](/static/courses/system-design/chapter-I/tcp-and-udp/udp.png)
 
-It is largely preferred for real-time communications like broadcast or multitask network transmission. We should use UDP over TCP when we need the lowest latency and late data is worse than the loss of data.
+It is largely preferred for real-time communications like broadcast or multicast network transmission. We should use UDP over TCP when we need the lowest latency and late data is worse than the loss of data.
 
 ## TCP vs UDP
 

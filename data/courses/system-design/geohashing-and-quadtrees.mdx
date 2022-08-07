@@ -2,7 +2,7 @@
 title: 'Geohashing and Quadtrees'
 date: '2022-11-11'
 draft: false
-summary: 'In this tutorial we will discuss Geohashing and Quadtrees'
+summary: 'In this tutorial, we will discuss Geohashing and Quadtrees'
 images:
   [
     '/static/courses/system-design/chapter-IV/geohashing-and-quadtrees/banner.png',
@@ -18,15 +18,15 @@ For example, San Francisco with coordinates `37.7564, -122.4016` can be represen
 
 ### How does Geohashing work?
 
-Geohash is a hierarchical spatial index that uses Base-32 alphabet encoding, the first character in a geohash identifies the initial location as one of the 32 cells. This cell will also contain 32 cells. This means that to represent a point, the world is recursively divided into smaller and smaller cells, with each additional bit, until the desired precision is attained. The precision factor also determines the size of the cell.
+Geohash is a hierarchical spatial index that uses Base-32 alphabet encoding, the first character in a geohash identifies the initial location as one of the 32 cells. This cell will also contain 32 cells. This means that to represent a point, the world is recursively divided into smaller and smaller cells with each additional bit until the desired precision is attained. The precision factor also determines the size of the cell.
 
 ![geohashing](/static/courses/system-design/chapter-IV/geohashing-and-quadtrees/geohashing.png)
 
-Geohashing guarantees that points are spatially closer if their Geohashes share a longer prefix which means the more characters in the string, the more precise the location. For example, geohashes `9q8yy9mf` and `9q8yy9vx` are always spatially closer as they share the prefix `9q8yy9`.
+Geohashing guarantees that points are spatially closer if their Geohashes share a longer prefix which means the more characters in the string, the more precise the location. For example, geohashes `9q8yy9mf` and `9q8yy9vx` are spatially closer as they share the prefix `9q8yy9`.
 
-Geohashing can also be used to provide a degree of anonymity as we don't need to expose the exact location of the user, depending on the length of the geohash we just know they are somewhere within an area.
+Geohashing can also be used to provide a degree of anonymity as we don't need to expose the exact location of the user because depending on the length of the geohash we just know they are somewhere within an area.
 
-The cell sizes of geohashes of different lengths are as follows:
+The cell sizes of the geohashes of different lengths are as follows:
 
 | Geohash length | Cell width | Cell height |
 | -------------- | ---------- | ----------- |
@@ -55,10 +55,10 @@ Here are some common use cases for Geohashing:
 
 Geohashing is widely used and it is supported by popular databases.
 
-- [MySQL](https://www.mysql.com/)
-- [Redis](http://redis.io/)
-- [Amazon DynamoDB](https://aws.amazon.com/dynamodb/)
-- [Google Firestore](https://cloud.google.com/firestore)
+- [MySQL](https://www.mysql.com)
+- [Redis](http://redis.io)
+- [Amazon DynamoDB](https://aws.amazon.com/dynamodb)
+- [Google Cloud Firestore](https://cloud.google.com/firestore)
 
 ## Quadtrees
 

@@ -2,16 +2,16 @@
 title: 'URL Shortener'
 date: '2022-11-21'
 draft: false
-summary: 'In this tutorial we will learn how to design a URL Shortener'
+summary: 'In this tutorial, we will learn how to design a URL Shortener'
 images: ['/static/courses/system-design/chapter-V/url-shortener/banner.png']
 authors: ['default']
 ---
 
-Let's design a URL shortener, similar to services like [bit.ly](https://bitly.com/), [tinyURL](https://tinyurl.com/app).
+Let's design a URL shortener, similar to services like [Bitly](https://bitly.com), [TinyURL](https://tinyurl.com/app).
 
 ## What is a URL Shortener?
 
-A URL shortener service creates an alias or a short url for a long url. Users are redirected to the original URL when they visit these short links.
+A URL shortener service creates an alias or a short URL for a long URL. Users are redirected to the original URL when they visit these short links.
 
 For example, the following long URL can be changed to a shorter URL.
 
@@ -21,7 +21,7 @@ For example, the following long URL can be changed to a shorter URL.
 
 ## Why do we need a URL shortener?
 
-URL shortener saves space in general when we are sharing URLs. Users are also less likely to mistype shorter URLs. Moreover, we can also optimize links across devices, this allows us to track individual links and analytics.
+URL shortener saves space in general when we are sharing URLs. Users are also less likely to mistype shorter URLs. Moreover, we can also optimize links across devices, this allows us to track individual links.
 
 ## Requirements
 
@@ -64,7 +64,7 @@ $$
 Similarly for writes:
 
 $$
-1 \times 100 \space million = 1 \space million/month
+1 \times 100 \space million = 100 \space million/month
 $$
 
 **What would be Requests Per Second (RPS) for our system?**
@@ -75,9 +75,7 @@ $$
 \frac{100 \space million}{(30 \space days \times 24 \space hrs \times 3600 \space seconds)} = \sim 40 \space URLs/second
 $$
 
-**Redirections**
-
-With a `100:1` read/write ratio, the number of redirections will be:
+And with a `100:1` read/write ratio, the number of redirections will be:
 
 $$
 100 \times 40 \space URLs/second = 4000 \space requests/second
@@ -102,7 +100,7 @@ $$
 For storage, we will assume we store each link or record in our database for 10 years. Since we expect around 100M new requests every month, the total number of records we will need to store would be:
 
 $$
-100 million \times 10\space years \times 12 \space months = 12 \space billion
+100 \space million \times 10\space years \times 12 \space months = 12 \space billion
 $$
 
 Like earlier, if we assume each stored recorded will be approximately 500 bytes. We will need around 6TB of storage:
@@ -158,19 +156,19 @@ Next, we will focus on the data model design. Here is our database schema:
   src='https://drawsql.app/karanpratapsingh/diagrams/url-shortener/embed'
 ></iframe>
 
-Initially, we can get started with two tables:
+Initially, we can get started with just two tables:
 
 **users**
+
 Stores user's details such as `name`, `email`, `createdAt`, etc.
 
 **urls**
-Contains the new short URL's properties such as `expiration`, `hash`, `originalURL`, and `userID` of the user who created the short URL.
 
-We can also use the `hash` column as an [index](/courses/system-design/indexes) to improve query performance.
+Contains the new short URL's properties such as `expiration`, `hash`, `originalURL`, and `userID` of the user who created the short URL. We can also use the `hash` column as an [index](/courses/system-design/indexes) to improve the query performance.
 
 ### What kind of database should we use?
 
-Since the data is not strongly relational, NoSQL databases such as [Amazon DynamoDB](https://aws.amazon.com/dynamodb/), [Apache Cassandra](https://cassandra.apache.org/_/index.html), or [MongoDB](https://www.mongodb.com/) will be a better choice here, if we do decide to use an SQL database then we can use something like [Azure SQL Database](https://azure.microsoft.com/en-in/products/azure-sql/database/) or [Amazon RDS](https://aws.amazon.com/rds/).
+Since the data is not strongly relational, NoSQL databases such as [Amazon DynamoDB](https://aws.amazon.com/dynamodb), [Apache Cassandra](https://cassandra.apache.org/_/index.html), or [MongoDB](https://www.mongodb.com) will be a better choice here, if we do decide to use an SQL database then we can use something like [Azure SQL Database](https://azure.microsoft.com/en-in/products/azure-sql/database) or [Amazon RDS](https://aws.amazon.com/rds).
 
 _For more details, refer to [SQL vs NoSQL](/courses/system-design/sql-vs-nosql-databases)._
 
@@ -180,7 +178,7 @@ Let us do a basic API design for our services:
 
 ### Create URL
 
-`createURL` API should create a new short URL in our system given an orignal URL.
+This API should create a new short URL in our system given an original URL.
 
 ```tsx
 createURL(apiKey: string, originalURL: string, expiration?: Date): string
@@ -188,7 +186,7 @@ createURL(apiKey: string, originalURL: string, expiration?: Date): string
 
 **Parameters**
 
-API Key (`string`): API key provided to the user.
+API Key (`string`): API key provided by the user.
 
 Original Url (`string`): Original URL to be shortened.
 
@@ -198,9 +196,27 @@ Expiration (`Date`): Expiration date of the new URL _(optional)_.
 
 Short URL (`string`): New shortened URL.
 
+### Get URL
+
+This API should retrieve the original URL from a given short URL.
+
+```tsx
+getURL(apiKey: string, shortURL: string): string
+```
+
+**Parameters**
+
+API Key (`string`): API key provided by the user.
+
+Short Url (`string`): Short URL mapped to the original URL.
+
+**Returns**
+
+Original URL (`string`): Original URL to be retrieved.
+
 ### Delete URL
 
-`deleteURL` API should delete a given shortURL from our system.
+This API should delete a given shortURL from our system.
 
 ```tsx
 deleteURL(apiKey: string, shortURL: string): boolean
@@ -208,9 +224,9 @@ deleteURL(apiKey: string, shortURL: string): boolean
 
 **Parameters**
 
-API Key (`string`): API key provided to the user.
+API Key (`string`): API key provided by the user.
 
-Short Url (`string`): Short URL to be retrieved.
+Short Url (`string`): Short URL to be deleted.
 
 **Returns**
 
@@ -218,7 +234,7 @@ Result (`boolean`): Represents whether the operation was successful or not.
 
 ### Why do we need an API key?
 
-As you must've noticed, we're using an API key to prevent abuse of our services. Using this API key we can limit the users to a certain number of requests per minute or hour. This is quite a standard practice for developer APIs and should cover our extended requirement.
+As you must've noticed, we're using an API key to prevent abuse of our services. Using this API key we can limit the users to a certain number of requests per second or minute. This is quite a standard practice for developer APIs and should cover our extended requirement.
 
 ## High-level design
 
@@ -238,9 +254,9 @@ $$
 
 Where,
 
-`N`: Number of characters in the generated url.
+`N`: Number of characters in the generated URL.
 
-So, if we want to generate a url that is 7 characters long, we will generate ~3.5 trillion different URLs.
+So, if we want to generate a URL that is 7 characters long, we will generate ~3.5 trillion different URLs.
 
 $$
 \begin{gather*}
@@ -256,7 +272,7 @@ This is the simplest solution here, but it does not guarantee non-duplicate or c
 
 **MD5 Approach**
 
-The [MD5 message-digest algorithm](https://en.wikipedia.org/wiki/MD5) is a widely used hash function producing a 128-bit hash value (or 32 hexadecimal digits). We can use these 32 hexadecimal digits for generating 7 characters long url.
+The [MD5 message-digest algorithm](https://en.wikipedia.org/wiki/MD5) is a widely used hash function producing a 128-bit hash value (or 32 hexadecimal digits). We can use these 32 hexadecimal digits for generating 7 characters long URL.
 
 $$
 MD5(original\_url) \rightarrow base62encode \rightarrow hash
@@ -274,7 +290,7 @@ $$
 
 The problem with this approach is that it can quickly become a single point for failure. And if we run multiple instances of the counter we can have collision as it's essentially a distributed system.
 
-To solve this issue we can use a distributed system manager such as [Zookeeper](https://zookeeper.apache.org/) which can provide distributed synchronization. Zookeeper can maintain multiple ranges for our servers.
+To solve this issue we can use a distributed system manager such as [Zookeeper](https://zookeeper.apache.org) which can provide distributed synchronization. Zookeeper can maintain multiple ranges for our servers.
 
 $$
 \begin{align*}
@@ -312,7 +328,7 @@ While 390 GB seems like a lot for this simple use case, it is important to remem
 
 ### Caching
 
-Now, let's talk about [caching](/courses/system-design/caching). As per our estimations, we will require around ~35 GB of memory per day to cache 20% of the incoming requests to our services. For this use case, we can use [Redis](https://redis.io/) or [Memcached](https://memcached.org/) servers alongside our API server.
+Now, let's talk about [caching](/courses/system-design/caching). As per our estimations, we will require around ~35 GB of memory per day to cache 20% of the incoming requests to our services. For this use case, we can use [Redis](https://redis.io) or [Memcached](https://memcached.org) servers alongside our API server.
 
 _For more details, refer to [caching](/courses/system-design/caching)._
 
@@ -372,7 +388,7 @@ Now let us talk about [caching](/courses/system-design/caching).
 
 **Which cache eviction policy to use?**
 
-As we discussed before, we can use solutions like [Redis](https://redis.io/) or [Memcached](https://memcached.org/) and cache 20% of the daily traffic but what kind of cache eviction policy would best fit our needs?
+As we discussed before, we can use solutions like [Redis](https://redis.io) or [Memcached](https://memcached.org) and cache 20% of the daily traffic but what kind of cache eviction policy would best fit our needs?
 
 [Least Recently Used (LRU)](<https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_(LRU)>) can be a good policy for our system. In this policy, we discard the least recently used key first.
 
@@ -405,7 +421,7 @@ Let us identify and resolve bottlenecks such as single points of failure in our 
 To make our system more resilient we can do the following:
 
 - Running multiple instances of our Servers and Key Generation Service.
-- Introduce [load-balancers](/courses/system-design/load-balancing) between clients, servers, databases, and cache servers.
+- Introducing [load balancers](/courses/system-design/load-balancing) between clients, servers, databases, and cache servers.
 - Using multiple read replicas for our database as it's a read-heavy system.
 - Standby replica for our key database in case it fails.
 - Multiple instances and replicas for our distributed cache.

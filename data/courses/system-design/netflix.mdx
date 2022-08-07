@@ -2,12 +2,12 @@
 title: 'Netflix'
 date: '2022-11-24'
 draft: false
-summary: 'In this tutorial we will learn how to design Netflix'
+summary: 'In this tutorial, we will learn how to design Netflix'
 images: ['/static/courses/system-design/chapter-V/netflix/banner.png']
 authors: ['default']
 ---
 
-Let's design a Netflix like streaming service, similar to services like [Amazon Prime Video](https://www.primevideo.com/), [Disney Plus](https://www.disneyplus.com/), [Hulu](https://www.hulu.com/), [Youtube](youtube.com), [Vimeo](https://vimeo.com/), etc.
+Let's design a Netflix like video streaming service, similar to services like [Amazon Prime Video](https://www.primevideo.com), [Disney Plus](https://www.disneyplus.com), [Hulu](https://www.hulu.com), [Youtube](https://youtube.com), [Vimeo](https://vimeo.com), etc.
 
 ## What is Netflix?
 
@@ -19,8 +19,8 @@ Our system should meet the following requirements:
 
 ### Functional requirements
 
-- Users should be able to share and view videos.
-- The content team (or users in YouTube's case) should be able to upload new videos (movies, tv episodes, and other content).
+- Users should be able to stream and share videos.
+- The content team (or users in YouTube's case) should be able to upload new videos (movies, tv shows episodes, and other content).
 - Users should be able to search for videos using titles or tags.
 - Users should be able to comment on a video similar to YouTube.
 
@@ -90,13 +90,13 @@ $$
 
 Here is our high-level estimate:
 
-| Type                     | Estimate    |
-| ------------------------ | ----------- |
-| Daily active users (DAU) | 200 million |
-| Requests per second      | 12K/s       |
-| Storage (per day)        | ~5 PB       |
-| Storage (10 years)       | ~18,250 PB  |
-| Bandwidth                | ~58 GB/s    |
+| Type                      | Estimate    |
+| ------------------------- | ----------- |
+| Daily active users (DAU)  | 200 million |
+| Requests per second (RPS) | 12K/s       |
+| Storage (per day)         | ~5 PB       |
+| Storage (10 years)        | ~18,250 PB  |
+| Bandwidth                 | ~58 GB/s    |
 
 ## Data model design
 
@@ -142,7 +142,7 @@ This table stores all the comments received on a video (like YouTube).
 
 While our data model seems quite relational, we don't necessarily need to store everything in a single database, as this can limit our scalability and quickly become a bottleneck.
 
-We will split the data between different services each having ownership over a particular table. Then we can use a relational database such as [PostgreSQL](https://www.postgresql.org/) or a distributed NoSQL database such as [Apache Cassandra](https://cassandra.apache.org/_/index.html) for our use case.
+We will split the data between different services each having ownership over a particular table. Then we can use a relational database such as [PostgreSQL](https://www.postgresql.org) or a distributed NoSQL database such as [Apache Cassandra](https://cassandra.apache.org/_/index.html) for our use case.
 
 ## API design
 
@@ -186,7 +186,7 @@ Offset (`int`): Offset of the video stream in seconds to stream data from any po
 
 **Returns**
 
-Stream (`VideoStream`): Data stream of the requested video from a given offset.
+Stream (`VideoStream`): Data stream of the requested video.
 
 ### Search for a video
 
@@ -250,7 +250,7 @@ This service will be used for metrics and analytics use cases.
 
 **What about inter-service communication and service discovery?**
 
-Since our architecture is micro-services based, services will be communicating with each other as well. Generally, REST or HTTP performs well but we can further improve the performance using [gRPC](/courses/system-design/rest-graphql-grpc#grpc) which is more lightweight and efficient.
+Since our architecture is microservices based, services will be communicating with each other as well. Generally, REST or HTTP performs well but we can further improve the performance using [gRPC](/courses/system-design/rest-graphql-grpc#grpc) which is more lightweight and efficient.
 
 Service discovery is another thing we will have to take into account. We can also use a service mesh that enables managed, observable, and secure communication between individual services.
 
@@ -270,7 +270,7 @@ Let's discuss how this works:
 
 This is the first step of our processing pipeline. File chunking is the process of splitting a file into smaller pieces called chunks. It can help us eliminate duplicate copies of repeating data on storage, and reduces the amount of data sent over the network by only selecting changed chunks.
 
-Usually, a video file can be split into equal size chunks based on timestamps but Netflix instead splits chunks based on scenes (movies or tv shows), this slight variation becomes a big factor for a better user experience as whenever the client requests a chunk from the server, there is a lower chance of interruption as a complete scene was retrieved.
+Usually, a video file can be split into equal size chunks based on timestamps but Netflix instead splits chunks based on scenes, this slight variation becomes a huge factor for a better user experience as whenever the client requests a chunk from the server, there is a lower chance of interruption as a complete scene will be retrieved.
 
 ![file-chunking](/static/courses/system-design/chapter-V/netflix/file-chunking.png)
 
@@ -278,47 +278,47 @@ Usually, a video file can be split into equal size chunks based on timestamps bu
 
 This step checks if the video adheres to the content policy of the platform, this can be pre-approved in the case of Netflix as per the [content rating](https://en.wikipedia.org/wiki/Motion_picture_content_rating_system) of the media or can be strictly enforced like YouTube.
 
-This entire step is done by a machine learning model which performs copyright, piracy, or NSFW checks. If issues are found, we can push the task to a [dead-letter queue](/courses/system-design/message-queues#dead-letter-queues) and someone from the moderation team can do further inspection.
+This entire step is done by a machine learning model which performs copyright, piracy, and NSFW checks. If issues are found, we can push the task to a [dead-letter queue (DLQ)](/courses/system-design/message-queues#dead-letter-queues) and someone from the moderation team can do further inspection.
 
 - **Transcoder**
 
 [Transcoding](https://en.wikipedia.org/wiki/Transcoding) is a process in which the original data is decoded to an intermediate uncompressed format, which is then encoded into the target format. This process uses different [codecs](https://en.wikipedia.org/wiki/Video_codec) to perform bitrate adjustment, image downsampling, or re-encoding the media.
 
-This results in a smaller size file and a much more optimized format for the target devices. Standalone solutions such as [FFmpeg](https://ffmpeg.org/) or cloud-based solutions like [AWS Elemental MediaConvert](https://aws.amazon.com/mediaconvert/) can be used to implement this step of the pipeline.
+This results in a smaller size file and a much more optimized format for the target devices. Standalone solutions such as [FFmpeg](https://ffmpeg.org) or cloud-based solutions like [AWS Elemental MediaConvert](https://aws.amazon.com/mediaconvert) can be used to implement this step of the pipeline.
 
 - **Quality Conversion**
 
-This is the last step of the processing pipeline and as the name suggests, this step handles the conversion of the transcoded media from the previous step to different resolutions such as 4K, 1440p, 1080p, 720p, etc.
+This is the last step of the processing pipeline and as the name suggests, this step handles the conversion of the transcoded media from the previous step into different resolutions such as 4K, 1440p, 1080p, 720p, etc.
 
-This allows us to fetch the optimal quality for large sets of devices that our users might be using, and once the media file finishes processing, it will be uploaded to a distributed file storage such as [HDFS](/courses/system-design/storage#hdfs), [GlusterFS](https://www.gluster.org/), or [object storage](/courses/system-design/storage#object-storage) such as [Amazon S3](https://aws.amazon.com/s3/) for later retrieval during streaming.
+This allows us to fetch the desired quality of the video as per the user's request, and once the media file finishes processing, it will be uploaded to a distributed file storage such as [HDFS](/courses/system-design/storage#hdfs), [GlusterFS](https://www.gluster.org), or an [object storage](/courses/system-design/storage#object-storage) such as [Amazon S3](https://aws.amazon.com/s3) for later retrieval during streaming.
 
-_Note: We can add additional steps such as subtitles, thumbnails, etc as part of our pipeline._
+_Note: We can add additional steps such as subtitles and thumbnails generation as part of our pipeline._
 
 **Why are we using a message queue?**
 
-Processing videos as a long-running task makes much more sense, and the [message queue](/courses/system-design/message-queues) also decouples our video processing pipeline from uploads functionality. We can use something like [Amazon SQS](https://aws.amazon.com/sqs/) or [RabbitMQ](https://www.rabbitmq.com/) to support this functionality.
+Processing videos as a long-running task makes much more sense, and a [message queue](/courses/system-design/message-queues) also decouples our video processing pipeline from the uploads functionality. We can use something like [Amazon SQS](https://aws.amazon.com/sqs) or [RabbitMQ](https://www.rabbitmq.com) to support this.
 
 ### Video streaming
 
-Video streaming is a challenging task from both the client and server perspectives. Moreover, Internet connection speeds vary quite a lot between different users. To make sure users don't re-fetch the same content, we can use a [Content Delivery Network (CDN)](/courses/system-design/content-delivery-network).
+Video streaming is a challenging task from both the client and server perspectives. Moreover, internet connection speeds vary quite a lot between different users. To make sure users don't re-fetch the same content, we can use a [Content Delivery Network (CDN)](/courses/system-design/content-delivery-network).
 
-Netflix takes this a step further with its [Open Connect](https://openconnect.netflix.com) program. In this approach, they partner with thousands of Internet Service Providers (ISPs) to localize their traffic and deliver their content more efficiently. This enables them to serve the user requests
+Netflix takes this a step further with its [Open Connect](https://openconnect.netflix.com) program. In this approach, they partner with thousands of Internet Service Providers (ISPs) to localize their traffic and deliver their content more efficiently.
 
 **What is the difference between Netflix's Open Connect and a traditional Content Delivery Network (CDN)?**
 
-Netflix Open Connect is our purpose-built [Content Delivery Network (CDN)](/courses/system-design/content-delivery-network) responsible for serving Netflix's video traffic. Around 95% of the traffic globally is delivered via direct connections between Open Connect and the ISPs their customers use to access the Internet.
+Netflix Open Connect is our purpose-built [Content Delivery Network (CDN)](/courses/system-design/content-delivery-network) responsible for serving Netflix's video traffic. Around 95% of the traffic globally is delivered via direct connections between Open Connect and the ISPs their customers use to access the internet.
 
-Currently, they have Open Connect Appliances (OCAs) in over 1000 separate locations around the world. In case of issues, Open Connect Appliances (OCAs) can failover, and traffic can be re-routed to Netflix servers.
+Currently, they have Open Connect Appliances (OCAs) in over 1000 separate locations around the world. In case of issues, Open Connect Appliances (OCAs) can failover, and the traffic can be re-routed to Netflix servers.
 
-Additionally, we can use [Adaptive bitrate streaming](https://en.wikipedia.org/wiki/Adaptive_bitrate_streaming) protocols such as [HTTP Live Streaming (HLS)](https://en.wikipedia.org/wiki/HTTP_Live_Streaming) which is designed for reliability and dynamically adapts to network conditions by optimizing playback for the available speed of the connections.
+Additionally, we can use [Adaptive bitrate streaming](https://en.wikipedia.org/wiki/Adaptive_bitrate_streaming) protocols such as [HTTP Live Streaming (HLS)](https://en.wikipedia.org/wiki/HTTP_Live_Streaming) which is designed for reliability and it dynamically adapts to network conditions by optimizing playback for the available speed of the connections.
 
 Lastly, for playing the video from where the user left off (part of our extended requirements), we can simply use the `offset` property we stored in the `views` table to retrieve the scene chunk at that particular timestamp and resume the playback for the user.
 
 ### Searching
 
-Sometimes traditional DBMS are not performant enough, we need something which allows us to store, search, and analyze huge volumes of data quickly and in near real-time and give back answers in milliseconds. [Elasticsearch](https://www.elastic.co/) can help us with this use case.
+Sometimes traditional DBMS are not performant enough, we need something which allows us to store, search, and analyze huge volumes of data quickly and in near real-time and give results within milliseconds. [Elasticsearch](https://www.elastic.co) can help us with this use case.
 
-[Elasticsearch](https://www.elastic.co/) is a distributed, free and open search and analytics engine for all types of data, including textual, numerical, geospatial, structured, and unstructured. It is built on top of [Apache Lucene](https://lucene.apache.org/).
+[Elasticsearch](https://www.elastic.co) is a distributed, free and open search and analytics engine for all types of data, including textual, numerical, geospatial, structured, and unstructured. It is built on top of [Apache Lucene](https://lucene.apache.org).
 
 **How do we identify trending content?**
 
@@ -349,9 +349,9 @@ _For more details, refer to [Sharding](/courses/system-design/sharding) and [Con
 
 ### Geo-blocking
 
-Platforms like Netflix and YouTube use [Geo-blocking](https://en.wikipedia.org/wiki/Geo-blocking) to restrict content in certain geographical areas or countries. This is primarily done to adhere to legal distribution laws that Netflix has with the production and distribution companies. In the case of YouTube, this can also be controlled by the user during the publishing of the content.
+Platforms like Netflix and YouTube use [Geo-blocking](https://en.wikipedia.org/wiki/Geo-blocking) to restrict content in certain geographical areas or countries. This is primarily done due to legal distribution laws that Netflix has to adhere to when they make a deal with the production and distribution companies. In the case of YouTube, this will be controlled by the user during the publishing of the content.
 
-We can determine user's location either using their [IP](/courses/system-design/ip) or region settings in their profile then use services like [Amazon CloudFront](https://aws.amazon.com/cloudfront/) which supports a geographic restrictions feature or a [geolocation routing policy](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-geo.html) with services like [Amazon Route53](https://aws.amazon.com/route53/) to restrict the content and re-route the user to an error page as the content might not be available in the user's country.
+We can determine the user's location either using their [IP](/courses/system-design/ip) or region settings in their profile then use services like [Amazon CloudFront](https://aws.amazon.com/cloudfront) which supports a geographic restrictions feature or a [geolocation routing policy](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-geo.html) with [Amazon Route53](https://aws.amazon.com/route53) to restrict the content and re-route the user to an error page if the content is not available in that particular region or country.
 
 ### Recommendations
 
@@ -359,21 +359,21 @@ Netflix uses a machine learning model which uses the user's viewing history to p
 
 However, Netflix (like YouTube) uses its own algorithm called Netflix Recommendation Engine which can track several data points such as:
 
-- User profile information such as age, gender, and location.
+- User profile information like age, gender, and location.
 - Browsing and scrolling behavior of the user.
 - Time and date a user watched a title.
-- The device used to stream the content.
-- The number of searches and what is searched for.
+- The device which was used to stream the content.
+- The number of searches and what terms were searched.
 
 _For more detail, refer to [Netflix recommendation research](https://research.netflix.com/research-area/recommendations)._
 
 ### Metrics and Analytics
 
-Recording analytics and metrics is one of our extended requirements. We can capture the data from different services and run analytics on the data using [Apache Spark](https://spark.apache.org/) which is an open-source unified analytics engine for large-scale data processing. Additionally, we can store critical metadata in the views table to increase data points within our data.
+Recording analytics and metrics is one of our extended requirements. We can capture the data from different services and run analytics on the data using [Apache Spark](https://spark.apache.org) which is an open-source unified analytics engine for large-scale data processing. Additionally, we can store critical metadata in the views table to increase data points within our data.
 
 ### Caching
 
-In a streaming platform, caching is important. We have to be able to cache as much static media content as possible to improve user experience. We can use solutions like [Redis](https://redis.io/) or [Memcached](https://memcached.org/) but what kind of cache eviction policy would best fit our needs?
+In a streaming platform, caching is important. We have to be able to cache as much static media content as possible to improve user experience. We can use solutions like [Redis](https://redis.io) or [Memcached](https://memcached.org) but what kind of cache eviction policy would best fit our needs?
 
 **Which cache eviction policy to use?**
 
@@ -389,11 +389,11 @@ _For more details, refer to [Caching](/courses/system-design/caching)._
 
 As most of our storage space will be used for storing media files such as thumbnails and videos. Per our discussion earlier, the media service will be handling both the upload and processing of media files.
 
-We will use distributed file storage such as [HDFS](/courses/system-design/storage#hdfs), [GlusterFS](https://www.gluster.org/), or [object storage](/courses/system-design/storage#object-storage) such as [Amazon S3](https://aws.amazon.com/s3/) for storage and streaming of the content.
+We will use distributed file storage such as [HDFS](/courses/system-design/storage#hdfs), [GlusterFS](https://www.gluster.org), or an [object storage](/courses/system-design/storage#object-storage) such as [Amazon S3](https://aws.amazon.com/s3) for storage and streaming of the content.
 
 ### Content Delivery Network (CDN)
 
-[Content Delivery Network (CDN)](/courses/system-design/content-delivery-network) increases content availability and redundancy while reducing bandwidth costs. Generally, static files such as images, and videos are served from CDN. We can use services like [Amazon CloudFront](https://aws.amazon.com/cloudfront/) or [Cloudflare CDN](https://www.cloudflare.com/cdn/) for this use case.
+[Content Delivery Network (CDN)](/courses/system-design/content-delivery-network) increases content availability and redundancy while reducing bandwidth costs. Generally, static files such as images, and videos are served from CDN. We can use services like [Amazon CloudFront](https://aws.amazon.com/cloudfront) or [Cloudflare CDN](https://www.cloudflare.com/cdn) for this use case.
 
 ## Identify and resolve bottlenecks
 
@@ -409,6 +409,6 @@ Let us identify and resolve bottlenecks such as single points of failure in our 
 To make our system more resilient we can do the following:
 
 - Running multiple instances of each of our services.
-- Introduce [load-balancers](/courses/system-design/load-balancing) between clients, servers, databases, and cache servers.
+- Introducing [load balancers](/courses/system-design/load-balancing) between clients, servers, databases, and cache servers.
 - Using multiple read replicas for our databases.
 - Multiple instances and replicas for our distributed cache.

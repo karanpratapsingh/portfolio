@@ -2,7 +2,7 @@
 title: 'Content Delivery Network (CDN)'
 date: '2022-10-10'
 draft: false
-summary: 'In this tutorial we will discuss Content delivery network (CDN)'
+summary: 'In this tutorial, we will discuss Content Delivery Network (CDN)'
 images:
   [
     '/static/courses/system-design/chapter-I/content-delivery-network/banner.png',
@@ -10,15 +10,13 @@ images:
 authors: ['default']
 ---
 
-A content delivery network (CDN) is a geographically distributed group of servers that work together to provide fast delivery of Internet content.
+A content delivery network (CDN) is a geographically distributed group of servers that work together to provide fast delivery of internet content. Generally, static files such as HTML/CSS/JS, photos, and videos are served from CDN.
 
 ![cdn-map](/static/courses/system-design/chapter-I/content-delivery-network/cdn-map.png)
 
-_Generally, static files such as HTML/CSS/JS, photos, and videos are served from CDN._
-
 ## Why use a CDN?
 
-Content Delivery Network (CDN) increases content availability and redundancy while reducing bandwidth costs and improving website security. Serving content from CDNs can significantly improve performance as users receive content from data centers close to them and our servers do not have to serve requests that the CDN fulfills.
+Content Delivery Network (CDN) increases content availability and redundancy while reducing bandwidth costs and improving security. Serving content from CDNs can significantly improve performance as users receive content from data centers close to them and our servers do not have to serve requests that the CDN fulfills.
 
 ## How does a CDN work?
 
@@ -30,11 +28,11 @@ To minimize the distance between the visitors and the website's server, a CDN st
 
 Once the static assets are cached on all the CDN servers for a particular location, all subsequent website visitor requests for static assets will be delivered from these edge servers instead of the origin, thus reducing origin load and improving scalability.
 
-For example, when someone in the UK requests your website which might be hosted in the USA, will be served from the closest edge location such as the London edge location. This is much quicker than having the visitor make a complete request to the origin server which will increase the latency.
+For example, when someone in the UK requests our website which might be hosted in the USA, they will be served from the closest edge location such as the London edge location. This is much quicker than having the visitor make a complete request to the origin server which will increase the latency.
 
 ## Types
 
-Here are the types of CDNs:
+CDNs are generally divided into two types:
 
 ### Push CDNs
 
@@ -54,13 +52,13 @@ As we all know good things come with extra costs, so let's discuss some disadvan
 
 - **Extra charges**: It can be expensive to use a CDN, especially for high-traffic services.
 - **Restrictions**: Some organizations and countries have blocked the domains or IP addresses of popular CDNs.
-- **Location**: If most of our audience is located in a country where the CDN has no servers, the data on your website may have to travel further than without using any CDN.
+- **Location**: If most of our audience is located in a country where the CDN has no servers, the data on our website may have to travel further than without using any CDN.
 
 ## Examples
 
 Here are some widely used CDNs:
 
-- [Amazon CloudFront](https://aws.amazon.com/cloudfront/)
+- [Amazon CloudFront](https://aws.amazon.com/cloudfront)
 - [Google Cloud CDN](https://cloud.google.com/cdn)
-- [Cloudflare CDN](https://www.cloudflare.com/cdn/)
+- [Cloudflare CDN](https://www.cloudflare.com/cdn)
 - [Fastly](https://www.fastly.com/products/cdn)

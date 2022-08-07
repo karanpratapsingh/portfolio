@@ -2,12 +2,12 @@
 title: 'Twitter'
 date: '2022-11-23'
 draft: false
-summary: 'In this tutorial we will learn how to design Twitter'
+summary: 'In this tutorial, we will learn how to design Twitter'
 images: ['/static/courses/system-design/chapter-V/twitter/banner.png']
 authors: ['default']
 ---
 
-Let's design a [Twitter](https://twitter.com/) like social media service, similar to services like [Facebook](https://facebook.com/), [Instagram](https://instagram.com/), etc.
+Let's design a [Twitter](https://twitter.com) like social media service, similar to services like [Facebook](https://facebook.com), [Instagram](https://instagram.com), etc.
 
 ## What is Twitter?
 
@@ -71,7 +71,7 @@ $$
 1 \space billion \times 100 \space bytes = \sim 100 \space GB/day
 $$
 
-We also know that around 10 percent of our daily messages (100 million) are media files per our requirements. If we assume each file is 50 KB on average, we will require 5 TB of object storage every day.
+We also know that around 10 percent of our daily messages (100 million) are media files per our requirements. If we assume each file is 50 KB on average, we will require 5 TB of storage every day.
 
 $$
 100 \space million \times 100 \space KB = 5 \space TB/day
@@ -95,13 +95,13 @@ $$
 
 Here is our high-level estimate:
 
-| Type                     | Estimate    |
-| ------------------------ | ----------- |
-| Daily active users (DAU) | 100 million |
-| Requests per second      | 12K/s       |
-| Storage (per day)        | ~5.1 PB     |
-| Storage (10 years)       | ~19 PB      |
-| Bandwidth                | ~60 MB/s    |
+| Type                      | Estimate    |
+| ------------------------- | ----------- |
+| Daily active users (DAU)  | 100 million |
+| Requests per second (RPS) | 12K/s       |
+| Storage (per day)         | ~5.1 PB     |
+| Storage (10 years)        | ~19 PB      |
+| Bandwidth                 | ~60 MB/s    |
 
 ## Data model design
 
@@ -133,7 +133,7 @@ As the name suggests, this table will store tweets and their properties such as 
 
 **favorites**
 
-This table maps tweets with users for the favorite tweets functionality of our application.
+This table maps tweets with users for the favorite tweets functionality in our application.
 
 **followers**
 
@@ -151,7 +151,7 @@ This table maps tweets and feed (N:M relationship).
 
 While our data model seems quite relational, we don't necessarily need to store everything in a single database, as this can limit our scalability and quickly become a bottleneck.
 
-We will split the data between different services each having ownership over a particular table. Then we can use a relational database such as [PostgreSQL](https://www.postgresql.org/) or a distributed NoSQL database such as [Apache Cassandra](https://cassandra.apache.org/_/index.html) for our use case.
+We will split the data between different services each having ownership over a particular table. Then we can use a relational database such as [PostgreSQL](https://www.postgresql.org) or a distributed NoSQL database such as [Apache Cassandra](https://cassandra.apache.org/_/index.html) for our use case.
 
 ## API design
 
@@ -206,7 +206,7 @@ User ID (`UUID`): ID of the user.
 
 **Returns**
 
-Tweets (`Tweet[]`): All the tweets for a given newsfeed.
+Tweets (`Tweet[]`): All the tweets to be shown within a given newsfeed.
 
 ## High-level design
 
@@ -246,7 +246,7 @@ This service will be used for metrics and analytics use cases.
 
 **What about inter-service communication and service discovery?**
 
-Since our architecture is micro-services based, services will be communicating with each other as well. Generally, REST or HTTP performs well but we can further improve the performance using [gRPC](/courses/system-design/rest-graphql-grpc#grpc) which is more lightweight and efficient.
+Since our architecture is microservices based, services will be communicating with each other as well. Generally, REST or HTTP performs well but we can further improve the performance using [gRPC](/courses/system-design/rest-graphql-grpc#grpc) which is more lightweight and efficient.
 
 Service discovery is another thing we will have to take into account. We can also use a service mesh that enables managed, observable, and secure communication between individual services.
 
@@ -262,14 +262,14 @@ Let's assume we want to generate the feed for user A, we will perform the follow
 
 1. Retrieve the IDs of all the users and entities (hashtags, topics, etc.) user A follows.
 2. Fetch the relevant tweets for each of the retrieved IDs.
-3. Use a ranking algorithm to rank the tweets based on relevance, time, engagement, etc.
-4. Return the ranked tweets data in a paginated manner to the client.
+3. Use a ranking algorithm to rank the tweets based on parameters such as relevance, time, engagement, etc.
+4. Return the ranked tweets data to the client in a paginated manner.
 
 Feed generation is an intensive process and can take quite a lot of time, especially for users following a lot of people. To improve the performance, the feed can be pre-generated and stored in the cache, then we can have a mechanism to periodically update the feed and apply our ranking algorithm to the new tweets.
 
 **Publishing**
 
-Publishing is the step where the feed data is displaced according to each specific user. This can be quite a heavy operation, as the user may have millions of friends or followers. To deal with this, we have three different approaches:
+Publishing is the step where the feed data is pushed according to each specific user. This can be a quite heavy operation, as a user may have millions of friends or followers. To deal with this, we have three different approaches:
 
 - Pull Model (or Fan-out on load)
 
@@ -283,21 +283,21 @@ The downside of this approach is that the users will not be able to view recent 
 
 ![newsfeed-push-model](/static/courses/system-design/chapter-V/twitter/newsfeed-push-model.png)
 
-In this model, once a user creates a tweet, it is "pushed" to all the followers immediately. This prevents the system from having to go through a user's entire followers list to check for updates on their posts published.
+In this model, once a user creates a tweet, it is "pushed" to all the follower's feeds immediately. This prevents the system from having to go through a user's entire followers list to check for updates.
 
-However, the downside of this approach is that it would result in an increase in the number of write operations on the database.
+However, the downside of this approach is that it would increase the number of write operations on the database.
 
 - Hybrid Model
 
-A third approach is a hybrid approach between the pull and push model. It combines the beneficial features of the above two approaches and tries to provide a balanced approach between the two.
+A third approach is a hybrid model between the pull and push model. It combines the beneficial features of the above two models and tries to provide a balanced approach between the two.
 
-The hybrid model allows only users with a lesser number of followers to use the push model and for users with a higher number of followers, the pull model will be used.
+The hybrid model allows only users with a lesser number of followers to use the push model and for users with a higher number of followers celebrities, the pull model will be used.
 
 ### Ranking Algorithm
 
 As we discussed, we will need a ranking algorithm to rank each tweet according to its relevance to each specific user.
 
-For example, Facebook used to utilize an [EdgeRank](https://en.wikipedia.org/wiki/EdgeRank) algorithm, the rank of each feed item is described by:
+For example, Facebook used to utilize an [EdgeRank](https://en.wikipedia.org/wiki/EdgeRank) algorithm, here, the rank of each feed item is described by:
 
 $$
 Rank = Affinity \times Weight \times Decay
@@ -305,42 +305,42 @@ $$
 
 Where,
 
-`Affinity`: is the "closeness" of the user to the creator of the edge. If a user frequently likes, comments, or messages the edge creator, then the value of affinity will be higher resulting in a higher rank for the post.
+`Affinity`: is the "closeness" of the user to the creator of the edge. If a user frequently likes, comments, or messages the edge creator, then the value of affinity will be higher, resulting in a higher rank for the post.
 
 `Weight`: is the value assigned according to each edge. A comment can have a higher weightage than likes, and thus a post with more comments is more likely to get a higher rank.
 
 `Decay`: is the measure of the creation of the edge. The older the edge, the lesser will be the value of decay and eventually the rank.
 
-Nowadays, algorithms are much more complex and ranking is done using machine learning models which can take thousands of factors into consideration for ranking.
+Nowadays, algorithms are much more complex and ranking is done using machine learning models which can take thousands of factors into consideration.
 
 ### Retweets
 
-Retweets are one of our extended requirements. To implement this feature we can simply create a new tweet with the user id of the user re-tweeting the original tweet and then modify the `type` enum and `content` property of the new tweet to link it with the original tweet.
+Retweets are one of our extended requirements. To implement this feature we can simply create a new tweet with the user id of the user retweeting the original tweet and then modify the `type` enum and `content` property of the new tweet to link it with the original tweet.
 
-For example, the `type` enum property can be of type tweet, similar to text, video, etc and `content` can be the id of the original tweet. Here the first row indicates the original tweet while the second row is how we can represent a re-tweet.
+For example, the `type` enum property can be of type tweet, similar to text, video, etc and `content` can be the id of the original tweet. Here the first row indicates the original tweet while the second row is how we can represent a retweet.
 
 | id                  | userID              | type  | content                      | createdAt     |
 | ------------------- | ------------------- | ----- | ---------------------------- | ------------- |
 | ad34-291a-45f6-b36c | 7a2c-62c4-4dc8-b1bb | text  | Hey, this is my first tweet… | 1658905644054 |
 | f064-49ad-9aa2-84a6 | 6aa2-2bc9-4331-879f | tweet | ad34-291a-45f6-b36c          | 1658906165427 |
 
-This is a very basic implementation, to improve this we can create a separate table itself to store re-tweets.
+This is a very basic implementation, to improve this we can create a separate table itself to store retweets.
 
 ### Search
 
-Sometimes traditional DBMS are not performant enough, we need something which allows us to store, search, and analyze huge volumes of data quickly and in near real-time and give back answers in milliseconds. [Elasticsearch](https://www.elastic.co/) can help us with this use case.
+Sometimes traditional DBMS are not performant enough, we need something which allows us to store, search, and analyze huge volumes of data quickly and in near real-time and give results within milliseconds. [Elasticsearch](https://www.elastic.co) can help us with this use case.
 
-[Elasticsearch](https://www.elastic.co/) is a distributed, free and open search and analytics engine for all types of data, including textual, numerical, geospatial, structured, and unstructured. It is built on top of [Apache Lucene](https://lucene.apache.org/).
+[Elasticsearch](https://www.elastic.co) is a distributed, free and open search and analytics engine for all types of data, including textual, numerical, geospatial, structured, and unstructured. It is built on top of [Apache Lucene](https://lucene.apache.org).
 
 **How do we identify trending topics?**
 
-Trending functionality will be based on top of the search functionality. We can cache the most frequently searched queries, hashtags, and topics in the last `N` seconds and update them every `M` seconds using some sort of batch job mechanism. Our ranking algorithm can also be applied to the trending topics to give them more weight and personalize them for the current user.
+Trending functionality will be based on top of the search functionality. We can cache the most frequently searched queries, hashtags, and topics in the last `N` seconds and update them every `M` seconds using some sort of batch job mechanism. Our ranking algorithm can also be applied to the trending topics to give them more weight and personalize them for the user.
 
 ### Notifications
 
-Push notifications are an integral part of any social media platform. We can use a message queue or a message broker such as [Apache Kafka](https://kafka.apache.org/) with the notification service to dispatch requests to Firebase Cloud Messaging (FCM) or Apple Push Notification Service (APNS) which will handle the delivery of the push notifications to user devices.
+Push notifications are an integral part of any social media platform. We can use a message queue or a message broker such as [Apache Kafka](https://kafka.apache.org) with the notification service to dispatch requests to [Firebase Cloud Messaging (FCM)](https://firebase.google.com/docs/cloud-messaging) or [Apple Push Notification Service (APNS)](https://developer.apple.com/documentation/usernotifications) which will handle the delivery of the push notifications to user devices.
 
-_For more details, refer to the [Whatsapp system design](/courses/system-design/whatsapp#notfications) tutorial where we discuss push notifications._
+_For more details, refer to the [Whatsapp](/courses/system-design/whatsapp#notifications) system design where we discuss push notifications._
 
 ## Detailed design
 
@@ -359,15 +359,15 @@ The above approaches can still cause uneven data and load distribution, we can s
 
 _For more details, refer to [Sharding](/courses/system-design/sharding) and [Consistent Hashing](/courses/system-design/consistent-hashing)._
 
-### Suggestions
+### Mutual friends
 
-For suggestions, we can build a social graph for every user. Each node in the graph will represent a user and a directional edge will represent followers and followees. After that, we can traverse the followers of a user to find and suggest a mutual friend. This would require a graph database such as [Neo4j](https://neo4j.com/) and [ArangoDB](https://www.arangodb.com/).
+For mutual friends, we can build a social graph for every user. Each node in the graph will represent a user and a directional edge will represent followers and followees. After that, we can traverse the followers of a user to find and suggest a mutual friend. This would require a graph database such as [Neo4j](https://neo4j.com) and [ArangoDB](https://www.arangodb.com).
 
-This is a pretty simple algorithm, To improve our suggestion accuracy, we will need to incorporate a recommendation model which uses machine learning as part of our algorithm.
+This is a pretty simple algorithm, to improve our suggestion accuracy, we will need to incorporate a recommendation model which uses machine learning as part of our algorithm.
 
 ### Metrics and Analytics
 
-Recording analytics and metrics is one of our extended requirements. As we will be using [Apache Kafka](https://kafka.apache.org/) to publish all sorts of events, we can process these events and run analytics on the data using [Apache Spark](https://spark.apache.org/) which is an open-source unified analytics engine for large-scale data processing.
+Recording analytics and metrics is one of our extended requirements. As we will be using [Apache Kafka](https://kafka.apache.org) to publish all sorts of events, we can process these events and run analytics on the data using [Apache Spark](https://spark.apache.org) which is an open-source unified analytics engine for large-scale data processing.
 
 ### Caching
 
@@ -377,7 +377,7 @@ To further improve efficiency we can add pagination to our system APIs. This dec
 
 **Which cache eviction policy to use?**
 
-We can use solutions like [Redis](https://redis.io/) or [Memcached](https://memcached.org/) and cache 20% of the daily traffic but what kind of cache eviction policy would best fit our needs?
+We can use solutions like [Redis](https://redis.io) or [Memcached](https://memcached.org) and cache 20% of the daily traffic but what kind of cache eviction policy would best fit our needs?
 
 [Least Recently Used (LRU)](<https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_(LRU)>) can be a good policy for our system. In this policy, we discard the least recently used key first.
 
@@ -391,11 +391,11 @@ _For more details, refer to [Caching](/courses/system-design/caching)._
 
 As we know, most of our storage space will be used for storing media files such as images, videos, or other files. Our media service will be handling both access and storage of the user media files.
 
-But where can we store files at scale? Well, [object storage](/courses/system-design/storage#object-storage) is what we're looking for. Object stores break data files up into pieces called objects. It then stores those objects in a single repository, which can be spread out across multiple networked systems. We can also use distributed file storage such as [HDFS](/courses/system-design/storage#hdfs) or [GlusterFS](https://www.gluster.org/).
+But where can we store files at scale? Well, [object storage](/courses/system-design/storage#object-storage) is what we're looking for. Object stores break data files up into pieces called objects. It then stores those objects in a single repository, which can be spread out across multiple networked systems. We can also use distributed file storage such as [HDFS](/courses/system-design/storage#hdfs) or [GlusterFS](https://www.gluster.org).
 
 ### Content Delivery Network (CDN)
 
-[Content Delivery Network (CDN)](/courses/system-design/content-delivery-network) increases content availability and redundancy while reducing bandwidth costs. Generally, static files such as images, and videos are served from CDN. We can use services like [Amazon CloudFront](https://aws.amazon.com/cloudfront/) or [Cloudflare CDN](https://www.cloudflare.com/cdn/) for this use case.
+[Content Delivery Network (CDN)](/courses/system-design/content-delivery-network) increases content availability and redundancy while reducing bandwidth costs. Generally, static files such as images, and videos are served from CDN. We can use services like [Amazon CloudFront](https://aws.amazon.com/cloudfront) or [Cloudflare CDN](https://www.cloudflare.com/cdn) for this use case.
 
 ## Identify and resolve bottlenecks
 
@@ -413,8 +413,8 @@ Let us identify and resolve bottlenecks such as single points of failure in our 
 To make our system more resilient we can do the following:
 
 - Running multiple instances of each of our services.
-- Introduce [load-balancers](/courses/system-design/load-balancing) between clients, servers, databases, and cache servers.
+- Introducing [load balancers](/courses/system-design/load-balancing) between clients, servers, databases, and cache servers.
 - Using multiple read replicas for our databases.
 - Multiple instances and replicas for our distributed cache.
-- Exactly once delivery and message ordering is challenging in a distributed system, we can use a dedicated [message broker](/courses/system-design/message-brokers) such as [Kafka](https://kafka.apache.org/) or [NATS](https://nats.io/) to make our notification system more robust.
+- Exactly once delivery and message ordering is challenging in a distributed system, we can use a dedicated [message broker](/courses/system-design/message-brokers) such as [Apache Kafka](https://kafka.apache.org) or [NATS](https://nats.io) to make our notification system more robust.
 - We can add media processing and compression capabilities to the media service to compress large files which will save a lot of storage space and reduce cost.

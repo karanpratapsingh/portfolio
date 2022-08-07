@@ -2,15 +2,13 @@
 title: 'SQL vs NoSQL databases'
 date: '2022-10-18'
 draft: false
-summary: 'In this tutorial we will discuss SQL vs NoSQL databases'
+summary: 'In this tutorial, we will discuss SQL vs NoSQL databases'
 images:
   ['/static/courses/system-design/chapter-II/sql-vs-nosql-databases/banner.png']
 authors: ['default']
 ---
 
-In the world of databases, there are two main types of solutions, SQL and NoSQL, or relational databases, and non-relational databases. Both of them differ in the way they were built, the kind of information they store, and how they store it.
-
-Relational databases are structured and have predefined schemas, like phone books that store phone numbers and addresses. Non-relational databases are unstructured, distributed, and have a dynamic schema.
+In the world of databases, there are two main types of solutions, SQL (relational) and NoSQL (non-relational) databases. Both of them differ in the way they were built, the kind of information they store, and how they store it. Relational databases are structured and have predefined schemas while non-relational databases are unstructured, distributed, and have a dynamic schema.
 
 ## High-level differences
 
@@ -18,13 +16,13 @@ Here are some high-level differences between SQL and NoSQL:
 
 ### Storage
 
-SQL stores data in tables, where each row represents an entity, and each column represents a data point about that entity.
+SQL stores data in tables, where each row represents an entity and each column represents a data point about that entity.
 
 NoSQL databases have different data storage models such as key-value, graph, document, etc.
 
 ### Schema
 
-In SQL, each record conforms to a fixed schema, meaning the columns must be decided and chosen before data entry and each row must have data for each column. The schema can be altered later, but it involves modifying the whole database and going offline.
+In SQL, each record conforms to a fixed schema, meaning the columns must be decided and chosen before data entry and each row must have data for each column. The schema can be altered later, but it involves modifying the database using migrations.
 
 Whereas in NoSQL, schemas are dynamic. Columns can be added on the fly, and each _row_ (or equivalent) doesn't have to contain data for each _column_.
 
@@ -32,7 +30,7 @@ Whereas in NoSQL, schemas are dynamic. Columns can be added on the fly, and each
 
 SQL databases use SQL (structured query language) for defining and manipulating the data, which is very powerful.
 
-In a NoSQL database, queries are focused on a collection of documents. Different databases have different syntax for using UnQL.
+In a NoSQL database, queries are focused on a collection of documents. Different databases have different syntax for querying.
 
 ### Scalability
 
@@ -42,7 +40,7 @@ On the other hand, NoSQL databases are horizontally scalable, meaning we can add
 
 ### Reliability
 
-The vast majority of relational databases are ACID compliant. So, when it comes to data reliability and safe guarantee of performing transactions, SQL databases are still the better bet.
+The vast majority of relational databases are ACID compliant. So, when it comes to data reliability and a safe guarantee of performing transactions, SQL databases are still the better bet.
 
 Most of the NoSQL solutions sacrifice ACID compliance for performance and scalability.
 

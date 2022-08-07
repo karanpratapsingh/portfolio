@@ -2,7 +2,7 @@
 title: 'Normalization and Denormalization'
 date: '2022-10-21'
 draft: false
-summary: 'In this tutorial we will discuss Normalization and Denormalization'
+summary: 'In this tutorial, we will discuss Normalization and Denormalization'
 images:
   [
     '/static/courses/system-design/chapter-II/normalization-and-denormalization/banner.png',
@@ -16,7 +16,7 @@ Before we go any further, let's look at some commonly used terms in normalizatio
 
 ### Keys
 
-**Primary Key**: Column or group of columns that can be used to uniquely identify every row of the table.
+**Primary key**: Column or group of columns that can be used to uniquely identify every row of the table.
 
 **Composite key**: A primary key made up of multiple columns.
 
@@ -40,13 +40,13 @@ Before we go any further, let's look at some commonly used terms in normalizatio
 
 ### Anomalies
 
-Database anomaly happens when there is a flow in the database due to incorrect planning and storing everything in a flat database. This is generally addressed by the process of normalization.
+Database anomaly happens when there is a flaw in the database due to incorrect planning or storing everything in a flat database. This is generally addressed by the process of normalization.
 
 There are three types of database anomalies:
 
 **Insertion anomaly**: Occurs when we are not able to insert certain attributes in the database without the presence of other attributes.
 
-**Update anomaly**: Occurs in case of data redundancy and partial up update. In other words, a correct update of the database needs other actions such as addition, deletion, or both.
+**Update anomaly**: Occurs in case of data redundancy and partial update. In other words, a correct update of the database needs other actions such as addition, deletion, or both.
 
 **Deletion anomaly**: Occurs where deletion of some data requires deletion of other data.
 
@@ -66,7 +66,7 @@ Let's imagine, we hired a new person "John" but they might not be assigned a tea
 
 Next, let's say Hailey from Team C got promoted, to reflect that change in the database, we will need to update 2 rows to maintain consistency which can cause an _update anomaly_.
 
-Finally, we would like to remove Team B but to do that we will also need to remove additional information such as name and role, this is an example of _deletion anomaly_.
+Finally, we would like to remove Team B but to do that we will also need to remove additional information such as name and role, this is an example of a _deletion anomaly_.
 
 ## Normalization
 
@@ -78,11 +78,11 @@ The goal of normalization is to eliminate redundant data and ensure data is cons
 
 ### Normal forms
 
-Normal forms are a series of guidelines to ensure that the databases are normalized. Let's discuss some essential normal forms:
+Normal forms are a series of guidelines to ensure that the database is normalized. Let's discuss some essential normal forms:
 
 **1NF**
 
-For a table to be in the first normal form(1NF), it should follow the following rules:
+For a table to be in the first normal form (1NF), it should follow the following rules:
 
 - Repeating groups are not permitted.
 - Identify each set of related data with a primary key.
@@ -112,9 +112,9 @@ For a table to be in the Boyce-Codd normal form (BCNF), it should follow the fol
 - Satisfied the third normal form (3NF).
 - For every functional dependency X → Y, X should be the super key.
 
-_There are more normal forms such as 4NF, 5NF, and 6NF but we won't discuss them here. Check out this [amazing video](https://www.youtube.com/watch?v=GFQaEYEc8_8) that goes into complete detail._
+_There are more normal forms such as 4NF, 5NF, and 6NF but we won't discuss them here. Check out this [amazing video](https://www.youtube.com/watch?v=GFQaEYEc8_8) that goes into detail._
 
-A relational database relation is often described as _"normalized"_ if it meets the third normal form. Most 3NF relations are free of insertion, update, and deletion anomalies.
+In a relational database, a relation is often described as _"normalized"_ if it meets the third normal form. Most 3NF relations are free of insertion, update, and deletion anomalies.
 
 As with many formal rules and specifications, real-world scenarios do not always allow for perfect compliance. If you decide to violate one of the first three rules of normalization, make sure that your application anticipates any problems that could occur, such as redundant data and inconsistent dependencies.
 
@@ -138,17 +138,15 @@ Let's look at some disadvantages of normalization:
 
 ## Denormalization
 
-Denormalization is a database optimization technique in which we add redundant data to one or more tables. This can help us avoid costly joins in a relational database.
+Denormalization is a database optimization technique in which we add redundant data to one or more tables. This can help us avoid costly joins in a relational database. It attempts to improve read performance at the expense of some write performance. Redundant copies of the data are written in multiple tables to avoid expensive joins.
 
-It attempts to improve read performance at the expense of some write performance. Redundant copies of the data are written in multiple tables to avoid expensive joins.
-
-Once data becomes distributed with techniques such as federation and sharding, managing joins across data centers further increases complexity. Denormalization might circumvent the need for such complex joins.
+Once data becomes distributed with techniques such as federation and sharding, managing joins across the network further increases complexity. Denormalization might circumvent the need for such complex joins.
 
 _Note: Denormalization does not mean reversing normalization._
 
 ### Advantages
 
-Let's look at some advantages of denomalization:
+Let's look at some advantages of denormalization:
 
 - Retrieving data is faster.
 - Writing queries is easier.
@@ -157,7 +155,7 @@ Let's look at some advantages of denomalization:
 
 ### Disadvantages
 
-Below are some disadvantages of denomalization:
+Below are some disadvantages of denormalization:
 
 - Expensive inserts and updates.
 - Increases complexity of database design.

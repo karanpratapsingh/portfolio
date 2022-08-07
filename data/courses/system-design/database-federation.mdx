@@ -2,17 +2,17 @@
 title: 'Database Federation'
 date: '2022-10-29'
 draft: false
-summary: 'In this tutorial we will discuss Database Federation'
+summary: 'In this tutorial, we will discuss Database Federation'
 images:
-  ['/static/courses/system-design/chapter-II/federated-databases/banner.png']
+  ['/static/courses/system-design/chapter-II/database-federation/banner.png']
 authors: ['default']
 ---
 
 Federation (or functional partitioning) splits up databases by function. The federation architecture makes several distinct physical databases appear as one logical database to end-users.
 
-All of the components in a federation are tied together by one or more federal schemas that express the commonality of data throughout the federation. These federal schemas are used to specify the information that can be shared by the federation components and to provide a common basis for communication among them.
+All of the components in a federation are tied together by one or more federal schemas that express the commonality of data throughout the federation. These federated schemas are used to specify the information that can be shared by the federation components and to provide a common basis for communication among them.
 
-![database-federation](/static/courses/system-design/chapter-II/federated-databases/database-federation.png)
+![database-federation](/static/courses/system-design/chapter-II/database-federation/database-federation.png)
 
 Federation also provides a cohesive, unified view of data derived from multiple sources. The data sources for federated systems can include databases and various other forms of structured and unstructured data.
 
@@ -41,5 +41,5 @@ Below are some disadvantages of federated databases:
 
 - Adds more hardware and additional complexity.
 - Joining data from two databases is complex.
-- Dependence on autonomous data sources
+- Dependence on autonomous data sources.
 - Query performance and scalability.

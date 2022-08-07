@@ -2,7 +2,7 @@
 title: 'System Design Interviews'
 date: '2022-11-20'
 draft: false
-summary: 'In this tutorial we will discuss system design interviews'
+summary: 'In this tutorial, we will discuss system design interviews'
 images:
   [
     '/static/courses/system-design/chapter-V/system-design-interviews/banner.png',
@@ -10,7 +10,7 @@ images:
 authors: ['default']
 ---
 
-System design is a very extensive topic and system design interviews are designed to evaluate our capability to produce technical solutions to abstract problems, as such, they're not designed with a specific correct answer. The unique aspect of system design interviews is the two-way nature between candidate and interviewer.
+System design is a very extensive topic and system design interviews are designed to evaluate your capability to produce technical solutions to abstract problems, as such, they're not designed for a specific answer. The unique aspect of system design interviews is the two-way nature between the candidate and the interviewer.
 
 Expectations are quite different at different engineering levels as well. Because someone with a lot of practical experience will approach it quite differently from someone who's new in the industry. As a result, it's hard to come up with a single strategy that will help us stay organized during the interview.
 
@@ -22,7 +22,7 @@ System design interview questions, by nature, are vague or abstract. Asking ques
 
 ### Functional requirements
 
-These are the requirements that the end user specifically demands as basic functionalities that the system should offer. All these functionalities need to be necessarily incorporated into the system as a part of the contract.
+These are the requirements that the end user specifically demands as basic functionalities that the system should offer. All these functionalities need to be necessarily incorporated into the system as part of the contract.
 
 For example:
 
@@ -31,20 +31,21 @@ For example:
 
 ### Non-functional requirements
 
-These are basically the quality constraints that the system must satisfy according to the project contract. The priority or extent to which these factors are implemented varies from one project to another. They are also called non-behavioral requirements. For example, portability, maintainability, reliability, scalability, security, etc.
+These are the quality constraints that the system must satisfy according to the project contract. The priority or extent to which these factors are implemented varies from one project to another. They are also called non-behavioral requirements. For example, portability, maintainability, reliability, scalability, security, etc.
 
 For example:
 
-- "Each request should be processed with the minimum latency".
-- "System should be highly available".
+- "Each request should be processed with the minimum latency"
+- "System should be highly available"
 
 ### Extended requirements
 
-These can be "nice to have" requirements that might be out of the scope of the system.
+These are basically "nice to have" requirements that might be out of the scope of the system.
 
 For example:
 
-- "Our system should record metrics and analytics".
+- "Our system should record metrics and analytics"
+- "Service health and performance monitoring?"
 
 ## Estimation and Constraints
 
@@ -59,7 +60,7 @@ These questions will help us scale our design later.
 
 ## Data model design
 
-Once we have the estimations, we can start with defining the database schema. As doing so in the early stages of the interview would help us to understand the data flow which is the core of every system. In this step, we basically define all the entities and relationships between them.
+Once we have the estimations, we can start with defining the database schema. Doing so in the early stages of the interview would help us to understand the data flow which is the core of every system. In this step, we basically define all the entities and relationships between them.
 
 - "What are the different entities in the system?"
 - "What are the relationships between these entities?"
@@ -80,7 +81,7 @@ It is advised to keep the interface as simple as possible and come back to it la
 
 ## High-level component design
 
-Now we have established our API and data model design, it's time to identify system components (such as Load Balancers, API Gateway, etc.) that are needed to solve our problem and draft the first design of our system.
+Now we have established our data model and API design, it's time to identify system components (such as Load Balancers, API Gateway, etc.) that are needed to solve our problem and draft the first design of our system.
 
 - "Is it best to design a monolithic or a microservices architecture?"
 - "What type of database should we use?"
@@ -89,7 +90,7 @@ Once we have a basic diagram, we can start discussing with the interviewer how t
 
 ## Detailed design
 
-Now it's time to go into detail about the major components of the system we designed. As always discuss with the interviewer which component may need further discussion.
+Now it's time to go into detail about the major components of the system we designed. As always discuss with the interviewer which component may need further improvements.
 
 Here is a good opportunity to demonstrate your experience in the areas of your expertise. Present different approaches, advantages, and disadvantages. Explain your design decisions, and back them up with examples. This is also a good time to discuss any additional features the system might be able to support, though this is optional.
 
@@ -107,6 +108,7 @@ Finally, it's time to discuss bottlenecks and approaches to mitigate them. Here 
 - "Do we have enough database replicas?"
 - "Is there any single point of failure?"
 - "Is database sharding required?"
-- "Service health and performance monitoring?"
+- "How can we make our system more robust?"
+- "How to improve the availability of our cache?"
 
-Make sure to read the engineering blog of the company you're interviewing with. This will help you get a sense of what technology stack they're using and which problems are important to their engineering team.
+Make sure to read the engineering blog of the company you're interviewing with. This will help you get a sense of what technology stack they're using and which problems are important to them.

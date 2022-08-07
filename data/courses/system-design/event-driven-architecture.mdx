@@ -2,7 +2,7 @@
 title: 'Event-Driven Architecture (EDA)'
 date: '2022-11-05'
 draft: false
-summary: 'In this tutorial we will discuss Event-Driven Architecture (EDA)'
+summary: 'In this tutorial, we will discuss Event-Driven Architecture (EDA)'
 images:
   [
     '/static/courses/system-design/chapter-III/event-driven-architecture/banner.png',
@@ -10,7 +10,13 @@ images:
 authors: ['default']
 ---
 
-An event-driven architecture (EDA) uses events to trigger and communicate between decoupled services. Events are data points that represent state changes in a system. When a user makes an action, they trigger an event, which doesn't specify what should happen and how the change should modify the system. It only notifies the system of a particular state change.
+Event-Driven Architecture (EDA) is about using events as a way to communicate within a system. Generally, leveraging a message broker to publish and consume events asynchronously. The publisher is unaware of who is consuming an event and the consumers are unaware of each other. Event-Driven Architecture is simply a way of achieving loose coupling between services within a system.
+
+## What is an event?
+
+An event is a data point that represents state changes in a system. It doesn't specify what should happen and how the change should modify the system, it only notifies the system of a particular state change. When a user makes an action, they trigger an event.
+
+## Components
 
 Event-driven architectures have three key components:
 
@@ -20,18 +26,18 @@ Event-driven architectures have three key components:
 
 ![event-driven-architecture](/static/courses/system-design/chapter-III/event-driven-architecture/event-driven-architecture.png)
 
-_Note: Dots in the diagram represents different events._
+_Note: Dots in the diagram represents different events in the system._
 
 ## Patterns
 
 There are several ways to implement the event-driven architecture, and which method we use depends on the use case but here are some common examples:
 
-_Note: Each of these methods is discussed separately._
-
 - [Sagas](/courses/system-design/distributed-transactions#sagas)
-- [Command and Query Responsibility Segregation (CQRS)](/courses/system-design/command-and-query-responsibility-segregation)
-- [Event Sourcing](/courses/system-design/event-sourcing)
 - [Publish-Subscribe](/courses/system-design/publish-subscribe)
+- [Event Sourcing](/courses/system-design/event-sourcing)
+- [Command and Query Responsibility Segregation (CQRS)](/courses/system-design/command-and-query-responsibility-segregation)
+
+_Note: Each of these methods is discussed separately._
 
 ## Advantages
 
@@ -44,7 +50,7 @@ Let's discuss some advantages:
 
 ## Challenges
 
-Here are some challenges:
+Here are some challenges of event-drive architecture:
 
 - Guaranteed delivery.
 - Exactly once, in-order processing of events.
@@ -62,8 +68,8 @@ Below are some common use cases where event-driven architectures are beneficial:
 
 Here are some widely used technologies for implementing event-driven architectures:
 
-- [NATS](https://nats.io/)
-- [Apache Kafka](https://kafka.apache.org/)
-- [Amazon EventBridge](https://aws.amazon.com/eventbridge/)
-- [Amazon SNS](https://aws.amazon.com/sns/)
+- [NATS](https://nats.io)
+- [Apache Kafka](https://kafka.apache.org)
+- [Amazon EventBridge](https://aws.amazon.com/eventbridge)
+- [Amazon SNS](https://aws.amazon.com/sns)
 - [Google PubSub](https://cloud.google.com/pubsub)

@@ -2,7 +2,7 @@
 title: 'Command and Query Responsibility Segregation (CQRS)'
 date: '2022-11-07'
 draft: false
-summary: 'In this tutorial we will discuss Command and Query Responsibility Segregation (CQRS)'
+summary: 'In this tutorial, we will discuss Command and Query Responsibility Segregation (CQRS)'
 images:
   [
     '/static/courses/system-design/chapter-III/command-and-query-responsibility-segregation/banner.png',
@@ -12,13 +12,13 @@ authors: ['default']
 
 Command Query Responsibility Segregation (CQRS) is an architectural pattern that divides a system's actions into commands and queries. It was first described by [Greg Young](https://twitter.com/gregyoung).
 
-In CQRS, a _command_ is an instruction, a directive to perform a specific task. It is an intention to change something and doesn't return a value, only an indication of success or failure. And, a \*query\* is a request for information that doesn't change the system's state or cause any side effects that change the state.
+In CQRS, a _command_ is an instruction, a directive to perform a specific task. It is an intention to change something and doesn't return a value, only an indication of success or failure. And, a _query_ is a request for information that doesn't change the system's state or cause any side effects.
 
 ![command-and-query-responsibility-segregation](/static/courses/system-design/chapter-III/command-and-query-responsibility-segregation/command-and-query-responsibility-segregation.png)
 
-The core principle of CQRS is the separation of commands and queries. They perform fundamentally different roles within a system, and separating them means that each can be optimized as needed, which can be hugely beneficial for distributed systems.
+The core principle of CQRS is the separation of commands and queries. They perform fundamentally different roles within a system, and separating them means that each can be optimized as needed, which distributed systems can really benefit from.
 
-## Event Sourcing and CQRS pattern
+## CQRS with Event Sourcing
 
 The CQRS pattern is often used along with the Event Sourcing pattern. CQRS-based systems use separate read and write data models, each tailored to relevant tasks and often located in physically separate stores.
 
