@@ -226,6 +226,10 @@ export const courses: Course[] = [
             slug: 'rate-limiting',
           },
           {
+            name: 'Service Discovery',
+            slug: 'service-discovery',
+          },
+          {
             name: 'SLA, SLO, SLI',
             slug: 'sla-slo-sli',
           },

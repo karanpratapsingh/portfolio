@@ -1,6 +1,6 @@
 ---
 title: 'Netflix'
-date: '2022-11-24'
+date: '2022-11-25'
 draft: false
 summary: 'In this tutorial, we will learn how to design Netflix'
 images: ['/static/courses/system-design/chapter-V/netflix/banner.png']
@@ -238,9 +238,9 @@ This service will be used for metrics and analytics use cases.
 
 **What about inter-service communication and service discovery?**
 
-Since our architecture is microservices based, services will be communicating with each other as well. Generally, REST or HTTP performs well but we can further improve the performance using [gRPC](/courses/system-design/rest-graphql-grpc#grpc) which is more lightweight and efficient.
+Since our architecture is microservices-based, services will be communicating with each other as well. Generally, REST or HTTP performs well but we can further improve the performance using [gRPC](/courses/system-design/rest-graphql-grpc#grpc) which is more lightweight and efficient.
 
-Service discovery is another thing we will have to take into account. We can also use a service mesh that enables managed, observable, and secure communication between individual services.
+[Service discovery](/courses/system-design/service-discovery) is another thing we will have to take into account. We can also use a service mesh that enables managed, observable, and secure communication between individual services.
 
 _Note: Learn more about [REST, GraphQL, gRPC](/courses/system-design/rest-graphql-grpc) and how they compare with each other._
 
