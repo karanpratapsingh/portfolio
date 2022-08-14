@@ -7,7 +7,7 @@ images: ['/static/courses/system-design/chapter-V/netflix/banner.png']
 authors: ['default']
 ---
 
-Let's design a Netflix like video streaming service, similar to services like [Amazon Prime Video](https://www.primevideo.com), [Disney Plus](https://www.disneyplus.com), [Hulu](https://www.hulu.com), [Youtube](https://youtube.com), [Vimeo](https://vimeo.com), etc.
+Let's design a [Netflix](https://netflix.com) like video streaming service, similar to services like [Amazon Prime Video](https://www.primevideo.com), [Disney Plus](https://www.disneyplus.com), [Hulu](https://www.hulu.com), [Youtube](https://youtube.com), [Vimeo](https://vimeo.com), etc.
 
 ## What is Netflix?
 
@@ -50,7 +50,7 @@ $$
 200 \space million \times 5 \space videos = 1 \space billion/day
 $$
 
-Assuming, `200:1` read/write ratio, about 50 million videos will be uploaded every day.
+Assuming, a `200:1` read/write ratio, about 50 million videos will be uploaded every day.
 
 $$
 \frac{1}{200} \times 1 \space billion = 50 \space million/day
@@ -80,7 +80,7 @@ $$
 
 ### Bandwidth
 
-As our system is handling 5 PB of ingress every day, so we will a require minimum bandwidth of around 58 GB per second.
+As our system is handling 5 PB of ingress every day, we will a require minimum bandwidth of around 58 GB per second.
 
 $$
 \frac{5 \space PB}{(24 \space hrs \times 3600 \space seconds)} = \sim 58 \space GB/second

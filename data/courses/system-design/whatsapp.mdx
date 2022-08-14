@@ -7,7 +7,7 @@ images: ['/static/courses/system-design/chapter-V/whatsapp/banner.png']
 authors: ['default']
 ---
 
-Let's design an instant messaging service, similar to services like [Whatsapp](https://www.whatsapp.com), [Facebook Messenger](https://www.messenger.com), and [WeChat](https://www.wechat.com).
+Let's design a [Whatsapp](https://whatsapp.com) like instant messaging service, similar to services like [Whatsapp](https://www.whatsapp.com), [Facebook Messenger](https://www.messenger.com), and [WeChat](https://www.wechat.com).
 
 ## What is Whatsapp?
 
@@ -84,7 +84,7 @@ $$
 
 ### Bandwidth
 
-As our system is handling 10.2 TB of ingress every day, so we will a require minimum bandwidth of around 120 MB per second.
+As our system is handling 10.2 TB of ingress every day, we will a require minimum bandwidth of around 120 MB per second.
 
 $$
 \frac{10.2 \space TB}{(24 \space hrs \times 3600 \space seconds)} = \sim 120 \space MB/second
@@ -98,7 +98,7 @@ Here is our high-level estimate:
 | ------------------------- | ---------- |
 | Daily active users (DAU)  | 50 million |
 | Requests per second (RPS) | 24K/s      |
-| Storage (per day)         | ~10.2 PB   |
+| Storage (per day)         | ~10.2 TB   |
 | Storage (10 years)        | ~38 PB     |
 | Bandwidth                 | ~120 MB/s  |
 
@@ -287,17 +287,15 @@ Another way to implement this is to track the latest action of the user, once th
 
 Once a message is sent in a chat or a group, we will first check if the recipient is active or not, we can get this information by taking the user's active connection and last seen into consideration.
 
-If the recipient is not active, the chat service will add an event to a [message queue](/courses/system-design/message-queues) with additional metadata such as the client's platform which will be used to route the notification to the correct platform later on.
+If the recipient is not active, the chat service will add an event to a [message queue](/courses/system-design/message-queues) with additional metadata such as the client's device platform which will be used to route the notification to the correct platform later on.
 
-The notification service will then consume the event from the message queue and forward the request to [Firebase Cloud Messaging (FCM)](https://firebase.google.com/docs/cloud-messaging) or [Apple Push Notification Service (APNS)](https://developer.apple.com/documentation/usernotifications) based on the client's platform (Android, iOS, web, etc). We can also add support for email and SMS.
+The notification service will then consume the event from the message queue and forward the request to [Firebase Cloud Messaging (FCM)](https://firebase.google.com/docs/cloud-messaging) or [Apple Push Notification Service (APNS)](https://developer.apple.com/documentation/usernotifications) based on the client's device platform (Android, iOS, web, etc). We can also add support for email and SMS.
 
 **Why are we using a message queue?**
 
 Since most message queues provide best-effort ordering which ensures that messages are generally delivered in the same order as they're sent and that a message is delivered at least once which is an important part of our service functionality.
 
-While this seems like a classic [publish-subscribe](/courses/system-design/publish-subscribe) use case, it is actually not as mobile devices and browsers each have their own way of handling push notifications. Usually, notifications are handled externally via Firebase Cloud Messaging (FCM) or Apple Push Notification Service (APNS) unlike message fan-out which we commonly see in backend services.
-
-We can use something like [Amazon SQS](https://aws.amazon.com/sqs) or [RabbitMQ](https://www.rabbitmq.com) to support this functionality.
+While this seems like a classic [publish-subscribe](/courses/system-design/publish-subscribe) use case, it is actually not as mobile devices and browsers each have their own way of handling push notifications. Usually, notifications are handled externally via Firebase Cloud Messaging (FCM) or Apple Push Notification Service (APNS) unlike message fan-out which we commonly see in backend services. We can use something like [Amazon SQS](https://aws.amazon.com/sqs) or [RabbitMQ](https://www.rabbitmq.com) to support this functionality.
 
 ### Read receipts
 
