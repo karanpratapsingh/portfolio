@@ -81,8 +81,8 @@ function createDraft(apiKey, body) {
   for (const [, { name, section, slug }] of articles.entries()) {
     const title = `System Design: ${name}`;
     const main_image = getBanner(section, course_slug, slug);
-    const tags = ['distributedsystems', 'tutorial', 'beginners'];
-    const canonical_url = `https://karanpratapsingh.com/courses/${course_slug}/${slug}`;
+    const tags = ['distributedsystems', 'architecture', 'tutorial'];
+    const canonical_url = `https://github.com/karanpratapsingh/${course_slug}#${slug}`;
     const series = 'System Design';
     const body_markdown = getBody(course_slug, slug);
 
@@ -98,7 +98,12 @@ function createDraft(apiKey, body) {
     };
 
     try {
-      await createDraft(API_KEY, body);
+      const response = await createDraft(API_KEY, body);
+      if (response.error) {
+        console.log(response);
+        throw new Error(response.error);
+      }
+
       console.log(`Created article for: ${name}`);
       await sleep(10);
     } catch (error) {
