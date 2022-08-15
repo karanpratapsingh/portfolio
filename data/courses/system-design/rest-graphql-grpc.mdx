@@ -1,0 +1,278 @@
+---
+title: 'REST, GraphQL, gRPC'
+date: '2022-10-10'
+draft: false
+summary: 'In this tutorial, we will discuss REST, GraphQL, gRPC'
+images:
+  ['/static/courses/system-design/chapter-III/rest-graphql-grpc/banner.png']
+authors: ['default']
+---
+
+A good API design is always a crucial part of any system. But it is also important to pick the right API technology. So, in this tutorial, we will briefly discuss different API technologies such as REST, GraphQL, and gRPC.
+
+## What's an API?
+
+Before we even get into API technologies, let's first understand what is an API.
+
+An API is a set of definitions and protocols for building and integrating application software. It's sometimes referred to as a contract between an information provider and an information user establishing the content required from the producer and the content required by the consumer.
+
+In other words, if you want to interact with a computer or system to retrieve information or perform a function, an API helps you communicate what you want to that system so it can understand and complete the request.
+
+## REST
+
+A [REST API](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm) (also known as RESTful API) is an application programming interface that conforms to the constraints of REST architectural style and allows for interaction with RESTful web services. REST stands for Representational State Transfer and it was first introduced by [Roy Fielding](https://roy.gbiv.com) in the year 2000.
+
+_In REST API, the fundamental unit is a resource._
+
+### Concepts
+
+Let's discuss some concepts of a RESTful API.
+
+**Constraints**
+
+In order for an API to be considered _RESTful_, it has to conform to these architectural constraints:
+
+- **Uniform Interface**: There should be a uniform way of interacting with a given server.
+- **Client-Server**: A client-server architecture managed through HTTP.
+- **Stateless**: No client context shall be stored on the server between requests.
+- **Cacheable**: Every response should include whether the response is cacheable or not and for how much duration responses can be cached at the client-side.
+- **Layered system**: An application architecture needs to be composed of multiple layers.
+- **Code on demand**: Return executable code to support a part of your application. _(optional)_
+
+**HTTP Verbs**
+
+HTTP defines a set of request methods to indicate the desired action to be performed for a given resource. Although they can also be nouns, these request methods are sometimes referred to as _HTTP verbs_. Each of them implements a different semantic, but some common features are shared by a group of them.
+
+Below are some commonly used HTTP verbs:
+
+- **GET**: Request a representation of the specified resource.
+- **HEAD**: Response is identical to a `GET` request, but without the response body.
+- **POST**: Submits an entity to the specified resource, often causing a change in state or side effects on the server.
+- **PUT**: Replaces all current representations of the target resource with the request payload.
+- **DELETE**: Deletes the specified resource.
+- **PATCH**: Applies partial modifications to a resource.
+
+**HTTP response codes**
+
+[HTTP response status codes](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) indicate whether a specific HTTP request has been successfully completed.
+
+There are five classes defined by the standard:
+
+- 1xx - Informational responses.
+- 2xx - Successful responses.
+- 3xx - Redirection responses.
+- 4xx - Client error responses.
+- 5xx - Server error responses.
+
+For example, HTTP 200 means that the request was successful.
+
+### Advantages
+
+Let's discuss some advantages of REST API:
+
+- Simple and easy to understand.
+- Flexible and portable.
+- Good caching support.
+- Client and server are decoupled.
+
+### Disadvantages
+
+Let's discuss some disadvantages of REST API:
+
+- Over-fetching of data.
+- Sometimes multiple round trips to the server are required.
+
+### Use cases
+
+REST APIs are pretty much used universally and are the default standard for designing APIs. Overall REST APIs are quite flexible and can fit almost all scenarios.
+
+### Example
+
+Here's an example usage of a REST API that operates on a **users** resource.
+
+| URI           | HTTP verb | Description         |
+| ------------- | --------- | ------------------- |
+| /users        | GET       | Get all users       |
+| /users/\{id\} | GET       | Get a user by id    |
+| /users        | POST      | Add a new user      |
+| /users/\{id\} | PATCH     | Update a user by id |
+| /users/\{id\} | DELETE    | Delete a user by id |
+
+_There is so much more to learn when it comes to REST APIs, I will highly recommend looking into [Hypermedia as the Engine of Application State (HATEOAS)](https://en.wikipedia.org/wiki/HATEOAS)._
+
+## GraphQL
+
+[GraphQL](https://graphql.org) is a query language and server-side runtime for APIs that prioritizes giving clients exactly the data they request and no more. It was developed by [Facebook](https://engineering.fb.com) and later open-sourced in 2015.
+
+GraphQL is designed to make APIs fast, flexible, and developer-friendly. Additionally, GraphQL gives API maintainers the flexibility to add or deprecate fields without impacting existing queries. Developers can build APIs with whatever methods they prefer, and the GraphQL specification will ensure they function in predictable ways to clients.
+
+_In GraphQL, the fundamental unit is a query._
+
+### Concepts
+
+Let's briefly discuss some key concepts in GraphQL:
+
+**Schema**
+
+A GraphQL schema describes the functionality clients can utilize once they connect to the GraphQL server.
+
+**Queries**
+
+A query is a request made by the client. It can consist of fields and arguments for the query. The operation type of a query can also be a [mutation](https://graphql.org/learn/queries/#mutations) which provides a way to modify server-side data.
+
+**Resolvers**
+
+Resolver is a collection of functions that generate responses for a GraphQL query. In simple terms, a resolver acts as a GraphQL query handler.
+
+### Advantages
+
+Let's discuss some advantages of GraphQL:
+
+- Eliminates over-fetching of data.
+- Strongly defined schema.
+- Code generation support.
+- Payload optimization.
+
+### Disadvantages
+
+Let's discuss some disadvantages of GraphQL:
+
+- Shifts complexity to server-side.
+- Caching becomes hard.
+- Versioning is ambiguous.
+- N+1 problem.
+
+### Use cases
+
+GraphQL proves to be essential in the following scenarios:
+
+- Reducing app bandwidth usage as we can query multiple resources in a single query.
+- Rapid prototyping for complex systems.
+- When we are working with a graph-like data model.
+
+### Example
+
+Here's a GraphQL schema that defines a `User` type and a `Query` type.
+
+```graphql
+type Query {
+  getUser: User
+}
+
+type User {
+  id: ID
+  name: String
+  city: String
+  state: String
+}
+```
+
+Using the above schema, the client can request the required fields easily without having to fetch the entire resource or guess what the API might return.
+
+```graphql
+{
+  getUser {
+    id
+    name
+    city
+  }
+}
+```
+
+This will give the following response to the client.
+
+```json
+{
+  "getUser": {
+    "id": 123,
+    "name": "Karan",
+    "city": "San Francisco"
+  }
+}
+```
+
+_Learn more about GraphQL at [graphql.org](https://graphql.org)._
+
+## gRPC
+
+[gRPC](https://grpc.io) is a modern open-source high-performance [Remote Procedure Call (RPC)](https://en.wikipedia.org/wiki/Remote_procedure_call) framework that can run in any environment. It can efficiently connect services in and across data centers with pluggable support for load balancing, tracing, health checking, authentication and much more.
+
+### Concepts
+
+Let's discuss some key concepts of gRPC.
+
+**Protocol buffers**
+
+Protocol buffers provide a language and platform-neutral extensible mechanism for serializing structured data in a forward and backward-compatible way. It's like JSON, except it's smaller and faster, and it generates native language bindings.
+
+**Service definition**
+
+Like many RPC systems, gRPC is based on the idea of defining a service and specifying the methods that can be called remotely with their parameters and return types. gRPC uses protocol buffers as the [Interface Definition Language (IDL)](https://en.wikipedia.org/wiki/Interface_description_language) for describing both the service interface and the structure of the payload messages.
+
+### Advantages
+
+Let's discuss some disadvantages of gRPC:
+
+- Lightweight and efficient.
+- High performance.
+- Built-in code generation support.
+- Bi-directional streaming.
+
+### Disadvantages
+
+Let's discuss some disadvantages of gRPC:
+
+- Relatively new compared to REST and GraphQL.
+- Limited browser support.
+- Steeper learning curve.
+- Not human readable.
+
+### Use cases
+
+Below are some good use cases for gRPC:
+
+- Real-time communication via bi-directional streaming.
+- Efficient inter-service communication in microservices.
+- Low latency and high throughput communication.
+- Polyglot environments.
+
+### Example
+
+Here's a basic example of a gRPC service defined in a `*.proto` file. Using this definition, we can easily code generate the `HelloService` service in the programming language of our choice.
+
+```protobuf
+service HelloService {
+  rpc SayHello (HelloRequest) returns (HelloResponse);
+}
+
+message HelloRequest {
+  string greeting = 1;
+}
+
+message HelloResponse {
+  string reply = 1;
+}
+```
+
+## REST vs GraphQL vs gRPC
+
+Now that we know how these API designing techniques work, let's compare them based on the following parameters:
+
+- Will it cause tight coupling?
+- How _chatty_ (distinct API calls to get needed information) are the APIs?
+- What's the performance like?
+- How complex is it to integrate?
+- How well does the caching work?
+- Built-in tooling and code generation?
+- What's API discoverability like?
+- How easy is it to version APIs?
+
+| Type    | Coupling | Chattiness | Performance | Complexity | Caching | Codegen | Discoverability | Versioning |
+| ------- | -------- | ---------- | ----------- | ---------- | ------- | ------- | --------------- | ---------- |
+| REST    | Low      | High       | Good        | Medium     | Great   | Bad     | Good            | Easy       |
+| GraphQL | Medium   | Low        | Good        | High       | Custom  | Good    | Good            | Custom     |
+| gRPC    | High     | Medium     | Great       | Low        | Custom  | Great   | Bad             | Hard       |
+
+### Which API technology is better?
+
+Well, the answer is none of them. There is no silver bullet as each of these technologies has its own advantages and disadvantages. Users only care about using our APIs in a consistent way, so make sure to focus on your domain and requirements when designing your API.

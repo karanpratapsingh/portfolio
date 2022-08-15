@@ -11,7 +11,7 @@ const ContentSecurityPolicy = `
   media-src 'none';
   connect-src *;
   font-src 'self';
-  frame-src giscus.app www.youtube.com calendly.com
+  frame-src giscus.app www.youtube.com calendly.com drawsql.app
 `;
 
 const securityHeaders = [

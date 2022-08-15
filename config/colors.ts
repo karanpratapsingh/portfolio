@@ -40,6 +40,7 @@ export const Colors = {
 
   // Messaging
   nats: '#199bfc',
+  kafka: '#000000',
 
   // Social
   linkedin: '#0077B5',

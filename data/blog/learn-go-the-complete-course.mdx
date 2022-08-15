@@ -100,7 +100,7 @@ _(You may need to run the command as root or through sudo)_
 export PATH=$PATH:/usr/local/go/bin
 ```
 
-_**Note:** Changes made to a profile file may not apply until the next time you log into your computer. To apply the changes immediately, just run the shell commands directly or execute them from the profile using a command such as source `$HOME/.profile`._
+_**Note**: Changes made to a profile file may not apply until the next time you log into your computer. To apply the changes immediately, just run the shell commands directly or execute them from the profile using a command such as source `$HOME/.profile`._
 
 3. Verify that you've installed Go by opening a command prompt and typing the following command:
 
@@ -631,7 +631,7 @@ For those who are coming from C/C++ background, this should feel natural, but if
 
 # Flow Control
 
-et's talk about flow control, starting with if/else.
+Let's talk about flow control, starting with if/else.
 
 ## If/Else
 
@@ -1403,7 +1403,7 @@ func main() {
 }
 ```
 
-**External Dependencies**
+## External Dependencies
 
 In Go, we are not only limited to working with local packages, we can also install external packages using `go install` command as we saw earlier.
 
@@ -1844,7 +1844,7 @@ func main() {
 }
 ```
 
-For readability, we can separate by new line but this will also require a trialing comma.
+For readability, we can separate by new line but this will also require a trailing comma.
 
 ```go
 	var p2 = Person{
@@ -2344,7 +2344,7 @@ In this tutorial, we will learn about arrays and slices in Go.
 
 ## Arrays
 
-### What's an array?
+### What is an array?
 
 An array is a fixed-size collection of elements of the same type. The elements of the array are stored sequentially and can be accessed using their `index`.
 
@@ -2598,7 +2598,7 @@ func main() {
 	// Output: Array: [20 15 5 30 25], Length: 5, Capacity: 5
 	fmt.Printf("Array: %v, Length: %d, Capacity: %d\n", a, len(a), cap(a))
 
-	// Output: Slice [15 5], Length: 3, Capacity: 4
+	// Output: Slice [15 5 30], Length: 3, Capacity: 4
 	fmt.Printf("Slice: %v, Length: %d, Capacity: %d", s, len(s), cap(s))
 }
 ```
@@ -2771,17 +2771,17 @@ Let's try it in an example by appending elements to our slice.
 func main() {
 	s1 := []string{"a", "b", "c", "d"}
 
-	s2 := append(a1, "e", "f")
+	s2 := append(s1, "e", "f")
 
-	fmt.Println("a1:", a1)
-	fmt.Println("a2:", a2)
+	fmt.Println("s1:", s1)
+	fmt.Println("s2:", s2)
 }
 ```
 
 ```bash
 $ go run main.go
-a1: [a b c d]
-a2: [a b c d e f]
+s1: [a b c d]
+s2: [a b c d e f]
 ```
 
 As we can see, the new elements were appended and a new slice was returned.
@@ -5237,7 +5237,7 @@ Each Cond has an associated lock (often a `*Mutex` or `*RWMutex`), which must be
 
 One scenario can be when one process is receiving data, and other processes must wait for this process to receive data before they can read the correct data.
 
-If we simply use a [channel](https://karanpratapsingh.com/courses/go/channels) or mutex, only one process can wait and read the data. There is no way to notify other processes to read the data. Thus, we can `sync.Cond` to coordinate shared resources.
+If we simply use a [channel](/courses/go/channels) or mutex, only one process can wait and read the data. There is no way to notify other processes to read the data. Thus, we can `sync.Cond` to coordinate shared resources.
 
 ### Usage
 
@@ -5435,7 +5435,7 @@ Creating a new person...
 There is no object in the pool now (new one will be created): &{}
 ```
 
-_Notice how we did [type assertion](https://karanpratapsingh.com/courses/go/interfaces#type-assertion) when we call `Get`._
+_Notice how we did [type assertion](/courses/go/interfaces#type-assertion) when we call `Get`._
 
 It can be seen that the `sync.Pool` is strictly a temporary object pool, which is suitable for storing some temporary objects that will be shared among goroutines.
 
@@ -5636,7 +5636,7 @@ _This is a similar behavior as `yield` in JavaScript and Python._
 
 The fan-in pattern combines multiple inputs into one single output channel. Basically, we multiplex our inputs.
 
-In our example, we create the inputs `i1` and `i2` using the `generateWork` function. Then we use our [variadic function](https://www.karanpratapsingh.com/courses/go/functions#variadic-functions) `fanIn` to combine values from these inputs to a single output channel from which we can consume values.
+In our example, we create the inputs `i1` and `i2` using the `generateWork` function. Then we use our [variadic function](/courses/go/functions#variadic-functions) `fanIn` to combine values from these inputs to a single output channel from which we can consume values.
 
 _Note: order of input will not be guaranteed._
 
@@ -5998,7 +5998,7 @@ Worker 2 finished job 4
 
 Queuing pattern allows us to process `n` number of items at a time.
 
-In our example, we use a buffered channel to simulate a queue behavior. We simply send an [empty struct](https://www.karanpratapsingh.com/courses/go/structs#properties) to our `queue` channel and wait for it to be released by the previous process so that we can continue.
+In our example, we use a buffered channel to simulate a queue behavior. We simply send an [empty struct](/courses/go/structs#properties) to our `queue` channel and wait for it to be released by the previous process so that we can continue.
 
 This is because _sends_ to a buffered channel block only when the buffer is full and receives block when the buffer is empty.
 
@@ -6303,11 +6303,11 @@ Congratulations, you've finished the course!
 
 Now that you know the fundamentals of Go, here are some additional things for you to try:
 
-- [`Build a REST API with Go - For Beginners`](https://www.youtube.com/watch?v=bFYZrEuEDLE)
-- [`Connecting to PostgreSQL using GORM`](https://www.youtube.com/watch?v=Yk5ZjKq4qDQ)
-- [`Web Scraping with Go`](https://www.youtube.com/watch?v=sU_BwzOxl54)
-- [`Dockerize your Go app`](https://www.youtube.com/watch?v=zUc2LihXjlw)
-- [`DevOps Roadmap`](https://www.youtube.com/watch?v=np_seazJL3Q)
+- [Build a REST API with Go - For Beginners](https://www.youtube.com/watch?v=bFYZrEuEDLE)
+- [Connecting to PostgreSQL using GORM](https://www.youtube.com/watch?v=Yk5ZjKq4qDQ)
+- [Web Scraping with Go](https://www.youtube.com/watch?v=sU_BwzOxl54)
+- [Dockerize your Go app](https://www.youtube.com/watch?v=zUc2LihXjlw)
+- [DevOps Roadmap](https://www.youtube.com/watch?v=np_seazJL3Q)
 
 I hope this course was a great learning experience. I would love to hear feedback from you.
 
@@ -6317,8 +6317,8 @@ Wishing you all the best for further learning!
 
 Here are the resources that were referenced while creating this course.
 
-- [`The Go Programming Language`](https://www.gopl.io)
-- [`Official Go documentation`](https://go.dev/doc)
-- [`Official Go blog`](https://go.dev/blog)
-- [`A Tour of Go`](https://go.dev/tour)
-- [`Learn Go with Tests`](https://quii.gitbook.io/learn-go-with-tests)
+- [The Go Programming Language](https://www.gopl.io)
+- [Official Go documentation](https://go.dev/doc)
+- [Official Go blog](https://go.dev/blog)
+- [A Tour of Go](https://go.dev/tour)
+- [Learn Go with Tests](https://quii.gitbook.io/learn-go-with-tests)

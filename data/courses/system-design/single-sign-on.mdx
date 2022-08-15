@@ -1,0 +1,87 @@
+---
+title: 'Single Sign-On (SSO)'
+date: '2022-10-20'
+draft: false
+summary: 'In this tutorial, we will discuss Single Sign-On (SSO)'
+images: ['/static/courses/system-design/chapter-IV/single-sign-on/banner.png']
+authors: ['default']
+---
+
+Single Sign-On (SSO) is an authentication process in which a user is provided access to multiple applications or websites by using only a single set of login credentials. This prevents the need for the user to log separately into the different applications.
+
+The user credentials and other identifying information are stored and managed by a centralized system called Identity Provider (IdP). The Identity Provider is a trusted system that provides access to other websites and applications.
+
+Single Sign-On (SSO) based authentication systems are commonly used in enterprise environments where employees require access to multiple applications of their organizations.
+
+## Components
+
+Let's discuss some key components of Single Sign-On (SSO).
+
+### Identity Provider (IdP)
+
+User Identity information is stored and managed by a centralized system called Identity Provider (IdP). The Identity Provider authenticates the user and provides access to the service provider.
+
+The identity provider can directly authenticate the user by validating a username and password or by validating an assertion about the user's identity as presented by a separate identity provider. The identity provider handles the management of user identities in order to free the service provider from this responsibility.
+
+### Service Provider
+
+A service provider provides services to the end-user. They rely on identity providers to assert the identity of a user, and typically certain attributes about the user are managed by the identity provider. Service providers may also maintain a local account for the user along with attributes that are unique to their service.
+
+### Identity Broker
+
+An identity broker acts as an intermediary that connects multiple service providers with various different identity providers. Using Identity Broker, we can perform single sign-on over any application without the hassle of the protocol it follows.
+
+## SAML
+
+Security Assertion Markup Language is an open standard that allows clients to share security information about identity, authentication, and permission across different systems. SAML is implemented with the Extensible Markup Language (XML) standard for sharing data.
+
+SAML specifically enables identity federation, making it possible for identity providers (IdPs) to seamlessly and securely pass authenticated identities and their attributes to service providers.
+
+## How does SSO work?
+
+Now, let's discuss how Single Sign-On works:
+
+![sso](/static/courses/system-design/chapter-IV/single-sign-on/sso.png)
+
+1. The user requests a resource from their desired application.
+2. The application redirects the user to the Identity Provider (IdP) for authentication.
+3. The user signs in with their credentials (usually, username and password).
+4. Identity Provider (IdP) sends a Single Sign-On response back to the client application.
+5. The application grants access to the user.
+
+## SAML vs OAuth 2.0 and OpenID Connect (OIDC)
+
+There are many differences between SAML, OAuth, and OIDC. SAML uses XML to pass messages, while OAuth and OIDC use JSON. OAuth provides a simpler experience, while SAML is geared towards enterprise security.
+
+OAuth and OIDC use RESTful communication extensively, which is why mobile, and modern web applications find OAuth and OIDC a better experience for the user. SAML, on the other hand, drops a session cookie in a browser that allows a user to access certain web pages. This is great for short-lived workloads.
+
+OIDC is developer-friendly and simpler to implement, which broadens the use cases for which it might be implemented. It can be implemented from scratch pretty fast, via freely available libraries in all common programming languages. SAML can be complex to install and maintain, which only enterprise-size companies can handle well.
+
+OpenID Connect is essentially a layer on top of the OAuth framework. Therefore, it can offer a built-in layer of permission that asks a user to agree to what the service provider might access. Although SAML is also capable of allowing consent flow, it achieves this by hard-coding carried out by a developer and not as part of its protocol.
+
+_Both of these authentication protocols are good at what they do. As always, a lot depends on our specific use cases and target audience._
+
+## Advantages
+
+Following are the benefits of using Single Sign-On:
+
+- Ease of use as users only need to remember one set of credentials.
+- Ease of access without having to go through a lengthy authorization process.
+- Enforced security and compliance to protect sensitive data.
+- Simplifying the management with reduced IT support cost and admin time.
+
+## Disadvantages
+
+Here are some disadvantages of Single Sign-On:
+
+- Single Password Vulnerability, if the main SSO password gets compromised, all the supported applications get compromised.
+- The authentication process using Single Sign-On is slower than traditional authentication as every application has to request the SSO provider for verification.
+
+## Examples
+
+These are some commonly used Identity Providers (IdP):
+
+- [Okta](https://www.okta.com)
+- [Google](https://cloud.google.com/architecture/identity/single-sign-on)
+- [Auth0](https://auth0.com)
+- [OneLogin](https://www.onelogin.com)

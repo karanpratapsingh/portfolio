@@ -66,7 +66,7 @@ _This is a similar behavior as `yield` in JavaScript and Python._
 
 The fan-in pattern combines multiple inputs into one single output channel. Basically, we multiplex our inputs.
 
-In our example, we create the inputs `i1` and `i2` using the `generateWork` function. Then we use our [variadic function](https://www.karanpratapsingh.com/courses/go/functions#variadic-functions) `fanIn` to combine values from these inputs to a single output channel from which we can consume values.
+In our example, we create the inputs `i1` and `i2` using the `generateWork` function. Then we use our [variadic function](/courses/go/functions#variadic-functions) `fanIn` to combine values from these inputs to a single output channel from which we can consume values.
 
 _Note: order of input will not be guaranteed._
 
@@ -428,7 +428,7 @@ Worker 2 finished job 4
 
 Queuing pattern allows us to process `n` number of items at a time.
 
-In our example, we use a buffered channel to simulate a queue behavior. We simply send an [empty struct](https://www.karanpratapsingh.com/courses/go/structs#properties) to our `queue` channel and wait for it to be released by the previous process so that we can continue.
+In our example, we use a buffered channel to simulate a queue behavior. We simply send an [empty struct](/courses/go/structs#properties) to our `queue` channel and wait for it to be released by the previous process so that we can continue.
 
 This is because _sends_ to a buffered channel block only when the buffer is full and receives block when the buffer is empty.
 

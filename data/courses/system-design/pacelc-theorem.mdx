@@ -1,0 +1,20 @@
+---
+title: 'PACELC Theorem'
+date: '2022-09-24'
+draft: false
+summary: 'In this tutorial, we will discuss PACELC Theorem'
+images: ['/static/courses/system-design/chapter-II/pacelc-theorem/banner.png']
+authors: ['default']
+---
+
+The PACELC theorem is an extension of the CAP theorem. The CAP theorem states that in the case of network partitioning (P) in a distributed system, one has to choose between Availability (A) and Consistency (C).
+
+PACELC extends the CAP theorem by introducing latency (L) as an additional attribute of a distributed system. The theorem states that else (E), even when the system is running normally in the absence of partitions, one has to choose between latency (L) and consistency (C).
+
+_The PACELC theorem was first described by [Daniel J. Abadi](https://scholar.google.com/citations?user=zxeEF2gAAAAJ)._
+
+![pacelc-theorem](/static/courses/system-design/chapter-II/pacelc-theorem/pacelc-theorem.png)
+
+PACELC theorem was developed to address a key limitation of the CAP theorem as it makes no provision for performance or latency.
+
+For example, according to the CAP theorem, a database can be considered Available if a query returns a response after 30 days. Obviously, such latency would be unacceptable for any real-world application.

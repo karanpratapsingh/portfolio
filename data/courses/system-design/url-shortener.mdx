@@ -1,0 +1,415 @@
+---
+title: 'URL Shortener'
+date: '2022-10-23'
+draft: false
+summary: 'In this tutorial, we will learn how to design a URL Shortener'
+images: ['/static/courses/system-design/chapter-V/url-shortener/banner.png']
+authors: ['default']
+---
+
+Let's design a URL shortener, similar to services like [Bitly](https://bitly.com), [TinyURL](https://tinyurl.com/app).
+
+## What is a URL Shortener?
+
+A URL shortener service creates an alias or a short URL for a long URL. Users are redirected to the original URL when they visit these short links.
+
+For example, the following long URL can be changed to a shorter URL.
+
+**Long URL**: [https://karanpratapsingh.com/courses/system-design/url-shortener](/courses/system-design/url-shortener)
+
+**Short URL**: [https://bit.ly/3I71d3o](https://bit.ly/3I71d3o)
+
+## Why do we need a URL shortener?
+
+URL shortener saves space in general when we are sharing URLs. Users are also less likely to mistype shorter URLs. Moreover, we can also optimize links across devices, this allows us to track individual links.
+
+## Requirements
+
+Our URL shortening system should meet the following requirements:
+
+### Functional requirements
+
+- Given a URL, our service should generate a _shorter and unique_ alias for it.
+- Users should be redirected to the original URL when they visit the short link.
+- Links should expire after a default timespan.
+
+### Non-functional requirements
+
+- High availability with minimal latency.
+- The system should be scalable and efficient.
+
+### Extended requirements
+
+- Prevent abuse of services.
+- Record analytics and metrics for redirections.
+
+## Estimation and Constraints
+
+Let's start with the estimation and constraints.
+
+_Note: Make sure to check any scale or traffic related assumptions with your interviewer._
+
+### Traffic
+
+This will be a read-heavy system, so let's assume a `100:1` read/write ratio with 100 million links generated per month.
+
+**Reads/Writes Per month**
+
+For reads per month:
+
+$$
+100 \times 100 \space million = 10 \space billion/month
+$$
+
+Similarly for writes:
+
+$$
+1 \times 100 \space million = 100 \space million/month
+$$
+
+**What would be Requests Per Second (RPS) for our system?**
+
+100 million requests per month translate into 40 requests per second.
+
+$$
+\frac{100 \space million}{(30 \space days \times 24 \space hrs \times 3600 \space seconds)} = \sim 40 \space URLs/second
+$$
+
+And with a `100:1` read/write ratio, the number of redirections will be:
+
+$$
+100 \times 40 \space URLs/second = 4000 \space requests/second
+$$
+
+### Bandwidth
+
+Since we expect about 40 URLs every second, and if we assume each request is of size 500 bytes then the total incoming data for then write requests would be:
+
+$$
+40 \times 500 \space bytes = 20 \space KB/second
+$$
+
+Similarly, for the read requests, since we expect about 4K redirections, the total outgoing data would be:
+
+$$
+4000 \space URLs/second \times 500 \space bytes = \sim 2 \space MB/second
+$$
+
+### Storage
+
+For storage, we will assume we store each link or record in our database for 10 years. Since we expect around 100M new requests every month, the total number of records we will need to store would be:
+
+$$
+100 \space million \times 10\space years \times 12 \space months = 12 \space billion
+$$
+
+Like earlier, if we assume each stored recorded will be approximately 500 bytes. We will need around 6TB of storage:
+
+$$
+12 \space billion \times 500 \space bytes = 6 \space TB
+$$
+
+### Cache
+
+For caching, we will follow the classic [Pareto principle](https://en.wikipedia.org/wiki/Pareto_principle) also known as the 80/20 rule. This means that 80% of the requests are for 20% of the data, so we can cache around 20% of our requests.
+
+Since we get around 4K read or redirection requests each second. This translates into 350M requests per day.
+
+$$
+4000 \space URLs/second \times 24 \space hours \times 3600 \space seconds = \sim 350 \space million \space requests/day
+$$
+
+Hence, we will need around 35GB of memory per day.
+
+$$
+20 \space percent \times 350 \space million \times 500 \space bytes = 35 \space GB/day
+$$
+
+### High-level estimate
+
+Here is our high-level estimate:
+
+| Type                 | Estimate   |
+| -------------------- | ---------- |
+| Writes (New URLs)    | 40/s       |
+| Reads (Redirection)  | 4K/s       |
+| Bandwidth (Incoming) | 20 KB/s    |
+| Bandwidth (Outgoing) | 2 MB/s     |
+| Storage (10 years)   | 6 TB       |
+| Memory (Caching)     | ~35 GB/day |
+
+## Data model design
+
+Next, we will focus on the data model design. Here is our database schema:
+
+![url-shortener-datamodel](/static/courses/system-design/chapter-V/url-shortener/url-shortener-datamodel.png)
+
+Initially, we can get started with just two tables:
+
+**users**
+
+Stores user's details such as `name`, `email`, `createdAt`, etc.
+
+**urls**
+
+Contains the new short URL's properties such as `expiration`, `hash`, `originalURL`, and `userID` of the user who created the short URL. We can also use the `hash` column as an [index](/courses/system-design/indexes) to improve the query performance.
+
+### What kind of database should we use?
+
+Since the data is not strongly relational, NoSQL databases such as [Amazon DynamoDB](https://aws.amazon.com/dynamodb), [Apache Cassandra](https://cassandra.apache.org/_/index.html), or [MongoDB](https://www.mongodb.com) will be a better choice here, if we do decide to use an SQL database then we can use something like [Azure SQL Database](https://azure.microsoft.com/en-in/products/azure-sql/database) or [Amazon RDS](https://aws.amazon.com/rds).
+
+_For more details, refer to [SQL vs NoSQL](/courses/system-design/sql-vs-nosql-databases)._
+
+## API design
+
+Let us do a basic API design for our services:
+
+### Create URL
+
+This API should create a new short URL in our system given an original URL.
+
+```tsx
+createURL(apiKey: string, originalURL: string, expiration?: Date): string
+```
+
+**Parameters**
+
+API Key (`string`): API key provided by the user.
+
+Original Url (`string`): Original URL to be shortened.
+
+Expiration (`Date`): Expiration date of the new URL _(optional)_.
+
+**Returns**
+
+Short URL (`string`): New shortened URL.
+
+### Get URL
+
+This API should retrieve the original URL from a given short URL.
+
+```tsx
+getURL(apiKey: string, shortURL: string): string
+```
+
+**Parameters**
+
+API Key (`string`): API key provided by the user.
+
+Short Url (`string`): Short URL mapped to the original URL.
+
+**Returns**
+
+Original URL (`string`): Original URL to be retrieved.
+
+### Delete URL
+
+This API should delete a given shortURL from our system.
+
+```tsx
+deleteURL(apiKey: string, shortURL: string): boolean
+```
+
+**Parameters**
+
+API Key (`string`): API key provided by the user.
+
+Short Url (`string`): Short URL to be deleted.
+
+**Returns**
+
+Result (`boolean`): Represents whether the operation was successful or not.
+
+### Why do we need an API key?
+
+As you must've noticed, we're using an API key to prevent abuse of our services. Using this API key we can limit the users to a certain number of requests per second or minute. This is quite a standard practice for developer APIs and should cover our extended requirement.
+
+## High-level design
+
+Now let us do a high-level design of our system.
+
+### URL Encoding
+
+Our system's primary goal is to shorten a given URL, let's look at different approaches:
+
+**Base62 Approach**
+
+In this approach, we can encode the original URL using [Base62](https://en.wikipedia.org/wiki/Base62) which consists of the capital letters A-Z, the lower case letters a-z, and the numbers 0-9.
+
+$$
+Number \space of \space URLs = 62^N
+$$
+
+Where,
+
+`N`: Number of characters in the generated URL.
+
+So, if we want to generate a URL that is 7 characters long, we will generate ~3.5 trillion different URLs.
+
+$$
+\begin{gather*}
+62^5 = \sim 916 \space million \space URLs \\
+
+62^6 = \sim 56.8 \space billion \space URLs \\
+
+62^7 = \sim 3.5 \space trillion \space URLs
+\end{gather*}
+$$
+
+This is the simplest solution here, but it does not guarantee non-duplicate or collision-resistant keys.
+
+**MD5 Approach**
+
+The [MD5 message-digest algorithm](https://en.wikipedia.org/wiki/MD5) is a widely used hash function producing a 128-bit hash value (or 32 hexadecimal digits). We can use these 32 hexadecimal digits for generating 7 characters long URL.
+
+$$
+MD5(original\_url) \rightarrow base62encode \rightarrow hash
+$$
+
+However, this creates a new issue for us, which is duplication and collision. We can try to re-compute the hash until we find a unique one but that will increase the overhead of our systems. It's better to look for more scalable approaches.
+
+**Counter Approach**
+
+In this approach, we will start with a single server which will maintain the count of the keys generated. Once our service receives a request, it can reach out to the counter which returns a unique number and increments the counter. When the next request comes the counter again returns the unique number and this goes on.
+
+$$
+Counter(0-3.5 \space trillion) \rightarrow base62encode \rightarrow hash
+$$
+
+The problem with this approach is that it can quickly become a single point for failure. And if we run multiple instances of the counter we can have collision as it's essentially a distributed system.
+
+To solve this issue we can use a distributed system manager such as [Zookeeper](https://zookeeper.apache.org) which can provide distributed synchronization. Zookeeper can maintain multiple ranges for our servers.
+
+$$
+\begin{align*}
+& Range \space 1: \space 1 \rightarrow 1,000,000 \\
+
+& Range \space 2: \space 1,000,001 \rightarrow 2,000,000 \\
+
+& Range \space 3: \space 2,000,001 \rightarrow 3,000,000 \\
+
+& ...
+\end{align*}
+$$
+
+Once a server reaches its maximum range Zookeeper will assign an unused counter range to the new server. This approach can guarantee non-duplicate and collision-resistant URLs. Also, we can run multiple instances of Zookeeper to remove the single point of failure.
+
+### Key Generation Service (KGS)
+
+As we discussed, generating a unique key at scale without duplication and collisions can be a bit of a challenge. To solve this problem, we can create a standalone Key Generation Service (KGS) that generates a unique key ahead of time and stores it in a separate database for later use. This approach can make things simple for us.
+
+**How to handle concurrent access?**
+
+Once the key is used, we can mark it in the database to make sure we don't reuse it, however, if there are multiple server instances reading data concurrently, two or more servers might try to use the same key.
+
+The easiest way to solve this would be to store keys in two tables. As soon as a key is used, we move it to a separate table with appropriate locking in place. Also, to improve reads, we can keep some of the keys in memory.
+
+**KGS database estimations**
+
+As per our discussion, we can generate up to ~56.8 billion unique 6 character long keys which will result in us having to store 300 GB of keys.
+
+$$
+6 \space characters \times 56.8 \space billion = \sim 390 \space GB
+$$
+
+While 390 GB seems like a lot for this simple use case, it is important to remember this is for the entirety of our service lifetime and the size of the keys database would not increase like our main database.
+
+### Caching
+
+Now, let's talk about [caching](/courses/system-design/caching). As per our estimations, we will require around ~35 GB of memory per day to cache 20% of the incoming requests to our services. For this use case, we can use [Redis](https://redis.io) or [Memcached](https://memcached.org) servers alongside our API server.
+
+_For more details, refer to [caching](/courses/system-design/caching)._
+
+### Design
+
+Now that we have identified some core components, let's do the first draft of our system design.
+
+![url-shortener-basic-design](/static/courses/system-design/chapter-V/url-shortener/url-shortener-basic-design.png)
+
+Here's how it works:
+
+**Creating a new URL**
+
+1. When a user creates a new URL, our API server requests a new unique key from the Key Generation Service (KGS).
+2. Key Generation Service provides a unique key to the API server and marks the key as used.
+3. API server writes the new URL entry to the database and cache.
+4. Our service returns an HTTP 201 (Created) response to the user.
+
+**Accessing a URL**
+
+1. When a client navigates to a certain short URL, the request is sent to the API servers.
+2. The request first hits the cache, and if the entry is not found there then it is retrieved from the database and an HTTP 301 (Redirect) is issued to the original URL.
+3. If the key is still not found in the database, an HTTP 404 (Not found) error is sent to the user.
+
+## Detailed design
+
+It's time to discuss the finer details of our design.
+
+### Data Partitioning
+
+To scale out our databases we will need to partition our data. Horizontal partitioning (aka [Sharding](/courses/system-design/sharding)) can be a good first step. We can use partitions schemes such as:
+
+- Hash-Based Partitioning
+- List-Based Partitioning
+- Range Based Partitioning
+- Composite Partitioning
+
+The above approaches can still cause uneven data and load distribution, we can solve this using [Consistent hashing](/courses/system-design/consistent-hashing).
+
+_For more details, refer to [Sharding](/courses/system-design/sharding) and [Consistent Hashing](/courses/system-design/consistent-hashing)._
+
+### Database cleanup
+
+This is more of a maintenance step for our services and depends on whether we keep the expired entries or remove them. If we do decide to remove expired entries, we can approach this in two different ways:
+
+**Active cleanup**
+
+In active cleanup, we will run a separate cleanup service which will periodically remove expired links from our storage and cache. This will be a very lightweight service like a [cron job](https://en.wikipedia.org/wiki/Cron).
+
+**Passive cleanup**
+
+For passive cleanup, we can remove the entry when a user tries to access an expired link. This can ensure a lazy cleanup of our database and cache.
+
+### Cache
+
+Now let us talk about [caching](/courses/system-design/caching).
+
+**Which cache eviction policy to use?**
+
+As we discussed before, we can use solutions like [Redis](https://redis.io) or [Memcached](https://memcached.org) and cache 20% of the daily traffic but what kind of cache eviction policy would best fit our needs?
+
+[Least Recently Used (LRU)](<https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_recently_used_(LRU)>) can be a good policy for our system. In this policy, we discard the least recently used key first.
+
+**How to handle cache miss?**
+
+Whenever there is a cache miss, our servers can hit the database directly and update the cache with the new entries.
+
+### Metrics and Analytics
+
+Recording analytics and metrics is one of our extended requirements. We can store and update metadata like visitor's country, platform, the number of views, etc alongside the URL entry in our database.
+
+### Security
+
+For security, we can introduce private URLs and authorization. A separate table can be used to store user ids that have permission to access a specific URL. If a user does not have proper permissions, we can return an HTTP 401 (Unauthorized) error.
+
+We can also use an [API Gateway](/courses/system-design/api-gateway) as they can support capabilities like authorization, rate limiting, and load balancing out of the box.
+
+## Identify and resolve bottlenecks
+
+![url-shortener-advanced-design](/static/courses/system-design/chapter-V/url-shortener/url-shortener-advanced-design.png)
+
+Let us identify and resolve bottlenecks such as single points of failure in our design:
+
+- "What if the API service or Key Generation Service crashes?"
+- "How will we distribute our traffic between our components?"
+- "How can we reduce the load on our database?"
+- "What if the key database used by KGS fails?"
+- "How to improve the availability of our cache?"
+
+To make our system more resilient we can do the following:
+
+- Running multiple instances of our Servers and Key Generation Service.
+- Introducing [load balancers](/courses/system-design/load-balancing) between clients, servers, databases, and cache servers.
+- Using multiple read replicas for our database as it's a read-heavy system.
+- Standby replica for our key database in case it fails.
+- Multiple instances and replicas for our distributed cache.

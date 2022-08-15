@@ -1,0 +1,42 @@
+---
+title: 'SSL, TLS, mTLS'
+date: '2022-10-21'
+draft: false
+summary: 'In this tutorial, we will discuss SSL, TLS, mTLS'
+images: ['/static/courses/system-design/chapter-IV/ssl-tls-mtls/banner.png']
+authors: ['default']
+---
+
+Let's briefly discuss some important communication security protocols such as SSL, TLS, and mTLS. I would say that from a _"big picture"_ system design perspective, this topic is not very important but still good to know about.
+
+## SSL
+
+SSL stands for Secure Sockets Layer, and it refers to a protocol for encrypting and securing communications that take place on the internet. It was first developed in 1995 but since has been deprecated in favor of TLS (Transport Layer Security).
+
+### Why is it called an SSL certificate if it is deprecated?
+
+Most major certificate providers still refer to certificates as SSL certificates, which is why the naming convention persists.
+
+### Why was SSL so important?
+
+Originally, data on the web was transmitted in plaintext that anyone could read if they intercepted the message. SSL was created to correct this problem and protect user privacy. By encrypting any data that goes between the user and a web server, SSL also stops certain kinds of cyber attacks by preventing attackers from tampering with data in transit.
+
+## TLS
+
+Transport Layer Security, or TLS, is a widely adopted security protocol designed to facilitate privacy and data security for communications over the internet. TLS evolved from a previous encryption protocol called Secure Sockets Layer (SSL). A primary use case of TLS is encrypting the communication between web applications and servers.
+
+There are three main components to what the TLS protocol accomplishes:
+
+- **Encryption**: hides the data being transferred from third parties.
+- **Authentication**: ensures that the parties exchanging information are who they claim to be.
+- **Integrity**: verifies that the data has not been forged or tampered with.
+
+## mTLS
+
+Mutual TLS, or mTLS, is a method for mutual authentication. mTLS ensures that the parties at each end of a network connection are who they claim to be by verifying that they both have the correct private key. The information within their respective TLS certificates provides additional verification.
+
+### Why use mTLS?
+
+mTLS helps ensure that the traffic is secure and trusted in both directions between a client and server. This provides an additional layer of security for users who log in to an organization's network or applications. It also verifies connections with client devices that do not follow a login process, such as Internet of Things (IoT) devices.
+
+Nowadays, mTLS is commonly used by microservices or distributed systems in a [zero trust security model](https://en.wikipedia.org/wiki/Zero_trust_security_model) to verify each other.

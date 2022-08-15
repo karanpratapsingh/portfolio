@@ -11,7 +11,7 @@ In this tutorial, we will learn about arrays and slices in Go.
 
 ## Arrays
 
-### What's an array?
+### What is an array?
 
 An array is a fixed-size collection of elements of the same type. The elements of the array are stored sequentially and can be accessed using their `index`.
 
@@ -265,7 +265,7 @@ func main() {
 	// Output: Array: [20 15 5 30 25], Length: 5, Capacity: 5
 	fmt.Printf("Array: %v, Length: %d, Capacity: %d\n", a, len(a), cap(a))
 
-	// Output: Slice [15 5], Length: 3, Capacity: 4
+	// Output: Slice [15 5 30], Length: 3, Capacity: 4
 	fmt.Printf("Slice: %v, Length: %d, Capacity: %d", s, len(s), cap(s))
 }
 ```
@@ -438,17 +438,17 @@ Let's try it in an example by appending elements to our slice.
 func main() {
 	s1 := []string{"a", "b", "c", "d"}
 
-	s2 := append(a1, "e", "f")
+	s2 := append(s1, "e", "f")
 
-	fmt.Println("a1:", a1)
-	fmt.Println("a2:", a2)
+	fmt.Println("s1:", s1)
+	fmt.Println("s2:", s2)
 }
 ```
 
 ```bash
 $ go run main.go
-a1: [a b c d]
-a2: [a b c d e f]
+s1: [a b c d]
+s2: [a b c d e f]
 ```
 
 As we can see, the new elements were appended and a new slice was returned.

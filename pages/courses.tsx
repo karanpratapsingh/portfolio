@@ -12,7 +12,10 @@ export default function Courses(): React.ReactElement {
         description={siteMetadata.description}
       />
       <div className='fade-in divide-y-2 divide-gray-100 dark:divide-gray-800'>
-        <Header title='Courses' />
+        <Header
+          title='Courses'
+          subtitle="Free and open-source courses I've built, I hope they provide a positive learning experience"
+        />
         <div className='container py-12'>
           <div className='-m-4 flex flex-wrap'>
             {config.courses.map(({ slug, title, description, banner }) => (

@@ -1,0 +1,45 @@
+---
+title: 'Database Federation'
+date: '2022-09-29'
+draft: false
+summary: 'In this tutorial, we will discuss Database Federation'
+images:
+  ['/static/courses/system-design/chapter-II/database-federation/banner.png']
+authors: ['default']
+---
+
+Federation (or functional partitioning) splits up databases by function. The federation architecture makes several distinct physical databases appear as one logical database to end-users.
+
+All of the components in a federation are tied together by one or more federal schemas that express the commonality of data throughout the federation. These federated schemas are used to specify the information that can be shared by the federation components and to provide a common basis for communication among them.
+
+![database-federation](/static/courses/system-design/chapter-II/database-federation/database-federation.png)
+
+Federation also provides a cohesive, unified view of data derived from multiple sources. The data sources for federated systems can include databases and various other forms of structured and unstructured data.
+
+## Characteristics
+
+Let's look at some key characteristics of a federated database:
+
+- **Transparency**: Federated database masks user differences and implementations of underlying data sources. Therefore, the users do not need to be aware of where the data is stored.
+- **Heterogeneity**: Data sources can differ in many ways. A federated database system can handle different hardware, network protocols, data models, etc.
+- **Extensibility**: New sources may be needed to meet the changing needs of the business. A good federated database system needs to make it easy to add new sources.
+- **Autonomy**: A Federated database does not change existing data sources, interfaces should remain the same.
+- **Data integration**: A federated database can integrate data from different protocols, database management systems, etc.
+
+## Advantages
+
+Here are some advantages of federated databases:
+
+- Flexible data sharing.
+- Autonomy among the database components.
+- Access heterogeneous data in a unified way.
+- No tight coupling of applications with legacy databases.
+
+## Disadvantages
+
+Below are some disadvantages of federated databases:
+
+- Adds more hardware and additional complexity.
+- Joining data from two databases is complex.
+- Dependence on autonomous data sources.
+- Query performance and scalability.

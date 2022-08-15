@@ -7,6 +7,7 @@ import { BlogSEO } from '@/components/SEO';
 import Share from '@/components/Share';
 import TOCInline from '@/components/TOCInline';
 import siteMetadata from '@/data/siteMetadata';
+import { courseSlugMap } from 'config/courses';
 import Image from 'next/image';
 import { ReactNode } from 'react';
 import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
@@ -39,13 +40,19 @@ export default function CourseLayout({
 }: Props) {
   const { slug, fileName, title, readingTime, images } = frontMatter;
 
+  const [courseSlug] = slug.split('/');
   const banner = images?.[0];
 
   const url = `${siteMetadata.siteUrl}/courses/${slug}`;
 
   return (
     <SectionContainer>
-      <BlogSEO url={url} authorDetails={authorDetails} {...frontMatter} />
+      <BlogSEO
+        url={url}
+        authorDetails={authorDetails}
+        {...frontMatter}
+        title={`${title} | ${courseSlugMap[courseSlug]}`}
+      />
       <ScrollTopAndComment />
       <article className='fade-in'>
         <div className='xl:divide-y xl:divide-gray-100 xl:dark:divide-gray-800'>
@@ -161,7 +168,7 @@ export default function CourseLayout({
               </div>
               <div className='pt-4 xl:pt-8'>
                 <Link
-                  href='/courses'
+                  href={`/courses/${courseSlug}`}
                   className='text-primary-500 hover:text-primary-600 dark:hover:text-primary-400'
                 >
                   &larr; Back to the course
