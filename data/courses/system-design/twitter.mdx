@@ -125,7 +125,7 @@ This table maps tweets with users for the favorite tweets functionality in our a
 
 **followers**
 
-This table maps followers and [followees](https://en.wiktionary.org/wiki/followee) as users can follow each other (N:M relationship).
+This table maps the followers and [followees](https://en.wiktionary.org/wiki/followee) as users can follow each other (N:M relationship).
 
 **feeds**
 
@@ -147,6 +147,8 @@ Let us do a basic API design for our services:
 
 ### Post a tweet
 
+This API will allow the user to post a tweet on the platform.
+
 ```tsx
 postTweet(userID: UUID, content: string, mediaURL?: string): boolean
 ```
@@ -164,6 +166,8 @@ Media URL (`string`): URL of the attached media _(optional)_.
 Result (`boolean`): Represents whether the operation was successful or not.
 
 ### Follow or unfollow a user
+
+This API will allow the user to follow or unfollow another user.
 
 ```tsx
 follow(followerID: UUID, followeeID: UUID): boolean
@@ -183,6 +187,8 @@ Media URL (`string`): URL of the attached media _(optional)_.
 Result (`boolean`): Represents whether the operation was successful or not.
 
 ### Get newsfeed
+
+This API will return all the tweets to be shown within a given newsfeed.
 
 ```tsx
 getNewsfeed(userID: UUID): Tweet[]

@@ -138,6 +138,8 @@ Let us do a basic API design for our services:
 
 ### Upload a video
 
+Given a byte stream, this API enables video to be uploaded to our service.
+
 ```tsx
 uploadVideo(title: string, description: string, data: Stream<byte>, tags?: string[]): boolean
 ```
@@ -157,6 +159,8 @@ Tags (`string[]`): Tags for the video _(optional)_.
 Result (`boolean`): Represents whether the operation was successful or not.
 
 ### Streaming a video
+
+This API allows our users to stream a video with the preferred codec and resolution.
 
 ```tsx
 streamVideo(videoID: UUID, codec: Enum<string>, resolution: Tuple<int>, offset?: int): VideoStream
@@ -178,6 +182,8 @@ Stream (`VideoStream`): Data stream of the requested video.
 
 ### Search for a video
 
+This API will enable our users to search for a video based on its title or tags.
+
 ```tsx
 searchVideo(query: string, nextPage?: string): Video[]
 ```
@@ -193,6 +199,8 @@ Next Page (`string`): Token for the next page, this can be used for pagination _
 Videos (`Video[]`): All the videos available for a particular search query.
 
 ### Add a comment
+
+This API will allow our users to post a comment on a video (like YouTube).
 
 ```tsx
 comment(videoID: UUID, comment: string): boolean

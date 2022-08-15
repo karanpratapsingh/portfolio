@@ -263,9 +263,9 @@ The client can periodically send an HTTP request to servers to check if there ar
 
 **Push model**
 
-The client opens a long-lived connection with the server and once new data is available it will be pushed to the client. We can use [WebSockets](/courses/system-design/long-polling-websockets-server-sent-events#websockets) or [Server-Sent Events](/courses/system-design/long-polling-websockets-server-sent-events#server-sent-events-sse) for this.
+The client opens a long-lived connection with the server and once new data is available it will be pushed to the client. We can use [WebSockets](/courses/system-design/long-polling-websockets-server-sent-events#websockets) or [Server-Sent Events (SSE)](/courses/system-design/long-polling-websockets-server-sent-events#server-sent-events-sse) for this.
 
-The pull model approach is not scalable as it will create unnecessary request overhead on our servers and most of the time the response will be empty, thus wasting our resources. To minimize latency, using the push model with [WebSockets](/courses/system-design/long-polling-websockets-server-sent-events#websockets) is a better choice because then we can push data to the client once it's available without any delay given the connection is open with the client. Also, WebSockets provide full-duplex communication, unlike [Server-Sent Events](/courses/system-design/long-polling-websockets-server-sent-events#server-sent-events-sse) which are only unidirectional.
+The pull model approach is not scalable as it will create unnecessary request overhead on our servers and most of the time the response will be empty, thus wasting our resources. To minimize latency, using the push model with [WebSockets](/courses/system-design/long-polling-websockets-server-sent-events#websockets) is a better choice because then we can push data to the client once it's available without any delay given the connection is open with the client. Also, WebSockets provide full-duplex communication, unlike [Server-Sent Events (SSE)](/courses/system-design/long-polling-websockets-server-sent-events#server-sent-events-sse) which are only unidirectional.
 
 _Note: Learn more about [Long polling, WebSockets, Server-Sent Events (SSE)](/courses/system-design/long-polling-websockets-server-sent-events)._
 
