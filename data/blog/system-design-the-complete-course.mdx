@@ -744,10 +744,7 @@ If a service consists of multiple components prone to failure, the service's ove
 Overall availability decreases when two components are in sequence.
 
 $$
-
 Availability \space (Total) = Availability \space (Foo) * Availability \space (Bar)
-
-
 $$
 
 For example, if both `Foo` and `Bar` each had 99.9% availability, their total availability in sequence would be 99.8%.
@@ -757,10 +754,7 @@ For example, if both `Foo` and `Bar` each had 99.9% availability, their total av
 Overall availability increases when two components are in parallel.
 
 $$
-
 Availability \space (Total) = 1 - (1 - Availability \space (Foo)) * (1 - Availability \space (Bar))
-
-
 $$
 
 For example, if both `Foo` and `Bar` each had 99.9% availability, their total availability in parallel would be 99.9999%.
@@ -1183,7 +1177,7 @@ As always we should always pick the technology that fits the requirements better
 - Transactions
 - Lookups by index are very fast
 
-**For NoSQL**:
+**For NoSQL**
 
 - Dynamic or flexible schema
 - Non-relational data
@@ -1472,7 +1466,7 @@ Given BASE's loose consistency, developers need to be more knowledgeable and rig
 
 On the other hand, planning around BASE limitations can sometimes be a major disadvantage when compared to the simplicity of ACID transactions. A fully ACID database is the perfect fit for use cases where data reliability and consistency are essential.
 
-# CAP theorem
+# CAP Theorem
 
 CAP theorem states that a distributed system can deliver only two of the three desired characteristics Consistency, Availability, and Partition tolerance (CAP).
 
@@ -4349,7 +4343,7 @@ Let's design a [Twitter](https://twitter.com) like social media service, similar
 
 ## What is Twitter?
 
-Twitter is a social media service where users can read or post short messages (up to 280 characters) called "tweets". It is available on the web and mobile platforms such as Android and iOS.
+Twitter is a social media service where users can read or post short messages (up to 280 characters) called tweets. It is available on the web and mobile platforms such as Android and iOS.
 
 ## Requirements
 

@@ -40,10 +40,7 @@ If a service consists of multiple components prone to failure, the service's ove
 Overall availability decreases when two components are in sequence.
 
 $$
-
 Availability \space (Total) = Availability \space (Foo) * Availability \space (Bar)
-
-
 $$
 
 For example, if both `Foo` and `Bar` each had 99.9% availability, their total availability in sequence would be 99.8%.
@@ -53,10 +50,7 @@ For example, if both `Foo` and `Bar` each had 99.9% availability, their total av
 Overall availability increases when two components are in parallel.
 
 $$
-
 Availability \space (Total) = 1 - (1 - Availability \space (Foo)) * (1 - Availability \space (Bar))
-
-
 $$
 
 For example, if both `Foo` and `Bar` each had 99.9% availability, their total availability in parallel would be 99.9999%.
