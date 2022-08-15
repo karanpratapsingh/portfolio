@@ -42,7 +42,7 @@ function getBody(course_slug, slug) {
     
     ---
     
-    _This article is part of my open source [System Design Course](https://www.karanpratapsingh.com/courses/go) available on Github._
+    _This article is part of my open source [System Design Course](https://www.karanpratapsingh.com/courses/system-design) available on Github._
 
 {% github karanpratapsingh/system-design %}`;
 
@@ -79,11 +79,11 @@ function createDraft(apiKey, body) {
   const API_KEY = getEnv('DEVTO_API_KEY');
 
   for (const [, { name, section, slug }] of articles.entries()) {
-    const title = `Go Course: ${name}`;
+    const title = `System Design: ${name}`;
     const main_image = getBanner(section, course_slug, slug);
-    const tags = ['go', 'tutorial', 'beginners'];
+    const tags = ['distributedsystems', 'tutorial', 'beginners'];
     const canonical_url = `https://karanpratapsingh.com/courses/${course_slug}/${slug}`;
-    const series = 'Go Course';
+    const series = 'System Design';
     const body_markdown = getBody(course_slug, slug);
 
     const body = {
