@@ -1,6 +1,6 @@
 {
   "name": "portfolio",
-  "version": "1.5.1",
+  "version": "5.0.0",
   "private": true,
   "scripts": {
     "start": "cross-env SOCKET=true node ./scripts/next-remote-watch.js ./data",
@@ -60,6 +60,7 @@
     "@types/tailwindcss": "^2.2.0",
     "@typescript-eslint/eslint-plugin": "^4.28.1",
     "@typescript-eslint/parser": "^4.28.1",
+    "axios": "0.27.2",
     "cross-env": "^7.0.3",
     "dedent": "^0.7.0",
     "eslint": "^7.29.0",
