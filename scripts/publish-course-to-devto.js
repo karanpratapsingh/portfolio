@@ -1,11 +1,11 @@
 /**
  * Publish course to Dev.to
  *
- * This script publishes articles to dev.to
+ * This script publishes course to dev.to
  */
 
 const usage = `Usage:
- node scripts/publish-to-devto.js <course-slug>
+ node scripts/publish-course-to-devto.js <course-slug>
 `;
 
 const fetch = require('node-fetch');
@@ -57,7 +57,7 @@ function getBody(course_slug, slug) {
 
 ---
 
-_This article is part of my open source [System Design Course](https://github.com/karanpratapsingh/system-design) available on Github._
+_This article is part of my open-source [System Design Course](https://github.com/karanpratapsingh/system-design) available on Github._
 
 {% github karanpratapsingh/system-design %}`;
 
