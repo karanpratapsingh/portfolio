@@ -17,9 +17,9 @@ For additional scalability and redundancy, we can try to load balance at each la
 
 ## But why?
 
-Modern high-traffic websites must serve hundreds of thousands, if not millions, of concurrent requests from users or clients. To cost effectively scale to meet these high volumes, modern computing best practice generally requires adding more servers.
+Modern high-traffic websites must serve hundreds of thousands, if not millions, of concurrent requests from users or clients. To cost-effectively scale to meet these high volumes, modern computing best practice generally requires adding more servers.
 
-A load balancer can sit in front of the servers and route client requests across all servers capable of fulfilling those requests in a manner that maximizes speed and capacity utilization and ensures that no one server is overworked, which could degrade performance. If a single server goes down, the load balancer redirects traffic to the remaining online servers. When a new server is added to the server group, the load balancer automatically starts to send requests to it.
+A load balancer can sit in front of the servers and route client requests across all servers capable of fulfilling those requests in a manner that maximizes speed and capacity utilization. This ensures that no single server is overworked, which could degrade performance. If a single server goes down, the load balancer redirects traffic to the remaining online servers. When a new server is added to the server group, the load balancer automatically starts sending requests to it.
 
 ## Workload distribution
 
@@ -61,7 +61,7 @@ Hardware load balancers include proprietary firmware that requires maintenance a
 
 DNS load balancing is the practice of configuring a domain in the Domain Name System (DNS) such that client requests to the domain are distributed across a group of server machines.
 
-Unfortunately, DNS load balancing has inherent problems limiting its reliability and efficiency. Most significantly, DNS does not check for server, network outages, or errors, and so always returns the same set of IP addresses for a domain even if servers are down or inaccessible
+Unfortunately, DNS load balancing has inherent problems limiting its reliability and efficiency. Most significantly, DNS does not check for server and network outages, or errors. It always returns the same set of IP addresses for a domain even if servers are down or inaccessible.
 
 ## Routing Algorithms
 
