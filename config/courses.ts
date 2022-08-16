@@ -267,7 +267,7 @@ export const courses: Course[] = [
             slug: 'url-shortener',
           },
           {
-            name: 'Whatsapp',
+            name: 'WhatsApp',
             slug: 'whatsapp',
           },
           {
