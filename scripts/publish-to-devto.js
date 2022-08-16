@@ -4,6 +4,10 @@
  * This script publishes articles to dev.to
  */
 
+const usage = `Usage:
+ node scripts/publish-to-devto.js <course-slug>
+`;
+
 const fetch = require('node-fetch');
 const matter = require('gray-matter');
 const fs = require('fs');
@@ -12,7 +16,18 @@ const fs = require('fs');
  * @type {Array<{ name: string, slug: string, section: string}>}
  */
 const articles = [];
-const course_slug = 'system-design';
+
+function verifyArgs() {
+  const [slug] = process.argv.slice(2);
+
+  if (!slug) {
+    console.log('[error]: course slug is required as first argument.');
+    console.log(usage);
+    process.exit(1);
+  }
+
+  return slug;
+}
 
 function getBanner(section, course_slug, slug) {
   return `https://raw.githubusercontent.com/karanpratapsingh/portfolio/master/public/static/courses/${course_slug}/${section}/${slug}/banner.png`;
@@ -33,16 +48,16 @@ function getBody(course_slug, slug) {
 
   // Replace static links
   body = body.replace(
-    new RegExp(`]\\(/courses/${course_slug}`),
+    new RegExp(`]\\(/courses/${course_slug}`, 'g'),
     `](https://karanpratapsingh.com/courses/${course_slug}`,
   );
 
   // Add footer
   body = `${body}
-    
-    ---
-    
-    _This article is part of my open source [System Design Course](https://www.karanpratapsingh.com/courses/system-design) available on Github._
+
+---
+
+_This article is part of my open source [System Design Course](https://github.com/karanpratapsingh/system-design) available on Github._
 
 {% github karanpratapsingh/system-design %}`;
 
@@ -77,6 +92,7 @@ function createDraft(apiKey, body) {
 
 (async function main() {
   const API_KEY = getEnv('DEVTO_API_KEY');
+  const course_slug = verifyArgs();
 
   for (const [, { name, section, slug }] of articles.entries()) {
     const title = `System Design: ${name}`;

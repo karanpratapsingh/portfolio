@@ -5,7 +5,7 @@
  */
 
 const usage = `Usage:
- node scripts/combineCourse.js <slug>
+ node scripts/combine-course.js <course-slug>
 `;
 
 const matter = require('gray-matter');
@@ -17,9 +17,11 @@ const readingTime = require('reading-time');
   const slug = verifyArgs();
   const topics = await getCourseTopics(slug);
 
-  printTOC(slug, topics);
+  const toc = printTOC(slug, topics);
+  console.log(toc);
 
-  combine(slug, topics);
+  combineBlog(slug, topics);
+  combineGithub(slug, topics, toc);
 })();
 
 function verifyArgs() {
@@ -66,9 +68,11 @@ function printTOC(slug, topics) {
   let readingTime = 0;
   let words = 0;
 
-  console.log('Table of contents:\n');
+  const toc = [];
+
+  toc.push('# Table of contents\n');
   for (const topic of topics) {
-    console.log(`- [${topic.title}](#${createSlug(topic.title)})`);
+    toc.push(`  - [${topic.title}](#${createSlug(topic.title)})`);
     readingTime += topic.metadata.minutes;
     words += topic.metadata.words;
   }
@@ -78,18 +82,35 @@ function printTOC(slug, topics) {
       2,
     )} minutes | Words: ${words}`,
   );
+
+  return toc.join('\n');
 }
 
-function combine(slug, topics) {
+function transformBody(course_slug, body) {
+  body = body.replace(
+    /\]\(\/static\/courses/g,
+    '](https://raw.githubusercontent.com/karanpratapsingh/portfolio/master/public/static/courses',
+  );
+
+  // Replace static links
+  body = body.replace(
+    new RegExp(`]\\(/courses/${course_slug}`, 'g'),
+    `](https://karanpratapsingh.com/courses/${course_slug}`,
+  );
+
+  return body;
+}
+
+function combineBlog(course_slug, topics) {
   const time = new Date();
   const data = [
     `---
-title: '${slug} course'
+title: '${course_slug} course'
 date: '${time.getFullYear()}-${time.getUTCMonth()}-${time.getDate()}'
-tags: ['${slug}']
+tags: ['${course_slug}']
 draft: false
 summary: 'todo'
-images: ['/static/courses/${slug}/banner.png']
+images: ['/static/courses/${course_slug}/banner.png']
 authors: ['default']
 ---\n`,
   ];
@@ -99,6 +120,21 @@ authors: ['default']
     data.push(`${topic.content}`);
   }
 
-  fs.writeFileSync(`data/blog/${Date.now()}.mdx`, data.join('\n'));
+  fs.writeFileSync(
+    `data/blog/blog-${course_slug}.generated.mdx`,
+    data.join('\n'),
+  );
   console.log(`[success]: combined ${topics.length} topics.`);
+}
+
+function combineGithub(course_slug, topics, toc) {
+  const data = [`${toc}\n`];
+
+  for (const topic of topics) {
+    data.push(`# ${topic.title}`);
+    data.push(`${topic.content}`);
+  }
+
+  const combined = transformBody(course_slug, data.join('\n'));
+  fs.writeFileSync(`data/github-${course_slug}.generated.mdx`, combined);
 }
