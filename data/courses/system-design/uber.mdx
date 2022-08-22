@@ -85,7 +85,7 @@ $$
 
 ### Bandwidth
 
-As our system is handling 400 GB of ingress every day, we will a require minimum bandwidth of around 4 MB per second.
+As our system is handling 400 GB of ingress every day, we will require a minimum bandwidth of around 4 MB per second.
 
 $$
 \frac{400 \space GB}{(24 \space hrs \times 3600 \space seconds)} = \sim 5 \space MB/second
@@ -361,7 +361,7 @@ We can save further computation by only subdividing a node after a certain thres
 
 **What about race conditions?**
 
-Race conditions can easily occur when a large number of customers will be requesting rides simultaneously. To avoid this can wrap our ride matching logic in a [Mutex](<https://en.wikipedia.org/wiki/Lock_(computer_science)>) to avoid any race conditions. Furthermore, every action should be transactional in nature.
+Race conditions can easily occur when a large number of customers will be requesting rides simultaneously. To avoid this, we can wrap our ride matching logic in a [Mutex](<https://en.wikipedia.org/wiki/Lock_(computer_science)>) to avoid any race conditions. Furthermore, every action should be transactional in nature.
 
 _For more details, refer to [Transactions](/courses/system-design/transactions) and [Distributed Transactions](/courses/system-design/distributed-transactions)._
 
