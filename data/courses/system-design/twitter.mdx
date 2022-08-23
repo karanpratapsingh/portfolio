@@ -285,13 +285,13 @@ However, the downside of this approach is that it would increase the number of w
 
 A third approach is a hybrid model between the pull and push model. It combines the beneficial features of the above two models and tries to provide a balanced approach between the two.
 
-The hybrid model allows only users with a lesser number of followers to use the push model and for users with a higher number of followers celebrities, the pull model will be used.
+The hybrid model allows only users with a lesser number of followers to use the push model. For users with a higher number of followers such as celebrities, the pull model is used.
 
 ### Ranking Algorithm
 
 As we discussed, we will need a ranking algorithm to rank each tweet according to its relevance to each specific user.
 
-For example, Facebook used to utilize an [EdgeRank](https://en.wikipedia.org/wiki/EdgeRank) algorithm, here, the rank of each feed item is described by:
+For example, Facebook used to utilize an [EdgeRank](https://en.wikipedia.org/wiki/EdgeRank) algorithm. Here, the rank of each feed item is described by:
 
 $$
 Rank = Affinity \times Weight \times Decay
@@ -309,7 +309,7 @@ Nowadays, algorithms are much more complex and ranking is done using machine lea
 
 ### Retweets
 
-Retweets are one of our extended requirements. To implement this feature we can simply create a new tweet with the user id of the user retweeting the original tweet and then modify the `type` enum and `content` property of the new tweet to link it with the original tweet.
+Retweets are one of our extended requirements. To implement this feature, we can simply create a new tweet with the user id of the user retweeting the original tweet and then modify the `type` enum and `content` property of the new tweet to link it with the original tweet.
 
 For example, the `type` enum property can be of type tweet, similar to text, video, etc and `content` can be the id of the original tweet. Here the first row indicates the original tweet while the second row is how we can represent a retweet.
 
@@ -318,7 +318,7 @@ For example, the `type` enum property can be of type tweet, similar to text, vid
 | ad34-291a-45f6-b36c | 7a2c-62c4-4dc8-b1bb | text  | Hey, this is my first tweet… | 1658905644054 |
 | f064-49ad-9aa2-84a6 | 6aa2-2bc9-4331-879f | tweet | ad34-291a-45f6-b36c          | 1658906165427 |
 
-This is a very basic implementation, to improve this we can create a separate table itself to store retweets.
+This is a very basic implementation. To improve this we can create a separate table itself to store retweets.
 
 ### Search
 
@@ -334,7 +334,7 @@ Trending functionality will be based on top of the search functionality. We can 
 
 Push notifications are an integral part of any social media platform. We can use a message queue or a message broker such as [Apache Kafka](https://kafka.apache.org) with the notification service to dispatch requests to [Firebase Cloud Messaging (FCM)](https://firebase.google.com/docs/cloud-messaging) or [Apple Push Notification Service (APNS)](https://developer.apple.com/documentation/usernotifications) which will handle the delivery of the push notifications to user devices.
 
-_For more details, refer to the [WhatsApp](/courses/system-design/whatsapp#notifications) system design where we discuss push notifications._
+_For more details, refer to the [WhatsApp](/courses/system-design/whatsapp#notifications) system design where we discuss push notifications in detail._
 
 ## Detailed design
 

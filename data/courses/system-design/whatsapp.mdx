@@ -7,11 +7,11 @@ images: ['/static/courses/system-design/chapter-V/whatsapp/banner.png']
 authors: ['default']
 ---
 
-Let's design a [WhatsApp](https://whatsapp.com) like instant messaging service, similar to services like [WhatsApp](https://www.whatsapp.com), [Facebook Messenger](https://www.messenger.com), and [WeChat](https://www.wechat.com).
+Let's design a [WhatsApp](https://whatsapp.com) like instant messaging service, similar to services like [Facebook Messenger](https://www.messenger.com), and [WeChat](https://www.wechat.com).
 
 ## What is WhatsApp?
 
-WhatsApp is a chat application that provides instant messaging services to its users. It is one of the most used mobile applications on the planet connecting over 2 billion users in 180+ countries. WhatsApp is also available on the web.
+WhatsApp is a chat application that provides instant messaging services to its users. It is one of the most used mobile applications on the planet, connecting over 2 billion users in 180+ countries. WhatsApp is also available on the web.
 
 ## Requirements
 
@@ -128,7 +128,7 @@ This table maps users and chats as multiple users can have multiple chats (N:M r
 
 **groups**
 
-This table represents a group between multiple users.
+This table represents a group made up of multiple users.
 
 **users_groups**
 
@@ -239,7 +239,7 @@ This service will simply send push notifications to the users. It will be discus
 
 **Presence Service**
 
-The presence service will keep track of the last seen status of all users. It will be discussed in detail separately.
+The presence service will keep track of the _last seen_ status of all users. It will be discussed in detail separately.
 
 **Media service**
 
@@ -265,7 +265,7 @@ The client can periodically send an HTTP request to servers to check if there ar
 
 The client opens a long-lived connection with the server and once new data is available it will be pushed to the client. We can use [WebSockets](/courses/system-design/long-polling-websockets-server-sent-events#websockets) or [Server-Sent Events (SSE)](/courses/system-design/long-polling-websockets-server-sent-events#server-sent-events-sse) for this.
 
-The pull model approach is not scalable as it will create unnecessary request overhead on our servers and most of the time the response will be empty, thus wasting our resources. To minimize latency, using the push model with [WebSockets](/courses/system-design/long-polling-websockets-server-sent-events#websockets) is a better choice because then we can push data to the client once it's available without any delay given the connection is open with the client. Also, WebSockets provide full-duplex communication, unlike [Server-Sent Events (SSE)](/courses/system-design/long-polling-websockets-server-sent-events#server-sent-events-sse) which are only unidirectional.
+The pull model approach is not scalable as it will create unnecessary request overhead on our servers and most of the time the response will be empty, thus wasting our resources. To minimize latency, using the push model with [WebSockets](/courses/system-design/long-polling-websockets-server-sent-events#websockets) is a better choice because then we can push data to the client once it's available without any delay, given the connection is open with the client. Also, WebSockets provide full-duplex communication, unlike [Server-Sent Events (SSE)](/courses/system-design/long-polling-websockets-server-sent-events#server-sent-events-sse) which are only unidirectional.
 
 _Note: Learn more about [Long polling, WebSockets, Server-Sent Events (SSE)](/courses/system-design/long-polling-websockets-server-sent-events)._
 
@@ -299,7 +299,7 @@ While this seems like a classic [publish-subscribe](/courses/system-design/publi
 
 ### Read receipts
 
-Handling read receipts can be tricky, for this use case we can wait for some sort of [Acknowledgment (ACK)](<https://en.wikipedia.org/wiki/Acknowledgement_(data_networks)>) from the client to determine if the message was delivered and update the corresponding `deliveredAt` field. Similarly, we will mark message the message seen once the user opens the chat and update the corresponding `seenAt` timestamp field.
+Handling read receipts can be tricky, for this use case we can wait for some sort of [Acknowledgment (ACK)](<https://en.wikipedia.org/wiki/Acknowledgement_(data_networks)>) from the client to determine if the message was delivered and update the corresponding `deliveredAt` field. Similarly, we will mark the message as seen once the user opens the chat and update the corresponding `seenAt` timestamp field.
 
 ### Design
 

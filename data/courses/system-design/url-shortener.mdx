@@ -83,7 +83,7 @@ $$
 
 ### Bandwidth
 
-Since we expect about 40 URLs every second, and if we assume each request is of size 500 bytes then the total incoming data for then write requests would be:
+Since we expect about 40 URLs every second, and if we assume each request is of size 500 bytes then the total incoming data for write requests would be:
 
 $$
 40 \times 500 \space bytes = 20 \space KB/second
@@ -113,7 +113,7 @@ $$
 
 For caching, we will follow the classic [Pareto principle](https://en.wikipedia.org/wiki/Pareto_principle) also known as the 80/20 rule. This means that 80% of the requests are for 20% of the data, so we can cache around 20% of our requests.
 
-Since we get around 4K read or redirection requests each second. This translates into 350M requests per day.
+Since we get around 4K read or redirection requests each second, this translates into 350M requests per day.
 
 $$
 4000 \space URLs/second \times 24 \space hours \times 3600 \space seconds = \sim 350 \space million \space requests/day
