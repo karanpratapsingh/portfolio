@@ -48,7 +48,7 @@ Shorthand declaration, here we omit `var` keyword and type is always implicit. T
 foo := "Shorthand!"
 ```
 
-_Note: Shorthand only works inside `function` bodies_
+_Note: Shorthand only works inside `function` bodies._
 
 ## Constants
 
@@ -98,10 +98,10 @@ var isItTrue bool = true
 
 We can use the following operators on boolean types
 
-|          |     |     |
-| -------- | --- | --- |
-| Logical  | &&  | !   |
-| Equality | ==  | !=  |
+| Type     | Syntax    |
+| -------- | --------- |
+| Logical  | `&&` `!`  |
+| Equality | `==` `!=` |
 
 ### Numeric types
 
@@ -111,7 +111,7 @@ Now, let's talk about numeric types, starting with
 
 Go has several built-in integer types of varying sizes for storing signed and unsigned integers
 
-The size of generic `int` and `uint` type is platform dependent. This means it is 32-bits wide on a 32-bit system and 64-bits wide on a 64-bit system.
+The size of the generic `int` and `uint` type is platform-dependent. This means it is 32-bits wide on a 32-bit system and 64-bits wide on a 64-bit system.
 
 ```go
 var i int = 404                     // Platform dependent
@@ -175,7 +175,13 @@ var f64 float64 = 3.1415 // IEEE-754 64-bit
 
 Go provides several operators for performing operations on numeric types.
 
-![numeric-operators](/static/courses/go/chapter-I/variables-and-data-types/numeric-operators.png)
+| Type                | Syntax                                                   |
+| ------------------- | -------------------------------------------------------- |
+| Arithmetic          | `+` `-` `*` `/` `%`                                      |
+| Comparison          | `==` `!=` `<` `>` `<=` `>=`                              |
+| Bitwise             | `&` `^` `<<` `>>`                                        |
+| Increment/Decrement | `++` `--`                                                |
+| Assignment          | `=` `+=` `-=` `*=` `/=` `%=` `<<=` `>>=` `&=` `\|=` `^=` |
 
 **Complex**
 
