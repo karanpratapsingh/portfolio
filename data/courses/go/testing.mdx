@@ -43,7 +43,7 @@ $ go run main.go
 4
 ```
 
-Now, we want to test our `Add` function. So, in Go, we declare tests files with `_test` suffix in the file name. So for our `add.go`, we will create a test as `add_test.go`. Our project structure should look like this.
+Now, we want to test our `Add` function. So, in Go, we declare test files with `_test` suffix in the file name. So for our `add.go`, we will create a test as `add_test.go`. Our project structure should look like this.
 
 ```bash
 .
@@ -111,7 +111,7 @@ $ go test math
 ok      example/math    0.412s
 ```
 
-Let's also see what happens if we fail the test, so for that, we can change our expected result.
+Let's also see what happens if we fail the test, for that, we can simply change our expected result.
 
 ```go
 package math_test
@@ -269,7 +269,7 @@ PASS
 ok      foo 12.692s
 ```
 
-But if we update our `Add` function with a random edge case such where the program will panic if `b + 10` is greater than `a`.
+But if we update our `Add` function with a random edge case such that the program will panic if `b + 10` is greater than `a`.
 
 ```go
 func Add(a, b int) int {

@@ -31,7 +31,7 @@ Before we write any code, it is important to briefly discuss the fork-join model
 
 ## Fork-Join Model
 
-Go uses the idea of the fork-join model of concurrency behind goroutines. The fork-join model essentially implies that a child process splits from its parent process to run concurrently with the parent process. After completing its execution, the child process merges back into the parent process. The point where it joins back is called the **_join point_**.
+Go uses the idea of the fork-join model of concurrency behind goroutines. The fork-join model essentially implies that a child process splits from its parent process to run concurrently with the parent process. After completing its execution, the child process merges back into the parent process. The point where it joins back is called the **join point**.
 
 ![fork-join](/static/courses/go/chapter-IV/goroutines/fork-join.png)
 
