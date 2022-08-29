@@ -7,7 +7,7 @@ images: ['/static/courses/go/chapter-IV/context/banner.png']
 authors: ['default']
 ---
 
-In concurrent programs, it's often necessary to preempt operations because of timeouts, cancellation, or failure of another portion of the system.
+In concurrent programs, it's often necessary to preempt operations because of timeouts, cancellations, or failure of another portion of the system.
 
 The `context` package makes it easy to pass request-scoped values, cancellation signals, and deadlines across API boundaries to all the goroutines involved in handling a request.
 
@@ -33,7 +33,7 @@ The `Context` type has the following methods:
 - `Done() <- chan struct{}` returns a channel that is closed when the context is canceled or times out. Done may return `nil` if the context can never be canceled.
 - `Deadline() (deadline time.Time, ok bool)` returns the time when the context will be canceled or timed out. Deadline returns `ok` as `false` when no deadline is set.
 - `Err() error` returns an error that explains why the Done channel was closed. If Done is not closed yet, it returns `nil`.
-- `Value(key any) any` returns the value associated with key or `nil` if none.
+- `Value(key any) any` returns the value associated with the key or `nil` if none.
 
 ### CancelFunc
 
@@ -69,7 +69,7 @@ func TODO() Context
 
 ### WithValue
 
-This function takes in a context and returns a derived context where value `val` is associated with `key` and flows through the context tree with the context.
+This function takes in a context and returns a derived context where the value `val` is associated with `key` and flows through the context tree with the context.
 
 This means that once you get a context with value, any context that derives from this gets this value.
 
@@ -117,7 +117,7 @@ Processing ID: abc-xyz
 
 This function creates a new context from the parent context and derived context and the cancel function. The parent can be a `context.Background` or a context that was passed into the function.
 
-Canceling this context releases resources associated with it, so the code should call cancel as soon as the operations running in this Context complete.
+Canceling this context releases resources associated with it, so the code should call cancel as soon as the operations running in this context is completed.
 
 _Passing around the `cancel` function is not recommended as it may lead to unexpected behavior._
 
@@ -137,7 +137,7 @@ func WithDeadline(parent Context, d time.Time) (Context, CancelFunc)
 
 ### WithTimeout
 
-This function is basically just a wrapper around the `WithDeadline` function with the added timeout.
+This function is just a wrapper around the `WithDeadline` function with the added timeout.
 
 ```go
 func WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc) {
@@ -223,4 +223,4 @@ Handler complete
 
 I'm sure you can already see how this can be immensely useful.
 
-For example, we can use this to cancel any resource intensive work if it's no longer needed or has exceeded the deadline or a timeout.
+For example, we can use this to cancel any resource-intensive work if it's no longer needed or has exceeded the deadline or a timeout.

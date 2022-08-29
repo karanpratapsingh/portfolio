@@ -46,7 +46,7 @@ Now, let's talk about some important build time variables, starting with:
 
 - `GOOS` and `GOARCH`
 
-these environment variables help use build go programs for different [operating systems](https://en.wikipedia.org/wiki/Operating_system)
+These environment variables help us build go programs for different [operating systems](https://en.wikipedia.org/wiki/Operating_system)
 and underlying processor [architectures](https://en.wikipedia.org/wiki/Microarchitecture).
 
 We can list all the supported architecture using `go tool` command.
@@ -63,7 +63,7 @@ windows/arm64
 .
 ```
 
-Here's an example for building a window's executable from macOS!
+Here's an example for building a windows executable from macOS!
 
 ```bash
 $ GOOS=windows GOARCH=amd64 go build -o app.exe

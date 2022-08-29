@@ -17,7 +17,7 @@ A WaitGroup waits for a collection of goroutines to finish. The main goroutine c
 
 We can use the `sync.WaitGroup` using the following methods:
 
-- `Add(delta int)` takes in an integer value which is essentially the number of goroutines that the waitgroup has to wait for. This must be called before we execute a goroutine.
+- `Add(delta int)` takes in an integer value which is essentially the number of goroutines that the `WaitGroup` has to wait for. This must be called before we execute a goroutine.
 - `Done()` is called within the goroutine to signal that the goroutine has successfully executed.
 - `Wait()` blocks the program until all the goroutines specified by `Add()` have invoked `Done()` from within.
 
@@ -57,7 +57,7 @@ $ go run main.go
 working...
 ```
 
-We can also pass the waitgroup to the function directly.
+We can also pass the `WaitGroup` to the function directly.
 
 ```go
 func work(wg *sync.WaitGroup) {
@@ -76,9 +76,9 @@ func main() {
 }
 ```
 
-But is important to know that a waitgroup must **not be copied** after first use. And if it's explicitly passed into functions, it should be done by a _pointer._ This is because it can affect our counter which will disrupt the logic of our program.
+But is important to know that a `WaitGroup` must **not be copied** after first use. And if it's explicitly passed into functions, it should be done by a _pointer._ This is because it can affect our counter which will disrupt the logic of our program.
 
-Let's also increase the number of goroutines and update our waitgroup `Add` method to wait for 4 goroutines.
+Let's also increase the number of goroutines by calling the `Add` method to wait for 4 goroutines.
 
 ```go
 func main() {

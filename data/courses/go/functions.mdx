@@ -39,7 +39,7 @@ func myFunction(p1 string) {
 $ go run main.go
 ```
 
-As we can see it prints our message. We can also do a short hand declaration if the consecutive parameters have the same type. For example:
+As we can see it prints our message. We can also do a shorthand declaration if the consecutive parameters have the same type. For example:
 
 ```go
 func myNextFunction(p1, p2 string) {}
@@ -147,7 +147,7 @@ fmt.Println(add(10))
 ...
 ```
 
-As we can see, we get a result of 15 as `sum` variable is _bound_ to the function. This is a very powerful concept and definitely a must know.
+As we can see, we get a result of 15 as `sum` variable is _bound_ to the function. This is a very powerful concept and definitely, a must know.
 
 ## Variadic Functions
 
@@ -178,7 +178,7 @@ _**Fun fact**: `fmt.Println` is a variadic function, that's how we were able to 
 
 ## Init
 
-In Go, `init` is a special lifecycle function which is executed prior to the `main` function.
+In Go, `init` is a special lifecycle function that is executed before the `main` function.
 
 Similar to `main`, the `init` function does not take any arguments nor returns any value. Let's see how it works with an example.
 
@@ -204,9 +204,9 @@ Before main!
 Running main
 ```
 
-Unlike `main`, there can be more than one `init` function in a single or multiple files.
+Unlike `main`, there can be more than one `init` function in single or multiple files.
 
-For multiple `init` in a single file, their processing is done in the order of their declaration, while `init` declared in multiple files are processed according to the lexicographic filename order.
+For multiple `init` in a single file, their processing is done in the order of their declaration, while `init` functions declared in multiple files are processed according to the lexicographic filename order.
 
 ```go
 package main
@@ -226,7 +226,7 @@ func main() {
 }
 ```
 
-And if we run this, we'll see the `init` functions were executed in order they were declared.
+And if we run this, we'll see the `init` functions were executed in the order they were declared.
 
 ```bash
 $ go run main.go
@@ -253,7 +253,7 @@ Can we use multiple defer functions? Absolutely, this brings us to what is known
 ```go
 func main() {
 	defer fmt.Println("I am finished")
-	defer fmt.Prinlnt("Are you?")
+	defer fmt.Println("Are you?")
 
 	fmt.Println("Doing some work...")
 }

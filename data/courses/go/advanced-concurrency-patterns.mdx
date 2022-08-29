@@ -8,7 +8,7 @@ images:
 authors: ['default']
 ---
 
-In this tutorial, we will discuss some advanced concurrency patterns in Go. Often times these patterns are used in combination in the real world.
+In this tutorial, we will discuss some advanced concurrency patterns in Go. Often, these patterns are used in combination in the real world.
 
 ## Generator
 
@@ -430,7 +430,7 @@ Queuing pattern allows us to process `n` number of items at a time.
 
 In our example, we use a buffered channel to simulate a queue behavior. We simply send an [empty struct](/courses/go/structs#properties) to our `queue` channel and wait for it to be released by the previous process so that we can continue.
 
-This is because _sends_ to a buffered channel block only when the buffer is full and receives block when the buffer is empty.
+This is because _sends_ to a buffered channel block only when the buffer is full and _receives_ block when the buffer is empty.
 
 Here, we have total work of 10 items and we have a limit of 2. This means we can process 2 items at a time.
 
@@ -500,7 +500,7 @@ Work complete
 
 ## Additional patterns
 
-There are some additional patterns that might be useful to know:
+Some additional patterns that might be useful to know:
 
 - Tee channel
 - Bridge channel
