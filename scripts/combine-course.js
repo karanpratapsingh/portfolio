@@ -17,11 +17,11 @@ const readingTime = require('reading-time');
   const slug = verifyArgs();
   const topics = await getCourseTopics(slug);
 
-  const toc = printTOC(slug, topics);
-  console.log(toc);
-
   combineBlog(slug, topics);
-  combineGithub(slug, topics, toc);
+  combineGithub(slug, topics);
+
+  console.log(printTOC(slug, topics));
+  console.log(`\n[success]: combined ${topics.length} topics.`);
 })();
 
 function verifyArgs() {
@@ -54,6 +54,9 @@ async function getCourseTopics(slug) {
 
   topics.sort((a, b) => new Date(a.date) - new Date(b.date));
 
+  // Remove the welcome article
+  topics.shift();
+
   return topics;
 }
 
@@ -70,7 +73,7 @@ function printTOC(slug, topics) {
 
   const toc = [];
 
-  toc.push('# Table of contents\n');
+  toc.push('# Table of contents');
   for (const topic of topics) {
     toc.push(`  - [${topic.title}](#${createSlug(topic.title)})`);
     readingTime += topic.metadata.minutes;
@@ -124,11 +127,10 @@ authors: ['default']
     `data/blog/blog-${course_slug}.generated.mdx`,
     data.join('\n'),
   );
-  console.log(`[success]: combined ${topics.length} topics.`);
 }
 
-function combineGithub(course_slug, topics, toc) {
-  const data = [`${toc}\n`];
+function combineGithub(course_slug, topics) {
+  const data = [];
 
   for (const topic of topics) {
     data.push(`# ${topic.title}`);
