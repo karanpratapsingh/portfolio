@@ -24,7 +24,7 @@ Messages are stored in the queue until they are processed and deleted. Each mess
 
 Let's discuss some advantages of using a message queue:
 
-- **Scalability**: Message queues make it possible to scale precisely where we need to. When workloads peak, multiple instances of our application can all add requests to the queue without the risk of collision
+- **Scalability**: Message queues make it possible to scale precisely where we need to. When workloads peak, multiple instances of our application can add all requests to the queue without the risk of collision.
 - **Decoupling**: Message queues remove dependencies between components and significantly simplify the implementation of decoupled applications.
 - **Performance**: Message queues enable asynchronous communication, which means that the endpoints that are producing and consuming messages interact with the queue, not each other. Producers can add requests to the queue without waiting for them to be processed.
 - **Reliability**: Queues make our data persistent, and reduce the errors that happen when different parts of our system go offline.

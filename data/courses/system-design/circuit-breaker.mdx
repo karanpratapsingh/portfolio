@@ -15,7 +15,7 @@ The basic idea behind the circuit breaker is very simple. We wrap a protected fu
 
 ## Why do we need circuit breaking?
 
-It's common for software systems to make remote calls to software running in different processes, probably on different machines across a network. One of the big differences between in-memory calls and remote calls is that remote calls can fail, or hang without a response until some timeout limit is reached. What's worse if we have many callers on an unresponsive supplier, then we can run out of critical resources leading to cascading failures across multiple systems.
+It's common for software systems to make remote calls to software running in different processes, probably on different machines across a network. One of the big differences between in-memory calls and remote calls is that remote calls can fail, or hang without a response until some timeout limit is reached. What's worse is if we have many callers on an unresponsive supplier, then we can run out of critical resources leading to cascading failures across multiple systems.
 
 ## States
 
