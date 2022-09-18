@@ -254,21 +254,21 @@ _Note: Learn more about [REST, GraphQL, gRPC](/courses/system-design/rest-graphq
 
 ### Video processing
 
+![video-processing-pipeline](/static/courses/system-design/chapter-V/netflix/video-processing-pipeline.png)
+
 There are so many variables in play when it comes to processing a video. For example, an average data size of two-hour raw 8K footage from a high-end camera can easily be up to 4 TB, thus we need to have some kind of processing to reduce both storage and delivery costs.
 
 Here's how we can process videos once they're uploaded by the content team (or users in YouTube's case) and are queued for processing in our [message queue](/courses/system-design/message-queues).
-
-![video-processing-pipeline](/static/courses/system-design/chapter-V/netflix/video-processing-pipeline.png)
 
 Let's discuss how this works:
 
 - **File Chunker**
 
+![file-chunking](/static/courses/system-design/chapter-V/netflix/file-chunking.png)
+
 This is the first step of our processing pipeline. File chunking is the process of splitting a file into smaller pieces called chunks. It can help us eliminate duplicate copies of repeating data on storage, and reduces the amount of data sent over the network by only selecting changed chunks.
 
 Usually, a video file can be split into equal size chunks based on timestamps but Netflix instead splits chunks based on scenes. This slight variation becomes a huge factor for a better user experience since whenever the client requests a chunk from the server, there is a lower chance of interruption as a complete scene will be retrieved.
-
-![file-chunking](/static/courses/system-design/chapter-V/netflix/file-chunking.png)
 
 - **Content Filter**
 

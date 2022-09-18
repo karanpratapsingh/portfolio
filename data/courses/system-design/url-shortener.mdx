@@ -103,7 +103,7 @@ $$
 100 \space million \times 10\space years \times 12 \space months = 12 \space billion
 $$
 
-Like earlier, if we assume each stored recorded will be approximately 500 bytes. We will need around 6TB of storage:
+Like earlier, if we assume each stored record will be approximately 500 bytes. We will need around 6TB of storage:
 
 $$
 12 \space billion \times 500 \space bytes = 6 \space TB
@@ -176,7 +176,7 @@ createURL(apiKey: string, originalURL: string, expiration?: Date): string
 
 API Key (`string`): API key provided by the user.
 
-Original Url (`string`): Original URL to be shortened.
+Original URL (`string`): Original URL to be shortened.
 
 Expiration (`Date`): Expiration date of the new URL _(optional)_.
 
@@ -196,7 +196,7 @@ getURL(apiKey: string, shortURL: string): string
 
 API Key (`string`): API key provided by the user.
 
-Short Url (`string`): Short URL mapped to the original URL.
+Short URL (`string`): Short URL mapped to the original URL.
 
 **Returns**
 
@@ -214,7 +214,7 @@ deleteURL(apiKey: string, shortURL: string): boolean
 
 API Key (`string`): API key provided by the user.
 
-Short Url (`string`): Short URL to be deleted.
+Short URL (`string`): Short URL to be deleted.
 
 **Returns**
 
