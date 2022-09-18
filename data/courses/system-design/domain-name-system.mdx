@@ -20,14 +20,14 @@ DNS lookup involves the following eight steps:
 
 1. A client types [example.com](http://example.com) into a web browser, the query travels to the internet and is received by a DNS resolver.
 2. The resolver then recursively queries a DNS root nameserver.
-3. The root server responds to the resolver with the address of a Top Level Domain (TLD).
+3. The root server responds to the resolver with the address of a Top-Level Domain (TLD).
 4. The resolver then makes a request to the `.com` TLD.
 5. The TLD server then responds with the IP address of the domain's nameserver, [example.com](http://example.com).
 6. Lastly, the recursive resolver sends a query to the domain's nameserver.
 7. The IP address for [example.com](http://example.com) is then returned to the resolver from the nameserver.
 8. The DNS resolver then responds to the web browser with the IP address of the domain requested initially.
 
-Once the IP address has been resolved, the client should be able to request content from the resolved IP address. For example, the resolved IP may return a webpage to be rendered in the browser
+Once the IP address has been resolved, the client should be able to request content from the resolved IP address. For example, the resolved IP may return a webpage to be rendered in the browser.
 
 ## Server types
 
@@ -72,7 +72,7 @@ In an iterative query, a DNS client provides a hostname, and the DNS Resolver re
 
 A non-recursive query is a query in which the DNS Resolver already knows the answer. It either immediately returns a DNS record because it already stores it in a local cache, or queries a DNS Name Server which is authoritative for the record, meaning it definitely holds the correct IP for that hostname. In both cases, there is no need for additional rounds of queries (like in recursive or iterative queries). Rather, a response is immediately returned to the client.
 
-## Records Types
+## Record Types
 
 DNS records (aka zone files) are instructions that live in authoritative DNS servers and provide information about a domain including what IP address is associated with that domain and how to handle requests for that domain.
 

@@ -17,7 +17,7 @@ Caches take advantage of the locality of reference principle _"recently requeste
 
 ## Caching and Memory
 
-Similar to a computer's memory, a cache is a compact, fast-performing memory that stores data in a hierarchy of levels, starting at level one, and progressing from there sequentially. They are labeled as L1, L2, L3, and so on. A cache also gets written if requested, such as when there has been an update and new content needs to be saved to the cache, replacing the older content that was saved.
+Like a computer's memory, a cache is a compact, fast-performing memory that stores data in a hierarchy of levels, starting at level one, and progressing from there sequentially. They are labeled as L1, L2, L3, and so on. A cache also gets written if requested, such as when there has been an update and new content needs to be saved to the cache, replacing the older content that was saved.
 
 No matter whether the cache is read or written, it's done one block at a time. Each block also has a tag that includes the location where the data was stored in the cache. When data is requested from the cache, a search occurs through the tags to find the specific content that's needed in level one (L1) of the memory. If the correct data isn't found, more searches are conducted in L2.
 
@@ -41,7 +41,7 @@ A warm cache is used to describe data that's found in L2 or L3. It's not as fast
 
 ### Cache miss
 
-A cache miss refers to the instance when the memory is searched and the data isn't found. When this happens, the content is transferred and written into the cache.
+A cache miss refers to the instance when the memory is searched, and the data isn't found. When this happens, the content is transferred and written into the cache.
 
 ## Cache Invalidation
 
