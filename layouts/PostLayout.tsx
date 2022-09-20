@@ -86,7 +86,7 @@ export default function PostLayout({
             className='divide-y divide-gray-100 pb-8 dark:divide-gray-800 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:divide-y-0'
             style={{ gridTemplateRows: 'auto 1fr' }}
           >
-            <dl className='pt-6 pb-10 xl:border-b xl:border-gray-100 xl:pt-11 xl:dark:border-gray-800'>
+            <dl className='pt-6 pb-10 xl:sticky xl:top-0 xl:border-b xl:border-gray-100 xl:pt-11 xl:dark:border-gray-800'>
               <dt className='sr-only'>Authors</dt>
               <dd>
                 <ul className='flex justify-center space-x-8 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8'>
@@ -151,51 +151,57 @@ export default function PostLayout({
               <Comments frontMatter={frontMatter} />
             </div>
             <footer>
-              <div className='divide-gray-100 text-sm font-medium leading-5 dark:divide-gray-800 xl:col-start-1 xl:row-start-2 xl:divide-y'>
-                {tags && (
-                  <div className='py-4 xl:py-8'>
-                    <h2 className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>
-                      Tags
-                    </h2>
-                    <div className='flex flex-wrap'>
-                      {tags.map(tag => (
-                        <Tag key={tag} text={tag} />
-                      ))}
+              <div className='xl:sticky xl:top-32'>
+                <div className='divide-gray-100 text-sm font-medium leading-5 dark:divide-gray-800 xl:col-start-1 xl:row-start-2 xl:divide-y'>
+                  {tags && (
+                    <div className='py-4 xl:py-8'>
+                      <h2 className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>
+                        Tags
+                      </h2>
+                      <div className='flex flex-wrap'>
+                        {tags.map(tag => (
+                          <Tag key={tag} text={tag} />
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-                {(next || prev) && (
-                  <div className='flex justify-between py-4 xl:block xl:space-y-8 xl:py-8'>
-                    {prev && (
-                      <div>
-                        <h2 className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>
-                          Previous Article
-                        </h2>
-                        <div className='text-primary-500 hover:text-primary-600 dark:hover:text-primary-400'>
-                          <Link href={`/blog/${prev.slug}`}>{prev.title}</Link>
+                  )}
+                  {(next || prev) && (
+                    <div className='flex justify-between py-4 xl:block xl:space-y-8 xl:py-8'>
+                      {prev && (
+                        <div>
+                          <h2 className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>
+                            Previous Article
+                          </h2>
+                          <div className='text-primary-500 hover:text-primary-600 dark:hover:text-primary-400'>
+                            <Link href={`/blog/${prev.slug}`}>
+                              {prev.title}
+                            </Link>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                    {next && (
-                      <div>
-                        <h2 className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>
-                          Next Article
-                        </h2>
-                        <div className='text-primary-500 hover:text-primary-600 dark:hover:text-primary-400'>
-                          <Link href={`/blog/${next.slug}`}>{next.title}</Link>
+                      )}
+                      {next && (
+                        <div>
+                          <h2 className='text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400'>
+                            Next Article
+                          </h2>
+                          <div className='text-primary-500 hover:text-primary-600 dark:hover:text-primary-400'>
+                            <Link href={`/blog/${next.slug}`}>
+                              {next.title}
+                            </Link>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-              <div className='pt-4 xl:pt-8'>
-                <Link
-                  href='/blog'
-                  className='text-primary-500 hover:text-primary-600 dark:hover:text-primary-400'
-                >
-                  &larr; Back to the blog
-                </Link>
+                      )}
+                    </div>
+                  )}
+                </div>
+                <div className='pt-4 xl:pt-8'>
+                  <Link
+                    href='/blog'
+                    className='text-primary-500 hover:text-primary-600 dark:hover:text-primary-400'
+                  >
+                    &larr; Back to the blog
+                  </Link>
+                </div>
               </div>
             </footer>
           </div>
