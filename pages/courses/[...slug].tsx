@@ -39,9 +39,9 @@ export const getStaticProps: GetStaticProps<{
   const courseIndex = allCourses.findIndex(
     course => formatSlug(course.slug) === slug,
   );
-  const prev: { slug: string; title: string } =
+  let prev: { slug: string; title: string } =
     allCourses[courseIndex + 1] || null;
-  const next: { slug: string; title: string } =
+  let next: { slug: string; title: string } =
     allCourses[courseIndex - 1] || null;
   const course = await getFileBySlug<CourseFrontMatter>('courses', slug);
   // @ts-ignore
@@ -53,6 +53,14 @@ export const getStaticProps: GetStaticProps<{
     return authorResults.frontMatter;
   });
   const authorDetails = await Promise.all(authorPromise);
+
+  if (prev && prev.slug.includes('references')) {
+    prev = null;
+  }
+
+  if (next && next.slug.includes('welcome-to-the-course')) {
+    next = null;
+  }
 
   return {
     props: {
