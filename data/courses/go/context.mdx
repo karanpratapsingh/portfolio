@@ -37,7 +37,7 @@ The `Context` type has the following methods:
 
 ### CancelFunc
 
-A `CancelFunc` tells an operation to abandon its work and it does not wait for the work to stop. If it is called by multiple goroutines simultaneously, after the first call, subsequent calls to a `CancelFunc` do nothing.
+A `CancelFunc` tells an operation to abandon its work and it does not wait for the work to stop. If it is called by multiple goroutines simultaneously, after the first call, subsequent calls to a `CancelFunc` does nothing.
 
 ```go
 type CancelFunc func()

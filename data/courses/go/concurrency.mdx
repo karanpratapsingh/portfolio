@@ -47,7 +47,7 @@ _We'll learn how Golang implements it using goroutines and channels later in the
 
 ## Basic Concepts
 
-Now, let's get familiar with some basic concurrency concepts
+Now, let's get familiar with some basic concurrency concepts.
 
 ### Data Race
 
@@ -67,7 +67,7 @@ A deadlock occurs when all processes are blocked while waiting for each other an
 
 There are four conditions, known as the Coffman conditions, all of them must be satisfied for a deadlock to occur.
 
-- **Mutual Exclusion**
+- Mutual Exclusion
 
 A concurrent process holds at least one resource at any one time making it non-sharable.
 
@@ -75,7 +75,7 @@ _In the diagram below, there is a single instance of Resource 1 and it is held b
 
 ![mutual-exclusion](/static/courses/go/chapter-IV/concurrency/mutual-exclusion.png)
 
-- **Hold and wait**
+- Hold and wait
 
 A concurrent process holds a resource and is waiting for an additional resource.
 
@@ -83,7 +83,7 @@ _In the diagram given below, Process 2 holds Resource 2 and Resource 3 and is re
 
 ![hold-and-wait](/static/courses/go/chapter-IV/concurrency/hold-and-wait.png)
 
-- **No preemption**
+- No preemption
 
 A resource held by a concurrent process cannot be taken away by the system. It can only be freed by the process holding it.
 
@@ -91,7 +91,7 @@ _In the diagram below, Process 2 cannot preempt Resource 1 from Process 1. It wi
 
 ![no-preemption](/static/courses/go/chapter-IV/concurrency/no-preemption.png)
 
-- **Circular wait**
+- Circular wait
 
 A process is waiting for the resource held by the second process, which is waiting for the resource held by the third process, and so on, till the last process is waiting for a resource held by the first process. Hence, forming a circular chain.
 

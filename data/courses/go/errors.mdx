@@ -9,7 +9,7 @@ authors: ['default']
 
 In this tutorial, let's talk about error handling.
 
-Notice I said errors and not exceptions as there is no exception handling in Go.
+Notice how I said errors and not exceptions as there is no exception handling in Go.
 
 Instead, we can just return a built-in `error` type which is an interface type.
 
@@ -249,7 +249,7 @@ func Divide(a, b int) (int, error) {...}
 ```
 
 ```bash
-$ go run man.go
+$ go run main.go
 code 2000: cannot divide by zero
 ```
 

@@ -103,7 +103,7 @@ We can use the following operators on boolean types
 
 ### Numeric types
 
-Now, let's talk about numeric types, starting with
+Now, let's talk about numeric types.
 
 **Signed and Unsigned integers**
 
@@ -136,10 +136,6 @@ If you noticed, there's also an unsigned integer pointer `uintptr` type, which i
 
 It is recommended that whenever we need an integer value, we should just use `int` unless we have a specific reason to use a sized or unsigned integer type.
 
-**Integer alias types**
-
-Next, let's discuss integer alias types.
-
 **Byte and Rune**
 
 Golang has two additional integer types called `byte` and `rune` that are aliases for `uint8` and `int32` data types respectively.
@@ -162,7 +158,7 @@ Next, we have floating point types which are used to store numbers with a decima
 
 Go has two floating point types `float32` and `float64`. Both type follows the IEEE-754 standard.
 
-_The default type for floating point values is float64_
+_The default type for floating point values is float64._
 
 ```go
 var f32 float32 = 1.7812 // IEEE-754 32-bit
@@ -183,7 +179,7 @@ Go provides several operators for performing operations on numeric types.
 
 **Complex**
 
-There are 2 complex types in Go, `complex128` where both real and imaginary parts are `float64` and `complex64` where real and imaginary are `float32`.
+There are 2 complex types in Go, `complex128` where both real and imaginary parts are `float64` and `complex64` where real and imaginary parts are `float32`.
 
 We can define complex numbers either using the built-in complex function or as literals.
 
@@ -233,7 +229,7 @@ float64 uint
 
 And as we can see, it prints the type as `float64` and `uint`.
 
-_Note that this is different from parsing_
+_Note that this is different from parsing._
 
 ## Alias types
 

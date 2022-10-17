@@ -57,7 +57,6 @@ Great, let's run this:
 
 ```bash
 $ go run main.go
-
 ```
 
 Interesting, it seems like our program did not run completely as it's missing some output. This is because our main goroutine exited and did not wait for the goroutine that we created.
@@ -70,8 +69,6 @@ func main() {
 	time.Sleep(1 * time.Second)
 }
 ```
-
-And now, if we run this.
 
 ```bash
 $ go run main.go

@@ -86,8 +86,6 @@ func main() {
 
 Notice how we can send data using the `channel<-data` and receive data using the `data := <-channel` syntax.
 
-And if we run this
-
 ```bash
 $ go run main.go
 Hello World
@@ -120,7 +118,7 @@ func main() {
 
 Because this channel is buffered, we can send these values into the channel without a corresponding concurrent receive. This means _sends_ to a buffered channel block only when the buffer is full and _receives_ block when the buffer is empty.
 
-By default, a channel is unbuffered and has a capacity of 0, hence, we omit the second argument to the `make` function.
+By default, a channel is unbuffered and has a capacity of 0, hence, we omit the second argument of the `make` function.
 
 Next, we have directional channels.
 
@@ -190,21 +188,21 @@ _In a way, this is similar to how we check if a key exists or not in a map._
 
 Lastly, let's discuss some properties of channels:
 
-- A send to a nil channel blocks forever.
+- A send to a `nil` channel blocks forever.
 
 ```go
 var c chan string
 c <- "Hello, World!" // Panic: all goroutines are asleep - deadlock!
 ```
 
-- A receive from a nil channel blocks forever.
+- A receive from a `nil` channel blocks forever.
 
 ```go
 var c chan string
 fmt.Println(<-c) // Panic: all goroutines are asleep - deadlock!
 ```
 
-- A send to a closed channel panics.
+- A send to a closed channel causes a panic.
 
 ```go
 var c = make(chan string, 1)

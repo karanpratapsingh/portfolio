@@ -187,7 +187,7 @@ func main() {
 }
 ```
 
-And just as we expected, it works.
+And it works just as we expected.
 
 ```bash
 $ go run main.go
@@ -279,7 +279,7 @@ hello true
 panic: interface conversion: interface {} is string, not float64
 ```
 
-### Type Switch
+## Type Switch
 
 Here, a `switch` statement can be used to determine the type of a variable of type empty `interface{}`.
 
@@ -306,11 +306,11 @@ $ go run main.go
 string: hello
 ```
 
-### Properties
+## Properties
 
 Let's discuss some properties of interfaces.
 
-**Zero value**
+### Zero value
 
 The zero value of an interface is `nil`.
 
@@ -330,11 +330,9 @@ func main() {
 }
 ```
 
-**Embedding**
+### Embedding
 
-We can embed interfaces like structs.
-
-_For example_
+We can embed interfaces like structs. For example:
 
 ```go
 type interface1 interface {
@@ -351,7 +349,7 @@ type interface3 interface {
 }
 ```
 
-**Values**
+### Values
 
 Interface values are comparable.
 
@@ -376,7 +374,7 @@ func main() {
 }
 ```
 
-**Interface Values**
+### Interface Values
 
 Under the hood, an interface value can be thought of as a tuple consisting of a value and a concrete type.
 

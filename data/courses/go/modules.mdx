@@ -15,7 +15,7 @@ Simply defined, A module is a collection of [Go packages](https://go.dev/ref/spe
 
 Go modules were introduced in Go 1.11, which brings native support for versions and modules. Earlier, we needed the `GO111MODULE=on` flag to turn on the modules functionality when it was experimental. But now after Go 1.13 modules mode is the default for all development.
 
-But wait what is `GOPATH`?
+**But wait, what is `GOPATH`?**
 
 Well, `GOPATH` is a variable that defines the root of your workspace and it contains the following folders:
 
@@ -31,7 +31,7 @@ Like earlier, let's create a new module using `go mod init` command which create
 $ go mod init example
 ```
 
-_The important thing to note here is that a Go module can correspond to a Github repository as well if you plan to publish this module. For example:_
+The important thing to note here is that a Go module can correspond to a Github repository as well if you plan to publish this module. For example:
 
 ```bash
 $ go mod init example
@@ -75,7 +75,7 @@ Vendoring is the act of making your own copy of the 3rd party packages your proj
 
 This can be done through `go mod vendor` command.
 
-So let's reinstall the removed module using `go mod tidy`.
+So, let's reinstall the removed module using `go mod tidy`.
 
 ```go
 package main
@@ -96,6 +96,8 @@ go: found github.com/rs/zerolog/log in github.com/rs/zerolog v1.26.1
 ```bash
 $ go mod vendor
 ```
+
+After the `go mod vendor` command is executed, a `vendor` directory will be created.
 
 ```
 ├── go.mod

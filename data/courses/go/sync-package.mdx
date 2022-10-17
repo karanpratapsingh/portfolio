@@ -7,7 +7,7 @@ images: ['/static/courses/go/chapter-IV/sync-package/banner.png']
 authors: ['default']
 ---
 
-As we learned earlier, goroutines run in the same address space, so access to shared memory must be synchronized. The [`sync`](https://go.dev/pkg/sync/) package provides useful primitives.
+As we learned earlier, goroutines run in the same address space, so access to shared memory must be synchronized. The [`sync`](https://go.dev/pkg/sync) package provides useful primitives.
 
 ## WaitGroup
 
@@ -76,7 +76,7 @@ func main() {
 }
 ```
 
-But is important to know that a `WaitGroup` must **not be copied** after first use. And if it's explicitly passed into functions, it should be done by a _pointer._ This is because it can affect our counter which will disrupt the logic of our program.
+But is important to know that a `WaitGroup` **must not be copied** after first use. And if it's explicitly passed into functions, it should be done by a _pointer._ This is because it can affect our counter which will disrupt the logic of our program.
 
 Let's also increase the number of goroutines by calling the `Add` method to wait for 4 goroutines.
 
@@ -156,7 +156,7 @@ func main() {
 	go c.Update(19, &wg)
 
 	wg.Wait()
-	fmt.Println(c.value)
+	fmt.Printf("Result is %d", c.value)
 }
 ```
 
@@ -211,6 +211,7 @@ func main() {
 	go c.Update(19, &wg)
 
 	wg.Wait()
+	fmt.Printf("Result is %d", c.value)
 }
 ```
 
@@ -225,7 +226,7 @@ Result is 49
 
 Looks like we solved our issue and the output looks correct as well.
 
-_Note: Similar to WaitGroup a Mutex must **not be copied** after first use._
+_Note: Similar to WaitGroup a Mutex **must not be copied** after first use._
 
 ## RWMutex
 
@@ -244,7 +245,7 @@ Similar to `sync.Mutex`, we can use `sync.RWMutex` using the following methods:
 - `RLock()` acquires or holds the read lock.
 - `RUnlock()` releases the read lock.
 
-_Notice how RWMutex has additional `RLock` and `RUnlock`_ methods _compared to Mutex._
+_Notice how RWMutex has additional `RLock` and `RUnlock` methods compared to Mutex._
 
 ### Example
 
@@ -308,7 +309,7 @@ Get value: 10
 Get value: 10
 ```
 
-_Note: Both `sync.Mutex` and `sync.RWMutex` implements the `sync.Locker` interface:_
+_Note: Both `sync.Mutex` and `sync.RWMutex` implements the `sync.Locker` interface._
 
 ```go
 type Locker interface {
@@ -544,7 +545,7 @@ The Map type is optimized for two common use cases:
 
 _The zero Map is empty and ready for use. A Map must not be copied after first use._
 
-## Usage
+### Usage
 
 `sync.Map` gives us the following methods:
 
@@ -557,7 +558,7 @@ _The zero Map is empty and ready for use. A Map must not be copied after first u
 
 _Note: Range does not necessarily correspond to any consistent snapshot of the Map's contents._
 
-## Example
+### Example
 
 Let's look at an example. Here, we will launch a bunch of goroutines that will add and retrieve values from our map concurrently.
 
@@ -618,7 +619,7 @@ Package atomic provides low-level atomic memory primitives for integers and poin
 
 ### Usage
 
-`atomic` package provides [several functions](https://pkg.go.dev/sync/atomic#pkg-functions) which do the following 5 operations for `int`, `uint`, and `uintptr` types:
+`atomic` package provides [several functions](https://pkg.go.dev/sync/atomic#pkg-functions) that do the following 5 operations for `int`, `uint`, and `uintptr` types:
 
 - Add
 - Load
@@ -662,6 +663,6 @@ func main() {
 Here, `atomic.AddInt32` guarantees that the result of `n` will be 1000 as the instruction execution of atomic operations cannot be interrupted.
 
 ```bash
-go run main.go
+$ go run main.go
 Result: 1000
 ```
