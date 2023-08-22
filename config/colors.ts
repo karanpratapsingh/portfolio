@@ -46,6 +46,7 @@ export const Colors = {
   linkedin: '#0077B5',
   twitter: '#1DA1F2',
   youtube: '#FF0000',
+  googlescholar: '#4285F4',
   email: '#D44638',
   buymeacoffee: '#FFDD00',
   reddit: '#ff4500',

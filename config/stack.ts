@@ -52,7 +52,7 @@ export const WorkStack = [
   Stack.postgres,
   Stack.redis,
   Stack.arangodb,
-  Stack.reactnative,
+  // Stack.reactnative,
 ];
 
 type StackInfoMap = {
