@@ -2,7 +2,7 @@
 name: Karan Pratap Singh
 shortname: Karan
 avatar: /static/avatar.jpg
-occupation: Senior Software Engineer
+occupation: Software Engineer
 company: Guardian Life
 resume: /static/karan_resume.pdf
 email: contact@karanpratapsingh.com
