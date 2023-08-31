@@ -11,7 +11,7 @@ linkedin: https://www.linkedin.com/in/karan99
 github: https://github.com/karanpratapsingh
 ---
 
-I'm a dedicated software engineer with an aim to evolve, innovate, and inspire through technology.
+A software engineer who aims to evolve, innovate, and inspire through technology.
 
 Currently, I am working as a Senior Software Engineer at [Guardian Life](https://www.guardianlife.com).
 
