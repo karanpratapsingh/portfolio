@@ -231,7 +231,7 @@ This is an HTTP-based service that handles user-related concerns such as authent
 
 **Chat Service**
 
-The chat service will use WebSockets and establish connections with the client to handle chat and group message-related functionality. We can also use cache to keep track of all the active connections sort of like sessions which will help us determine if the user is online or not.
+The chat service will use WebSockets to establish connections with the client to handle chat and group message-related functionality. We can also use cache to keep track of all the active connections, sort of like sessions which will help us determine if the user is online or not.
 
 **Notification Service**
 
@@ -265,7 +265,7 @@ The client can periodically send an HTTP request to servers to check if there ar
 
 The client opens a long-lived connection with the server and once new data is available it will be pushed to the client. We can use [WebSockets](/courses/system-design/long-polling-websockets-server-sent-events#websockets) or [Server-Sent Events (SSE)](/courses/system-design/long-polling-websockets-server-sent-events#server-sent-events-sse) for this.
 
-The pull model approach is not scalable as it will create unnecessary request overhead on our servers and most of the time the response will be empty, thus wasting our resources. To minimize latency, using the push model with [WebSockets](/courses/system-design/long-polling-websockets-server-sent-events#websockets) is a better choice because then we can push data to the client once it's available without any delay, given the connection is open with the client. Also, WebSockets provide full-duplex communication, unlike [Server-Sent Events (SSE)](/courses/system-design/long-polling-websockets-server-sent-events#server-sent-events-sse) which are only unidirectional.
+The pull model approach is not scalable as it will create unnecessary request overhead on our servers and most of the time the response will be empty, thus wasting our resources. To minimize latency, using the push model with [WebSockets](/courses/system-design/long-polling-websockets-server-sent-events#websockets) is a better choice because then we can push data to the client once it's available without any delay, given that the connection is open with the client. Also, WebSockets provide full-duplex communication, unlike [Server-Sent Events (SSE)](/courses/system-design/long-polling-websockets-server-sent-events#server-sent-events-sse) which are only unidirectional.
 
 _Note: Learn more about [Long polling, WebSockets, Server-Sent Events (SSE)](/courses/system-design/long-polling-websockets-server-sent-events)._
 
@@ -281,7 +281,7 @@ To implement the last seen functionality, we can use a [heartbeat](<https://en.w
 
 This will give us the last time the user was active. This functionality will be handled by the presence service combined with [Redis](https://redis.io) or [Memcached](https://memcached.org) as our cache.
 
-Another way to implement this is to track the latest action of the user, once the last activity crosses a certain threshold, such as _"user hasn't performed any action in the last 30 seconds"_, we can show the user as offline and last seen with the last recorded timestamp. This will be more of a lazy update approach and might benefit us over heartbeat in certain cases.
+Another way to implement this is to track the latest action of the user, once the last activity crosses a certain threshold, such as _"user hasn't performed any action in the last 30 seconds"_, we can show the user as offline and last seen with the last recorded timestamp. This will be more of a lazy update approach and might benefit us over heartbeat mechanism in certain cases.
 
 ### Notifications
 
