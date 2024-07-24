@@ -8,6 +8,7 @@ import { AuthorFrontMatter } from 'types/AuthorFrontMatter';
 // TODO: Direct share functionality.
 // TODO: Switch geist-ui with something simple.
 // git test
+// git test
 // @ts-ignore
 export const getStaticProps: GetStaticProps<{
   author: AuthorFrontMatter;
