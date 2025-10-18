@@ -2,7 +2,7 @@
 name: Karan Pratap Singh
 shortname: Karan
 avatar: /static/avatar.jpg
-occupation: Cloud Engineer
+occupation: Software Engineer
 company: Apple
 resume: /static/karan_resume.pdf
 email: contact@karanpratapsingh.com
@@ -13,7 +13,7 @@ github: https://github.com/karanpratapsingh
 
 A software engineer who aims to evolve, innovate, and inspire through technology.
 
-Currently, I am working as a **Cloud Engineer** at **Apple**.
+Currently, I am working as a **Software Engineer** at **Apple**.
 
 Previously, I was a Senior Software Engineer at [Guardian Life](https://www.guardianlife.com), and a Senior Engineer at [Curebase](https://www.curebase.com) where I contributed to the creation of a decentralized clinical trial platform and scaling infrastructure with an emphasis on security, HIPAA compliance, and GDPR compliance.
 

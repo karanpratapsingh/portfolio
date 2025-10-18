@@ -31,14 +31,14 @@ function Contact(): React.ReactElement {
       <div className='fade-in divide-y-2 divide-gray-100 dark:divide-gray-800'>
         <Header title='Contact' />
         <div className='container py-12'>
+          <p>Got a question or an idea? Let's connect!</p>
+
           <p>
-            Do you have a project in mind? Want to hire me? or simply wanna
-            chat? Feel free to
-            <span
+            Email me at
+            <a
               className='ml-2 cursor-pointer !font-normal !text-black !no-underline dark:!text-white'
-              onClick={onScheduleMeeting}
-              role='button'
-              tabIndex={0}
+              href='mailto:contact@karanpratapsingh.com'
+              aria-label='Send an email to Karan Pratap Singh'
             >
               <RoughNotation
                 show
@@ -48,9 +48,9 @@ function Contact(): React.ReactElement {
                 animationDuration={2000}
                 color={randomColor}
               >
-                schedule a meeting
+                contact@karanpratapsingh.com
               </RoughNotation>
-            </span>
+            </a>
           </p>
         </div>
       </div>
