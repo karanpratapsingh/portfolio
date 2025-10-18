@@ -31,10 +31,8 @@ function Contact(): React.ReactElement {
       <div className='fade-in divide-y-2 divide-gray-100 dark:divide-gray-800'>
         <Header title='Contact' />
         <div className='container py-12'>
-          <p>Got a question or an idea? Let's connect!</p>
-
           <p>
-            Email me at
+            Got a question or an idea? Let's connect! Email me at
             <a
               className='ml-2 cursor-pointer !font-normal !text-black !no-underline dark:!text-white'
               href='mailto:contact@karanpratapsingh.com'
