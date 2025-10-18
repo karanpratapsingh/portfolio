@@ -19,4 +19,4 @@ Previously, I was a Senior Software Engineer at [Guardian Life](https://www.guar
 
 Prior to that, I worked with the Digitization Program Office (DPO) at the [Smithsonian Institution](https://www.si.edu) as a consulting Software Developer in collaboration with the Office of the Chief Information Officer (OCIO).
 
-Outside of work, I've written more than 50 technical articles that have received over 1 million views. I've self-published two books, worked on US patents, and made contributions to open-source projects like Meta's [React Native (v0.60)](https://reactnative.dev/blog/2019/06/12/react-native-open-source-update).
+Outside of work, I've written more than 50 technical articles that have received over 2 million views. I've self-published two books, worked on US patents, and made contributions to open-source projects like Meta's [React Native (v0.60)](https://reactnative.dev/blog/2019/06/12/react-native-open-source-update).
