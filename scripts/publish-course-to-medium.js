@@ -11,6 +11,7 @@ const usage = `Usage:
 const axios = require('axios');
 const matter = require('gray-matter');
 const { exec } = require('child_process');
+const path = require('path');
 const fs = require('fs');
 
 /**
@@ -19,7 +20,7 @@ const fs = require('fs');
 const articles = [];
 
 function verifyArgs() {
-  const [slug] = process.argv.slice(2);
+  const [slug, articleSlug] = process.argv.slice(2);
 
   if (!slug) {
     console.log('[error]: course slug is required as first argument.');
@@ -27,7 +28,7 @@ function verifyArgs() {
     process.exit(1);
   }
 
-  return slug;
+  return [slug, articleSlug];
 }
 
 function getBody(course_slug, slug) {
@@ -54,7 +55,7 @@ function getBody(course_slug, slug) {
 
 ---
 
-_This article is part of my open-source [System Design Course](https://github.com/karanpratapsingh/system-design) available on Github._`;
+_This article is part of my open-source [Go Course](https://github.com/karanpratapsingh/learn-go) available on Github._`;
 
   return body;
 }
@@ -86,29 +87,64 @@ function getUserID(apiKey) {
   return axios(config).then(({ data }) => data.data.id);
 }
 
-function createDraft(apiKey, user_id, body) {
+function createDraft(apiKey, user_id, filePath) {
   const command = `
     curl --location --request POST https://api.medium.com/v1/users/${user_id}/posts \
         --header 'Authorization: Bearer ${apiKey}' \
         --header 'Content-Type: application/json'  \
-        -d ${JSON.stringify(Buffer.from(body).toString())}
+        -d @${filePath}
   `;
 
   exec(command);
 }
 
 (async function main() {
+  const [course_slug, articleSlug] = verifyArgs();
+
+  const dir = `data/courses/${course_slug}`;
+
+  const files = fs.readdirSync(dir);
+
+  const frontmatters = [];
+
+  for (const file of files) {
+    const filePath = path.join(dir, file);
+
+    const content = fs.readFileSync(filePath).toString('utf-8');
+    const { data } = matter(content);
+    frontmatters.push({ ...data, slug: file });
+  }
+
+  frontmatters.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  console.log(`Found ${frontmatters.length} articles`);
+
+  let idx = 0;
+  for (const data of frontmatters) {
+    const slug = data.slug.replace('.mdx', '');
+
+    console.log(`${idx + 1}: ${slug}`);
+    console.log(`   - ${data.summary}`);
+
+    idx += 1;
+    if (slug !== articleSlug) continue;
+
+    articles.push({ name: data.title, slug });
+  }
+
   const API_KEY = getEnv('MEDIUM_API_KEY');
   const USER_ID = await getUserID(API_KEY);
-  const course_slug = verifyArgs();
+
+  console.log(`Publishing ${articles.length} articles`);
 
   for (const [, { name, slug }] of articles.entries()) {
-    const title = `System Design: ${name}`;
+    const title = `Learn Go: ${name}`;
     const tags = [
+      'Go',
+      'Golang',
       'Distributed Systems',
-      'System Design Interview',
-      'Architecture',
       'Software Engineering',
+      'Software Architecture',
     ];
     const canonicalUrl = `https://github.com/karanpratapsingh/${course_slug}#${slug}`;
     const content = getBody(course_slug, slug);
@@ -124,10 +160,10 @@ function createDraft(apiKey, user_id, body) {
 
     try {
       fs.writeFileSync(`medium/${slug}.json`, JSON.stringify(body));
-      createDraft(API_KEY, USER_ID, fs.readFileSync(`medium/${slug}.json`));
+
+      createDraft(API_KEY, USER_ID, `medium/${slug}.json`);
 
       console.log(`Created article for: ${name}`);
-      await sleep(2);
     } catch (error) {
       console.log(error);
       console.log(`Encountered error for article: ${name}`);
