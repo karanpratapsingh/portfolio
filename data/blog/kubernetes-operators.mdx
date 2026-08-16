@@ -1,0 +1,642 @@
+---
+title: 'Building Kubernetes Operators'
+date: '2026-07-29'
+tags: ['kubernetes', 'go', 'docker']
+draft: true
+summary: 'A hands-on guide to how Kubernetes operators work, and how to build one from scratch'
+images: ['/static/blogs/kubernetes-operators/banner.png']
+authors: ['default']
+---
+
+Kubernetes ships with controllers that manage a fixed set of built-in resources: Deployments, Services, Nodes, and so on. An operator extends the same pattern to resources Kubernetes doesn't know about natively, letting us manage custom, often external, systems the same declarative way we manage everything else in the cluster.
+
+This guide goes in four parts: what an operator actually is, the anatomy of one, building one from scratch, and preparing it for production.
+
+## Part 1: Introduction
+
+### What is an operator?
+
+Kubernetes works by comparing the state we describe against actual state, and a controller acts to close the gap, whether that's the Deployment controller replacing a pod we killed or scaling down the ones we no longer want. This loop of observe, compare, and act is called **reconciliation**. It means looking up a resource's desired and actual state, deciding what to do next, and recomputing that decision fresh on every run regardless of what changed. That's what makes the loop resilient, it never has to trust that it saw every event, only that it gets called again.
+
+![reconciliation loop](/static/blogs/kubernetes-operators/reconcile-loop.png)
+
+An operator applies that exact same loop to a resource Kubernetes doesn't understand natively. We define a Custom Resource, describe our domain's desired state in it, and write a controller that knows how to reconcile that domain.
+
+That's the whole concept. Everything else in this guide, informers, workqueues, finalizers, status conditions, exists to make that one loop reliable for a resource type Kubernetes only knows about because we defined it.
+
+### Operator vs Controller vs CRD
+
+These three terms are often used interchangeably, but they describe three different layers of the same system.
+
+- **CRD (CustomResourceDefinition)**: a schema we register with the Kubernetes API server to teach it about a new resource type. On its own, a CRD does nothing, it only gives the API server a shape to store, validate, and serve.
+
+- **Controller**: any piece of software running a reconciliation loop against a resource type, from the built-in Deployment controller to a custom controller reconciling a `PostgresCluster`.
+
+- **Operator**: a controller, or a small set of controllers, that targets a custom resource and encodes enough domain-specific knowledge to manage its full lifecycle without a human: provisioning, upgrades, failure recovery, and so on.
+
+Every operator is a controller, but not every controller is an operator, and a CRD without a controller behind it is just a schema that nothing acts on.
+
+### Why not just a Helm chart, a CronJob, or a script?
+
+- **[Helm chart](https://helm.sh/docs/topics/charts/)**: renders a set of values into YAML and applies it once. It has no way to keep watching afterward, if a resource it created is deleted or drifts, Helm has no idea until we run `helm upgrade` again by hand.
+
+- **CronJob**: gives us a loop back, at the cost of granularity, staleness up to one interval, no state carried between runs, and no way for one CronJob to react to a status change another one made.
+
+- **One-off script**: only acts when triggered, manually or by a CI pipeline, and does nothing about drift in between runs. It is also rarely written with retries and idempotency as first-class concerns.
+
+#### Why an operator wins here
+
+An operator is event-driven and continuous. The API server notifies it the instant a custom resource is created, updated, or deleted, and it keeps reconciling for that resource's entire lifetime, not just at apply time. That matters most for state that takes time to converge, can fail partway through, and can drift after it's first created.
+
+This comes at a cost. An operator is a long-running process with its own RBAC (Role-Based Access Control), failure modes, and observability surface, which is more to build and operate than a chart or a script. If the problem really is rendering some YAML once, a Helm chart is the right tool. An operator earns its keep when the problem is keeping something continuously correct, which is what the rest of this guide builds toward.
+
+## Part 2: Anatomy of an Operator
+
+Next, we'll look at the pieces that make that loop actually work, the Custom Resource itself, the machinery that notices when something changed, and the manager that runs it all, before going into the reconciliation loop in detail.
+
+### Custom Resource
+
+Before a controller can reconcile anything, the API server needs to know the shape of what it's storing. Registering a CRD teaches it that shape. Every Custom Resource carries the same identity fields every Kubernetes object already has, `kind`, `name`, `namespace`, `labels`, and so on, plus two fields that are entirely ours to define, a spec and a status. That split is not a style choice, it maps directly to the reconciliation loop.
+
+- **Spec** is desired state. It's written by whoever creates or edits the resource, and the controller only ever reads it.
+- **Status** is observed state. It's written only by the controller, to record what it found and what it did.
+
+A client that writes to status directly is working around the controller instead of through it, which is why status is usually served as its own subresource with separate permissions.
+
+The last piece is registration. The API server and any client talking to it need a shared, agreed-upon way to encode and decode our type, so we register it once against a scheme before anything can use it. Without that, our type is just a definition nobody can serve. With it, the API server can store and serve it exactly the way it serves Pods or Deployments. We'll see exactly what that registration looks like when we build one for real in Part 3.
+
+### Watching for change
+
+A reconciler doesn't poll the API server in a loop asking "did anything change yet?" Three pieces work together to avoid that.
+
+An **informer** opens a long-lived watch against the API server and keeps a local, in-memory cache of every object of a given type, updating it as add, update, and delete events arrive. A **lister** reads from that cache instead of the API server, so a reconciler checking "does this Resource already exist?" costs a local map lookup, not a network call. A **workqueue** sits between the informer and the reconciler. When the informer sees a change, it doesn't call the reconciler directly, it enqueues a key instead, namespace and name, not the object itself. Workers pull keys off the queue and reconcile them, and the queue deduplicates and rate-limits on our behalf, so ten rapid updates to the same object collapse into one pending item instead of ten redundant reconciles.
+
+![informer, workqueue, and reconciler pipeline](/static/blogs/kubernetes-operators/informer-pipeline.png)
+
+This is also why a reconciler receives a key and not an object. By the time a worker picks the key off the queue, the object may have changed again, so the reconciler always looks up the current state itself rather than trusting whatever triggered it.
+
+### Manager
+
+The manager is the process that owns all of this: the shared cache the informers populate, the client the reconciler uses to read and write objects, and the health, readiness, and metrics endpoints the rest of the cluster uses to know the controller is alive. Every reconciler we register runs inside one manager.
+
+If we run more than one replica of the same controller for availability, we don't want both replicas reconciling the same object at once and racing each other. The manager coordinates this through **leader election**. Replicas compete for a lease, exactly one holds it and actively reconciles, and the rest sit idle until the leader stops renewing it. We'll come back to this in practice in Part 4, for now it's enough to know the manager is what makes it possible.
+
+### Reconciliation Loop
+
+This is the part that matters most. Once we understand this loop well, most of what an operator does is a variation on it.
+
+A reconciler's entry point is called with just a namespace and a name, nothing else. No spec, no status, no diff. The reconciler has to fetch the object itself, compare its spec against what it can observe of the actual state, and decide what to do. That constraint is deliberate, and it's the reason for everything below.
+
+#### Idempotency
+
+Because the reconciler only ever gets a key, and because it can be called any number of times for the same object, in a row, out of order, or after a long gap, it has to produce the same end result no matter how many times it runs. A reconciler that blindly calls create every time it runs breaks the moment it runs twice, since the second call fails against an object that already exists. The fix is to always check current state before acting: create only if missing, update only if different, delete only if it shouldn't exist.
+
+#### Event-driven reconciliation
+
+A reconcile is triggered by a watch event on the resource being reconciled, and by convention also on anything it owns or otherwise depends on. On top of that, most controllers set a periodic resync so the loop also runs on a schedule even with no watch event at all, which matters once state can drift for reasons a watch would never catch.
+
+#### Requeues
+
+Sometimes a single pass through reconcile can't finish the job, the work it's waiting on is still in progress elsewhere. A reconciler can ask to be called again after a delay without treating this as a failure. This is how it polls something that takes time to converge, rather than blocking inside a single call.
+
+#### Error handling
+
+Returning an error does something similar, it requeues, but with exponential backoff instead of a fixed delay, so a persistently failing reconcile doesn't hammer whatever it's failing against. It's worth distinguishing errors that are worth retrying, a timeout, a lock conflict, from ones that aren't, a spec that will never be valid, which should be surfaced as a status condition instead of retried forever.
+
+#### Drift correction
+
+Put all of the above together and the loop is self-healing by construction. Because reconcile recomputes the full diff every time rather than reacting to what specifically changed, it doesn't matter whether the drift came from someone running `kubectl edit`, another controller, or the underlying system the resource represents changing state on its own. The next reconcile, whether triggered by a watch event or a resync, sees the same gap either way and closes it the same way.
+
+## Part 3: Building the Operator
+
+Everything so far has been building toward this. We now know what an operator is, how the terms around it relate, and what pieces a reconciliation loop is made of. Now we put all of it to use and build **VMOperator**, an operator that manages a `VirtualMachine` Custom Resource backed by a mock cloud provider, a small HTTP service we'll also write, that stands in for a real one.
+
+```yaml
+apiVersion: compute.example.com/v1
+kind: VirtualMachine
+spec:
+  image: ubuntu-22.04
+  cpu: 2
+  memory: 4Gi
+status:
+  phase: Running
+  id: vm-123
+```
+
+Say we want to represent a virtual machine in a Kubernetes-native way, `kubectl apply` a YAML file and get a VM, without touching a cloud console or a separate CLI. That's the motivation behind VMOperator: something that lives entirely outside Kubernetes becomes just another object the cluster's own tooling, `kubectl`, RBAC, GitOps pipelines, already knows how to work with.
+
+![VMOperator architecture](/static/blogs/kubernetes-operators/vmoperator-architecture.png)
+
+### Setup
+
+We'll need a local cluster, and [kind](https://kind.sigs.k8s.io/) is the easiest way to get one:
+
+```bash
+kind create cluster --name vmoperator
+```
+
+Beyond that, we'll be using [Go](https://go.dev/doc/install) in this part for the operator, `kubectl` pointed at the new cluster, and Python with Flask for the mock provider below.
+
+```bash
+pip install flask
+```
+
+### Mock Provider
+
+Before we write controller code, we need something for it to control. The mock provider is a small HTTP service with three endpoints, `POST /vms` to create one, `GET /vms/{id}` to check on it, and `DELETE /vms/{id}` to remove it, backed by nothing more than a dict in memory. Every VM it creates starts in `Provisioning` and flips to `Running` a few seconds later on its own, which is enough to force our reconciler to actually poll instead of assuming success.
+
+We're writing this one in Python rather than Go. It has nothing to do with the operator's code, this is only for mock purposes.
+
+```python
+import random
+import string
+import threading
+import time
+
+from flask import Flask, jsonify, request
+
+app = Flask(__name__)
+vms = {}  # in-memory store, keyed by VM id
+
+def provision(vm):
+    time.sleep(5)  # simulate provisioning taking time
+    vm["phase"] = "Running"
+
+@app.post("/vms")
+def create_vm():
+    body = request.get_json()
+    vm_id = "vm-" + "".join(random.choices(string.digits, k=6))
+    vm = {"id": vm_id, "image": body["image"], "phase": "Provisioning"}
+    vms[vm_id] = vm
+
+    threading.Thread(target=provision, args=(vm,), daemon=True).start()  # flips to Running in the background
+
+    return jsonify(vm)
+
+@app.get("/vms/<vm_id>")
+def get_vm(vm_id):
+    vm = vms.get(vm_id)
+    if vm is None:
+        return "", 404
+    return jsonify(vm)
+
+@app.delete("/vms/<vm_id>")
+def delete_vm(vm_id):
+    vms.pop(vm_id, None)
+    return "", 204
+
+if __name__ == "__main__":
+    app.run(port=8080, threaded=True)
+```
+
+We run this as its own process, alongside the cluster, listening on the port the operator will be configured to call. Nothing about it knows Kubernetes exists, which is the point, it's standing in for a real cloud API.
+
+### Defining the VirtualMachine CRD
+
+With something to control, we can define what we're controlling. The `VirtualMachine` type follows exactly the spec and status split from Part 2:
+
+```go
+type VirtualMachineSpec struct {
+	Image  string `json:"image"`
+	CPU    int    `json:"cpu"`
+	Memory string `json:"memory"`
+}
+
+type VirtualMachineStatus struct {
+	ID    string `json:"id,omitempty"`    // provider-assigned id, empty until first provisioned
+	Phase string `json:"phase,omitempty"` // mirrors the provider's lifecycle phase
+}
+
+type VirtualMachine struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	Spec   VirtualMachineSpec   `json:"spec,omitempty"`
+	Status VirtualMachineStatus `json:"status,omitempty"`
+}
+
+type VirtualMachineList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []VirtualMachine `json:"items"`
+}
+```
+
+`TypeMeta` carries `kind` and `apiVersion`, the same two fields on every Kubernetes object, built-in or custom, that say what this thing is. `ListMeta` is its counterpart for list types, `resourceVersion` and `continue` for pagination, instead of `name`/`namespace`, which is why `VirtualMachineList` embeds `ListMeta` next to its `TypeMeta` while `VirtualMachine` itself embeds `ObjectMeta`.
+
+Every type we register needs to satisfy `runtime.Object`, which means implementing `DeepCopyObject`. This is normally generated for us, but since we're doing this by hand, here's what that generated code actually looks like for `VirtualMachine`, the rest follow the same mechanical pattern:
+
+```go
+func (in *VirtualMachine) DeepCopyObject() runtime.Object {
+	out := VirtualMachine{
+		TypeMeta:   in.TypeMeta,
+		ObjectMeta: *in.ObjectMeta.DeepCopy(), // ObjectMeta already knows how to copy itself
+		Spec:       in.Spec,                   // no pointers or slices in Spec, a plain copy is safe
+		Status:     in.Status,
+	}
+	return &out
+}
+```
+
+And the CRD manifest that teaches the API server about it:
+
+```yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: virtualmachines.compute.example.com
+spec:
+  group: compute.example.com
+  scope: Namespaced
+  names:
+    kind: VirtualMachine
+    listKind: VirtualMachineList
+    plural: virtualmachines
+    singular: virtualmachine
+    shortNames: [vm] # lets us type `kubectl get vm` instead of the full plural
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      subresources:
+        status: {} # splits status into its own subresource, see Part 2
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              required: [image, cpu, memory]
+              properties:
+                image: { type: string }
+                cpu: { type: integer }
+                memory: { type: string }
+            status:
+              type: object
+              properties:
+                phase: { type: string }
+                id: { type: string }
+```
+
+The `subresources.status` line matters. It's what makes status a separate subresource with its own update path, exactly the boundary we talked about in Part 2 between what a client can write and what only the controller can.
+
+The `names` block is also what `kubectl` resolves against, `kubectl get virtualmachines` works because `plural` says so, and `shortNames` is why `kubectl get vm` works too, the same way `kubectl get po` works for Pods.
+
+### Reconciler
+
+The reconciler's job is small on paper, look at a `VirtualMachine`, and make sure a matching VM exists in the provider and its status reflects reality. We wrap the provider's HTTP API behind a small client so the reconciler itself stays readable:
+
+```go
+func (r *VirtualMachineReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+	var vm computev1.VirtualMachine
+	if err := r.Get(ctx, req.NamespacedName, &vm); err != nil {
+		return ctrl.Result{}, client.IgnoreNotFound(err) // object was deleted, nothing left to do
+	}
+
+	if vm.Status.ID == "" {
+		// no VM yet, this is the first time we've seen this object
+		created, err := r.Provider.Create(ctx, vm.Spec.Image)
+		if err != nil {
+			return ctrl.Result{}, err
+		}
+
+		vm.Status.ID = created.ID
+		vm.Status.Phase = created.Phase
+		if err := r.Status().Update(ctx, &vm); err != nil {
+			return ctrl.Result{}, err
+		}
+
+		return ctrl.Result{RequeueAfter: 2 * time.Second}, nil // check back shortly instead of blocking here
+	}
+
+	// VM already exists, poll the provider for whatever it knows right now
+	current, err := r.Provider.Get(ctx, vm.Status.ID)
+	if err != nil {
+		return ctrl.Result{}, err
+	}
+
+	vm.Status.Phase = current.Phase
+	if err := r.Status().Update(ctx, &vm); err != nil {
+		return ctrl.Result{}, err
+	}
+
+	if current.Phase != "Running" {
+		return ctrl.Result{RequeueAfter: 2 * time.Second}, nil // still provisioning, keep polling
+	}
+
+	return ctrl.Result{}, nil
+}
+```
+
+Two things worth calling out. First, this is only reachable at all because we've registered a watch on `VirtualMachine`, the API server tells us the moment one is created or edited, which is what triggers the first call. Second, every branch ends by writing to `vm.Status`, mapping whatever the provider told us onto the resource. Kubernetes never talks to the provider directly, the only way anyone finds out a VM is running is because our reconciler wrote it into status.
+
+### Failure Handling & Retries
+
+Notice the reconciler above never retries anything itself. When `r.Provider.Create` or `r.Provider.Get` fails, a network blip, the mock provider not being up yet, it just returns the error. That's deliberate. Returning an error is how we ask controller-runtime to requeue with exponential backoff on our behalf, so we don't need to hand-roll a retry loop, and a persistently unreachable provider doesn't get flooded with retries.
+
+The one thing worth being careful about is treating every failure the same way. A timeout talking to the provider is worth retrying. A `VirtualMachine` whose `spec.image` the provider will never accept is not, retrying that forever just produces a busy loop that never succeeds. We'll leave surfacing that distinction through status conditions to the exercises, the reconciler above only has one failure mode to worry about, since the mock provider never rejects a request outright.
+
+### Finalizer
+
+If we delete a `VirtualMachine` right now, Kubernetes removes the object and we're left with an orphaned VM the provider still thinks is running. A finalizer closes that gap, it's a string on the object that tells Kubernetes "don't actually delete this until I say so."
+
+```go
+const vmFinalizer = "compute.example.com/vm-cleanup"
+
+func (r *VirtualMachineReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+	var vm computev1.VirtualMachine
+	if err := r.Get(ctx, req.NamespacedName, &vm); err != nil {
+		return ctrl.Result{}, client.IgnoreNotFound(err)
+	}
+
+	if !vm.DeletionTimestamp.IsZero() {
+		// being deleted, deprovision through the provider before letting it go
+		if controllerutil.ContainsFinalizer(&vm, vmFinalizer) {
+			if vm.Status.ID != "" {
+				if err := r.Provider.Delete(ctx, vm.Status.ID); err != nil {
+					return ctrl.Result{}, err
+				}
+			}
+			controllerutil.RemoveFinalizer(&vm, vmFinalizer) // safe to let the delete proceed now
+			return ctrl.Result{}, r.Update(ctx, &vm)
+		}
+		return ctrl.Result{}, nil
+	}
+
+	if !controllerutil.ContainsFinalizer(&vm, vmFinalizer) {
+		controllerutil.AddFinalizer(&vm, vmFinalizer) // register before we ever provision anything
+		if err := r.Update(ctx, &vm); err != nil {
+			return ctrl.Result{}, err
+		}
+	}
+
+	// ... provisioning logic from before
+	return ctrl.Result{}, nil
+}
+```
+
+A `kubectl delete` on a `VirtualMachine` with our finalizer present doesn't remove it, it sets `deletionTimestamp` and waits. Our reconciler sees that on the next call, deprovisions the VM through the provider, and only then removes the finalizer, at which point Kubernetes finally deletes the object. No finalizer, no guarantee that cleanup ever runs.
+
+### Predicate
+
+There's a subtle bug already sitting in the reconciler above. Every time it calls `r.Status().Update`, that write is itself a change to the object, which triggers our own watch, which calls reconcile again. Left alone, this doesn't spin forever, since we're recomputing the same status until it settles, but it's still wasted work reconciling in response to writes we made ourselves.
+
+A predicate filters which events actually enqueue a reconcile, before our code ever runs:
+
+```go
+func (r *VirtualMachineReconciler) SetupWithManager(mgr ctrl.Manager) error {
+	return ctrl.NewControllerManagedBy(mgr).
+		For(&computev1.VirtualMachine{}, builder.WithPredicates(predicate.GenerationChangedPredicate{})). // drop status only events
+		Complete(r)
+}
+```
+
+`generation` only increments when `spec` changes, status updates don't touch it. `GenerationChangedPredicate` uses that to drop events where nothing but status moved, so our own writes stop retriggering us, and we're back to reconciling only when something meaningful changed, or when we explicitly ask to be requeued.
+
+### Owned Resources
+
+A `VirtualMachine` being `Running` somewhere isn't very useful on its own, so let's make the operator also create a `Secret` holding the VM's connection details in-cluster:
+
+```go
+func (r *VirtualMachineReconciler) reconcileConnectionSecret(ctx context.Context, vm *computev1.VirtualMachine) error {
+	secret := &corev1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      vm.Name + "-connection",
+			Namespace: vm.Namespace,
+		},
+		StringData: map[string]string{"id": vm.Status.ID},
+	}
+
+	if err := controllerutil.SetControllerReference(vm, secret, r.Scheme); err != nil {
+		return err // ties the Secret's lifecycle to this VirtualMachine
+	}
+
+	return r.Patch(ctx, secret, client.Apply, client.ForceOwnership, client.FieldOwner("vmoperator")) // create or update, either way
+}
+```
+
+`SetControllerReference` is what makes this an **owned resource**, it stamps an owner reference onto the `Secret` pointing back at the `VirtualMachine`. Two things fall out of that for free. Deleting the `VirtualMachine` now cascades, Kubernetes garbage collects the `Secret` automatically, no finalizer needed since it's an in-cluster object, not an external one. And if we add `Owns(&corev1.Secret{})` alongside `For(&computev1.VirtualMachine{})` in `SetupWithManager`, an edit or deletion of the `Secret` itself re-triggers reconciliation of its owning `VirtualMachine`, so if someone deletes it by hand, we notice and recreate it.
+
+The same pattern, same `SetControllerReference` call, same `Owns()` registration, creates a second owned resource, a `Service` fronting the VM in-cluster. That's two different resource kinds owned by one `VirtualMachine`, which is all **multiple owned resources** means in practice, there's nothing more to it than calling the same pattern twice for different types.
+
+### Cross-Resource Reconciliation
+
+Every `VirtualMachine` so far talks to one hardcoded provider endpoint. Real deployments need that to be configurable, and it's rarely a one-off, fifty `VirtualMachine`s in the same AWS account share the same endpoint and credentials, and a hundred more might live in Azure instead. We could put an `endpoint` field directly on `VirtualMachineSpec`, but rotating a credential or fixing a typo would then mean editing every `VirtualMachine` that uses it, one at a time. Pulling that into its own object lets many `VirtualMachine`s reference it by name instead, so a single edit propagates to all of them, so let's add a second, small CRD:
+
+```go
+type ProviderConfigSpec struct {
+	Endpoint string `json:"endpoint"`
+}
+```
+
+And a `providerRef` field on `VirtualMachineSpec` pointing at one by name. The interesting part isn't the new type, it's what happens when a `ProviderConfig` changes. A `VirtualMachine` doesn't watch `ProviderConfig` directly, there's no owner reference between them, so a plain `Owns()` won't do it. Instead, we watch the type and map each event onto every `VirtualMachine` that references it:
+
+![cross-resource reconciliation fan-out](/static/blogs/kubernetes-operators/cross-resource-fanout.png)
+
+```go
+func (r *VirtualMachineReconciler) SetupWithManager(mgr ctrl.Manager) error {
+	return ctrl.NewControllerManagedBy(mgr).
+		For(&computev1.VirtualMachine{}, builder.WithPredicates(predicate.GenerationChangedPredicate{})).
+		Owns(&corev1.Secret{}).
+		Owns(&corev1.Service{}).
+		Watches(
+			&computev1.ProviderConfig{}, // not owned, so Owns() won't catch its changes
+			handler.EnqueueRequestsFromMapFunc(r.findVirtualMachinesForProviderConfig),
+		).
+		Complete(r)
+}
+
+func (r *VirtualMachineReconciler) findVirtualMachinesForProviderConfig(ctx context.Context, obj client.Object) []reconcile.Request {
+	var vms computev1.VirtualMachineList
+	if err := r.List(ctx, &vms, client.InNamespace(obj.GetNamespace())); err != nil {
+		return nil
+	}
+
+	var requests []reconcile.Request
+	for _, vm := range vms.Items {
+		if vm.Spec.ProviderRef == obj.GetName() { // only re-enqueue VMs that actually reference this config
+			requests = append(requests, reconcile.Request{NamespacedName: client.ObjectKeyFromObject(&vm)})
+		}
+	}
+	return requests
+}
+```
+
+This is **cross-resource reconciliation**, one resource's change causing a different resource type entirely to reconcile, connected only by a field value rather than ownership. It's also where the theme of this whole project comes back around. `ProviderConfig` is what would hold real credentials and a real endpoint for AWS, Azure, or GCP in a production version of this operator, the mock provider is standing in for exactly that boundary.
+
+### RBAC
+
+None of the above works without permission to act on it. The manifest just has to list what we actually touch, `VirtualMachine` and `ProviderConfig` objects, the `VirtualMachine` status subresource separately, and the `Secret`/`Service` objects we create:
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: vmoperator-manager-role
+rules:
+  - apiGroups: ['compute.example.com']
+    resources: ['virtualmachines', 'providerconfigs']
+    verbs: ['get', 'list', 'watch', 'create', 'update', 'patch', 'delete']
+  - apiGroups: ['compute.example.com']
+    resources: ['virtualmachines/status'] # separate rule, it's a separate subresource
+    verbs: ['get', 'update', 'patch']
+  - apiGroups: ['']
+    resources: ['secrets', 'services']
+    verbs: ['get', 'list', 'watch', 'create', 'update', 'patch', 'delete']
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: vmoperator-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: vmoperator-manager-role
+subjects:
+  - kind: ServiceAccount
+    name: vmoperator-controller-manager
+    namespace: vmoperator-system
+```
+
+> **Note:** VMOperator manages a resource entirely outside the cluster through a hand-rolled HTTP client, but it's not a novel pattern. [Crossplane](https://www.crossplane.io/), [AWS Controllers for Kubernetes](https://aws-controllers-k8s.github.io/community/), [Cluster API](https://cluster-api.sigs.k8s.io/), and cert-manager all reconcile external or non-Kubernetes state through CRDs the same way, worth reading once this pattern feels familiar.
+
+> **Note:** we kept VMOperator's scope narrow on purpose. Resizing a running VM, stopping and restarting one, taking snapshots, and supporting more than one real provider behind `ProviderConfig` are all natural extensions of what's here, and a reasonable next step once the core loop feels solid.
+
+## Part 4: Production & Deployment
+
+Now that VMOperator works, let's see how to package and deploy it, and improve it for production.
+
+### Packaging & Deployment
+
+Everything so far has run as a binary on our own machine, `go run` against whatever cluster `kubectl` happens to be pointed at. A `Deployment` needs an image instead, so the operator gets a multi-stage `Dockerfile`, one stage to compile it, a second, much smaller image to actually run it:
+
+```dockerfile
+FROM golang:1.26 AS build
+WORKDIR /src
+COPY . .
+RUN CGO_ENABLED=0 go build -o /vmoperator ./cmd/manager
+
+FROM gcr.io/distroless/static-debian12
+COPY --from=build /vmoperator /vmoperator
+USER 65532:65532 # nonroot, matches the security context on the Deployment below
+ENTRYPOINT ["/vmoperator"]
+```
+
+The build stage has the full Go toolchain and every source file, none of which need to ship. The final image only has the compiled binary, which covers most of what a container security context later in this part would otherwise have to ask for, there's no shell to get a foothold in even before `runAsNonRoot` is set.
+
+```bash
+docker build -t registry.example.com/vmoperator:v0.1.0 .
+docker push registry.example.com/vmoperator:v0.1.0
+```
+
+That image is what the `Deployment` manifest under `config/manager/` actually references. With it pushed somewhere the cluster can pull from, the rest of the manifests can go on, the CRDs, RBAC, the operator's `Deployment`, and a `Deployment` and `Service` for the mock provider so it's no longer something we run as a side process on our own machine either:
+
+```bash
+kubectl apply -f config/crd/
+kubectl apply -f config/rbac/
+kubectl apply -f config/manager/
+```
+
+Installing the CRDs before anything else matters, the operator's `Deployment` will crash-loop if it starts and immediately tries to watch a resource type the API server has never heard of.
+
+Schema changes are the part hand-written manifests make us feel directly. Adding a field to `VirtualMachineSpec` is harmless, existing objects just don't have it set. Renaming or restructuring one isn't, every stored `VirtualMachine` was serialized against the old shape. The CRD's `versions` list is built for exactly this, more than one version can be `served` at once, one is marked `storage` to say which shape objects are actually persisted as, and a conversion webhook translates between them when a client asks for a version that isn't the stored one. We don't need this for VMOperator today, `v1` is the only version that's ever existed, but it's why the `versions` field was a list and not a single value from the very first manifest we wrote.
+
+None of the above replaces a person running `kubectl apply` by hand forever. A CI pipeline that builds the operator's image, pushes it, and applies the manifests on merge to main is the natural next step, ordinary CI/CD, nothing operator-specific about it once the manifests themselves are in git.
+
+### Performance & Resilience
+
+By default, a controller only processes one reconcile at a time. That's fine while we're the only ones testing it, but with hundreds of `VirtualMachine` objects it means most of them sit in the workqueue waiting their turn even though nothing about reconciling one blocks reconciling another. `MaxConcurrentReconciles` raises that:
+
+```go
+func (r *VirtualMachineReconciler) SetupWithManager(mgr ctrl.Manager) error {
+	return ctrl.NewControllerManagedBy(mgr).
+		For(&computev1.VirtualMachine{}, builder.WithPredicates(predicate.GenerationChangedPredicate{})).
+		Owns(&corev1.Secret{}).
+		Owns(&corev1.Service{}).
+		Watches(&computev1.ProviderConfig{}, handler.EnqueueRequestsFromMapFunc(r.findVirtualMachinesForProviderConfig)).
+		WithOptions(controller.Options{MaxConcurrentReconciles: 5}). // five VMs in flight instead of one
+		Complete(r)
+}
+```
+
+Caching only helps one side of this reconciler. Reading `vm` back from `r.Get` is already fast and local, informers keep that in memory, but `r.Provider.Get` is a real HTTP round trip every single time, and there's no cache in front of it. That asymmetry is worth sitting with, it's the same one from Part 2, in-cluster reads are cheap because Kubernetes built the caching layer for us, external reads are exactly as expensive as whatever's on the other end of the wire. We could add a short-lived cache in front of the provider client, but it comes with a real cost, a cached `Running` for a VM that just failed is a lie our status will repeat until the cache expires.
+
+The provider not having a cache in front of it also means nothing is stopping us from hammering it. A burst of reconciles, say every `VirtualMachine` getting touched at once after a cluster restart, turns into a burst of HTTP calls with no coordination between them. Wrapping the client in a rate limiter caps that independently of whatever backoff the workqueue is already doing on failures:
+
+```go
+type Client struct {
+	baseURL string
+	http    *http.Client
+	limiter *rate.Limiter // shared across every reconcile using this client
+}
+
+func (c *Client) Create(ctx context.Context, image string) (*VM, error) {
+	if err := c.limiter.Wait(ctx); err != nil {
+		return nil, err
+	}
+	// ... existing HTTP call
+}
+```
+
+Leader election is the other half of running more than one replica safely. We turned this down to a concept in Part 2, in practice it's two fields on the manager:
+
+```go
+mgr, err := ctrl.NewManager(cfg, ctrl.Options{
+	LeaderElection:   true,
+	LeaderElectionID: "vmoperator-leader",
+})
+```
+
+With this set, every replica starts up, but only the one holding the lease actually reconciles, the rest sit ready to take over the moment it doesn't renew in time.
+
+Concurrency also surfaces a race we glossed over in Part 3. Say the reconciler calls `r.Provider.Create`, the provider creates the VM and returns its id, and then the process crashes before `r.Status().Update` ever runs. `vm.Status.ID` is still empty, so the next reconcile sees an object with no VM yet and calls `Create` again, and now the provider has two VMs for one `VirtualMachine`. Nothing about `MaxConcurrentReconciles` or leader election prevents this, it's a gap in the create step itself, and it only shows up once something can fail between the external call and the write that records it. Closing it for real means the provider needs to accept an idempotency key, generated once and stored on the object before the first `Create` call, so a retried create recognizes it already happened instead of making a second VM.
+
+### Security
+
+The `ClusterRole` from Part 3 works, but it's broader than it needs to be, it grants every verb on `secrets` and `services` cluster-wide, when the operator only ever touches the ones it owns. A tighter version scopes to a single namespace with `Role`/`RoleBinding` instead of `ClusterRole`/`ClusterRoleBinding` wherever VMOperator is only expected to run in one, and drops verbs we never call, we never `list` or `watch` arbitrary `Secret`s outside our own, only the ones we create. This is also the RBAC the manifests applied in the previous section were referring to.
+
+Credentials are the other gap. `ProviderConfig` currently holds a plaintext endpoint, and a real provider needs an API key alongside it, which has no business sitting in a CRD spec anyone with read access to the object can see. It belongs in a `Secret`, referenced by name instead of embedded:
+
+```go
+type ProviderConfigSpec struct {
+	Endpoint  string                      `json:"endpoint"`
+	SecretRef corev1.LocalObjectReference `json:"secretRef"` // Secret holding the provider's API key
+}
+```
+
+The reconciler resolves `SecretRef` at the point it builds the provider client, reads the key out of the `Secret`'s data, and never logs it or writes it back to anything with wider read access, including the `VirtualMachine`'s own status.
+
+The last piece is the operator's own pod. A container security context that runs as a non-root user, sets a read-only root filesystem, and drops Linux capabilities it doesn't need shrinks what's possible if the binary itself is ever compromised, standard practice for any workload, not something specific to operators. If we'd added an admission webhook anywhere in this guide, its certificates would belong here too, we didn't need one for VMOperator, so we'll leave that as a pointer rather than something to configure.
+
+### Observability
+
+The manager exposes a Prometheus endpoint without us writing anything for it, workqueue depth, reconcile duration, and reconcile error counts are already there per controller. What isn't there automatically is anything about the provider, so we add a metric the same way any Go service would:
+
+```go
+var providerCallDuration = prometheus.NewHistogramVec(
+	prometheus.HistogramOpts{
+		Name: "vmoperator_provider_call_duration_seconds",
+		Help: "Duration of calls to the VM provider, by operation",
+	},
+	[]string{"operation"},
+)
+
+func init() {
+	metrics.Registry.MustRegister(providerCallDuration) // shares the manager's existing /metrics endpoint
+}
+```
+
+Wrapping each provider call with a timer around this turns "is the provider slow" from a question we'd have to guess at into one we can graph.
+
+Logging benefits from the same instinct. `log.FromContext(ctx)` inside `Reconcile` already carries the `VirtualMachine`'s name and namespace on every line if we set that up once in `SetupWithManager`, and adding `vm.Status.ID` to that logger right after it's set means every subsequent log line for that reconcile also carries the provider's own identifier for the VM. That one field is what makes it possible to grep a mock provider log and an operator log for the same request and find both sides of the same failure.
+
+## Next steps
+
+In this guide, we learned what a Kubernetes operator is, how to build one from scratch, and how to prepare it for production, picking up finalizers, predicates, owned resources, and cross-resource reconciliation along the way. None of that is specific to managing VMs, the next operator, whatever it manages, is the same shape.
+
+Also review the resources below to keep learning:
+
+- [K8s custom resources](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)
+- [client-go](https://github.com/kubernetes/client-go)
+- [controller-runtime](https://github.com/kubernetes-sigs/controller-runtime)
+- [Docker docs](https://docs.docker.com/build/)
