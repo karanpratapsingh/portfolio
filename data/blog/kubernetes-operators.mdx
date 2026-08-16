@@ -24,7 +24,7 @@ This loop of observe, compare, and act is called **reconciliation**. It means lo
 
 That's what makes the loop resilient: it never has to trust that it saw every event, only that it gets called again.
 
-![reconciliation loop illustration](https://raw.githubusercontent.com/karanpratapsingh/portfolio/refs/heads/master/public/static/blogs/kubernetes-operators/reconcile-loop.png align="center")
+![reconciliation loop illustration](/static/blogs/kubernetes-operators/reconcile-loop.png)
 
 An operator applies that exact same loop to a resource Kubernetes doesn't understand natively. We define a Custom Resource, describe our domain's desired state in it, and write a controller that knows how to reconcile that domain.
 
@@ -85,7 +85,7 @@ A **lister** reads from that cache instead of the API server, so a reconciler ch
 
 A **workqueue** sits between the informer and the reconciler. When the informer sees a change, it doesn't call the reconciler directly. Instead, it enqueues a key, namespace, and name, not the object itself. Workers pull keys off the queue and reconcile them, and the queue deduplicates and rate-limits on our behalf, so ten rapid updates to the same object collapse into one pending item instead of ten redundant reconciles.
 
-![informer, workqueue, and reconciler pipeline](https://raw.githubusercontent.com/karanpratapsingh/portfolio/refs/heads/master/public/static/blogs/kubernetes-operators/informer-pipeline.png align="center")
+![informer, workqueue, and reconciler pipeline](/static/blogs/kubernetes-operators/informer-pipeline.png)
 
 This is also why a reconciler receives a key and not an object. By the time a worker picks the key off the queue, the object may have changed again, so the reconciler always looks up the current state itself rather than trusting whatever triggered it.
 
@@ -151,7 +151,7 @@ Say we want to represent a virtual machine in a Kubernetes-native way, `kubectl 
 
 That's the motivation behind VMOperator: something that lives entirely outside Kubernetes becomes just another object the cluster's own tooling (`kubectl`, RBAC, GitOps pipelines) already knows how to work with.
 
-![VMOperator architecture](https://raw.githubusercontent.com/karanpratapsingh/portfolio/refs/heads/master/public/static/blogs/kubernetes-operators/vmoperator-architecture.png align="center")
+![VMOperator architecture](/static/blogs/kubernetes-operators/vmoperator-architecture.png)
 
 ### Setup
 
@@ -485,7 +485,7 @@ And a `providerRef` field on `VirtualMachineSpec` pointing at one by name. The i
 
 A `VirtualMachine` doesn't watch `ProviderConfig` directly, and there's no owner reference between them, so a plain `Owns()` won't do it. Instead, we watch the type and map each event onto every `VirtualMachine` that references it:
 
-![cross-resource reconciliation fan-out](https://raw.githubusercontent.com/karanpratapsingh/portfolio/refs/heads/master/public/static/blogs/kubernetes-operators/cross-resource-fanout.png align="center")
+![cross-resource reconciliation fan-out](/static/blogs/kubernetes-operators/cross-resource-fanout.png)
 
 ```go
 func (r *VirtualMachineReconciler) SetupWithManager(mgr ctrl.Manager) error {
