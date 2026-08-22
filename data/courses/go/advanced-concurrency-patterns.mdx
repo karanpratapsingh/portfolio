@@ -366,8 +366,10 @@ func main() {
 	jobs := make(chan int, totalJobs)
 	results := make(chan int, totalJobs)
 
+	var wg sync.WaitGroup
 	for w := 1; w <= totalWorkers; w++ {
-		go worker(w, jobs, results)
+		wg.Add(1)
+		go worker(w, jobs, results, &wg)
 	}
 
 	// Send jobs
@@ -377,34 +379,29 @@ func main() {
 
 	close(jobs)
 
-	// Receive results
-	for a := 1; a <= totalJobs; a++ {
-		<-results
-	}
+	// Close results once all workers are done
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
 
-	close(results)
+	// Receive results
+	for result := range results {
+		fmt.Println("Result:", result)
+	}
 }
 
-func worker(id int, jobs <-chan int, results chan<- int) {
-	var wg sync.WaitGroup
+func worker(id int, jobs <-chan int, results chan<- int, wg *sync.WaitGroup) {
+	defer wg.Done()
 
 	for j := range jobs {
-		wg.Add(1)
+		fmt.Printf("Worker %d started job %d\n", id, j)
 
-		go func(job int) {
-			defer wg.Done()
+		result := j * 2
+		results <- result
 
-			fmt.Printf("Worker %d started job %d\n", id, job)
-
-			// Do work and send result
-			result := job * 2
-			results <- result
-
-			fmt.Printf("Worker %d finished job %d\n", id, job)
-		}(j)
+		fmt.Printf("Worker %d finished job %d\n", id, j)
 	}
-
-	wg.Wait()
 }
 ```
 
