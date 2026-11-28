@@ -1,0 +1,519 @@
+---
+title: 'How Containers Work: Building a Container Runtime in Go'
+date: '2026-11-02'
+tags: ['go', 'docker', 'linux']
+draft: false
+summary: 'Building a minimal container runtime in Go with namespaces, overlayfs, and cgroups'
+images: ['/static/blogs/container-runtime-go.png']
+authors: ['default']
+---
+
+When we run `docker run alpine sh`, it feels like we just booted a tiny virtual machine. We get a new hostname, a new filesystem, our shell is PID 1, and the rest of the system seems to have disappeared.
+
+But there's no virtual machine here. The shell is just a regular process on the host, started with a few Linux kernel features that limit what it can see and how much it can use. Docker, containerd, and runc are all tooling built around those features, and underneath it all, it's just a handful of system calls.
+
+In this article, we will build our own container runtime using those system calls in about 250 lines of Go. Along the way, we'll look at namespaces, `pivot_root`, overlay filesystems, cgroups, and what Docker adds on top.
+
+## A Container Is a Process
+
+From the host's point of view, a container is a process like any other. If we start one with our runtime and look at it from the outside:
+
+```
+$ ps -o pid,args
+   26 /box run /var/lib/box/images/alpine /bin/sleep 3
+   40 /bin/sleep 3
+```
+
+Process 40 is the "container". The host sees it, can signal it, and can read everything about it in `/proc/40`. What makes it a container is what the process itself sees, and three kernel features control that:
+
+*   **Namespaces** give the process its own view of a global resource: its own process IDs, hostname, mounts, and network interfaces.
+
+*   **A different root filesystem** makes `/` inside the process point at a directory of files we chose, usually an image.
+
+*   **Control groups** (cgroups) cap how much memory, CPU, and how many processes it can use.
+
+Everything else in a container runtime is plumbing around these three.
+
+## The Plan
+
+Let's call our runtime `box`. It takes a directory to use as the root filesystem and a command to run:
+
+```bash
+box run /var/lib/box/images/alpine /bin/sh
+```
+
+It works in two stages. The parent process, `box run`, prepares everything that has to happen outside the container: a writable filesystem layer and a cgroup with limits. It then starts a copy of itself, `box child`, inside new namespaces. The child finishes the setup that has to happen inside, switches to the new root filesystem, and replaces itself with the user's command.
+
+Here's our entry point, which dispatches between the two:
+
+```go
+func main() {
+	log.SetFlags(0)
+	log.SetPrefix("box: ")
+
+	if len(os.Args) < 4 {
+		log.Fatal("usage: box run <rootfs> <command> [args...]")
+	}
+
+	switch os.Args[1] {
+	case "run":
+		os.Exit(run(os.Args[2], os.Args[3:]))
+	case "child":
+		child(os.Args[2], os.Args[3:])
+	default:
+		log.Fatalf("unknown command %q", os.Args[1])
+	}
+}
+```
+
+_Note: Everything here needs Linux, root, and cgroup v2, which most distributions have used by default for a few years now. On macOS or Windows, we can run it inside a privileged Linux container, which is how I tested it. We'll cover that in [Running It](#running-it)._
+
+## Namespaces
+
+A namespace wraps a global system resource so that processes inside it see their own isolated copy. Linux has eight kinds:
+
+| Namespace | Flag              | Isolates                                              |
+| --------- | ----------------- | ----------------------------------------------------- |
+| UTS       | `CLONE_NEWUTS`    | Hostname and domain name                              |
+| PID       | `CLONE_NEWPID`    | Process IDs                                           |
+| Mount     | `CLONE_NEWNS`     | The list of mounted filesystems                       |
+| IPC       | `CLONE_NEWIPC`    | Shared memory and message queues                      |
+| Network   | `CLONE_NEWNET`    | Network interfaces, routes, ports, and firewall rules |
+| User      | `CLONE_NEWUSER`   | User and group IDs                                    |
+| Cgroup    | `CLONE_NEWCGROUP` | The view of the cgroup hierarchy                      |
+| Time      | `CLONE_NEWTIME`   | The system's monotonic and boot clocks                |
+
+A process gets new namespaces when it's created, by passing these flags to the `clone` system call. In Go, we can set them on `exec.Cmd`.
+
+### Starting the Child
+
+Our `run` function creates the filesystem and the cgroup, then starts the child in five new namespaces:
+
+```go
+func run(image string, args []string) int {
+	id := strconv.Itoa(os.Getpid())
+
+	rootfs, cleanupFS, err := mountOverlay(id, image)
+	if err != nil {
+		log.Printf("filesystem: %v", err)
+		return 1
+	}
+	defer cleanupFS()
+
+	cgroup, cleanupCgroup, err := createCgroup(id, defaultLimits)
+	if err != nil {
+		log.Printf("cgroup: %v", err)
+		return 1
+	}
+	defer cleanupCgroup()
+
+	// Re-run this same binary as "child" inside the new namespaces.
+	cmd := exec.Command("/proc/self/exe", append([]string{"child", rootfs}, args...)...)
+	cmd.Stdin, cmd.Stdout, cmd.Stderr = os.Stdin, os.Stdout, os.Stderr
+	cmd.SysProcAttr = &syscall.SysProcAttr{
+		Cloneflags: syscall.CLONE_NEWUTS | // hostname
+			syscall.CLONE_NEWPID | // process IDs
+			syscall.CLONE_NEWNS | // mounts
+			syscall.CLONE_NEWIPC | // shared memory, semaphores
+			syscall.CLONE_NEWNET, // network interfaces
+		UseCgroupFD: true, // start the child directly inside the cgroup
+		CgroupFD:    int(cgroup.Fd()),
+	}
+
+	err = cmd.Run()
+
+	if events, _ := os.ReadFile(filepath.Join(cgroup.Name(), "memory.events")); oomKilled(events) {
+		log.Printf("container was killed: out of memory")
+	}
+
+	var exitErr *exec.ExitError
+	switch {
+	case err == nil:
+		return 0
+	case errors.As(err, &exitErr):
+		if status, ok := exitErr.Sys().(syscall.WaitStatus); ok && status.Signaled() {
+			return 128 + int(status.Signal())
+		}
+		return exitErr.ExitCode()
+	default:
+		log.Printf("run: %v", err)
+		return 1
+	}
+}
+```
+
+The exit code handling copies a shell convention: a process killed by a signal reports 128 plus the signal number. That's why a container killed by the out-of-memory killer exits with 137, which is 128 + 9 for `SIGKILL`, in Docker and in `box` alike.
+
+The `run` function returns an exit code instead of calling `os.Exit` itself, so the deferred cleanups always run. A runtime that leaks a mount or a cgroup every time something fails gets messy quickly.
+
+Next, the child sets the hostname, makes its mounts private, switches root, and then replaces itself with the user's command:
+
+```go
+func child(rootfs string, args []string) {
+	must(syscall.Sethostname([]byte("box")))
+
+	// Stop mount events from propagating back to the host.
+	must(syscall.Mount("", "/", "", syscall.MS_REC|syscall.MS_PRIVATE, ""))
+
+	must(pivotRoot(rootfs))
+	must(syscall.Mount("proc", "/proc", "proc", 0, ""))
+	must(setupDev())
+
+	env := []string{"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin", "HOME=/root"}
+	path, err := exec.LookPath(args[0])
+	if err != nil {
+		log.Fatalf("%s: command not found", args[0])
+	}
+
+	// Replace this process with the user's command, which becomes PID 1.
+	must(syscall.Exec(path, args, env))
+}
+
+func must(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+```
+
+`Sethostname` only affects the new UTS namespace, so the host keeps its own name. The `MS_PRIVATE` remount keeps the container's mounts to itself. A new mount namespace starts as a copy of the parent's, and on most systems those mounts are shared, meaning mount events propagate between namespaces. Without making them private, the container's `/proc` mount could show up on the host.
+
+`syscall.Exec` doesn't start a new process. It replaces the current one, so the user's command inherits the child's PID, which is 1 in the new PID namespace. There's no `box` process left inside the container.
+
+Let's see what that looks like from the inside:
+
+```
+$ box run /var/lib/box/images/alpine /bin/sh -c 'hostname; echo $$; ps'
+box
+1
+PID   USER     TIME  COMMAND
+    1 root      0:00 /bin/sh -c hostname; echo $$; ps
+    6 root      0:00 ps
+```
+
+The shell is PID 1 and sees only its own processes. On the host, the same shell has an ordinary PID like 40. A process in a PID namespace has one ID per namespace it's visible in.
+
+The network namespace starts with a loopback interface that's down and nothing else, so the container has no network at all. Docker's default bridge network is built on top of this, and we'll touch on it in [What Docker Adds](#what-docker-adds).
+
+### Why Re-execute Ourselves?
+
+The child is started as `/proc/self/exe child ...`, which is a fresh copy of the same binary. It would be simpler to call the namespace system calls directly in the parent, but Go makes that hard.
+
+The Go runtime starts several OS threads before `main` runs, and some namespace changes only apply to the calling thread. Others, like a new PID namespace, only apply to processes created afterward. Doing it in a running Go program means fighting the scheduler for control of which thread does what.
+
+Passing the flags to `clone` sidesteps that: the kernel creates the child already inside the new namespaces, and the child is a brand new Go program that starts up there. runc solves the same problem a different way, with a small piece of C that runs before the Go runtime starts.
+
+## A Root Filesystem
+
+New namespaces alone don't change the filesystem. The child can still see the host's entire `/`. To look like an Alpine container, it needs Alpine's files as its root.
+
+### Getting an Image
+
+A container image is a directory tree of files plus some metadata. The easiest way to get one is to ask Docker to export a container's filesystem as a tar archive:
+
+```bash
+mkdir -p /var/lib/box/images/alpine
+docker export $(docker create alpine:3.22) | tar -x -C /var/lib/box/images/alpine
+```
+
+That directory now holds `/bin`, `/etc`, `/lib`, and everything else in Alpine, about 9 MB. `box` treats it as a read-only image.
+
+### pivot_root
+
+The classic way to change a process's root is `chroot`, but it's not a security boundary. A process with root privileges inside a `chroot` can escape it with a few well-known tricks, because the old root is still mounted and reachable.
+
+Container runtimes use `pivot_root` instead. It moves the old root filesystem to a directory under the new one, after which the runtime unmounts it entirely:
+
+```go
+func pivotRoot(newRoot string) error {
+	// pivot_root requires the new root to be a mount point.
+	if err := syscall.Mount(newRoot, newRoot, "", syscall.MS_BIND|syscall.MS_REC, ""); err != nil {
+		return fmt.Errorf("bind mount: %w", err)
+	}
+
+	oldRoot := filepath.Join(newRoot, ".oldroot")
+	if err := os.MkdirAll(oldRoot, 0o700); err != nil {
+		return err
+	}
+	if err := syscall.PivotRoot(newRoot, oldRoot); err != nil {
+		return fmt.Errorf("pivot_root: %w", err)
+	}
+	if err := os.Chdir("/"); err != nil {
+		return err
+	}
+
+	// Detach the host's filesystem so nothing inside can reach it.
+	if err := syscall.Unmount("/.oldroot", syscall.MNT_DETACH); err != nil {
+		return fmt.Errorf("unmount old root: %w", err)
+	}
+	return os.Remove("/.oldroot")
+}
+```
+
+The bind mount of the new root onto itself looks redundant, but `pivot_root` refuses to pivot to a directory that isn't a mount point. Once the old root is unmounted, the host's filesystem is gone from this mount namespace. There's no path left to reach it.
+
+This all happens in the child's private mount namespace. The host's mounts are untouched.
+
+### /proc and /dev
+
+Two directories need special handling after the switch.
+
+`/proc` is how tools like `ps` find processes. Mounting a fresh `proc` filesystem inside the new PID namespace makes it list only the container's processes. Without the new mount, `ps` would either fail or show the host's processes.
+
+`/dev` is where device files live, and an exported image has an empty one. If we run the container without fixing it, things break immediately:
+
+```
+/bin/sh: can't open '/dev/null': No such file or directory
+head: /dev/zero: No such file or directory
+```
+
+We could just mount the host's `/dev`, but that would also give the container access to every disk and device on the machine. Instead, Docker mounts a small in-memory filesystem and only creates the basic devices. Let's do the same:
+
+```go
+// setupDev gives the container its own /dev with only the basic devices,
+// instead of every device on the host.
+func setupDev() error {
+	if err := syscall.Mount("tmpfs", "/dev", "tmpfs", syscall.MS_NOSUID, "mode=755"); err != nil {
+		return fmt.Errorf("mount /dev: %w", err)
+	}
+
+	devices := []struct {
+		name         string
+		major, minor int
+	}{
+		{"null", 1, 3},
+		{"zero", 1, 5},
+		{"random", 1, 8},
+		{"urandom", 1, 9},
+		{"tty", 5, 0},
+	}
+	for _, d := range devices {
+		path := filepath.Join("/dev", d.name)
+		if err := syscall.Mknod(path, syscall.S_IFCHR|0o666, d.major<<8|d.minor); err != nil {
+			return fmt.Errorf("mknod %s: %w", path, err)
+		}
+		if err := os.Chmod(path, 0o666); err != nil { // undo the umask
+			return err
+		}
+	}
+	return nil
+}
+```
+
+A device file is just a name pointing at a driver, identified by a major and minor number. `/dev/null` is character device 1:3 on every Linux system, so creating a file with that number gives the container a working `/dev/null` without exposing anything else.
+
+## Layers with Overlay Filesystems
+
+If the container used the image directory directly, anything it wrote would change the image for every container after it. Running `rm -rf /` inside would destroy the image.
+
+Docker avoids this with an overlay filesystem, which stacks directories on top of each other and presents them as one:
+
+*   The **lower** directory is the image, and it's never written to.
+
+*   The **upper** directory starts empty and receives every write.
+
+*   The **merged** directory is the combined view, and it's what the container uses as its root.
+
+Reading a file returns the upper copy if one exists, otherwise the lower one. Writing a file from the lower layer copies it up first. Deleting one creates a marker in the upper layer that hides it. A real Docker image has many lower layers, one per build step, stacked the same way.
+
+```go
+func mountOverlay(id, image string) (string, func(), error) {
+	dir := filepath.Join(stateDir, id)
+	upper := filepath.Join(dir, "upper")
+	work := filepath.Join(dir, "work")
+	merged := filepath.Join(dir, "merged")
+
+	for _, d := range []string{upper, work, merged} {
+		if err := os.MkdirAll(d, 0o700); err != nil {
+			return "", nil, err
+		}
+	}
+
+	opts := fmt.Sprintf("lowerdir=%s,upperdir=%s,workdir=%s", image, upper, work)
+	if err := syscall.Mount("overlay", merged, "overlay", 0, opts); err != nil {
+		os.RemoveAll(dir)
+		return "", nil, fmt.Errorf("mount overlay: %w", err)
+	}
+
+	cleanup := func() {
+		syscall.Unmount(merged, syscall.MNT_DETACH)
+		os.RemoveAll(dir)
+	}
+	return merged, cleanup, nil
+}
+```
+
+The work directory is scratch space the kernel needs to make copy-up operations atomic. The cleanup deletes the upper layer, which makes every container start from the clean image, the same as `docker run --rm`.
+
+Let's create a file and delete another one inside a container to see the layers in action:
+
+```
+$ box run $IMG /bin/sh -c 'echo hi > /hello.txt; rm /etc/motd; ls /hello.txt; ls /etc/motd'
+/hello.txt
+ls: /etc/motd: No such file or directory
+
+$ ls $IMG/hello.txt $IMG/etc/motd
+ls: /var/lib/box/images/alpine/hello.txt: No such file or directory
+/var/lib/box/images/alpine/etc/motd
+
+$ box run $IMG /bin/sh -c 'ls /hello.txt'
+ls: /hello.txt: No such file or directory
+```
+
+Inside the container, the new file exists and the deleted one is gone. In the image on the host, nothing changed, and the next container starts from the original files.
+
+## Resource Limits with cgroups
+
+Namespaces control what a container can see. Control groups control how much it can use. On cgroup v2, every cgroup is a directory under `/sys/fs/cgroup`, and we set its limits by writing to files in it:
+
+```go
+type Limits struct {
+	MemoryBytes int64
+	MaxPids     int
+	CPUPercent  int
+}
+
+var defaultLimits = Limits{
+	MemoryBytes: 64 << 20, // 64 MiB
+	MaxPids:     20,
+	CPUPercent:  50,
+}
+
+func createCgroup(id string, limits Limits) (*os.File, func(), error) {
+	dir := filepath.Join(cgroupRoot, "box-"+id)
+	if err := os.Mkdir(dir, 0o755); err != nil {
+		return nil, nil, err
+	}
+
+	settings := map[string]string{
+		"memory.max":      strconv.FormatInt(limits.MemoryBytes, 10),
+		"memory.swap.max": "0",
+		"pids.max":        strconv.Itoa(limits.MaxPids),
+		// cpu.max is "<quota> <period>" in microseconds.
+		"cpu.max": fmt.Sprintf("%d 100000", limits.CPUPercent*1000),
+	}
+	for file, value := range settings {
+		if err := os.WriteFile(filepath.Join(dir, file), []byte(value), 0o644); err != nil {
+			os.Remove(dir)
+			return nil, nil, fmt.Errorf("set %s: %w", file, err)
+		}
+	}
+
+	f, err := os.Open(dir)
+	if err != nil {
+		os.Remove(dir)
+		return nil, nil, err
+	}
+
+	cleanup := func() {
+		f.Close()
+		os.Remove(dir) // only succeeds once every process in it has exited
+	}
+	return f, cleanup, nil
+}
+```
+
+`mkdir` creates the cgroup, and the kernel fills the directory with control files. `cpu.max` of `50000 100000` lets the cgroup's processes run for 50 ms in every 100 ms period, which is half a CPU. `memory.swap.max` of `0` stops the container from escaping its memory limit by swapping.
+
+The usual way to put a process in a cgroup is to write its PID to the cgroup's `cgroup.procs` file after it starts. That leaves a window where the process is running without limits. `run` avoids it with `UseCgroupFD`, which passes the open cgroup directory to `clone`, so the kernel creates the child already inside the cgroup. It needs Linux 5.7 or later.
+
+When the container exits, `run` reads `memory.events`, where the kernel counts how many times it killed a process in this cgroup for running out of memory:
+
+```go
+func oomKilled(memoryEvents []byte) bool {
+	for _, line := range strings.Split(string(memoryEvents), "\n") {
+		fields := strings.Fields(line)
+		if len(fields) == 2 && fields[0] == "oom_kill" {
+			return fields[1] != "0"
+		}
+	}
+	return false
+}
+```
+
+Let's see what happens when we hit each limit. First, a loop that starts 30 background processes runs into the limit of 20:
+
+```
+$ box run $IMG /bin/sh -c 'for i in $(seq 1 30); do sleep 2 & done; wait'
+/bin/sh: can't fork: Resource temporarily unavailable
+```
+
+The process limit is the one that stops fork bombs. Without it, a container can exhaust the host's process table, which takes down everything on the machine.
+
+Next, buffering 200 MB through `tail` runs into the 64 MiB memory limit, and the kernel kills it:
+
+```
+$ box run $IMG /bin/sh -c 'head -c 200m /dev/zero | tail > /dev/null'
+Killed
+box: container was killed: out of memory
+$ echo $?
+137
+```
+
+Finally, CPU limits don't kill anything, they just slow the container down. Here's the same busy loop of two million iterations, run on the host and then inside `box`:
+
+| Where                 | Wall time | CPU time |
+| --------------------- | --------- | -------- |
+| Host, no limit        | 1.64 s    | 1.64 s   |
+| `box`, 50% of one CPU | 3.53 s    | 1.78 s   |
+
+The work costs the same CPU time in both, but inside the container it's spread over twice the wall-clock time, because the kernel pauses the container's processes for the second half of every 100 ms period.
+
+## Running It
+
+On a Linux machine with cgroup v2, build `box` and run it as root:
+
+```bash
+go build -o box .
+sudo ./box run /var/lib/box/images/alpine /bin/sh
+```
+
+On macOS or Windows, Docker Desktop runs a Linux VM, and a privileged container in it can act as the "host". I tested `box` this way, cross-compiling it with `GOOS=linux` and mounting the binary into an Alpine container started with `--privileged`.
+
+There's one extra step needed here, though. cgroup v2 doesn't allow a cgroup to have both its own processes and child cgroups with resource controllers, and the privileged container's processes already live in the cgroup `box` wants to create children under. Moving them into a leaf cgroup first and then enabling the controllers fixes it, the same trick Docker-in-Docker uses:
+
+```bash
+mkdir -p /sys/fs/cgroup/init
+for p in $(cat /sys/fs/cgroup/cgroup.procs); do
+  echo $p > /sys/fs/cgroup/init/cgroup.procs 2>/dev/null || true
+done
+echo "+memory +pids +cpu" > /sys/fs/cgroup/cgroup.subtree_control
+```
+
+The same container also can't host an overlay filesystem's upper layer on its own overlay root, so `/var/lib/box` needs to be a `tmpfs` mount there. On a regular Linux host, neither step is necessary.
+
+## What Docker Adds
+
+Our `box` runtime has the core pieces, but it's missing almost everything that makes Docker safe and convenient to use:
+
+*   **Networking:** Docker creates a virtual Ethernet pair for each container, puts one end in the container's network namespace and the other on a bridge on the host, and uses NAT so containers can reach the outside world. `box` containers have no network at all.
+
+*   **Dropping privileges:** the shell in `box` runs as full root. Docker drops most of root's capabilities, applies a seccomp profile that blocks more than 40 of the 300-plus system calls, and can map container root to an unprivileged host user with a user namespace.
+
+*   **Images:** `box` uses a directory someone else unpacked. Docker pulls layered images from registries, verifies them by content hash, and stacks the layers with overlayfs.
+
+*   **Lifecycle:** Docker runs containers in the background, keeps their logs, restarts them, and lets us `exec` into a running one, which joins its existing namespaces with the `setns` system call.
+
+Docker's own architecture splits this work into layers. The `docker` CLI talks to `dockerd`, which hands containers to containerd, which manages their lifecycle and images. To actually start a container, containerd calls runc, which reads a JSON description of the container defined by the [OCI runtime spec](https://github.com/opencontainers/runtime-spec) and does what `box` does: `clone` with namespace flags, `pivot_root`, mounts, cgroups, and finally `exec`.
+
+runc is written in Go too, and now that we know these system calls, its source code is a great next read.
+
+## Next Steps
+
+In this article, we learned that a container is just a Linux process, and built a small container runtime in Go using namespaces, `pivot_root`, overlay filesystems, and cgroups.
+
+These pieces also explain a lot of everyday container behavior: why a container's PID 1 needs to handle signals, why exit code 137 means out of memory, why a container can't see host devices, and why changes inside a container disappear when it's removed.
+
+You can also review the resources below to keep learning:
+
+*   [namespaces(7) man page](https://man7.org/linux/man-pages/man7/namespaces.7.html)
+
+*   [cgroups v2 kernel documentation](https://docs.kernel.org/admin-guide/cgroup-v2.html)
+
+*   [pivot_root(2) man page](https://man7.org/linux/man-pages/man2/pivot_root.2.html)
+
+*   [Overlay filesystem kernel documentation](https://docs.kernel.org/filesystems/overlayfs.html)
+
+*   [OCI runtime specification](https://github.com/opencontainers/runtime-spec)
+
+*   [runc source code](https://github.com/opencontainers/runc)

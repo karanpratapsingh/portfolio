@@ -13,36 +13,6 @@ Docker Sandboxes tries to solve exactly this. It gives each agent its own dispos
 
 In this article, we will look at what Docker Sandboxes are, why regular containers aren't enough, and how sandboxes work under the hood. Then we'll get hands-on with the `sbx` CLI on a Go project, use Cloud Sandboxes from a Go program, and go over some of the limitations.
 
-## Table of Contents
-
-- [Table of Contents](#table-of-contents)
-- [What Are Docker Sandboxes?](#what-are-docker-sandboxes)
-- [Why Do We Need Them?](#why-do-we-need-them)
-- [Why Not Just Use a Container?](#why-not-just-use-a-container)
-- [How It Works](#how-it-works)
-	- [MicroVMs](#microvms)
-	- [A Private Docker Engine](#a-private-docker-engine)
-	- [Workspaces](#workspaces)
-	- [Network Policy](#network-policy)
-	- [Credential Injection](#credential-injection)
-- [Getting Started](#getting-started)
-	- [Install and Sign In](#install-and-sign-in)
-	- [The First Sandbox](#the-first-sandbox)
-	- [Reaching the Go Module Proxy](#reaching-the-go-module-proxy)
-	- [Working in a Clone](#working-in-a-clone)
-	- [Running Unattended](#running-unattended)
-- [Using Cloud Sandboxes from Go](#using-cloud-sandboxes-from-go)
-	- [Authentication](#authentication)
-	- [Creating a Sandbox](#creating-a-sandbox)
-	- [Scoped Endpoint Credentials](#scoped-endpoint-credentials)
-	- [Running Code](#running-code)
-	- [Putting It Together](#putting-it-together)
-- [Local vs. Cloud](#local-vs-cloud)
-- [Limitations](#limitations)
-	- [What It Doesn't Protect Against](#what-it-doesnt-protect-against)
-	- [It Isn't Open Source](#it-isnt-open-source)
-- [Next Steps](#next-steps)
-
 ## What Are Docker Sandboxes?
 
 A sandbox is an isolated environment for running code we don't fully trust. Whatever happens inside it stays inside it. If the code deletes files, installs something malicious, or goes off the rails, we just throw the sandbox away and nothing outside it is touched.
