@@ -1,0 +1,491 @@
+---
+title: 'Integration Testing with Docker Testcontainers in Go'
+date: '2026-11-27'
+tags: ['go', 'docker', 'testing']
+draft: false
+summary: 'Learn how to write integration tests in Go against real Postgres and Redis with Testcontainers'
+images: ['https://raw.githubusercontent.com/karanpratapsingh/portfolio/refs/heads/master/public/static/blogs/testcontainers-go/banner.png']
+authors: ['default']
+---
+
+Almost every Go service we write depends on something external, like Postgres, Redis, or a message queue. In tests, we usually mock these out. Mocks are fast and easy to set up, but our code never actually runs against a real database until it hits production.
+
+And that's where the expensive bugs live. A mock doesn't know that our unique index is case-insensitive, that our query has a typo in a column name, or that we never set a TTL on a Redis key.
+
+Testcontainers fixes this by starting real dependencies in Docker containers right from our tests, and throwing them away afterward. In this article, we will look at why mocks fall short for data access code and how Testcontainers works. Then we'll use it to test a Postgres-backed store and a Redis rate limiter, and run it all in CI.
+
+## Why Not Just Mock It?
+
+Let's say we have a user store with a rule that email addresses are unique regardless of case, so `ada@example.com` and `ADA@example.com` can't both register. In Postgres, that rule lives in a unique index on `lower(email)`.
+
+A mock of that store is a map in Go. Whether it enforces case-insensitive uniqueness depends entirely on whether whoever wrote the mock remembered to, and it has no connection to the index that enforces the rule in production. If someone later changes the index to plain `email`, every mock-based test still passes and the bug ships.
+
+Mocks can test that our code calls its dependencies the way we expect, but not that those calls actually do what we expect. And for data access code, that's where most things go wrong: SQL syntax, constraint names, type conversions, transaction behavior, and how a driver reports errors.
+
+The usual alternative is a shared test database, which brings its own problems. Tests interfere with each other through shared state, the schema drifts from what the code expects, and running the suite needs a setup step that lives outside the repository.
+
+## What Is Testcontainers?
+
+[Testcontainers](https://golang.testcontainers.org/) is a library that starts throwaway Docker containers from test code. Each test run gets fresh dependencies at whatever version we ask for, and they're removed when the run ends.
+
+It started in Java and now has implementations for Go, .NET, Node.js, Python, Rust, and others. Docker acquired AtomicJar, the company behind it, in 2023, and the Go library lives at `github.com/testcontainers/testcontainers-go`.
+
+The library ships modules for common dependencies such as Postgres, MySQL, Redis, Kafka, MongoDB, and LocalStack. A module wraps a container with sensible defaults and helpers like `ConnectionString`, so starting Postgres is just one function call.
+
+The only requirement is a Docker-compatible engine where the tests run: Docker Desktop on a laptop, Docker Engine on a Linux CI runner, or a remote engine.
+
+## How It Works
+
+Under the hood, Testcontainers is just a Docker client with a few opinions about how test containers should behave. Let's look at the four that explain most of what it does.
+
+### Talking to Docker
+
+Testcontainers talks to the Docker Engine API the same way the `docker` CLI does, over the socket configured in `DOCKER_HOST` or the platform default. On startup, it logs which engine it found:
+
+```
+Testcontainers for Go Version: v0.44.0
+Resolved Docker Host: unix:///var/run/docker.sock
+```
+
+From there, starting a container is the usual sequence: pull the image if it's missing, create the container, start it, and wait for it to be ready.
+
+### Random Ports
+
+A test container's port is never published on a fixed host port. Docker picks a free one, and the test asks Testcontainers what it is.
+
+That's what lets two test packages, or two developers' CI jobs on the same machine, start Postgres at the same time without colliding on port `5432`. It's also why connection details always come from the container at runtime (`ConnectionString`, `PortEndpoint`) instead of being hard-coded.
+
+### Wait Strategies
+
+A container that has started isn't necessarily ready. Postgres, for example, starts, runs its init scripts, shuts down, and then starts again for real. Connecting during that window fails.
+
+Wait strategies define what "ready" means for each container: a line in the logs, a port accepting connections, an HTTP endpoint returning 200, or a combination. The Postgres module's default waits for the readiness log line to appear twice (once per startup) and then for port `5432` to accept connections, since Docker Desktop's port forwarding on macOS and Windows can lag behind the container itself.
+
+### Ryuk, the Resource Reaper
+
+Tests crash, get killed with Ctrl+C, and time out. When that happens, any cleanup code in the test never runs, and the containers it started keep running.
+
+Testcontainers handles this with a sidecar container called Ryuk. The first time a test session starts a container, Testcontainers also starts Ryuk, labels every container it creates with the session's ID, and holds a connection open to Ryuk. When that connection drops, because the test process exited for any reason, Ryuk removes everything carrying the session's label.
+
+Our tests should still clean up after themselves, Ryuk is just a safety net for when they can't.
+
+## An Example Implementation
+
+To see what this looks like in a real package, I built a small user store backed by Postgres, using [pgx](https://github.com/jackc/pgx) as the driver and Testcontainers v0.44.0 for the tests.
+
+### The Store
+
+Here's our schema, which enforces the case-insensitive email rule with an expression index:
+
+```sql
+CREATE TABLE users (
+    id         BIGSERIAL PRIMARY KEY,
+    email      TEXT NOT NULL,
+    name       TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE UNIQUE INDEX users_email_lower_idx ON users (lower(email));
+```
+
+The store itself just has two methods. Both translate database errors into errors the rest of the application can check for, and a mock has no way to verify that translation:
+
+```go
+var (
+	ErrNotFound       = errors.New("user not found")
+	ErrDuplicateEmail = errors.New("email already registered")
+)
+
+type User struct {
+	ID        int64
+	Email     string
+	Name      string
+	CreatedAt time.Time
+}
+
+type Store struct {
+	db *pgxpool.Pool
+}
+
+func New(db *pgxpool.Pool) *Store {
+	return &Store{db: db}
+}
+
+func (s *Store) CreateUser(ctx context.Context, email, name string) (User, error) {
+	var u User
+	err := s.db.QueryRow(ctx,
+		`INSERT INTO users (email, name) VALUES ($1, $2)
+		 RETURNING id, email, name, created_at`,
+		email, name,
+	).Scan(&u.ID, &u.Email, &u.Name, &u.CreatedAt)
+
+	var pgErr *pgconn.PgError
+	if errors.As(err, &pgErr) && pgErr.Code == "23505" { // unique_violation
+		return User{}, ErrDuplicateEmail
+	}
+	return u, err
+}
+
+func (s *Store) GetUserByEmail(ctx context.Context, email string) (User, error) {
+	var u User
+	err := s.db.QueryRow(ctx,
+		`SELECT id, email, name, created_at FROM users WHERE lower(email) = lower($1)`,
+		email,
+	).Scan(&u.ID, &u.Email, &u.Name, &u.CreatedAt)
+
+	if errors.Is(err, pgx.ErrNoRows) {
+		return User{}, ErrNotFound
+	}
+	return u, err
+}
+```
+
+`23505` is Postgres's error code for a unique violation. Whether the driver surfaces it as a `*pgconn.PgError` we can unwrap with `errors.As` is a detail of pgx, and the only way to know it works is to run it against Postgres.
+
+### One Container for the Whole Package
+
+Starting a container takes around a second once the image is cached. Doing that for every test adds up quickly, so we'll share one Postgres container for the whole package, started in `TestMain`:
+
+```go
+var (
+	pgContainer *postgres.PostgresContainer
+	dsn         string
+)
+
+func TestMain(m *testing.M) {
+	os.Exit(run(m))
+}
+
+func run(m *testing.M) int {
+	flag.Parse()
+	if testing.Short() {
+		log.Println("skipping integration tests in -short mode")
+		return 0
+	}
+
+	ctx := context.Background()
+
+	ctr, err := postgres.Run(ctx, "postgres:17-alpine",
+		postgres.WithDatabase("users"),
+		postgres.WithUsername("test"),
+		postgres.WithPassword("test"),
+		postgres.WithInitScripts("schema.sql"),
+		postgres.WithSQLDriver("pgx"),
+		postgres.BasicWaitStrategies(),
+	)
+	// Run can return a container alongside an error, so terminate either way.
+	defer func() {
+		if err := testcontainers.TerminateContainer(ctr); err != nil {
+			log.Printf("terminate container: %v", err)
+		}
+	}()
+	if err != nil {
+		log.Printf("start postgres: %v", err)
+		return 1
+	}
+
+	dsn, err = ctr.ConnectionString(ctx, "sslmode=disable")
+	if err != nil {
+		log.Printf("connection string: %v", err)
+		return 1
+	}
+
+	// Snapshot the freshly migrated database so each test can start from it.
+	if err := ctr.Snapshot(ctx); err != nil {
+		log.Printf("snapshot: %v", err)
+		return 1
+	}
+
+	pgContainer = ctr
+	return m.Run()
+}
+```
+
+The work lives in `run` rather than `TestMain` because `os.Exit` skips deferred functions. With everything in `TestMain`, the container would never be terminated by the test itself, and Ryuk would have to clean it up.
+
+The `defer` is registered before the error check on purpose. `postgres.Run` can fail after the container already exists, for example when a wait strategy times out, and it returns the container alongside the error so we can still clean it up. `TerminateContainer` is safe to call with a nil container.
+
+`WithInitScripts` copies `schema.sql` into the container's init directory, so Postgres applies it on first start. A project with a real migration tool would run its migrations against `dsn` here instead.
+
+`flag.Parse` is called explicitly so `testing.Short` works in `TestMain`. Running `go test -short ./...` then skips the integration tests entirely, which keeps the fast feedback loop for when we're iterating on pure logic.
+
+### A Clean Database for Every Test
+
+Sharing a container makes tests fast, but it means they share data too. A user created in one test is still there in the next one, which makes tests order-dependent and failures hard to reproduce.
+
+The Postgres module solves this with snapshots. `Snapshot` copies the migrated database into a Postgres template database. `Restore` drops the working database and recreates it from that template, which Postgres does internally by copying the template's data and is much faster than re-running migrations.
+
+Let's write a helper that gives each test its own connection pool and restores the snapshot when the test ends:
+
+```go
+// newStore returns a Store backed by a clean copy of the database.
+func newStore(t *testing.T) *Store {
+	t.Helper()
+	ctx := context.Background()
+
+	// Cleanups run last-in first-out: the pool closes first, then the restore
+	// runs, so no open connection blocks the database from being replaced.
+	t.Cleanup(func() {
+		if err := pgContainer.Restore(ctx); err != nil {
+			t.Fatalf("restore snapshot: %v", err)
+		}
+	})
+
+	pool, err := pgxpool.New(ctx, dsn)
+	if err != nil {
+		t.Fatalf("connect: %v", err)
+	}
+	t.Cleanup(pool.Close)
+
+	return New(pool)
+}
+```
+
+The order of the two `t.Cleanup` calls matters. Postgres won't copy a database while other connections are open to it, so the pool has to close before the restore runs. Cleanups run in reverse order of registration, so registering the restore first makes it run last.
+
+The pgx `database/sql` driver is needed alongside the pool because the module runs its snapshot SQL through `database/sql`. `WithSQLDriver("pgx")` tells it which driver to use, and a blank import registers it:
+
+```go
+import _ "github.com/jackc/pgx/v5/stdlib" // registers the "pgx" database/sql driver
+```
+
+Without it, the module falls back to running `psql` inside the container with `docker exec`, which works but logs a warning on every restore and took each test from around 20 ms to around 130 ms in my runs.
+
+### The Tests
+
+With all the setup in place, our tests look just like ordinary unit tests:
+
+```go
+func TestCreateAndGetUser(t *testing.T) {
+	s := newStore(t)
+	ctx := context.Background()
+
+	created, err := s.CreateUser(ctx, "ada@example.com", "Ada Lovelace")
+	if err != nil {
+		t.Fatalf("CreateUser: %v", err)
+	}
+	if created.ID == 0 || created.CreatedAt.IsZero() {
+		t.Fatalf("expected database-generated fields, got %+v", created)
+	}
+
+	got, err := s.GetUserByEmail(ctx, "ADA@example.com")
+	if err != nil {
+		t.Fatalf("GetUserByEmail: %v", err)
+	}
+	if got.ID != created.ID {
+		t.Fatalf("got user %d, want %d", got.ID, created.ID)
+	}
+}
+
+func TestDuplicateEmailIsCaseInsensitive(t *testing.T) {
+	s := newStore(t)
+	ctx := context.Background()
+
+	if _, err := s.CreateUser(ctx, "grace@example.com", "Grace Hopper"); err != nil {
+		t.Fatalf("CreateUser: %v", err)
+	}
+
+	_, err := s.CreateUser(ctx, "Grace@Example.com", "Someone Else")
+	if !errors.Is(err, ErrDuplicateEmail) {
+		t.Fatalf("got %v, want ErrDuplicateEmail", err)
+	}
+}
+
+func TestGetUserNotFound(t *testing.T) {
+	s := newStore(t)
+
+	_, err := s.GetUserByEmail(context.Background(), "nobody@example.com")
+	if !errors.Is(err, ErrNotFound) {
+		t.Fatalf("got %v, want ErrNotFound", err)
+	}
+}
+
+func TestStartsFromCleanState(t *testing.T) {
+	s := newStore(t)
+
+	// TestCreateAndGetUser inserted this user; the restore must have removed it.
+	_, err := s.GetUserByEmail(context.Background(), "ada@example.com")
+	if !errors.Is(err, ErrNotFound) {
+		t.Fatalf("got %v, want ErrNotFound: state leaked between tests", err)
+	}
+}
+```
+
+`TestCreateAndGetUser` checks the fields Postgres generates, `id` and `created_at`, which a mock would have to invent. `TestDuplicateEmailIsCaseInsensitive` covers the most ground: it exercises the index, the unique violation, the driver's error type, and the store's error mapping in one go.
+
+`TestStartsFromCleanState` is there to prove the isolation works. Go runs a package's tests in source order, so it runs after `TestCreateAndGetUser` and would fail if that test's user were still in the database.
+
+### Results
+
+Here are the numbers on a MacBook with Docker Desktop:
+
+| Run                                                              | Time        |
+| ---------------------------------------------------------------- | ----------- |
+| Whole package, first run (pulling `postgres:17-alpine` and Ryuk) | 9.1 s       |
+| Whole package, images cached                                     | 1.6 s       |
+| Each test, including its snapshot restore                        | 20 to 40 ms |
+| `go test -short` (integration tests skipped)                     | 0.2 s       |
+
+Almost all of the 1.6 seconds is starting the container once. The tests themselves cost about as much as tests against an in-memory fake.
+
+To check that the tests catch what they're meant to, I changed the index from `lower(email)` to plain `email` and ran them again:
+
+```
+--- FAIL: TestDuplicateEmailIsCaseInsensitive (0.02s)
+    store_test.go:123: got <nil>, want ErrDuplicateEmail
+FAIL
+```
+
+That's the regression from the start of the article, caught in 20 milliseconds, by a test that a mock-based suite has no way to write.
+
+## Containers Without a Module
+
+Modules cover the common dependencies, but anything with a Docker image can be started with the generic `testcontainers.Run`. We just need to supply the parts a module would have filled in: the ports to expose and what "ready" means.
+
+Here's a fixed-window rate limiter backed by Redis, with a rule a mock would struggle to model honestly: the count resets when the key's TTL expires.
+
+```go
+// Limiter allows up to limit requests per key in each fixed window.
+type Limiter struct {
+	rdb    *redis.Client
+	limit  int64
+	window time.Duration
+}
+
+func NewLimiter(rdb *redis.Client, limit int64, window time.Duration) *Limiter {
+	return &Limiter{rdb: rdb, limit: limit, window: window}
+}
+
+func (l *Limiter) Allow(ctx context.Context, key string) (bool, error) {
+	pipe := l.rdb.TxPipeline()
+	count := pipe.Incr(ctx, "ratelimit:"+key)
+	pipe.ExpireNX(ctx, "ratelimit:"+key, l.window)
+	if _, err := pipe.Exec(ctx); err != nil {
+		return false, err
+	}
+	return count.Val() <= l.limit, nil
+}
+```
+
+`ExpireNX` sets the TTL only if the key doesn't have one yet, so the window starts at the first request and later requests don't keep pushing it back. Forgetting the `NX` is a classic bug: the window never ends for a client that keeps retrying.
+
+The test starts Redis with the generic API:
+
+```go
+func newRedis(t *testing.T) *redis.Client {
+	t.Helper()
+	ctx := context.Background()
+
+	ctr, err := testcontainers.Run(ctx, "redis:8-alpine",
+		testcontainers.WithExposedPorts("6379/tcp"),
+		testcontainers.WithWaitStrategy(
+			wait.ForLog("Ready to accept connections"),
+			wait.ForListeningPort("6379/tcp"),
+		),
+	)
+	testcontainers.CleanupContainer(t, ctr)
+	if err != nil {
+		t.Fatalf("start redis: %v", err)
+	}
+
+	addr, err := ctr.PortEndpoint(ctx, "6379/tcp", "")
+	if err != nil {
+		t.Fatalf("endpoint: %v", err)
+	}
+
+	rdb := redis.NewClient(&redis.Options{Addr: addr})
+	t.Cleanup(func() { rdb.Close() })
+	return rdb
+}
+
+func TestLimiterBlocksAfterLimitAndResets(t *testing.T) {
+	if testing.Short() {
+		t.Skip("integration test")
+	}
+	ctx := context.Background()
+	limiter := NewLimiter(newRedis(t), 3, time.Second)
+
+	for i := range 3 {
+		ok, err := limiter.Allow(ctx, "client-1")
+		if err != nil || !ok {
+			t.Fatalf("request %d: allowed=%v err=%v, want allowed", i+1, ok, err)
+		}
+	}
+
+	if ok, _ := limiter.Allow(ctx, "client-1"); ok {
+		t.Fatal("4th request allowed, want blocked")
+	}
+	if ok, _ := limiter.Allow(ctx, "client-2"); !ok {
+		t.Fatal("other client blocked, want allowed")
+	}
+
+	// Let the real TTL expire instead of faking a clock.
+	time.Sleep(1100 * time.Millisecond)
+
+	if ok, _ := limiter.Allow(ctx, "client-1"); !ok {
+		t.Fatal("request after window blocked, want allowed")
+	}
+}
+```
+
+`CleanupContainer` is the per-test counterpart to `TerminateContainer`. It registers a `t.Cleanup` that removes the container when the test ends, and like `TerminateContainer`, it's called before the error check so a half-started container is still removed.
+
+`PortEndpoint` returns `host:port` for the random host port Docker assigned to `6379`. The empty string is the protocol prefix; passing `"redis"` would return `redis://host:port` instead.
+
+This test takes about 2 seconds with the image cached, 1.1 of which is the deliberate sleep. That sleep is a real cost: tests that depend on wall-clock time are slower than tests with a fake clock. The tradeoff buys a test that checks Redis's actual expiry behavior instead of our model of it.
+
+A Redis module exists too (`modules/redis`), and in a real project I'd use it. Writing it by hand once shows what modules are: a preconfigured `Run` call with the right ports and wait strategy.
+
+## Running in CI
+
+GitHub Actions' Ubuntu runners come with Docker installed, so Testcontainers works there with no extra setup:
+
+```yaml
+name: test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: go test -race ./...
+```
+
+The same goes for most CI systems that give jobs a Docker daemon. Where they don't, such as some Kubernetes-based runners, Testcontainers can point at a remote engine through `DOCKER_HOST`, or at [Testcontainers Cloud](https://testcontainers.com/cloud/), Docker's hosted service for running test containers.
+
+There are two things to keep in mind for CI. Image pulls dominate the first run, so caching images between runs, or pulling from a registry mirror, cuts minutes off cold builds. And Docker Hub rate-limits anonymous pulls, so CI that runs often should authenticate with `docker login`, which Testcontainers picks up automatically.
+
+## Tradeoffs
+
+Testcontainers isn't free, and it doesn't replace every other kind of test:
+
+*   **Docker is now a test dependency.** Anyone running the integration tests needs a Docker engine. `-short` keeps a Docker-free path for the fast tests.
+
+*   **Startup cost is per package.** Go runs each package's tests as a separate process, so ten packages that each start Postgres start ten containers. Keeping database tests together in the packages that need them keeps this down.
+
+*   **Snapshots rule out `t.Parallel` within a package.** Restoring replaces the database every test is connected to, so tests sharing one snapshot have to run one at a time. Parallel tests need a database per test, created from the same template.
+
+*   **Real dependencies are still not production.** A single-node Postgres in a container won't reproduce replication lag, network partitions, or production-sized data. It catches the bugs that come from our code and the dependency disagreeing, which is most of them.
+
+## Next Steps
+
+In this article, we learned why mocks fall short for data access code, how Testcontainers works, and how to use it to test a Postgres-backed store and a Redis rate limiter, both locally and in CI.
+
+The same approach works for anything with a Docker image: Kafka consumers, S3 clients against LocalStack, search queries against Elasticsearch, or another one of our own services. If production talks to it, a test can too.
+
+You can also review the resources below to keep learning:
+
+*   [Testcontainers for Go documentation](https://golang.testcontainers.org/)
+
+*   [Testcontainers for Go modules](https://golang.testcontainers.org/modules/)
+
+*   [Postgres module and snapshots](https://golang.testcontainers.org/modules/postgres/)
+
+*   [Wait strategies](https://golang.testcontainers.org/features/wait/introduction/)
+
+*   [Garbage collector (Ryuk)](https://golang.testcontainers.org/features/garbage_collector/)
